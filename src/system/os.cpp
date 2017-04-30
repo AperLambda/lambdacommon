@@ -78,7 +78,7 @@ namespace apercommon
 #endif
     }
 
-    std::string APERCOMMON_EXPORTS ::apercommon::os::getArchName(OSArchitecture arch)
+    std::string os::getArchName(OSArchitecture arch)
     {
         string archName;
         switch (arch)

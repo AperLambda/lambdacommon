@@ -48,13 +48,13 @@ namespace apercommon
          *
          * @return The OS used.
          */
-        extern OS APERCOMMON_EXPORTS getOS();
+        extern OS APERCOMMON_API getOS();
 
-        extern std::string APERCOMMON_EXPORTS getOSName(OS os);
+        extern std::string APERCOMMON_API getOSName(OS os);
 
-        extern OSArchitecture APERCOMMON_EXPORTS getOSArch();
+        extern OSArchitecture APERCOMMON_API getOSArch();
 
-        extern std::string APERCOMMON_EXPORTS getArchName(OSArchitecture arch);
+        extern std::string APERCOMMON_API getArchName(OSArchitecture arch);
     }
 }
 

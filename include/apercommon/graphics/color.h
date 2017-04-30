@@ -14,7 +14,7 @@
 
 namespace apercommon
 {
-    class APERCOMMON_EXPORTS Color
+    class APERCOMMON_API Color
     {
     private:
         float _red;
@@ -90,7 +90,7 @@ namespace apercommon
         uint8_t alphaAsInt() const;
     };
 
-    extern Color APERCOMMON_EXPORTS getColorByIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+    extern Color APERCOMMON_API getColorByIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 }
 
 #endif //APERCOMMON_COLOR_H

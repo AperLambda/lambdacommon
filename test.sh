@@ -14,6 +14,6 @@ return 1;
 fi
 
 cd build/
-cp apercommon/libapercommon.so src/test
-cd src/test
+cp libapercommon.so tests
+cd tests
 ./apercommon_test

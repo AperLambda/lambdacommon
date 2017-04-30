@@ -18,7 +18,7 @@ namespace apercommon
     namespace aperstring
     {
         template<typename Out>
-        extern void APERCOMMON_EXPORTS split(const std::string &s, char delim, Out result);
+        extern void APERCOMMON_API split(const std::string &s, char delim, Out result);
 
         /**
          * Splits a string into a vector with a delimiter.
@@ -26,7 +26,7 @@ namespace apercommon
          * @param delim Delimiter.
          * @return The split string as a vector.
          */
-        extern std::vector<std::string> APERCOMMON_EXPORTS split(const std::string &s, char delim);
+        extern std::vector<std::string> APERCOMMON_API split(const std::string &s, char delim);
 
         /**
          * Checks if two chars are equal with case insensitive.
@@ -34,7 +34,7 @@ namespace apercommon
          * @param b One of two chars.
          * @return True if they are equal with case insensitive else false.
          */
-        extern bool APERCOMMON_EXPORTS equalsIgnoreCase(const char a, const char b);
+        extern bool APERCOMMON_API equalsIgnoreCase(const char a, const char b);
 
         /**
          * Checks if two strings are equal.
@@ -42,7 +42,7 @@ namespace apercommon
          * @param b One of two strings.
          * @return True if they are equal else false.
          */
-        extern bool APERCOMMON_EXPORTS equals(std::string const &a, std::string const &b);
+        extern bool APERCOMMON_API equals(std::string const &a, std::string const &b);
 
         /**
          * Checks if two strings are equal with case insensitive.
@@ -50,7 +50,7 @@ namespace apercommon
          * @param b One of two strings.
          * @return True if they are equal with case insensitive else false.
          */
-        extern bool APERCOMMON_EXPORTS equalsIgnoreCase(std::string const &a, std::string const &b);
+        extern bool APERCOMMON_API equalsIgnoreCase(std::string const &a, std::string const &b);
     }
 }
 

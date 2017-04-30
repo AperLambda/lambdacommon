@@ -74,9 +74,9 @@ namespace apercommon
             B_WHITE = 107
         };
 
-        extern std::ostream APERCOMMON_EXPORTS &operator<<(std::ostream &stream, TermFormatting termFormatting);
+        extern std::ostream APERCOMMON_API &operator<<(std::ostream &stream, TermFormatting termFormatting);
 
-        extern std::ostream APERCOMMON_EXPORTS &operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting);
+        extern std::ostream APERCOMMON_API &operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting);
 
         /*!
          * This function will erase the actual line in the stream.
@@ -84,7 +84,7 @@ namespace apercommon
          * @param stream Stream will be affect.
          * @return The current stream.
          */
-        extern std::ostream APERCOMMON_EXPORTS &eraseActualLine(std::ostream &stream);
+        extern std::ostream APERCOMMON_API &eraseActualLine(std::ostream &stream);
 
         /*!
          * This function will do a carriage return in the stream.
@@ -92,7 +92,7 @@ namespace apercommon
          * @param stream Stream will be affect.
          * @return The current stream.
          */
-        extern std::ostream APERCOMMON_EXPORTS &carriageReturn(std::ostream &stream);
+        extern std::ostream APERCOMMON_API &carriageReturn(std::ostream &stream);
     }
 }
 

@@ -26,11 +26,11 @@
 
 #define APERCOMMON_VERSION_MAJOR 1
 #define APERCOMMON_VERSION_MINOR 1
-#define APERCOMMON_VERSION_BUILD 2
+#define APERCOMMON_VERSION_BUILD 3
 
 namespace apercommon
 {
-    extern std::string APERCOMMON_EXPORTS getVersion();
+    extern std::string APERCOMMON_API getVersion();
 }
 
 #endif
