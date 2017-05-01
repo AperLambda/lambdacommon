@@ -6,6 +6,7 @@ include(GenerateExportHeader)
 set(CMAKE_CXX_STANDARD 11)
 
 option(APERCOMMON_BUILD_STATIC "Build static libraries" OFF)
+option(APERCOMMON_INSTALL "Generate installation target" ON)
 option(APERCOMMON_BUILD_TESTS "Build the AperCommon test programs" ON)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -17,20 +18,26 @@ elseif (MSVC)
 endif ()
 
 # All files
+# There is the C++ headers files.
 set(HEADERS_GRAPHICS include/apercommon/graphics/color.h)
 set(HEADERS_SYSTEM include/apercommon/system/os.h include/apercommon/system/devices.h include/apercommon/system/terminal.h)
 set(HEADERS_BASE include/apercommon/apercommon.h include/apercommon/string.h)
 set(HEADERS_FILES ${HEADERS_GRAPHICS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
+# There is the C++ sources files.
 set(SOURCES_GRAPHICS src/graphics/color.cpp)
 set(SOURCES_SYSTEM src/system/os.cpp src/system/terminal.cpp)
 set(SOURCES_BASE src/apercommon.cpp src/string.cpp)
 set(SOURCES_FILES ${SOURCES_GRAPHICS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
 
+# Now build the library
+# Build static if the option is on.
 if (APERCOMMON_BUILD_STATIC)
     add_library(apercommon STATIC ${HEADERS_FILES} ${SOURCES_FILES})
 else ()
+    # Build the shared library
     add_library(apercommon SHARED ${HEADERS_FILES} ${SOURCES_FILES})
 endif ()
+# Generate the export header and include it.
 GENERATE_EXPORT_HEADER(apercommon
         BASE_NAME mapercommon
         EXPORT_MACRO_NAME APERCOMMON_API
@@ -38,6 +45,19 @@ GENERATE_EXPORT_HEADER(apercommon
         STATIC_DEFINE SHARED_EXPORTS_BUILT_AS_STATIC)
 target_include_directories(apercommon PUBLIC ${CMAKE_BINARY_DIR}/exports)
 
+# Set the variables
+set(APERCOMMON_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Install if the option is on.
+if (APERCOMMON_INSTALL)
+    install(FILES ${HEADERS_FILES} DESTINATION include)
+    install(TARGETS apercommon
+            RUNTIME DESTINATION bin COMPONENT libraries
+            LIBRARY DESTINATION lib COMPONENT libraries
+            ARCHIVE DESTINATION lib COMPONENT libraries)
+endif ()
+
+# Build the tests if the option is on.
 if (APERCOMMON_BUILD_TESTS)
     add_subdirectory(tests)
 endif ()
