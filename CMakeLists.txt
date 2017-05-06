@@ -3,7 +3,7 @@ project(apercommon)
 
 include(GenerateExportHeader)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 option(APERCOMMON_BUILD_STATIC "Build static libraries" OFF)
 option(APERCOMMON_INSTALL "Generate installation target" ON)
@@ -32,11 +32,10 @@ set(SOURCES_FILES ${SOURCES_GRAPHICS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
 # Now build the library
 # Build static if the option is on.
 if (APERCOMMON_BUILD_STATIC)
-    add_library(apercommon STATIC ${HEADERS_FILES} ${SOURCES_FILES})
-else ()
-    # Build the shared library
-    add_library(apercommon SHARED ${HEADERS_FILES} ${SOURCES_FILES})
+    add_library(apercommon_static STATIC ${HEADERS_FILES} ${SOURCES_FILES})
 endif ()
+# Build the shared library
+add_library(apercommon SHARED ${HEADERS_FILES} ${SOURCES_FILES})
 # Generate the export header and include it.
 GENERATE_EXPORT_HEADER(apercommon
         BASE_NAME mapercommon
@@ -44,6 +43,10 @@ GENERATE_EXPORT_HEADER(apercommon
         EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/apercommon_exports.h
         STATIC_DEFINE SHARED_EXPORTS_BUILT_AS_STATIC)
 target_include_directories(apercommon PUBLIC ${CMAKE_BINARY_DIR}/exports)
+if (APERCOMMON_BUILD_STATIC)
+    target_compile_definitions(apercommon_static PUBLIC -DSHARED_EXPORTS_BUILT_AS_STATIC)
+    target_include_directories(apercommon_static PUBLIC ${CMAKE_BINARY_DIR}/exports)
+endif ()
 
 # Set the variables
 set(APERCOMMON_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
