@@ -5,3 +5,5 @@
 [![GitHub issues](https://img.shields.io/github/issues/AperEntertainment/AperCommon.svg)](https://github.com/AperEntertainment/AperCommon/issues)
 
 A library written in C++ with common features.
+
+Features: OS Detection, Terminal colors, string manipulations, filesystem manipulations, and more!

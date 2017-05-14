@@ -20,12 +20,14 @@ endif ()
 # All files
 # There is the C++ headers files.
 set(HEADERS_GRAPHICS include/apercommon/graphics/color.h)
-set(HEADERS_SYSTEM include/apercommon/system/os.h include/apercommon/system/devices.h include/apercommon/system/terminal.h)
+set(HEADERS_FILESYSTEM include/apercommon/system/filesystem/filesystem.h)
+set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/apercommon/system/os.h include/apercommon/system/devices.h include/apercommon/system/terminal.h)
 set(HEADERS_BASE include/apercommon/apercommon.h include/apercommon/string.h)
 set(HEADERS_FILES ${HEADERS_GRAPHICS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
 # There is the C++ sources files.
 set(SOURCES_GRAPHICS src/graphics/color.cpp)
-set(SOURCES_SYSTEM src/system/os.cpp src/system/terminal.cpp)
+set(SOURCES_FILESYSTEM src/system/filesystem/filesystem.cpp)
+set(SOURCES_SYSTEM ${SOURCES_FILESYSTEM} src/system/os.cpp src/system/terminal.cpp)
 set(SOURCES_BASE src/apercommon.cpp src/string.cpp)
 set(SOURCES_FILES ${SOURCES_GRAPHICS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
 
@@ -38,7 +40,7 @@ endif ()
 add_library(apercommon SHARED ${HEADERS_FILES} ${SOURCES_FILES})
 # Generate the export header and include it.
 GENERATE_EXPORT_HEADER(apercommon
-        BASE_NAME mapercommon
+        BASE_NAME apercommon
         EXPORT_MACRO_NAME APERCOMMON_API
         EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/apercommon_exports.h
         STATIC_DEFINE SHARED_EXPORTS_BUILT_AS_STATIC)

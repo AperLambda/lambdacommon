@@ -526,3 +526,4 @@ luac.out
 
 # Dependencies
 cmake-build-debug/
+cmake-build-release/

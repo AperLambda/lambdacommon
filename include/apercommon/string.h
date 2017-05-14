@@ -51,6 +51,29 @@ namespace apercommon
          * @return True if they are equal with case insensitive else false.
          */
         extern bool APERCOMMON_API equalsIgnoreCase(std::string const &a, std::string const &b);
+
+        extern std::string APERCOMMON_API replaceAll(std::string subject, const char &from, const char &to);
+
+        extern std::string APERCOMMON_API
+        replaceAll(std::string subject, const std::string &from, const std::string &to);
+
+#ifdef APER_WINDOWS
+
+        /**
+         * Converts a std::wstring to a std::string.
+         * @param wstring The std::wstring to convert.
+         * @return The converted string.
+         */
+        extern std::string APERCOMMON_API convertWStringToString(std::wstring wstring);
+
+        /**
+         * Converts a std::string to a std::wstring.
+         * @param wstring The std::string to convert.
+         * @return The converted wstring.
+         */
+        extern std::wstring APERCOMMON_API convertStringToWString(std::string string);
+
+#endif
     }
 }
 
