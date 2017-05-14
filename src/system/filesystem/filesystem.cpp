@@ -25,6 +25,8 @@
 #else
 
 #include <unistd.h>
+#include <cstring>
+#include <limits.h>
 #define STAT_STRUCT stat
 #define STAT_METHOD stat
 
@@ -197,7 +199,7 @@ namespace apercommon
                 return 0;
             struct STAT_STRUCT sb;
             if (STAT_METHOD(toString().c_str(), &sb) != 0)
-                throw runtime_error("Path::getFileSize(): cannot stat file \"" + toString() + "\"!");
+                throw runtime_error("apercommon::path::Path.getFileSize(): cannot stat file \"" + toString() + "\"!");
             return (size_t) sb.st_size;
         }
 
@@ -209,12 +211,12 @@ namespace apercommon
             char temp[MAX_PATH];
             auto length = GetFullPathNameA(toString().c_str(), MAX_PATH, temp, NULL);
             if (length == 0)
-                throw runtime_error("Internal error in apercommon::Path::toAbsolute(): " + to_string(GetLastError()));
+                throw runtime_error("Internal error in apercommon::path::Path.toAbsolute(): " + to_string(GetLastError()));
             return Path(temp);
 #else
             char temp[PATH_MAX];
             if (realpath(toString().c_str(), temp) == NULL)
-                throw runtime_error("Internal error in apercommon::Path::toAbsolute(): " + string(strerror(errno)));
+                throw runtime_error("Internal error in apercommon::path::Path::toAbsolute(): " + string(strerror(errno)));
             return Path(temp);
 #endif
         }
@@ -265,7 +267,7 @@ namespace apercommon
         Path Path::operator/(const Path &other)
         {
             if (other._absolute)
-                throw runtime_error("apercommon::Path::operator/(): Expected a relative path!");
+                throw runtime_error("apercommon::path::Path::operator/(): Expected a relative path!");
 
             Path result(*this);
 
@@ -292,7 +294,7 @@ namespace apercommon
             wchar_t temp[MAX_PATH];
             if (!_wgetcwd(temp, MAX_PATH))
                 throw runtime_error(
-                        "Internal error in apercommon::getCurrentWorkingDirectoryWStr(): " + to_string(GetLastError()));
+                        "Internal error in apercommon::path::getCurrentWorkingDirectoryWStr(): " + to_string(GetLastError()));
             return wstring(temp);
         }
 
@@ -305,7 +307,7 @@ namespace apercommon
 #else
             char temp[PATH_MAX];
             if (getcwd(temp, PATH_MAX) == NULL)
-                throw runtime_error("Internal error in apercommon::getCurrentWorkingDirectoryStr(): " + string(strerror(errno)));
+                throw runtime_error("Internal error in apercommon::path::getCurrentWorkingDirectoryStr(): " + string(strerror(errno)));
             return string(temp);
 #endif
         }
@@ -330,4 +332,5 @@ namespace apercommon
 }
 
 #undef STAT_STRUCT
+#undef STAT_METHOD
 #endif //APERCOMMON_FILESYSTEM_H
