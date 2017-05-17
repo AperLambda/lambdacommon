@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <cstring>
 #include <limits.h>
+
 #define STAT_STRUCT stat
 #define STAT_METHOD stat
 
@@ -89,6 +90,10 @@ namespace apercommon
 
         Path::Path(const Path &path) : _type(path._type), _path(new vector<string>(*path._path)),
                                        _absolute(path._absolute)
+        {}
+
+        Path::Path(Path &&path) : _type(path._type), _path(new vector<string>(move(*path._path))),
+                                  _absolute(path._absolute)
         {}
 
         Path::~Path()
@@ -216,7 +221,8 @@ namespace apercommon
 #else
             char temp[PATH_MAX];
             if (realpath(toString().c_str(), temp) == NULL)
-                throw runtime_error("Internal error in apercommon::path::Path::toAbsolute(): " + string(strerror(errno)));
+                throw runtime_error(
+                        "Internal error in apercommon::path::Path::toAbsolute(): " + string(strerror(errno)));
             return Path(temp);
 #endif
         }
@@ -307,7 +313,8 @@ namespace apercommon
 #else
             char temp[PATH_MAX];
             if (getcwd(temp, PATH_MAX) == NULL)
-                throw runtime_error("Internal error in apercommon::path::getCurrentWorkingDirectoryStr(): " + string(strerror(errno)));
+                throw runtime_error("Internal error in apercommon::path::getCurrentWorkingDirectoryStr(): " +
+                                    string(strerror(errno)));
             return string(temp);
 #endif
         }

@@ -10,7 +10,8 @@ using namespace std;
 
 int main()
 {
-    cout << "Starting AperCommon test with AperCommon v" << apercommon::getVersion() << endl;
+    cout << "Starting AperCommon test with AperCommon v" << apercommon::getVersion() << " (Compiled with "
+         << APERCOMMON_VERSION_MAJOR << APERCOMMON_VERSION_MINOR << APERCOMMON_VERSION_BUILD << ")" << endl;
     cout << endl;
     cout << "OS running: " << TermFormatting::LIGHT_YELLOW << os::getOSName(os::getOS()) << TermFormatting::RESET
          << " (arch: " << os::getArchName(os::getOSArch()) << ")" << endl;
@@ -76,5 +77,17 @@ int main()
         cout << TermFormatting::LIGHT_RED << "FAILED." << TermFormatting::RESET << endl;
         return 1;
     }
+
+    cout << "TESTING PATH::OPERATOR/(STD::STRING) WITH \"" << herePath.toString() << "\"...\nRESULT: ";
+    auto h404rePath = herePath / "notFoundDir";
+    if (aperstring::equals(h404rePath.getFileName(), "notFoundDir"))
+        cout << TermFormatting::LIGHT_GREEN << "OK. (" << h404rePath.toString() << ")" << TermFormatting::RESET << endl;
+    else
+    {
+        cout << TermFormatting::LIGHT_RED << "FAILED. (" << h404rePath.toString() << ")" << TermFormatting::RESET
+             << endl;
+        return 1;
+    }
+
     return 0;
 }

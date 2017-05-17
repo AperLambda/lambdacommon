@@ -52,6 +52,8 @@ namespace apercommon
 
             Path(const Path &path);
 
+            Path(Path &&path);
+
             ~Path();
 
             void set(const std::string &str, PathType type = NATIVE);
