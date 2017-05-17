@@ -102,6 +102,10 @@ namespace apercommon
 
             Path operator/(const Path &other);
 
+            Path &operator=(const Path &path);
+
+            Path &operator=(Path &&path);
+
             bool operator==(const Path &_path);
 
             bool operator!=(const Path &_path);

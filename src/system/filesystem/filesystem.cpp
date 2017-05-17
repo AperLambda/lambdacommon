@@ -283,6 +283,22 @@ namespace apercommon
             return result;
         }
 
+        Path &Path::operator=(const Path &path) {
+            _type = path._type;
+            _path = new vector<string>(*path._path);
+            _absolute = path._absolute;
+            return *this;
+        }
+
+        Path &Path::operator=(Path &&path) {
+            if (this != &path) {
+                _type = path._type;
+                _path = new vector<string>(move(*path._path));
+                _absolute = path._absolute;
+            }
+            return *this;
+        }
+
         bool Path::operator==(const Path &_p)
         {
             return _p._path == _path;
