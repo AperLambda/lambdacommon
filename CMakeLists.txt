@@ -55,11 +55,20 @@ set(APERCOMMON_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Install if the option is on.
 if (APERCOMMON_INSTALL)
-    install(FILES ${HEADERS_FILES} DESTINATION include)
+    foreach (LOOP_HEADER ${HEADERS_FILES})
+        get_filename_component(HEADER_PARENT_DIR ${LOOP_HEADER} DIRECTORY)
+        install(FILES ${LOOP_HEADER} DESTINATION ${HEADER_PARENT_DIR})
+    endforeach ()
     install(TARGETS apercommon
             RUNTIME DESTINATION bin COMPONENT libraries
             LIBRARY DESTINATION lib COMPONENT libraries
             ARCHIVE DESTINATION lib COMPONENT libraries)
+    if (APERCOMMON_BUILD_STATIC)
+        install(TARGETS apercommon_static
+                RUNTIME DESTINATION bin COMPONENT libraries
+                LIBRARY DESTINATION lib COMPONENT libraries
+                ARCHIVE DESTINATION lib COMPONENT libraries)
+    endif ()
 endif ()
 
 # Build the tests if the option is on.
