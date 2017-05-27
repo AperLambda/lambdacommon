@@ -126,8 +126,14 @@ namespace apercommon
 #endif
         }
 
-        bool Path::mkdir()
+        bool Path::mkdir(bool recursive)
         {
+            if (recursive)
+            {
+                auto parent = getParent();
+                if (!parent.exists())
+                    parent.mkdir(true);
+            }
 #ifdef APER_WINDOWS
             return CreateDirectoryA(toString().c_str(), NULL) != 0;
 #else
@@ -216,7 +222,8 @@ namespace apercommon
             char temp[MAX_PATH];
             auto length = GetFullPathNameA(toString().c_str(), MAX_PATH, temp, NULL);
             if (length == 0)
-                throw runtime_error("Internal error in apercommon::path::Path.toAbsolute(): " + to_string(GetLastError()));
+                throw runtime_error(
+                        "Internal error in apercommon::path::Path.toAbsolute(): " + to_string(GetLastError()));
             return Path(temp);
 #else
             char temp[PATH_MAX];
@@ -283,15 +290,18 @@ namespace apercommon
             return result;
         }
 
-        Path &Path::operator=(const Path &path) {
+        Path &Path::operator=(const Path &path)
+        {
             _type = path._type;
             _path = new vector<string>(*path._path);
             _absolute = path._absolute;
             return *this;
         }
 
-        Path &Path::operator=(Path &&path) {
-            if (this != &path) {
+        Path &Path::operator=(Path &&path)
+        {
+            if (this != &path)
+            {
                 _type = path._type;
                 _path = new vector<string>(move(*path._path));
                 _absolute = path._absolute;
@@ -316,7 +326,8 @@ namespace apercommon
             wchar_t temp[MAX_PATH];
             if (!_wgetcwd(temp, MAX_PATH))
                 throw runtime_error(
-                        "Internal error in apercommon::path::getCurrentWorkingDirectoryWStr(): " + to_string(GetLastError()));
+                        "Internal error in apercommon::path::getCurrentWorkingDirectoryWStr(): " +
+                        to_string(GetLastError()));
             return wstring(temp);
         }
 
@@ -340,15 +351,15 @@ namespace apercommon
             return Path(getCurrentWorkingDirectoryStr());
         }
 
-        Path APERCOMMON_API mkdir(const char *path)
+        Path APERCOMMON_API mkdir(const char *path, bool recursive)
         {
-            return mkdir(string(path));
+            return mkdir(string(path), recursive);
         }
 
-        Path APERCOMMON_API mkdir(std::string path)
+        Path APERCOMMON_API mkdir(std::string path, bool recusrive)
         {
             Path result{path};
-            result.mkdir();
+            result.mkdir(recusrive);
             return result;
         }
     }

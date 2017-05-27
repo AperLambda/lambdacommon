@@ -60,7 +60,7 @@ namespace apercommon
 
             bool remove();
 
-            bool mkdir();
+            bool mkdir(bool recursive = false);
 
             bool empty() const;
 
@@ -121,9 +121,9 @@ namespace apercommon
 
         extern Path APERCOMMON_API getCurrentWorkingDirectory();
 
-        extern Path APERCOMMON_API mkdir(const char *path);
+        extern Path APERCOMMON_API mkdir(const char *path, bool recursive = false);
 
-        extern Path APERCOMMON_API mkdir(std::string path);
+        extern Path APERCOMMON_API mkdir(std::string path, bool recursive = false);
     }
 }
 
