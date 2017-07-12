@@ -61,6 +61,16 @@ namespace apercommon
         return static_cast<uint8_t>(_alpha * 255);
     }
 
+    Color Color::BLACK{0.f, 0.f, 0.f};
+
+    Color Color::WHITE{1.f, 1.f, 1.f};
+
+    Color Color::RED{1.f, 0.f, 0.f};
+
+    Color Color::GREEN{0.f, 1.f, 0.f};
+
+    Color Color::BLUE{0.f, 0.f, 1.f};
+
     Color getColorByIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
     {
         return Color((red / 255.f), (green / 255.f), (blue / 255.f), (alpha / 255.f));

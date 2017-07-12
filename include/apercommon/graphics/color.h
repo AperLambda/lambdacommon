@@ -88,6 +88,31 @@ namespace apercommon
          * @return The alpha value (between 0 and 255).
          */
         uint8_t alphaAsInt() const;
+
+        /**
+         * Represents the black color.
+         */
+        static Color BLACK;
+
+        /**
+         * Represents the white color.
+         */
+        static Color WHITE;
+
+        /**
+         * Represents the red color.
+         */
+        static Color RED;
+
+        /**
+         * Represents the green color.
+         */
+        static Color GREEN;
+
+        /**
+         * Represents the blue color.
+         */
+        static Color BLUE;
     };
 
     extern Color APERCOMMON_API getColorByIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
