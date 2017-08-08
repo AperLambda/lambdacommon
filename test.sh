@@ -16,4 +16,4 @@ fi
 cd build/
 cp liblambdacommon.so tests
 cd tests
-./apercommon_test
+./lambdacommon_test
