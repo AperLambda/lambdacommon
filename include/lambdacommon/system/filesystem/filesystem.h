@@ -1,19 +1,19 @@
 /*
- * Copyright © 2017 Clément "wAperClem" Wagner
+ * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
  *
- * This file is part of AperCommon.
+ * This file is part of λcommon.
  *
  * Licensed under the MIT license. For more information,
  * see the LICENSE file.
  */
 
-#ifndef APERCOMMON_PATH_H
-#define APERCOMMON_PATH_H
+#ifndef LAMBDACOMMON_PATH_H
+#define LAMBDACOMMON_PATH_H
 
-#include "../../apercommon.h"
+#include "../../lambdacommon.h"
 #include <vector>
 
-namespace apercommon
+namespace lambdacommon
 {
     namespace filesystem
     {
@@ -21,14 +21,14 @@ namespace apercommon
         {
             WINDOWS = 1,
             COMMON = 0,
-#ifdef APER_WINDOWS
+#ifdef LAMBDA_WINDOWS
             NATIVE = WINDOWS
 #else
             NATIVE = COMMON
 #endif
         };
 
-        class APERCOMMON_API Path
+        class LAMBDACOMMON_API Path
         {
         protected:
             PathType _type;
@@ -42,7 +42,7 @@ namespace apercommon
 
             Path(std::string path);
 
-#ifdef APER_WINDOWS
+#ifdef LAMBDA_WINDOWS
 
             Path(const wchar_t *path);
 
@@ -111,20 +111,20 @@ namespace apercommon
             bool operator!=(const Path &_path);
         };
 
-#ifdef APER_WINDOWS
+#ifdef LAMBDA_WINDOWS
 
-        extern std::wstring APERCOMMON_API getCurrentWorkingDirectoryWStr();
+        extern std::wstring LAMBDACOMMON_API getCurrentWorkingDirectoryWStr();
 
 #endif
 
-        extern std::string APERCOMMON_API getCurrentWorkingDirectoryStr();
+        extern std::string LAMBDACOMMON_API getCurrentWorkingDirectoryStr();
 
-        extern Path APERCOMMON_API getCurrentWorkingDirectory();
+        extern Path LAMBDACOMMON_API getCurrentWorkingDirectory();
 
-        extern Path APERCOMMON_API mkdir(const char *path, bool recursive = false);
+        extern Path LAMBDACOMMON_API mkdir(const char *path, bool recursive = false);
 
-        extern Path APERCOMMON_API mkdir(std::string path, bool recursive = false);
+        extern Path LAMBDACOMMON_API mkdir(std::string path, bool recursive = false);
     }
 }
 
-#endif //APERCOMMON_PATH_H
+#endif //LAMBDACOMMON_PATH_H

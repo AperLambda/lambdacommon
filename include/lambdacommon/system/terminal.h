@@ -1,19 +1,19 @@
 /*
- * Copyright © 2017 Clément "wAperClem" Wagner
+ * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
  *
- * This file is part of AperCommon.
+ * This file is part of λcommon.
  *
  * Licensed under the MIT license. For more information,
  * see the LICENSE file.
  */
 
-#ifndef APERCOMMON_TERMINAL_H
-#define APERCOMMON_TERMINAL_H
+#ifndef LAMBDACOMMON_TERMINAL_H
+#define LAMBDACOMMON_TERMINAL_H
 
 #include "os.h"
 #include <vector>
 
-namespace apercommon
+namespace lambdacommon
 {
     namespace terminal
     {
@@ -74,9 +74,9 @@ namespace apercommon
             B_WHITE = 107
         };
 
-        extern std::ostream APERCOMMON_API &operator<<(std::ostream &stream, TermFormatting termFormatting);
+        extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting termFormatting);
 
-        extern std::ostream APERCOMMON_API &operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting);
+        extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting);
 
         /*!
          * This function will erase the actual line in the stream.
@@ -84,7 +84,7 @@ namespace apercommon
          * @param stream Stream will be affect.
          * @return The current stream.
          */
-        extern std::ostream APERCOMMON_API &eraseActualLine(std::ostream &stream);
+        extern std::ostream LAMBDACOMMON_API &eraseActualLine(std::ostream &stream);
 
         /*!
          * This function will do a carriage return in the stream.
@@ -92,8 +92,8 @@ namespace apercommon
          * @param stream Stream will be affect.
          * @return The current stream.
          */
-        extern std::ostream APERCOMMON_API &carriageReturn(std::ostream &stream);
+        extern std::ostream LAMBDACOMMON_API &carriageReturn(std::ostream &stream);
     }
 }
 
-#endif //APERCOMMON_TERMINAL_H
+#endif //LAMBDACOMMON_TERMINAL_H

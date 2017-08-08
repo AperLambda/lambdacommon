@@ -9,7 +9,7 @@ sh ./build.sh
 fi
 
 if [ ! -d "build" ]; then
-echo "${RED}Cannot test AperCommon: Cannot build the library.${NC}"
+echo "${RED}Cannot test λcommon: Cannot build the library.${NC}"
 return 1;
 fi
 

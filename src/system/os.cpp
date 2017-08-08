@@ -1,33 +1,33 @@
 /*
- * Copyright © 2017 Clément "wAperClem" Wagner
+ * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
  *
- * This file is part of AperCommon.
+ * This file is part of λcommon.
  *
  * Licensed under the MIT license. For more information,
  * see the LICENSE file.
  */
 
-#include "../../include/apercommon/system/os.h"
+#include "../../include/lambdacommon/system/os.h"
 
 #ifdef __arm__
-#define APER_ARM
+#define LAMBDA_ARM
 #elif _ARM || _M_ARM || __arm
-#define APER_ARM
+#define LAMBDA_ARM
 #endif
 
 using namespace std;
 
-namespace apercommon
+namespace lambdacommon
 {
     OS os::getOS()
     {
-#ifdef APER_WINDOWS
-#ifdef APER_WIN64
+#ifdef LAMBDA_WINDOWS
+#ifdef LAMBDA_WIN64
         return OS::WINDOWS_64;
 #else
         return OS::WINDOWS_32;
 #endif
-#elif APER_MAC_OSX
+#elif LAMBDA_MAC_OSX
         return OS::MAC_OSX;
 #elif __linux__
         return OS::LINUX;
@@ -67,7 +67,7 @@ namespace apercommon
 
     OSArchitecture os::getOSArch()
     {
-#ifdef APER_ARM
+#ifdef LAMBDA_ARM
         return OSArchitecture::ARM;
 #elif __aarch64__
         return OSArchitecture::ARM64;

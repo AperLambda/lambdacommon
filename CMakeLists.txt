@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.1)
-project(apercommon)
+project(λcommon)
 
 include(GenerateExportHeader)
 
 set(CMAKE_CXX_STANDARD 14)
 
-option(APERCOMMON_BUILD_STATIC "Build static libraries" OFF)
-option(APERCOMMON_INSTALL "Generate installation target" ON)
-option(APERCOMMON_BUILD_TESTS "Build the AperCommon test programs" ON)
+option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)
+option(LAMBDACOMMON_INSTALL "Generate installation target" ON)
+option(LAMBDACOMMON_BUILD_TESTS "Build the λcommon test programs" ON)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -march=native -mtune=native -ffast-math -D__extern_always_inline=\"extern __always_inline\"")
@@ -19,52 +19,52 @@ endif ()
 
 # All files
 # There is the C++ headers files.
-set(HEADERS_GRAPHICS include/apercommon/graphics/color.h)
-set(HEADERS_FILESYSTEM include/apercommon/system/filesystem/filesystem.h)
-set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/apercommon/system/os.h include/apercommon/system/devices.h include/apercommon/system/terminal.h)
-set(HEADERS_BASE include/apercommon/apercommon.h include/apercommon/string.h)
+set(HEADERS_GRAPHICS include/lambdacommon/graphics/color.h)
+set(HEADERS_FILESYSTEM include/lambdacommon/system/filesystem/filesystem.h)
+set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/lambdacommon/system/os.h include/lambdacommon/system/devices.h include/lambdacommon/system/terminal.h)
+set(HEADERS_BASE include/lambdacommon/lambdacommon.h include/lambdacommon/string.h)
 set(HEADERS_FILES ${HEADERS_GRAPHICS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
 # There is the C++ sources files.
 set(SOURCES_GRAPHICS src/graphics/color.cpp)
 set(SOURCES_FILESYSTEM src/system/filesystem/filesystem.cpp)
 set(SOURCES_SYSTEM ${SOURCES_FILESYSTEM} src/system/os.cpp src/system/terminal.cpp)
-set(SOURCES_BASE src/apercommon.cpp src/string.cpp)
+set(SOURCES_BASE src/lambdacommon.cpp src/string.cpp)
 set(SOURCES_FILES ${SOURCES_GRAPHICS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
 
 # Now build the library
 # Build static if the option is on.
-if (APERCOMMON_BUILD_STATIC)
-    add_library(apercommon_static STATIC ${HEADERS_FILES} ${SOURCES_FILES})
+if (LAMBDACOMMON_BUILD_STATIC)
+    add_library(lambdacommon_static STATIC ${HEADERS_FILES} ${SOURCES_FILES})
 endif ()
 # Build the shared library
-add_library(apercommon SHARED ${HEADERS_FILES} ${SOURCES_FILES})
+add_library(lambdacommon SHARED ${HEADERS_FILES} ${SOURCES_FILES})
 # Generate the export header and include it.
-GENERATE_EXPORT_HEADER(apercommon
-        BASE_NAME apercommon
-        EXPORT_MACRO_NAME APERCOMMON_API
-        EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/apercommon_exports.h
+GENERATE_EXPORT_HEADER(lambdacommon
+        BASE_NAME lambdacommon
+        EXPORT_MACRO_NAME LAMBDACOMMON_API
+        EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/lambdacommon_exports.h
         STATIC_DEFINE SHARED_EXPORTS_BUILT_AS_STATIC)
-target_include_directories(apercommon PUBLIC ${CMAKE_BINARY_DIR}/exports)
-if (APERCOMMON_BUILD_STATIC)
-    target_compile_definitions(apercommon_static PUBLIC -DSHARED_EXPORTS_BUILT_AS_STATIC)
-    target_include_directories(apercommon_static PUBLIC ${CMAKE_BINARY_DIR}/exports)
+target_include_directories(lambdacommon PUBLIC ${CMAKE_BINARY_DIR}/exports)
+if (LAMBDACOMMON_BUILD_STATIC)
+    target_compile_definitions(lambdacommon_static PUBLIC -DSHARED_EXPORTS_BUILT_AS_STATIC)
+    target_include_directories(lambdacommon_static PUBLIC ${CMAKE_BINARY_DIR}/exports)
 endif ()
 
 # Set the variables
-set(APERCOMMON_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(LAMBDACOMMON_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Install if the option is on.
-if (APERCOMMON_INSTALL)
+if (LAMBDACOMMON_INSTALL)
     foreach (LOOP_HEADER ${HEADERS_FILES})
         get_filename_component(HEADER_PARENT_DIR ${LOOP_HEADER} DIRECTORY)
         install(FILES ${LOOP_HEADER} DESTINATION ${HEADER_PARENT_DIR})
     endforeach ()
-    install(TARGETS apercommon
+    install(TARGETS lambdacommon
             RUNTIME DESTINATION bin COMPONENT libraries
             LIBRARY DESTINATION lib COMPONENT libraries
             ARCHIVE DESTINATION lib COMPONENT libraries)
-    if (APERCOMMON_BUILD_STATIC)
-        install(TARGETS apercommon_static
+    if (LAMBDACOMMON_BUILD_STATIC)
+        install(TARGETS lambdacommon_static
                 RUNTIME DESTINATION bin COMPONENT libraries
                 LIBRARY DESTINATION lib COMPONENT libraries
                 ARCHIVE DESTINATION lib COMPONENT libraries)
@@ -72,6 +72,6 @@ if (APERCOMMON_INSTALL)
 endif ()
 
 # Build the tests if the option is on.
-if (APERCOMMON_BUILD_TESTS)
+if (LAMBDACOMMON_BUILD_TESTS)
     add_subdirectory(tests)
 endif ()

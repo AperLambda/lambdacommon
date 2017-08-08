@@ -1,18 +1,18 @@
 /*
- * Copyright © 2017 Clément "wAperClem" Wagner
+ * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
  *
- * This file is part of AperCommon.
+ * This file is part of λcommon.
  *
  * Licensed under the MIT license. For more information,
  * see the LICENSE file.
  */
 
-#ifndef APERCOMMON_OS_H
-#define APERCOMMON_OS_H
+#ifndef LAMBDACOMMON_OS_H
+#define LAMBDACOMMON_OS_H
 
-#include "../apercommon.h"
+#include "../lambdacommon.h"
 
-namespace apercommon
+namespace lambdacommon
 {
     /*! @brief Enumeration of different Operating system.
      *
@@ -48,14 +48,14 @@ namespace apercommon
          *
          * @return The OS used.
          */
-        extern OS APERCOMMON_API getOS();
+        extern OS LAMBDACOMMON_API getOS();
 
-        extern std::string APERCOMMON_API getOSName(OS os);
+        extern std::string LAMBDACOMMON_API getOSName(OS os);
 
-        extern OSArchitecture APERCOMMON_API getOSArch();
+        extern OSArchitecture LAMBDACOMMON_API getOSArch();
 
-        extern std::string APERCOMMON_API getArchName(OSArchitecture arch);
+        extern std::string LAMBDACOMMON_API getArchName(OSArchitecture arch);
     }
 }
 
-#endif //APERCOMMON_OS_H
+#endif //LAMBDACOMMON_OS_H

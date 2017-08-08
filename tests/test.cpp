@@ -1,17 +1,17 @@
-#include <apercommon/graphics/color.h>
-#include <apercommon/system/terminal.h>
-#include <apercommon/system/filesystem/filesystem.h>
+#include <lambdacommon/graphics/color.h>
+#include <lambdacommon/system/terminal.h>
+#include <lambdacommon/system/filesystem/filesystem.h>
 #include <iostream>
-#include <apercommon/string.h>
+#include <lambdacommon/string.h>
 
-using namespace apercommon;
+using namespace lambdacommon;
 using namespace terminal;
 using namespace std;
 
 int main()
 {
-    cout << "Starting AperCommon test with AperCommon v" << apercommon::getVersion() << " (Compiled with "
-         << APERCOMMON_VERSION_MAJOR << APERCOMMON_VERSION_MINOR << APERCOMMON_VERSION_BUILD << ")" << endl;
+    cout << "Starting lambdacommon test with lambdacommon v" << lambdacommon::getVersion() << " (Compiled with "
+         << LAMBDACOMMON_VERSION_MAJOR << LAMBDACOMMON_VERSION_MINOR << LAMBDACOMMON_VERSION_BUILD << ")" << endl;
     cout << endl;
     cout << "OS running: " << TermFormatting::LIGHT_YELLOW << os::getOSName(os::getOS()) << TermFormatting::RESET
          << " (arch: " << os::getArchName(os::getOSArch()) << ")" << endl;
@@ -22,8 +22,8 @@ int main()
     string aString = "wAperClem";
     string bString = "wApErClEm";
 
-    cout << "TESTING APERSTRING::EQUALSIGNORECASE(CONST CHAR, CONST CHAR)...\nRESULT: ";
-    if (aperstring::equalsIgnoreCase(aChar, bChar))
+    cout << "TESTING LAMBDASTRING::EQUALSIGNORECASE(CONST CHAR, CONST CHAR)...\nRESULT: ";
+    if (lambdastring::equalsIgnoreCase(aChar, bChar))
         cout << TermFormatting::LIGHT_GREEN << "OK." << TermFormatting::RESET << endl;
     else
     {
@@ -31,8 +31,8 @@ int main()
         return 1;
     }
 
-    cout << "TESTING APERSTRING::EQUALS(CONST STRING, CONST STRING)...\nRESULT: ";
-    if (!aperstring::equals(aString, bString))
+    cout << "TESTING LAMBDASTRING::EQUALS(CONST STRING, CONST STRING)...\nRESULT: ";
+    if (!lambdastring::equals(aString, bString))
         cout << TermFormatting::LIGHT_GREEN << "OK." << TermFormatting::RESET << endl;
     else
     {
@@ -40,8 +40,8 @@ int main()
         return 1;
     }
 
-    cout << "TESTING APERSTRING::EQUALSIGNORECASE(CONST STRING, CONST STRING)...\nRESULT: ";
-    if (aperstring::equalsIgnoreCase(aString, bString))
+    cout << "TESTING LAMBDASTRING::EQUALSIGNORECASE(CONST STRING, CONST STRING)...\nRESULT: ";
+    if (lambdastring::equalsIgnoreCase(aString, bString))
         cout << TermFormatting::LIGHT_GREEN << "OK." << TermFormatting::RESET << endl;
     else
     {
@@ -80,7 +80,7 @@ int main()
 
     cout << "TESTING PATH::OPERATOR/(STD::STRING) WITH \"" << herePath.toString() << "\"...\nRESULT: ";
     auto h404rePath = herePath / "notFoundDir";
-    if (aperstring::equals(h404rePath.getFileName(), "notFoundDir"))
+    if (lambdastring::equals(h404rePath.getFileName(), "notFoundDir"))
         cout << TermFormatting::LIGHT_GREEN << "OK. (" << h404rePath.toString() << ")" << TermFormatting::RESET << endl;
     else
     {

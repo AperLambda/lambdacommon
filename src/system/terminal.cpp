@@ -1,27 +1,27 @@
 /*
- * Copyright © 2017 Clément "wAperClem" Wagner
+ * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
  *
- * This file is part of AperCommon.
+ * This file is part of λcommon.
  *
  * Licensed under the MIT license. For more information,
  * see the LICENSE file.
  */
 
-#include "../../include/apercommon/system/terminal.h"
+#include "../../include/lambdacommon/system/terminal.h"
 #include <iostream>
 
-#if defined(APER_WINDOWS)
+#if defined(LAMBDA_WINDOWS)
 
 #include <io.h>
 #include <windows.h>
 
-#elif defined(__linux__) || defined(APER_MAC_OSX)
+#elif defined(__linux__) || defined(LAMBDA_MAC_OSX)
 #include <unistd.h>
 #endif
 
 using namespace std;
 
-namespace apercommon
+namespace lambdacommon
 {
     namespace terminal
     {
@@ -44,14 +44,14 @@ namespace apercommon
         {
             FILE *std_stream = get_standard_stream(stream);
 
-#if defined(APER_MAC_OSX) || defined(__linux__)
+#if defined(LAMBDA_MAC_OSX) || defined(__linux__)
             return ::isatty(fileno(std_stream));
-#elif defined(APER_WINDOWS)
+#elif defined(LAMBDA_WINDOWS)
             return ::_isatty(_fileno(std_stream)) != 0;
 #endif
         }
 
-#if defined(APER_WINDOWS)
+#if defined(LAMBDA_WINDOWS)
 
         inline void win_change_attributes(std::ostream &stream, int foreground, int background)
         {
@@ -100,7 +100,7 @@ namespace apercommon
             SetConsoleTextAttribute(hTerminal, info.wAttributes);
         }
 
-#endif // APER_WINDOWS
+#endif // LAMBDA_WINDOWS
 
         /*
          * IMPLEMENTATION
@@ -116,7 +116,7 @@ namespace apercommon
         {
             if (is_atty(stream))
             {
-#if defined(APER_WINDOWS)
+#if defined(LAMBDA_WINDOWS)
                 for (size_t i = 0; i < termFormatting.size(); i++)
                 {
                     switch (termFormatting[i])
@@ -244,8 +244,8 @@ namespace apercommon
 
         ostream &eraseActualLine(ostream &stream)
         {
-#if defined(APER_WINDOWS)
-#elif defined(__linux__) || defined(APER_MAC_OSX)
+#if defined(LAMBDA_WINDOWS)
+#elif defined(__linux__) || defined(LAMBDA_MAC_OSX)
             stream << string("\33[2K");
 #endif
             return stream;

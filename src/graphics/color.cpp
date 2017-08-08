@@ -1,19 +1,19 @@
 /*
- * Copyright © 2017 Clément "wAperClem" Wagner
+ * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
  *
- * This file is part of AperCommon.
+ * This file is part of λcommon.
  *
  * Licensed under the MIT license. For more information,
  * see the LICENSE file.
  */
 
-#include "../../include/apercommon/graphics/color.h"
+#include "../../include/lambdacommon/graphics/color.h"
 
 #define MIN(A, B)    ((A) < (B) ? (A) : (B))
 #define MAX(A, B)    ((A) > (B) ? (A) : (B))
 #define CLAMP(X, min, max)    MIN(MAX(X, min), max)
 
-namespace apercommon
+namespace lambdacommon
 {
     Color::Color(float red, float green, float blue, float alpha) : _red(CLAMP(red, 0.f, 1.f)),
                                                                     _green(CLAMP(green, 0.f, 1.f)),

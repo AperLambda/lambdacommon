@@ -1,20 +1,20 @@
 /*
- * Copyright © 2017 Clément "wAperClem" Wagner
+ * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
  *
- * This file is part of AperCommon.
+ * This file is part of λcommon.
  *
  * Licensed under the MIT license. For more information,
  * see the LICENSE file.
  */
 
-#ifndef APERCOMMON_COLOR_H
-#define APERCOMMON_COLOR_H
+#ifndef LAMBDACOMMON_COLOR_H
+#define LAMBDACOMMON_COLOR_H
 
-#include "../apercommon.h"
+#include "../lambdacommon.h"
 
-namespace apercommon
+namespace lambdacommon
 {
-    class APERCOMMON_API Color
+    class LAMBDACOMMON_API Color
     {
     private:
         float _red;
@@ -115,7 +115,7 @@ namespace apercommon
         static Color BLUE;
     };
 
-    extern Color APERCOMMON_API getColorByIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+    extern Color LAMBDACOMMON_API getColorByIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 }
 
-#endif //APERCOMMON_COLOR_H
+#endif //LAMBDACOMMON_COLOR_H

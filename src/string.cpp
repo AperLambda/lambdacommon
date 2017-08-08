@@ -1,21 +1,21 @@
 /*
- * Copyright © 2017 Clément "wAperClem" Wagner
+ * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
  *
- * This file is part of AperCommon.
+ * This file is part of λcommon.
  *
  * Licensed under the MIT license. For more information,
  * see the LICENSE file.
  */
 
 #include <sstream>
-#include "../include/apercommon/string.h"
+#include "../include/lambdacommon/string.h"
 #include <iterator>
 
 using namespace std;
 
-namespace apercommon
+namespace lambdacommon
 {
-    namespace aperstring
+    namespace lambdastring
     {
         template<typename Out>
         void split(const std::string &s, char delim, Out result)
@@ -76,7 +76,7 @@ namespace apercommon
             return subject;
         }
 
-#ifdef APER_WINDOWS
+#ifdef LAMBDA_WINDOWS
 #ifndef __GNUC__
 
 #include <windows.h>
