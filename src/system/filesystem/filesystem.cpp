@@ -7,9 +7,6 @@
  * see the LICENSE file.
  */
 
-#ifndef LAMBDACOMMON_FILESYSTEM_H
-#define LAMBDACOMMON_FILESYSTEM_H
-
 #include "../../../include/lambdacommon/system/filesystem/filesystem.h"
 #include "../../../include/lambdacommon/string.h"
 #include <stdexcept>
@@ -41,83 +38,59 @@ namespace lambdacommon
 {
     namespace filesystem
     {
-        vector<string> tokenize(const string &_string, const string &delim)
-        {
-            string::size_type lastPos = 0, pos = _string.find_first_of(delim, lastPos);
-            vector<string> tokens;
-
-            while (lastPos != string::npos)
-            {
-                if (pos != lastPos)
-                    tokens.push_back(_string.substr(lastPos, pos - lastPos));
-                lastPos = pos;
-                if (lastPos == string::npos || lastPos + 1 == _string.length())
-                    break;
-                pos = _string.find_first_of(delim, ++lastPos);
-            }
-
-            return tokens;
-        }
-
-        Path::Path() : _type(NATIVE), _path(new vector<string>()), _absolute(false)
+        FilePath::FilePath() : Path(), _type(NATIVE), _absolute(false)
         {
 
         }
 
-        Path::Path(const char *path) : _path(new vector<string>())
+        FilePath::FilePath(const char *path) : Path()
         {
             set(string(path));
         }
 
-        Path::Path(string path) : _path(new vector<string>())
+        FilePath::FilePath(string path) : Path()
         {
             set(path);
         }
 
 #ifdef LAMBDA_WINDOWS
 
-        Path::Path(const wchar_t *path) : _path(new vector<string>())
+        FilePath::FilePath(const wchar_t *path) : Path()
         {
             set(lambdastring::convertWStringToString(wstring(path)));
         }
 
-        Path::Path(wstring path) : _path(new vector<string>())
+        FilePath::FilePath(wstring path) : Path()
         {
             set(lambdastring::convertWStringToString(path));
         }
 
 #endif
 
-        Path::Path(const Path &path) : _type(path._type), _path(new vector<string>(*path._path)),
-                                       _absolute(path._absolute)
+        FilePath::FilePath(const FilePath &path) : _type(path._type), Path(*path._path),
+                                                   _absolute(path._absolute)
         {}
 
-        Path::Path(Path &&path) : _type(path._type), _path(new vector<string>(move(*path._path))),
-                                  _absolute(path._absolute)
+        FilePath::FilePath(FilePath &&path) : _type(path._type), Path(vector<string>(move(*path._path))),
+                                              _absolute(path._absolute)
         {}
 
-        Path::~Path()
-        {
-            if (_path != nullptr)
-                delete _path;
-        }
-
-        void Path::set(const string &str, PathType type)
+        void FilePath::set(const string &str, PathType type)
         {
             _type = type;
             if (type == WINDOWS)
             {
-                *_path = tokenize(str, "/\\");
+                *_path = serializable::tokenize(str, "/\\");
                 _absolute = str.size() > 2 && isalpha(str[0]) && str[1] == ':';
             }
             else
             {
-                *_path = tokenize(str, "/");
+                *_path = serializable::tokenize(str, "/");
                 _absolute = !str.empty() && str[0] == '/';
             }
         }
 
-        bool Path::remove()
+        bool FilePath::remove()
         {
 #ifdef LAMBDA_WINDOWS
             return DeleteFileA(toString().c_str()) != 0;
@@ -126,7 +99,7 @@ namespace lambdacommon
 #endif
         }
 
-        bool Path::mkdir(bool recursive)
+        bool FilePath::mkdir(bool recursive)
         {
             if (recursive)
             {
@@ -141,17 +114,17 @@ namespace lambdacommon
 #endif
         }
 
-        bool Path::empty() const
+        bool FilePath::empty() const
         {
             return _path->empty();
         }
 
-        bool Path::isAbsolute() const
+        bool FilePath::isAbsolute() const
         {
             return _absolute;
         }
 
-        bool Path::exists() const
+        bool FilePath::exists() const
         {
 #ifdef LAMBDA_WINDOWS
             return GetFileAttributesA(toString().c_str()) != INVALID_FILE_ATTRIBUTES;
@@ -161,7 +134,7 @@ namespace lambdacommon
 #endif
         }
 
-        bool Path::isDirectory() const
+        bool FilePath::isDirectory() const
         {
 #ifdef LAMBDA_WINDOWS
             auto attr = GetFileAttributesA(toString().c_str());
@@ -174,7 +147,7 @@ namespace lambdacommon
 #endif
         }
 
-        bool Path::isFile() const
+        bool FilePath::isFile() const
         {
 #ifdef LAMBDA_WINDOWS
             auto attr = GetFileAttributesA(toString().c_str());
@@ -187,7 +160,7 @@ namespace lambdacommon
 #endif
         }
 
-        string Path::getFileName() const
+        string FilePath::getFileName() const
         {
             if (empty())
                 return "";
@@ -195,7 +168,7 @@ namespace lambdacommon
             return last;
         }
 
-        string Path::getExtension() const
+        string FilePath::getExtension() const
         {
             const string &name = getFileName();
             size_t pos = name.find_last_of(".");
@@ -204,17 +177,19 @@ namespace lambdacommon
             return name.substr(pos + 1);
         }
 
-        size_t Path::getFileSize() const
+        size_t FilePath::getFileSize() const
         {
             if (!exists())
                 return 0;
             struct STAT_STRUCT sb;
             if (STAT_METHOD(toString().c_str(), &sb) != 0)
-                throw runtime_error("lambdacommon::path::Path.getFileSize(): cannot stat file \"" + toString() + "\"!");
-            return (size_t) sb.st_size;
+                throw runtime_error(
+                        "lambdacommon::path::FilePath.getFileSize(): cannot stat file \"" + toString() + "\"!");
+            return (size_t)
+            sb.st_size;
         }
 
-        Path Path::toAbsolute() const
+        FilePath FilePath::toAbsolute() const
         {
 #ifdef LAMBDA_WINDOWS
             if (toString().empty())
@@ -223,20 +198,20 @@ namespace lambdacommon
             auto length = GetFullPathNameA(toString().c_str(), MAX_PATH, temp, NULL);
             if (length == 0)
                 throw runtime_error(
-                        "Internal error in lambdacommon::path::Path.toAbsolute(): " + to_string(GetLastError()));
-            return Path(temp);
+                        "Internal error in lambdacommon::path::FilePath.toAbsolute(): " + to_string(GetLastError()));
+            return FilePath(temp);
 #else
             char temp[PATH_MAX];
             if (realpath(toString().c_str(), temp) == NULL)
                 throw runtime_error(
-                        "Internal error in lambdacommon::path::Path::toAbsolute(): " + string(strerror(errno)));
-            return Path(temp);
+                        "Internal error in lambdacommon::path::FilePath::toAbsolute(): " + string(strerror(errno)));
+            return FilePath(temp);
 #endif
         }
 
-        Path Path::getParent() const
+        FilePath FilePath::getParent() const
         {
-            Path result;
+            FilePath result;
             result._type = _type;
             result._absolute = _absolute;
 
@@ -251,7 +226,7 @@ namespace lambdacommon
             return result;
         }
 
-        string Path::toString(PathType type) const
+        string FilePath::toString(PathType type) const
         {
             ostringstream oss;
 
@@ -277,12 +252,12 @@ namespace lambdacommon
          * OPERATORS
          */
 
-        Path Path::operator/(const Path &other)
+        FilePath FilePath::operator/(const FilePath &other)
         {
             if (other._absolute)
-                throw runtime_error("lambdacommon::path::Path::operator/(): Expected a relative path!");
+                throw runtime_error("lambdacommon::path::FilePath::operator/(): Expected a relative path!");
 
-            Path result(*this);
+            FilePath result(*this);
 
             for (auto part : *other._path)
                 (*result._path).push_back(part);
@@ -290,31 +265,33 @@ namespace lambdacommon
             return result;
         }
 
-        Path &Path::operator=(const Path &path)
+        FilePath &FilePath::operator=(const FilePath &path)
         {
             _type = path._type;
+            delete _path;
             _path = new vector<string>(*path._path);
             _absolute = path._absolute;
             return *this;
         }
 
-        Path &Path::operator=(Path &&path)
+        FilePath &FilePath::operator=(FilePath &&path)
         {
             if (this != &path)
             {
                 _type = path._type;
+                delete _path;
                 _path = new vector<string>(move(*path._path));
                 _absolute = path._absolute;
             }
             return *this;
         }
 
-        bool Path::operator==(const Path &_p)
+        bool FilePath::operator==(const FilePath &_p)
         {
             return _p._path == _path;
         }
 
-        bool Path::operator!=(const Path &_p)
+        bool FilePath::operator!=(const FilePath &_p)
         {
             return _p._path != _path;
         }
@@ -346,19 +323,19 @@ namespace lambdacommon
 #endif
         }
 
-        Path getCurrentWorkingDirectory()
+        FilePath getCurrentWorkingDirectory()
         {
-            return Path(getCurrentWorkingDirectoryStr());
+            return FilePath(getCurrentWorkingDirectoryStr());
         }
 
-        Path LAMBDACOMMON_API mkdir(const char *path, bool recursive)
+        FilePath LAMBDACOMMON_API mkdir(const char *path, bool recursive)
         {
             return mkdir(string(path), recursive);
         }
 
-        Path LAMBDACOMMON_API mkdir(std::string path, bool recusrive)
+        FilePath LAMBDACOMMON_API mkdir(std::string path, bool recusrive)
         {
-            Path result{path};
+            FilePath result{path};
             result.mkdir(recusrive);
             return result;
         }
@@ -367,4 +344,3 @@ namespace lambdacommon
 
 #undef STAT_STRUCT
 #undef STAT_METHOD
-#endif //LAMBDACOMMON_FILESYSTEM_H

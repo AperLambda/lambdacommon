@@ -7,10 +7,10 @@
  * see the LICENSE file.
  */
 
-#ifndef LAMBDACOMMON_PATH_H
-#define LAMBDACOMMON_PATH_H
+#ifndef LAMBDACOMMON_FILESYSTEM_H
+#define LAMBDACOMMON_FILESYSTEM_H
 
-#include "../../lambdacommon.h"
+#include "../../path.h"
 #include <vector>
 
 namespace lambdacommon
@@ -28,33 +28,31 @@ namespace lambdacommon
 #endif
         };
 
-        class LAMBDACOMMON_API Path
+        class LAMBDACOMMON_API FilePath : public Path
         {
         protected:
             PathType _type;
-            std::vector<std::string> *_path;
+            //std::vector<std::string> *_path;
             bool _absolute;
 
         public:
-            Path();
+            FilePath();
 
-            Path(const char *path);
+            FilePath(const char *path);
 
-            Path(std::string path);
+            FilePath(std::string path);
 
 #ifdef LAMBDA_WINDOWS
 
-            Path(const wchar_t *path);
+            FilePath(const wchar_t *path);
 
-            Path(std::wstring path);
+            FilePath(std::wstring path);
 
 #endif
 
-            Path(const Path &path);
+            FilePath(const FilePath &path);
 
-            Path(Path &&path);
-
-            ~Path();
+            FilePath(FilePath &&path);
 
             void set(const std::string &str, PathType type = NATIVE);
 
@@ -86,13 +84,13 @@ namespace lambdacommon
 
             size_t getFileSize() const;
 
-            Path toAbsolute() const;
+            FilePath toAbsolute() const;
 
             /**
              * Gets the parent path.
              * @return Parent path.
              */
-            Path getParent() const;
+            FilePath getParent() const;
 
             std::string toString(PathType type = NATIVE) const;
 
@@ -100,15 +98,15 @@ namespace lambdacommon
              * Operators
              */
 
-            Path operator/(const Path &other);
+            FilePath operator/(const FilePath &other);
 
-            Path &operator=(const Path &path);
+            FilePath &operator=(const FilePath &path);
 
-            Path &operator=(Path &&path);
+            FilePath &operator=(FilePath &&path);
 
-            bool operator==(const Path &_path);
+            bool operator==(const FilePath &_path);
 
-            bool operator!=(const Path &_path);
+            bool operator!=(const FilePath &_path);
         };
 
 #ifdef LAMBDA_WINDOWS
@@ -119,12 +117,12 @@ namespace lambdacommon
 
         extern std::string LAMBDACOMMON_API getCurrentWorkingDirectoryStr();
 
-        extern Path LAMBDACOMMON_API getCurrentWorkingDirectory();
+        extern FilePath LAMBDACOMMON_API getCurrentWorkingDirectory();
 
-        extern Path LAMBDACOMMON_API mkdir(const char *path, bool recursive = false);
+        extern FilePath LAMBDACOMMON_API mkdir(const char *path, bool recursive = false);
 
-        extern Path LAMBDACOMMON_API mkdir(std::string path, bool recursive = false);
+        extern FilePath LAMBDACOMMON_API mkdir(std::string path, bool recursive = false);
     }
 }
 
-#endif //LAMBDACOMMON_PATH_H
+#endif //LAMBDACOMMON_FILESYSTEM_H
