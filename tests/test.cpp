@@ -1,7 +1,5 @@
 #include <lambdacommon/graphics/color.h>
-#include <lambdacommon/system/terminal.h>
-#include <lambdacommon/system/filesystem/filesystem.h>
-#include <iostream>
+#include <lambdacommon/system/system.h>
 #include <lambdacommon/string.h>
 #include <lambdacommon/connection/url.h>
 #include <lambdacommon/exceptions/exceptions.h>
@@ -12,18 +10,28 @@ using namespace std;
 
 int main()
 {
-#ifdef LAMBDA_WINDOWS
-    string lambdacommon = "lambdacommon";
-#else
-    string lambdacommon = "λcommon";
-#endif
+    useUTF8();
+    setTerminalTitle("λcommon - tests");
 
-    cout << "Starting " + lambdacommon + " test with " + lambdacommon + " v" << lambdacommon::getVersion()
+    cout << "Starting λcommon test with " << CYAN << "λcommon" << RESET << " v" << lambdacommon::getVersion()
          << " (Compiled with "
          << LAMBDACOMMON_VERSION_MAJOR << LAMBDACOMMON_VERSION_MINOR << LAMBDACOMMON_VERSION_BUILD << ")" << endl;
     cout << endl;
-    cout << "OS running: " << TermFormatting::LIGHT_YELLOW << os::getOSName(os::getOS()) << TermFormatting::RESET
-         << " (arch: " << os::getArchName(os::getOSArch()) << ")" << endl;
+    cout << "OS running: " << LIGHT_YELLOW << system::os::getOSName(system::os::getOS()) << RESET << " (arch: "
+         << system::os::getArchName(system::os::getOSArch()) << ")" << endl;
+    cout << endl;
+
+    cout << "Computer DATA:" << endl;
+    cout << " Computer Name: " << LIGHT_YELLOW << system::getComputerName() << RESET << endl;
+    cout << " User Name: " << LIGHT_YELLOW << system::getUserName() << RESET << endl;
+    cout << " User directory: " << vector<TermFormatting>{LIGHT_BLUE, BOLD} << system::getUserDirectory().toString()
+         << RESET << endl;
+    cout << " OS Physical Memory: " << LIGHT_GREEN << to_string((system::getPhysicalMemory() / (1024 * 1024))) << "MB"
+         << RESET << endl;
+    cout << " OS Available RAM: " << TermFormatting::LIGHT_GREEN
+         << to_string((system::getAvailablePhysicalMemory() / (1024 * 1024))) << "MB" << TermFormatting::RESET << endl;
+    cout << " OS used RAM: " << TermFormatting::LIGHT_GREEN
+         << to_string((system::getUsedPhysicalMemory() / (1024 * 1024))) << "MB" << TermFormatting::RESET << endl;
     cout << endl;
 
     string expected;

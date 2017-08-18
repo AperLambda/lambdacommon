@@ -14,47 +14,50 @@
 
 namespace lambdacommon
 {
-    /*! @brief Enumeration of different Operating system.
-     *
-     * Enum of different Operating system. Not complete.
-     */
-    enum OS
+    namespace system
     {
-        WINDOWS_32 = 1,
-        WINDOWS_64 = 2,
-        MAC_OSX = 3,
-        LINUX = 5,
-        FREEBSD = 6,
-        UNKNOWN = 0
-    };
-
-    /*! @brief Enumeration of different Architectures of a CPU
-     *
-     * Enum of different CPU Architectures. Not complete.
-     */
-    enum OSArchitecture
-    {
-        ARM,
-        ARM64,
-        I386,
-        X86_64
-    };
-
-    namespace os
-    {
-        /*! @brief Gets the Operating system used.
+        /*! @brief Enumeration of different Operating system.
          *
-         * This function returns the Operating system used as an enum value of the enum OS.
-         *
-         * @return The OS used.
+         * Enum of different Operating system. Not complete.
          */
-        extern OS LAMBDACOMMON_API getOS();
+        enum OS
+        {
+            WINDOWS_32 = 1,
+            WINDOWS_64 = 2,
+            MAC_OSX = 3,
+            LINUX = 5,
+            FREEBSD = 6,
+            UNKNOWN = 0
+        };
 
-        extern std::string LAMBDACOMMON_API getOSName(OS os);
+        /*! @brief Enumeration of different Architectures of a CPU
+         *
+         * Enum of different CPU Architectures. Not complete.
+         */
+        enum OSArchitecture
+        {
+            ARM,
+            ARM64,
+            I386,
+            X86_64
+        };
 
-        extern OSArchitecture LAMBDACOMMON_API getOSArch();
+        namespace os
+        {
+            /*! @brief Gets the Operating system used.
+             *
+             * This function returns the Operating system used as an enum value of the enum OS.
+             *
+             * @return The OS used.
+             */
+            extern OS LAMBDACOMMON_API getOS();
 
-        extern std::string LAMBDACOMMON_API getArchName(OSArchitecture arch);
+            extern std::string LAMBDACOMMON_API getOSName(OS os);
+
+            extern OSArchitecture LAMBDACOMMON_API getOSArch();
+
+            extern std::string LAMBDACOMMON_API getArchName(OSArchitecture arch);
+        }
     }
 }
 

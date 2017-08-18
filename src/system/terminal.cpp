@@ -8,7 +8,6 @@
  */
 
 #include "../../include/lambdacommon/system/terminal.h"
-#include <iostream>
 
 #if defined(LAMBDA_WINDOWS)
 
@@ -242,7 +241,7 @@ namespace lambdacommon
             return stream;
         }
 
-        ostream &eraseActualLine(ostream &stream)
+        ostream &eraseCurrentLine(ostream &stream)
         {
 #if defined(LAMBDA_WINDOWS)
 #elif defined(__linux__) || defined(LAMBDA_MAC_OSX)
@@ -255,6 +254,42 @@ namespace lambdacommon
         {
             stream << string("\r");
             return stream;
+        }
+
+        void LAMBDACOMMON_API useUTF8()
+        {
+#ifdef LAMBDA_WINDOWS
+            SetConsoleCP(65001);
+            SetConsoleOutputCP(65001);
+#endif
+        }
+
+        std::string LAMBDACOMMON_API getTerminalTitle()
+        {
+#ifdef LAMBDA_WINDOWS
+            TCHAR currentTitle[MAX_PATH];
+            if (GetConsoleTitle(currentTitle, MAX_PATH))
+                return string(currentTitle);
+            else
+                return "";
+#else
+            return "";
+#endif
+        }
+
+        bool LAMBDACOMMON_API setTerminalTitle(std::string title, ostream &stream)
+        {
+#ifdef LAMBDA_WINDOWS
+            if (is_atty(stream))
+                return (bool) SetConsoleTitle(TEXT(title.c_str()));
+            else
+                goto writeANSI;
+#else
+            goto writeANSI;
+#endif
+            writeANSI:
+            stream << ("\033]0;" + title + "\007");
+            return true;
         }
 
     }

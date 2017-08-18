@@ -29,11 +29,11 @@ namespace lambdacommon
             OTHER
         };
 
-        SchemeType LAMBDACOMMON_API getSchemeTypeByString(std::string scheme);
+        extern SchemeType LAMBDACOMMON_API getSchemeTypeByString(std::string scheme);
 
-        port LAMBDACOMMON_API getSchemeDefaultPort(SchemeType scheme);
+        extern port LAMBDACOMMON_API getSchemeDefaultPort(SchemeType scheme);
 
-        bool LAMBDACOMMON_API isSchemeTypeNonFileSpecial(SchemeType scheme);
+        extern bool LAMBDACOMMON_API isSchemeTypeNonFileSpecial(SchemeType scheme);
 
         /**
          * Based on https://url.spec.whatwg.org
@@ -105,9 +105,9 @@ namespace lambdacommon
          * @param path Filesystem's file path.
          * @return An URL.
          */
-        URL LAMBDACOMMON_API fromFilePath(filesystem::FilePath path = filesystem::getCurrentWorkingDirectory());
+        extern URL LAMBDACOMMON_API fromFilePath(filesystem::FilePath path = filesystem::getCurrentWorkingDirectory());
 
-        URL LAMBDACOMMON_API fromString(std::string url);
+        extern URL LAMBDACOMMON_API fromString(std::string url);
     }
 }
 

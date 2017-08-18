@@ -12,6 +12,7 @@
 
 #include "os.h"
 #include <vector>
+#include <iostream>
 
 namespace lambdacommon
 {
@@ -76,7 +77,8 @@ namespace lambdacommon
 
         extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting termFormatting);
 
-        extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting);
+        extern std::ostream LAMBDACOMMON_API &
+        operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting);
 
         /*!
          * This function will erase the actual line in the stream.
@@ -84,7 +86,7 @@ namespace lambdacommon
          * @param stream Stream will be affect.
          * @return The current stream.
          */
-        extern std::ostream LAMBDACOMMON_API &eraseActualLine(std::ostream &stream);
+        extern std::ostream LAMBDACOMMON_API &eraseCurrentLine(std::ostream &stream);
 
         /*!
          * This function will do a carriage return in the stream.
@@ -93,6 +95,21 @@ namespace lambdacommon
          * @return The current stream.
          */
         extern std::ostream LAMBDACOMMON_API &carriageReturn(std::ostream &stream);
+
+        extern void LAMBDACOMMON_API useUTF8();
+
+        /*!
+         * Returns the title of the terminal. Warning: Only works on Windows, on Unix system this returns an empty string.
+         * @return The title of the terminal.
+         */
+        extern std::string LAMBDACOMMON_API getTerminalTitle();
+
+        /*!
+         * Sets the title of the terminal.
+         * @param title The new title of the terminal.
+         * @return True if success else false.
+         */
+        extern bool LAMBDACOMMON_API setTerminalTitle(std::string title, std::ostream &stream = std::cout);
     }
 }
 
