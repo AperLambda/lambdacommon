@@ -28,10 +28,10 @@ int main()
          << RESET << endl;
     cout << " OS Physical Memory: " << LIGHT_GREEN << to_string((system::getPhysicalMemory() / (1024 * 1024))) << "MB"
          << RESET << endl;
-    cout << " OS Available RAM: " << TermFormatting::LIGHT_GREEN
-         << to_string((system::getAvailablePhysicalMemory() / (1024 * 1024))) << "MB" << TermFormatting::RESET << endl;
-    cout << " OS used RAM: " << TermFormatting::LIGHT_GREEN
-         << to_string((system::getUsedPhysicalMemory() / (1024 * 1024))) << "MB" << TermFormatting::RESET << endl;
+    cout << " OS Available RAM: " << LIGHT_GREEN << to_string((system::getAvailablePhysicalMemory() / (1024 * 1024)))
+         << "MB" << RESET << endl;
+    cout << " OS used RAM: " << LIGHT_GREEN << to_string((system::getUsedPhysicalMemory() / (1024 * 1024))) << "MB"
+         << RESET << endl;
     cout << endl;
 
     string expected;
@@ -43,67 +43,67 @@ int main()
 
     cout << "TESTING LAMBDASTRING::EQUALSIGNORECASE(CONST CHAR, CONST CHAR)...\nRESULT: ";
     if (lambdastring::equalsIgnoreCase(aChar, bChar))
-        cout << TermFormatting::LIGHT_GREEN << "OK." << TermFormatting::RESET << endl;
+        cout << LIGHT_GREEN << "OK." << RESET << endl;
     else
     {
-        cout << TermFormatting::LIGHT_RED << "FAILED." << TermFormatting::RESET << endl;
+        cout << LIGHT_RED << "FAILED." << RESET << endl;
         return 1;
     }
 
     cout << "TESTING LAMBDASTRING::EQUALS(CONST STRING, CONST STRING)...\nRESULT: ";
     if (!lambdastring::equals(aString, bString))
-        cout << TermFormatting::LIGHT_GREEN << "OK." << TermFormatting::RESET << endl;
+        cout << LIGHT_GREEN << "OK." << RESET << endl;
     else
     {
-        cout << TermFormatting::LIGHT_RED << "FAILED." << TermFormatting::RESET << endl;
+        cout << LIGHT_RED << "FAILED." << RESET << endl;
         return 1;
     }
 
     cout << "TESTING LAMBDASTRING::EQUALSIGNORECASE(CONST STRING, CONST STRING)...\nRESULT: ";
     if (lambdastring::equalsIgnoreCase(aString, bString))
-        cout << TermFormatting::LIGHT_GREEN << "OK." << TermFormatting::RESET << endl;
+        cout << LIGHT_GREEN << "OK." << RESET << endl;
     else
     {
-        cout << TermFormatting::LIGHT_RED << "FAILED." << TermFormatting::RESET << endl;
+        cout << LIGHT_RED << "FAILED." << RESET << endl;
         return 1;
     }
 
     filesystem::FilePath path{"404_non_existent"};
     cout << "TESTING FILEPATH::EXISTS() WITH RELATIVE PATH \"" << path.toString() << "\"...\nRESULT: ";
     if (!path.exists())
-        cout << TermFormatting::LIGHT_GREEN << "OK." << TermFormatting::RESET << endl;
+        cout << LIGHT_GREEN << "OK." << RESET << endl;
     else
     {
-        cout << TermFormatting::LIGHT_RED << "FAILED." << TermFormatting::RESET << endl;
+        cout << LIGHT_RED << "FAILED." << RESET << endl;
         return 1;
     }
 
     filesystem::FilePath herePath = filesystem::getCurrentWorkingDirectory();
     cout << "TESTING FILEPATH::EXISTS() WITH ABSOLUTE PATH \"" << herePath.toString() << "\"...\nRESULT: ";
     if (herePath.exists())
-        cout << TermFormatting::LIGHT_GREEN << "OK." << TermFormatting::RESET << endl;
+        cout << LIGHT_GREEN << "OK." << RESET << endl;
     else
     {
-        cout << TermFormatting::LIGHT_RED << "FAILED." << TermFormatting::RESET << endl;
+        cout << LIGHT_RED << "FAILED." << RESET << endl;
         return 1;
     }
 
     cout << "TESTING FILEPATH::ISDIRECTORY() WITH ABSOLUTE PATH \"" << herePath.toString() << "\"...\nRESULT: ";
     if (herePath.isDirectory())
-        cout << TermFormatting::LIGHT_GREEN << "OK." << TermFormatting::RESET << endl;
+        cout << LIGHT_GREEN << "OK." << RESET << endl;
     else
     {
-        cout << TermFormatting::LIGHT_RED << "FAILED." << TermFormatting::RESET << endl;
+        cout << LIGHT_RED << "FAILED." << RESET << endl;
         return 1;
     }
 
     cout << "TESTING FILEPATH::OPERATOR/(STD::STRING) WITH \"" << herePath.toString() << "\"...\nRESULT: ";
     auto h404rePath = herePath / "notFoundDir";
     if (lambdastring::equals(h404rePath.getFileName(), "notFoundDir"))
-        cout << TermFormatting::LIGHT_GREEN << "OK. (" << h404rePath.toString() << ")" << TermFormatting::RESET << endl;
+        cout << LIGHT_GREEN << "OK. (" << h404rePath.toString() << ")" << RESET << endl;
     else
     {
-        cout << TermFormatting::LIGHT_RED << "FAILED. (" << h404rePath.toString() << ")" << TermFormatting::RESET
+        cout << LIGHT_RED << "FAILED. (" << h404rePath.toString() << ")" << RESET
              << endl;
         return 1;
     }
@@ -118,11 +118,11 @@ int main()
     string url_toString = url.toString();
     expected = "https://user:pwd@something.com/test/file_or_folder?foo=bar&queryWithoutValue&invalid%20query=but%20fixed#bar";
     if (lambdastring::equals(url_toString, expected))
-        cout << TermFormatting::LIGHT_GREEN << "OK. (" << url_toString << ")" << TermFormatting::RESET << endl;
+        cout << LIGHT_GREEN << "OK. (" << url_toString << ")" << RESET << endl;
     else
     {
-        cout << TermFormatting::LIGHT_RED << "FAILED. (" << url_toString << ", expected: " + expected + ")"
-             << TermFormatting::RESET << endl;
+        cout << LIGHT_RED << "FAILED. (" << url_toString << ", expected: " + expected + ")"
+             << RESET << endl;
         return 1;
     }
 
@@ -132,11 +132,11 @@ int main()
     expected = ("file://" + herePath.toString(filesystem::COMMON));
     url_toString = fileURL.toString();
     if (lambdastring::equals(url_toString, expected))
-        cout << TermFormatting::LIGHT_GREEN << "OK. (" << url_toString << ")" << TermFormatting::RESET << endl;
+        cout << LIGHT_GREEN << "OK. (" << url_toString << ")" << RESET << endl;
     else
     {
-        cout << TermFormatting::LIGHT_RED << "FAILED. (" << url_toString << ", expected: " + expected + ")"
-             << TermFormatting::RESET << endl;
+        cout << LIGHT_RED << "FAILED. (" << url_toString << ", expected: " + expected + ")"
+             << RESET << endl;
         return 1;
     }
 
@@ -147,19 +147,19 @@ int main()
         url = URL::fromString("https://www.youtube.com/watch?v=wh10k2LPZiI");
         url_toString = url.toString();
         if (lambdastring::equals(url_toString, expected))
-            cout << TermFormatting::LIGHT_GREEN << "OK. (" << url_toString << ")" << TermFormatting::RESET << endl;
+            cout << LIGHT_GREEN << "OK. (" << url_toString << ")" << RESET << endl;
         else
         {
-            cout << TermFormatting::LIGHT_RED << "FAILED. (" << url_toString << ", expected: " + expected + ")"
-                 << TermFormatting::RESET << endl;
+            cout << LIGHT_RED << "FAILED. (" << url_toString << ", expected: " + expected + ")"
+                 << RESET << endl;
             return 1;
         }
     }
     catch (ParseException e)
     {
-        cout << TermFormatting::LIGHT_RED << "FAILED. (ParseException{\"" << e.what()
+        cout << LIGHT_RED << "FAILED. (ParseException{\"" << e.what()
              << "\"}, expected: " + expected + ")"
-             << TermFormatting::RESET << endl;
+             << RESET << endl;
         return 1;
     }
     return 0;

@@ -18,21 +18,21 @@ namespace lambdacommon
     namespace lambdastring
     {
         template<typename Out>
-        void split(const std::string &s, char delim, Out result)
+        void split(const string &s, char delim, Out result)
         {
-            std::stringstream ss;
+            stringstream ss;
             ss.str(s);
-            std::string item;
-            while (std::getline(ss, item, delim))
+            string item;
+            while (getline(ss, item, delim))
             {
                 *(result++) = item;
             }
         }
 
-        std::vector<std::string> split(const std::string &s, char delimiter)
+        vector<string> split(const string &s, char delimiter)
         {
-            std::vector<std::string> elems;
-            split(s, delimiter, std::back_inserter(elems));
+            vector<string> elems;
+            split(s, delimiter, back_inserter(elems));
             return elems;
         }
 
@@ -53,22 +53,22 @@ namespace lambdacommon
         {
             if (a.length() == b.length())
             {
-                return std::equal(begin(a), end(a), begin(b), [](const char charA, const char charB)
+                return equal(begin(a), end(a), begin(b), [](const char charA, const char charB)
                     { return equalsIgnoreCase(charA, charB); });
             }
             else
                 return false;
         }
 
-        string replaceAll(std::string subject, const char &from, const char &to)
+        string replaceAll(string subject, const char &from, const char &to)
         {
             return replaceAll(subject, to_string(from), to_string(to));
         }
 
-        string replaceAll(std::string subject, const std::string &from, const std::string &to)
+        string replaceAll(string subject, const string &from, const string &to)
         {
             size_t start_pos = 0;
-            while ((start_pos = subject.find(from, start_pos)) != std::string::npos)
+            while ((start_pos = subject.find(from, start_pos)) != string::npos)
             {
                 subject.replace(start_pos, from.length(), to);
                 start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
@@ -81,9 +81,9 @@ namespace lambdacommon
 
 #include <windows.h>
 
-        string convertWStringToString(std::wstring wstring)
+        string convertWStringToString(wstring wstring)
         {
-            std::string string;
+            string string;
             if (!wstring.empty())
             {
                 int size = WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int) wstring.size(), NULL, 0, NULL, NULL);
@@ -93,7 +93,7 @@ namespace lambdacommon
             return string;
         }
 
-        wstring convertStringToWString(std::string string)
+        wstring convertStringToWString(string string)
         {
             int size = MultiByteToWideChar(CP_UTF8, 0, &string[0], (int) string.size(), NULL, 0);
             wstring result(size, 0);
@@ -103,17 +103,17 @@ namespace lambdacommon
 
 #else
 
-        string convertWStringToString(std::wstring wstring)
+        string convertWStringToString(wstring wstring)
         {
             string out;
-            std::copy(wstring.begin(), wstring.end(), std::back_inserter(out));
+            copy(wstring.begin(), wstring.end(), back_inserter(out));
             return out;
         }
 
-        wstring convertStringToWString(std::string string)
+        wstring convertStringToWString(string string)
         {
             wstring out;
-            std::copy(string.begin(), string.end(), std::back_inserter(out));
+            copy(string.begin(), string.end(), back_inserter(out));
             return out;
         }
 

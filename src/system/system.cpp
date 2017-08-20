@@ -83,7 +83,7 @@ namespace lambdacommon
 #endif
         }
 
-        std::string LAMBDACOMMON_API getComputerName()
+        string LAMBDACOMMON_API getComputerName()
         {
 #ifdef LAMBDA_WINDOWS
             char infoBuf[INFO_BUFFER_SIZE];
@@ -100,7 +100,7 @@ namespace lambdacommon
 #endif
         }
 
-        std::string LAMBDACOMMON_API getUserName()
+        string LAMBDACOMMON_API getUserName()
         {
 #ifdef LAMBDA_WINDOWS
             char infoBuf[INFO_BUFFER_SIZE];
@@ -117,7 +117,7 @@ namespace lambdacommon
 #endif
         }
 
-        std::string LAMBDACOMMON_API getUserDirectoryStr()
+        string LAMBDACOMMON_API getUserDirectoryStr()
         {
 #ifdef LAMBDA_WINDOWS
             PWSTR szPath;

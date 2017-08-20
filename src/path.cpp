@@ -14,24 +14,23 @@ using namespace std;
 
 namespace lambdacommon
 {
-    Path::Path() : _path(new std::vector<std::string>())
+    Path::Path() : _path(new vector<string>())
     {}
 
-    Path::Path(std::vector<std::string> path) : _path(new std::vector<std::string>(path))
+    Path::Path(const vector<string> &path) : _path(new vector<string>(path))
     {}
 
     Path::~Path()
     {
-        if (_path != nullptr)
-            delete _path;
+        delete _path;
     }
 
-    std::vector<std::string> Path::getPath()
+    vector<string> Path::getPath() const
     {
         return *_path;
     }
 
-    std::string Path::toString() const
+    string Path::toString() const
     {
         ostringstream oss;
         for (size_t i = 0; i < _path->size(); i++)

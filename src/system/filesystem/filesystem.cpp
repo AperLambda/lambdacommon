@@ -48,7 +48,7 @@ namespace lambdacommon
             set(string(path));
         }
 
-        FilePath::FilePath(string path) : Path()
+        FilePath::FilePath(const string &path) : Path()
         {
             set(path);
         }
@@ -60,7 +60,7 @@ namespace lambdacommon
             set(lambdastring::convertWStringToString(wstring(path)));
         }
 
-        FilePath::FilePath(wstring path) : Path()
+        FilePath::FilePath(const wstring &path) : Path()
         {
             set(lambdastring::convertWStringToString(path));
         }
@@ -71,7 +71,7 @@ namespace lambdacommon
                                                    _absolute(path._absolute)
         {}
 
-        FilePath::FilePath(FilePath &&path) : _type(path._type), Path(vector<string>(move(*path._path))),
+        FilePath::FilePath(FilePath &&path) noexcept : _type(path._type), Path(vector<string>(move(*path._path))),
                                               _absolute(path._absolute)
         {}
 
@@ -274,7 +274,7 @@ namespace lambdacommon
             return *this;
         }
 
-        FilePath &FilePath::operator=(FilePath &&path)
+        FilePath &FilePath::operator=(FilePath &&path) noexcept
         {
             if (this != &path)
             {
@@ -333,7 +333,7 @@ namespace lambdacommon
             return mkdir(string(path), recursive);
         }
 
-        FilePath LAMBDACOMMON_API mkdir(std::string path, bool recusrive)
+        FilePath LAMBDACOMMON_API mkdir(const string &path, bool recusrive)
         {
             FilePath result{path};
             result.mkdir(recusrive);

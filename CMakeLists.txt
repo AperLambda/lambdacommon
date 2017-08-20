@@ -14,7 +14,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -march=native -mtune=native -ffast-math")
 elseif (MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 endif ()
 
 # All files
@@ -27,7 +27,7 @@ set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/lambdacommon/system/os.h includ
 set(HEADERS_BASE include/lambdacommon/lambdacommon.h include/lambdacommon/serializable.h include/lambdacommon/string.h include/lambdacommon/path.h)
 set(HEADERS_FILES ${HEADERS_CONNECTION} ${HEADERS_GRAPHICS} ${HEADERS_EXCEPTIONS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
 # There is the C++ sources files.
-set(SOURCES_CONNECTION src/connection/address.cpp)
+set(SOURCES_CONNECTION src/connection/address.cpp src/connection/url.cpp)
 set(SOURCES_GRAPHICS src/graphics/color.cpp)
 set(SOURCES_FILESYSTEM src/system/filesystem/filesystem.cpp)
 set(SOURCES_SERIALIZERS)
@@ -41,7 +41,7 @@ if (LAMBDACOMMON_BUILD_STATIC)
     add_library(lambdacommon_static STATIC ${HEADERS_FILES} ${SOURCES_FILES})
 endif ()
 # Build the shared library
-add_library(lambdacommon SHARED ${HEADERS_FILES} ${SOURCES_FILES} src/connection/url.cpp)
+add_library(lambdacommon SHARED ${HEADERS_FILES} ${SOURCES_FILES})
 # Generate the export header and include it.
 GENERATE_EXPORT_HEADER(lambdacommon
         BASE_NAME lambdacommon

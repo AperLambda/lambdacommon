@@ -28,18 +28,18 @@ namespace lambdacommon
          * INTERNAL
          */
         inline
-        FILE *get_standard_stream(const std::ostream &stream)
+        FILE *get_standard_stream(const ostream &stream)
         {
-            if (&stream == &std::cout)
+            if (&stream == &cout)
                 return stdout;
-            else if ((&stream == &std::cerr) || (&stream == &std::clog))
+            else if ((&stream == &cerr) || (&stream == &clog))
                 return stderr;
 
-            return 0;
+            return nullptr;
         }
 
         inline
-        bool is_atty(const std::ostream &stream)
+        bool is_atty(const ostream &stream)
         {
             FILE *std_stream = get_standard_stream(stream);
 
@@ -52,15 +52,15 @@ namespace lambdacommon
 
 #if defined(LAMBDA_WINDOWS)
 
-        inline void win_change_attributes(std::ostream &stream, int foreground, int background)
+        inline void win_change_attributes(ostream &stream, int foreground, int background)
         {
             static WORD defaultAttributes = 0;
 
             // Get terminal handle
             HANDLE hTerminal = INVALID_HANDLE_VALUE;
-            if (&stream == &std::cout)
+            if (&stream == &cout)
                 hTerminal = GetStdHandle(STD_OUTPUT_HANDLE);
-            else if (&stream == &std::cerr)
+            else if (&stream == &cerr)
                 hTerminal = GetStdHandle(STD_ERROR_HANDLE);
 
             // Save default terminal attributes if it unsaved
@@ -264,7 +264,7 @@ namespace lambdacommon
 #endif
         }
 
-        std::string LAMBDACOMMON_API getTerminalTitle()
+        string LAMBDACOMMON_API getTerminalTitle()
         {
 #ifdef LAMBDA_WINDOWS
             TCHAR currentTitle[MAX_PATH];
@@ -277,7 +277,7 @@ namespace lambdacommon
 #endif
         }
 
-        bool LAMBDACOMMON_API setTerminalTitle(std::string title, ostream &stream)
+        bool LAMBDACOMMON_API setTerminalTitle(string title, ostream &stream)
         {
 #ifdef LAMBDA_WINDOWS
             if (is_atty(stream))

@@ -40,19 +40,19 @@ namespace lambdacommon
 
             FilePath(const char *path);
 
-            FilePath(std::string path);
+            FilePath(const std::string &path);
 
 #ifdef LAMBDA_WINDOWS
 
             FilePath(const wchar_t *path);
 
-            FilePath(std::wstring path);
+            FilePath(const std::wstring &path);
 
 #endif
 
             FilePath(const FilePath &path);
 
-            FilePath(FilePath &&path);
+            FilePath(FilePath &&path) noexcept;
 
             void set(const std::string &str, PathType type = NATIVE);
 
@@ -102,7 +102,7 @@ namespace lambdacommon
 
             FilePath &operator=(const FilePath &path);
 
-            FilePath &operator=(FilePath &&path);
+            FilePath &operator=(FilePath &&path) noexcept;
 
             bool operator==(const FilePath &_path);
 
@@ -121,7 +121,7 @@ namespace lambdacommon
 
         extern FilePath LAMBDACOMMON_API mkdir(const char *path, bool recursive = false);
 
-        extern FilePath LAMBDACOMMON_API mkdir(std::string path, bool recursive = false);
+        extern FilePath LAMBDACOMMON_API mkdir(const std::string &path, bool recursive = false);
     }
 }
 

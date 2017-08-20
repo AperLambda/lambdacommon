@@ -21,7 +21,7 @@ namespace lambdacommon
 {
     namespace URL
     {
-        SchemeType LAMBDACOMMON_API getSchemeTypeByString(std::string scheme)
+        SchemeType LAMBDACOMMON_API getSchemeTypeByString(const string &scheme)
         {
             if (lambdastring::equalsIgnoreCase(scheme, "file"))
                 return FILE;
@@ -75,7 +75,7 @@ namespace lambdacommon
          * URL
          */
 
-        vector<pair<string, string>> fixQueries(vector<pair<string, string>> queries)
+        vector<pair<string, string>> fixQueries(const vector<pair<string, string>> &queries)
         {
             vector<pair<string, string>> newQueries;
             for (auto query : queries)
@@ -84,14 +84,15 @@ namespace lambdacommon
             return newQueries;
         };
 
-        URL::URL(string scheme, string username, string password, Address address, vector<string> path,
-                 vector<pair<string, string>> queries, string fragment) : Path(path), _scheme(new string(scheme)),
-                                                                          _username(new string(username)),
-                                                                          _password(new string(password)),
-                                                                          _address(address),
-                                                                          _queries(new vector<pair<string, string>>(
-                                                                                  fixQueries(queries))),
-                                                                          _fragment(new string(fragment))
+        URL::URL(const string &scheme, const string &username, const string &password, const Address &address,
+                 const vector<string> &path, const vector<pair<string, string>> &queries, const string &fragment)
+                : Path(path),
+                  _scheme(new string(scheme)),
+                  _username(new string(username)),
+                  _password(new string(password)),
+                  _address(address),
+                  _queries(new vector<pair<string, string>>(fixQueries(queries))),
+                  _fragment(new string(fragment))
         {}
 
         URL::URL(const URL &url) : Path(*url._path), _scheme(new string(*url._scheme)),
@@ -108,14 +109,10 @@ namespace lambdacommon
 
         URL::~URL()
         {
-            if (_scheme != nullptr)
-                delete _scheme;
-            if (_username != nullptr)
-                delete _username;
-            if (_password != nullptr)
-                delete _password;
-            if (_fragment != nullptr)
-                delete _fragment;
+            delete _scheme;
+            delete _username;
+            delete _password;
+            delete _fragment;
         }
 
         string URL::getScheme() const
@@ -133,7 +130,7 @@ namespace lambdacommon
             return *_password;
         }
 
-        void URL::setUserAndPassword(std::string username, std::string password)
+        void URL::setUserAndPassword(const string &username, const string &password)
         {
             if (username.empty() || password.empty())
             {
@@ -152,10 +149,10 @@ namespace lambdacommon
             return _address;
         }
 
-        void URL::setAddress(Address address)
+        void URL::setAddress(const Address &address)
         {
             if (address.getHost().empty() && isSchemeTypeNonFileSpecial(getSchemeType()))
-                throw new IllegalArgumentException("Hostname cannot be null for this scheme.");
+                throw IllegalArgumentException("Hostname cannot be null for this scheme.");
 
             _address = address;
         }
@@ -165,7 +162,7 @@ namespace lambdacommon
             return *_queries;
         }
 
-        void URL::setQueries(std::vector<std::pair<std::string, std::string>> queries)
+        void URL::setQueries(const vector<pair<string, string>> &queries)
         {
             *_queries = fixQueries(queries);
         }
@@ -182,7 +179,7 @@ namespace lambdacommon
             return hasQuery;
         }
 
-        std::string URL::getQuery(std::string query) const
+        string URL::getQuery(string query) const
         {
             string result = "";
             for (auto q : *_queries)
@@ -199,7 +196,7 @@ namespace lambdacommon
             return *_fragment;
         }
 
-        void URL::setFragment(std::string fragment)
+        void URL::setFragment(const string &fragment)
         {
             *_fragment = fragment;
         }
@@ -265,7 +262,7 @@ namespace lambdacommon
             return *this;
         }
 
-        URL &URL::operator=(URL &&url)
+        URL &URL::operator=(URL &&url) noexcept
         {
             if (this != &url)
             {
@@ -308,7 +305,7 @@ namespace lambdacommon
             return URL("file", "", "", Address::EMPTY, path.getPath());
         }
 
-        int str2int(string str)
+        int str2int(const string &str)
         {
             int i;
             try
@@ -325,10 +322,10 @@ namespace lambdacommon
             return i;
         }
 
-        URL LAMBDACOMMON_API fromString(string url)
+        URL LAMBDACOMMON_API fromString(const string &url)
         {
             if (url.empty())
-                throw new IllegalArgumentException("URL cannot be empty.");
+                throw IllegalArgumentException("URL cannot be empty.");
 
             auto schemeSeparator = url.find_first_of("://");
             if (schemeSeparator == string::npos)
@@ -336,7 +333,7 @@ namespace lambdacommon
             string scheme = url.substr(0, schemeSeparator);
             auto tmpUrl = url.substr(schemeSeparator + 3, url.size());
 
-            auto authSeparator = tmpUrl.find_first_of("@");
+            auto authSeparator = tmpUrl.find_first_of('@');
             string username;
             string password;
             if (authSeparator != string::npos)

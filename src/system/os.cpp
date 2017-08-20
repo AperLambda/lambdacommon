@@ -80,7 +80,7 @@ namespace lambdacommon
 #endif
         }
 
-        std::string os::getArchName(OSArchitecture arch)
+        string os::getArchName(OSArchitecture arch)
         {
             string archName;
             switch (arch)

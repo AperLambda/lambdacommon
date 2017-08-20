@@ -22,11 +22,11 @@ namespace lambdacommon
     public:
         Path();
 
-        Path(std::vector<std::string> path);
+        Path(const std::vector<std::string> &path);
 
         virtual ~Path();
 
-        std::vector<std::string> getPath();
+        std::vector<std::string> getPath() const;
 
         virtual std::string toString() const;
     };

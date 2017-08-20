@@ -34,11 +34,13 @@ namespace lambdacommon
         port _port;
 
     public:
-        Address(host host, port port = 0);
+        Address(const host &host, port port = 0);
 
         Address(const Address &address);
 
         Address(Address &&address);
+
+        ~Address();
 
         host getHost() const;
 

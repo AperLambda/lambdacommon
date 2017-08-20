@@ -29,7 +29,7 @@ namespace lambdacommon
             OTHER
         };
 
-        extern SchemeType LAMBDACOMMON_API getSchemeTypeByString(std::string scheme);
+        extern SchemeType LAMBDACOMMON_API getSchemeTypeByString(const std::string &scheme);
 
         extern port LAMBDACOMMON_API getSchemeDefaultPort(SchemeType scheme);
 
@@ -49,10 +49,10 @@ namespace lambdacommon
             std::string *_fragment;
 
         public:
-            URL(std::string scheme, std::string username, std::string password, Address address,
-                std::vector<std::string> path = std::vector<std::string>(),
-                std::vector<std::pair<std::string, std::string>> queries = std::vector<std::pair<std::string, std::string>>(),
-                std::string fragment = "");
+            URL(const std::string &scheme, const std::string &username, const std::string &password,
+                const Address &address, const std::vector<std::string> &path = std::vector<std::string>(),
+                const std::vector<std::pair<std::string, std::string>> &queries = std::vector<std::pair<std::string, std::string>>(),
+                const std::string &fragment = "");
 
             URL(const URL &url);
 
@@ -71,15 +71,15 @@ namespace lambdacommon
 
             std::string getPassword() const;
 
-            void setUserAndPassword(std::string username, std::string password);
+            void setUserAndPassword(const std::string &username, const std::string &password);
 
             Address getAddress() const;
 
-            void setAddress(Address address);
+            void setAddress(const Address &address);
 
             std::vector<std::pair<std::string, std::string>> getQueries() const;
 
-            void setQueries(std::vector<std::pair<std::string, std::string>> queries);
+            void setQueries(const std::vector<std::pair<std::string, std::string>> &queries);
 
             bool hasQuery(std::string query) const;
 
@@ -87,13 +87,13 @@ namespace lambdacommon
 
             std::string getFragment() const;
 
-            void setFragment(std::string fragment);
+            void setFragment(const std::string &fragment);
 
             std::string toString() const;
 
             URL &operator=(const URL &url);
 
-            URL &operator=(URL &&url);
+            URL &operator=(URL &&url) noexcept;
 
             bool operator==(const URL &url);
 
@@ -107,7 +107,7 @@ namespace lambdacommon
          */
         extern URL LAMBDACOMMON_API fromFilePath(filesystem::FilePath path = filesystem::getCurrentWorkingDirectory());
 
-        extern URL LAMBDACOMMON_API fromString(std::string url);
+        extern URL LAMBDACOMMON_API fromString(const std::string &url);
     }
 }
 
