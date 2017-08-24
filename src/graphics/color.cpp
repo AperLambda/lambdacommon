@@ -73,6 +73,6 @@ namespace lambdacommon
 
     Color getColorByIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
     {
-        return Color((red / 255.f), (green / 255.f), (blue / 255.f), (alpha / 255.f));
+        return {(red / 255.f), (green / 255.f), (blue / 255.f), (alpha / 255.f)};
     }
 }

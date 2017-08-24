@@ -15,7 +15,8 @@ namespace lambdacommon
 {
     string getVersion()
     {
-        return to_string(LAMBDACOMMON_VERSION_MAJOR) + "." + to_string(LAMBDACOMMON_VERSION_MINOR) + "." +
-               to_string(LAMBDACOMMON_VERSION_BUILD);
+        return to_string(LAMBDACOMMON_VERSION_HIGH_MAJOR) + "." + to_string(LAMBDACOMMON_VERSION_MAJOR) + "." +
+               to_string(LAMBDACOMMON_VERSION_MINOR) +
+               (LAMBDACOMMON_VERSION_BUILD != 0 ? "." + to_string(LAMBDACOMMON_VERSION_BUILD) : "");
     }
 }

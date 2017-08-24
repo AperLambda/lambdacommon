@@ -81,7 +81,7 @@ namespace lambdacommon
         operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting);
 
         /*!
-         * This function will erase the actual line in the stream.
+         * This function will erase the current line in the stream.
          *
          * @param stream Stream will be affect.
          * @return The current stream.
@@ -95,6 +95,37 @@ namespace lambdacommon
          * @return The current stream.
          */
         extern std::ostream LAMBDACOMMON_API &carriageReturn(std::ostream &stream);
+
+        extern std::ostream LAMBDACOMMON_API &clear(std::ostream &stream = std::cout);
+
+        /*!
+         * This function set the cursor on a new position.
+         */
+        extern void LAMBDACOMMON_API
+        setCursorPosition(unsigned short x, unsigned short y, std::ostream &stream = std::cout);
+
+        /*!
+         * This function set the cursor on a new position.
+         */
+        inline void setCursorPosition(std::pair<unsigned short, unsigned short> pos, std::ostream &stream = std::cout)
+        {
+            setCursorPosition(pos.first, pos.second, stream);
+        }
+
+        /*
+         * Sound manipulations
+         */
+
+        /*!
+         * Do a beep/bell in the terminal.
+         * @param stream ¯\_(ツ)_/¯
+         * @return ¯\_(ツ)_/¯
+         */
+        extern std::ostream LAMBDACOMMON_API &doBeep(std::ostream &stream = std::cout);
+
+        /*
+         * Terminal manipulations
+         */
 
         extern void LAMBDACOMMON_API useUTF8();
 

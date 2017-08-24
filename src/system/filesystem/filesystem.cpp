@@ -108,7 +108,7 @@ namespace lambdacommon
                     parent.mkdir(true);
             }
 #ifdef LAMBDA_WINDOWS
-            return CreateDirectoryA(toString().c_str(), NULL) != 0;
+            return CreateDirectoryA(toString().c_str(), nullptr) != 0;
 #else
             return ::mkdir(toString().c_str(), S_IRUSR | S_IWUSR | S_IXUSR) == 0;
 #endif
@@ -171,7 +171,7 @@ namespace lambdacommon
         string FilePath::getExtension() const
         {
             const string &name = getFileName();
-            size_t pos = name.find_last_of(".");
+            size_t pos = name.find_last_of('.');
             if (pos == string::npos)
                 return "";
             return name.substr(pos + 1);
@@ -185,8 +185,7 @@ namespace lambdacommon
             if (STAT_METHOD(toString().c_str(), &sb) != 0)
                 throw runtime_error(
                         "lambdacommon::path::FilePath.getFileSize(): cannot stat file \"" + toString() + "\"!");
-            return (size_t)
-            sb.st_size;
+            return (size_t) sb.st_size;
         }
 
         FilePath FilePath::toAbsolute() const
@@ -195,7 +194,7 @@ namespace lambdacommon
             if (toString().empty())
                 return getCurrentWorkingDirectory();
             char temp[MAX_PATH];
-            auto length = GetFullPathNameA(toString().c_str(), MAX_PATH, temp, NULL);
+            auto length = GetFullPathNameA(toString().c_str(), MAX_PATH, temp, nullptr);
             if (length == 0)
                 throw runtime_error(
                         "Internal error in lambdacommon::path::FilePath.toAbsolute(): " + to_string(GetLastError()));
@@ -259,7 +258,7 @@ namespace lambdacommon
 
             FilePath result(*this);
 
-            for (auto part : *other._path)
+            for (const auto &part : *other._path)
                 (*result._path).push_back(part);
 
             return result;

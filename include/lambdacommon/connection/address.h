@@ -60,7 +60,7 @@ namespace lambdacommon
 
         Address &operator=(const Address &address);
 
-        Address &operator=(Address &&address);
+        Address &operator=(Address &&address) noexcept;
 
         bool operator==(const Address &address);
 

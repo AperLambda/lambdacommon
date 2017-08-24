@@ -13,12 +13,13 @@ int main()
     useUTF8();
     setTerminalTitle("λcommon - tests");
 
-    cout << "Starting λcommon test with " << CYAN << "λcommon" << RESET << " v" << lambdacommon::getVersion()
+    cout << "Starting λcommon-tests with " << CYAN << "λcommon" << RESET << " v" << lambdacommon::getVersion()
          << " (Compiled with "
-         << LAMBDACOMMON_VERSION_MAJOR << LAMBDACOMMON_VERSION_MINOR << LAMBDACOMMON_VERSION_BUILD << ")" << endl;
+         << LAMBDACOMMON_VERSION_HIGH_MAJOR << LAMBDACOMMON_VERSION_MAJOR << LAMBDACOMMON_VERSION_MINOR
+         << LAMBDACOMMON_VERSION_BUILD << ")" << endl;
     cout << endl;
-    cout << "OS running: " << LIGHT_YELLOW << system::os::getOSName(system::os::getOS()) << RESET << " (arch: "
-         << system::os::getArchName(system::os::getOSArch()) << ")" << endl;
+    cout << "OS running: " << LIGHT_YELLOW << system::getOSName() << RESET << " (kernel: " << system::getKernelVersion()
+         << ", arch: " << system::os::getArchName(system::os::getOSArch()) << ")" << endl;
     cout << endl;
 
     cout << "Computer DATA:" << endl;
@@ -26,6 +27,8 @@ int main()
     cout << " User Name: " << LIGHT_YELLOW << system::getUserName() << RESET << endl;
     cout << " User directory: " << vector<TermFormatting>{LIGHT_BLUE, BOLD} << system::getUserDirectory().toString()
          << RESET << endl;
+    cout << " CPU: " << LIGHT_GREEN << system::getProcessorName() << " (" << to_string(system::getProcessorCores())
+         << " cores)" << RESET << endl;
     cout << " OS Physical Memory: " << LIGHT_GREEN << to_string((system::getPhysicalMemory() / (1024 * 1024))) << "MB"
          << RESET << endl;
     cout << " OS Available RAM: " << LIGHT_GREEN << to_string((system::getAvailablePhysicalMemory() / (1024 * 1024)))

@@ -8,17 +8,18 @@
  */
 
 #include "../../include/lambdacommon/connection/address.h"
-#include "../../include/lambdacommon/string.h"
 #include <sstream>
 
 #ifdef LAMBDA_WINDOWS
 
-#include <Ws2tcpip.h>
+#  include <Ws2tcpip.h>
 
-#pragma comment(lib, "Ws2_32.lib")
+#  pragma comment(lib, "Ws2_32.lib")
 
 #else
-#include <arpa/inet.h>
+
+#  include <arpa/inet.h>
+
 #endif
 
 using namespace std;
@@ -51,14 +52,47 @@ namespace lambdacommon
 
     bool Address::isIPv4() const
     {
+#ifdef __MINGW32__
+        char d;
+        short ip1, ip2, ip3, ip4;
+        stringstream ss;
+        ss << *_host;
+        ss >> ip1 >> d >> ip2 >> d >> ip3 >> d >> ip4 >> d;
+        ss.str("");
+        ss.clear();
+        ss << (ip1 & 0xFF) << "." << (ip2 & 0xFF) << "." << (ip3 & 0xFF) << "." << (ip4 & 0xFF);
+        return ss.str() == *_host;
+#else
         struct sockaddr_in sa;
         return inet_pton(AF_INET, _host->c_str(), &(sa.sin_addr)) != 0;
+#endif
     }
 
     bool Address::isIPv6() const
     {
+#ifdef __MINGW32__
+        const char *s = _host->c_str();
+        int colons = 0, segsize = 0, i, ix = static_cast<int>(_host->length());
+        if (s[0] == ':' || s[ix - 1] == ':') return false;
+
+        for (colons = 0, i = 0, segsize = 0; i < ix; i++)
+        {
+            if (s[i] == ':')
+            {
+                segsize = 0;
+                colons++;
+            }
+            else if (('0' <= s[i] && s[i] <= '9') || ('a' <= s[i] && s[i] <= 'f'))//|| ('A' <= s[i] && s[i] <='F')
+                segsize++;
+            else
+                return false;
+            if (segsize >= 5) return false;
+        }
+        return colons <= 7;
+#else
         struct sockaddr_in6 sa;
         return inet_pton(AF_INET6, _host->c_str(), &(sa.sin6_addr)) != 0;
+#endif
     }
 
     bool Address::isValidDomain() const
@@ -94,7 +128,7 @@ namespace lambdacommon
         stringstream ss;
         ss << "|" << _host->substr(ix - segsize) << "|";//get last domain segment
 
-        return !(tlds.find(ss.str()) == string::npos);
+        return tlds.find(ss.str()) != string::npos;
 
     }
 
@@ -146,7 +180,7 @@ namespace lambdacommon
         return *this;
     }
 
-    Address &Address::operator=(Address &&address)
+    Address &Address::operator=(Address &&address) noexcept
     {
         if (this != &address)
         {

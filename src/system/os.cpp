@@ -10,9 +10,9 @@
 #include "../../include/lambdacommon/system/os.h"
 
 #ifdef __arm__
-#define LAMBDA_ARM
+#  define LAMBDA_ARM
 #elif _ARM || _M_ARM || __arm
-#define LAMBDA_ARM
+#  define LAMBDA_ARM
 #endif
 
 using namespace std;
@@ -29,12 +29,14 @@ namespace lambdacommon
 #else
             return OS::WINDOWS_32;
 #endif
-#elif LAMBDA_MAC_OSX
+#elif defined(LAMBDA_MAC_OSX)
             return OS::MAC_OSX;
-#elif __linux__
+#elif defined(__linux__)
             return OS::LINUX;
-#elif __FreeBSD__
+#elif defined(LAMBDA_FREEBSD)
             return OS::FREEBSD;
+#elif defined(LAMBDA_CYGWIN)
+            return OS::CYGWIN;
 #else
             return OS::UNKNOWN;
 #endif
@@ -59,6 +61,15 @@ namespace lambdacommon
                     break;
                 case FREEBSD:
                     osName = "FreeBSD";
+                    break;
+                case NETBSD:
+                    osName = "NetBSD";
+                    break;
+                case OPENBSD:
+                    osName = "OpenBSD";
+                    break;
+                case CYGWIN:
+                    osName = "Cygwin";
                     break;
                 case UNKNOWN:
                     osName = "Unknown";

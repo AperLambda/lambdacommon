@@ -12,8 +12,6 @@
 #include "../../include/lambdacommon/exceptions/exceptions.h"
 #include <sstream>
 #include <regex>
-#include <iostream>
-#include <limits>
 
 using namespace std;
 
@@ -79,8 +77,8 @@ namespace lambdacommon
         {
             vector<pair<string, string>> newQueries;
             for (auto query : queries)
-                newQueries.push_back({lambdastring::replaceAll(query.first, " ", "%20"),
-                                      lambdastring::replaceAll(query.second, " ", "%20")});
+                newQueries.emplace_back(lambdastring::replaceAll(query.first, " ", "%20"),
+                                        lambdastring::replaceAll(query.second, " ", "%20"));
             return newQueries;
         };
 
@@ -101,7 +99,7 @@ namespace lambdacommon
                                    _fragment(new string(*url._fragment))
         {}
 
-        URL::URL(URL &&url) : Path(move(*url._path)), _scheme(new string(move(*url._scheme))),
+        URL::URL(URL &&url) : Path(*url._path), _scheme(new string(move(*url._scheme))),
                               _username(new string(move(*url._username))), _password(new string(move(*url._password))),
                               _address(url._address), _queries(new vector<pair<string, string>>(move(*url._queries))),
                               _fragment(new string(move(*url._fragment)))
@@ -378,7 +376,7 @@ namespace lambdacommon
             if (querySeparator != string::npos)
             {
                 string strQueries;
-                if (fragmentSeparator > querySeparator || querySeparator == string::npos)
+                if (fragmentSeparator > querySeparator)
                 {
                     strQueries = tmpUrl.substr(querySeparator + 1, (fragmentSeparator - querySeparator - 1));
                     if (tmpAddress.empty())
@@ -390,14 +388,13 @@ namespace lambdacommon
                 if (!strQueries.empty())
                 {
                     auto splittedQueries = lambdastring::split(strQueries, '&');
-                    for (size_t i = 0; i < splittedQueries.size(); i++)
+                    for (auto query : splittedQueries)
                     {
-                        auto query = splittedQueries[i];
-                        auto j = string::npos;
+                        size_t j;
                         if ((j = query.find_first_of('=')) != string::npos)
-                            queries.push_back({query.substr(0, j), query.substr(j + 1, query.size())});
+                            queries.emplace_back(query.substr(0, j), query.substr(j + 1, query.size()));
                         else
-                            queries.push_back({query, ""});
+                            queries.emplace_back(query, "");
                     }
                 }
             }

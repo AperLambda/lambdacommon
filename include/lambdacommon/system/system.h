@@ -24,6 +24,18 @@ namespace lambdacommon
          */
 
         /*!
+         * Returns the name of the processor (CPU) as a string.
+         * @return The CPU's name.
+         */
+        extern std::string LAMBDACOMMON_API getProcessorName();
+
+        /*!
+         * Returns the count of the processor (CPU) cores as an int.
+         * @return The CPU cores' count
+         */
+        extern uint32_t LAMBDACOMMON_API getProcessorCores();
+
+        /*!
          * Returns the size of the physical memory (RAM) in bytes.
          * @return The physical memory in bytes.
          */
@@ -50,6 +62,18 @@ namespace lambdacommon
          * @return The computer's name.
          */
         extern std::string LAMBDACOMMON_API getComputerName();
+
+        /*!
+         * Returns the OS' name at runtime.
+         * @return The OS' name at runtime.
+         */
+        extern std::string LAMBDACOMMON_API getOSName();
+
+        /*!
+         * Returns the Kernel' version at runtime.
+         * @return The Kernel' version at runtime.
+         */
+        extern std::string LAMBDACOMMON_API getKernelVersion();
 
         /*
          * User

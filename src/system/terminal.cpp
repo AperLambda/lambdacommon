@@ -9,13 +9,22 @@
 
 #include "../../include/lambdacommon/system/terminal.h"
 
-#if defined(LAMBDA_WINDOWS)
+#if defined(LAMBDA_WINDOWS) || defined(__CYGWIN__)
+#define WIN_FRIENDLY
 
 #include <io.h>
 #include <windows.h>
 
-#elif defined(__linux__) || defined(LAMBDA_MAC_OSX)
+#  ifdef __CYGWIN__
+
 #include <unistd.h>
+
+#  endif
+
+#else
+
+#include <unistd.h>
+
 #endif
 
 using namespace std;
@@ -43,25 +52,72 @@ namespace lambdacommon
         {
             FILE *std_stream = get_standard_stream(stream);
 
-#if defined(LAMBDA_MAC_OSX) || defined(__linux__)
-            return ::isatty(fileno(std_stream));
-#elif defined(LAMBDA_WINDOWS)
+#ifdef LAMBDA_WINDOWS
             return ::_isatty(_fileno(std_stream)) != 0;
+#else
+            return static_cast<bool>(::isatty(fileno(std_stream)));
 #endif
         }
 
-#if defined(LAMBDA_WINDOWS)
+#ifdef WIN_FRIENDLY
 
-        inline void win_change_attributes(ostream &stream, int foreground, int background)
+        HANDLE getTermHandle(ostream &stream)
         {
-            static WORD defaultAttributes = 0;
-
             // Get terminal handle
             HANDLE hTerminal = INVALID_HANDLE_VALUE;
             if (&stream == &cout)
                 hTerminal = GetStdHandle(STD_OUTPUT_HANDLE);
             else if (&stream == &cerr)
                 hTerminal = GetStdHandle(STD_ERROR_HANDLE);
+            return hTerminal;
+        }
+
+        void cls(HANDLE hConsole)
+        {
+            COORD coordScreen{0, 0};    // home for the cursor
+            DWORD cCharsWritten;
+            CONSOLE_SCREEN_BUFFER_INFO csbi;
+            DWORD dwConSize;
+
+            // Get the number of character cells in the current buffer.
+            if (!GetConsoleScreenBufferInfo(hConsole, &csbi))
+            {
+                return;
+            }
+
+            dwConSize = static_cast<DWORD>(csbi.dwSize.X * csbi.dwSize.Y);
+
+            // Fill the entire screen with blanks.
+            if (!FillConsoleOutputCharacter(hConsole,        // Handle to console screen buffer
+                                            (TCHAR) ' ',     // Character to write to the buffer
+                                            dwConSize,       // Number of cells to write
+                                            coordScreen,     // Coordinates of first cell
+                                            &cCharsWritten))// Receive number of characters written
+                return;
+
+            // Get the current text attribute.
+            if (!GetConsoleScreenBufferInfo(hConsole, &csbi))
+                return;
+
+            // Set the buffer's attributes accordingly.
+            if (!FillConsoleOutputAttribute(hConsole,         // Handle to console screen buffer
+                                            csbi.wAttributes, // Character attributes to use
+                                            dwConSize,        // Number of cells to set attribute
+                                            coordScreen,      // Coordinates of first cell
+                                            &cCharsWritten)) // Receive number of characters written
+                return;
+
+            // Put the cursor at its home coordinates.
+
+            SetConsoleCursorPosition(hConsole, coordScreen);
+        }
+
+        inline void win_change_attributes(ostream &stream, int foreground, int background)
+        {
+            static WORD defaultAttributes = 0;
+
+            // Get terminal handle
+            auto hTerminal = getTermHandle(stream);
 
             // Save default terminal attributes if it unsaved
             if (!defaultAttributes)
@@ -115,10 +171,10 @@ namespace lambdacommon
         {
             if (is_atty(stream))
             {
-#if defined(LAMBDA_WINDOWS)
-                for (size_t i = 0; i < termFormatting.size(); i++)
+#ifdef WIN_FRIENDLY
+                for (auto format : termFormatting)
                 {
-                    switch (termFormatting[i])
+                    switch (format)
                     {
                         case RESET:
                             win_change_attributes(stream, -1, -1);
@@ -243,8 +299,8 @@ namespace lambdacommon
 
         ostream &eraseCurrentLine(ostream &stream)
         {
-#if defined(LAMBDA_WINDOWS)
-#elif defined(__linux__) || defined(LAMBDA_MAC_OSX)
+#ifdef WIN_FRIENDLY
+#else
             stream << string("\33[2K");
 #endif
             return stream;
@@ -256,17 +312,60 @@ namespace lambdacommon
             return stream;
         }
 
+        std::ostream LAMBDACOMMON_API &clear(ostream &stream)
+        {
+#ifdef WIN_FRIENDLY
+            if (is_atty(stream))
+            {
+                cls(getTermHandle(stream));
+                return stream;
+            }
+            else
+                goto writeANSI;
+#else
+            goto writeANSI;
+#endif
+            writeANSI:
+            stream << "\033[2J";
+            return stream;
+        }
+
+        void LAMBDACOMMON_API setCursorPosition(unsigned short x, unsigned short y, ostream &stream)
+        {
+#ifdef WIN_FRIENDLY
+            if (is_atty(stream))
+            {
+                COORD coord;
+                coord.X = x;
+                coord.Y = y;
+                SetConsoleCursorPosition(getTermHandle(stream), coord);
+            }
+            else
+                goto writeANSI;
+#else
+            goto writeANSI;
+#endif
+            writeANSI:
+            stream << ("\033[" + to_string(y) + ';' + to_string(x) + "H");
+        }
+
+        /*
+         * Terminal manipulations
+         */
+
         void LAMBDACOMMON_API useUTF8()
         {
-#ifdef LAMBDA_WINDOWS
-            SetConsoleCP(65001);
-            SetConsoleOutputCP(65001);
+#ifdef WIN_FRIENDLY
+            SetConsoleCP(CP_UTF8);
+            SetConsoleOutputCP(CP_UTF8);
+#else
+            setlocale(LC_ALL, "en_US.UTF-8");
 #endif
         }
 
         string LAMBDACOMMON_API getTerminalTitle()
         {
-#ifdef LAMBDA_WINDOWS
+#ifdef WIN_FRIENDLY
             TCHAR currentTitle[MAX_PATH];
             if (GetConsoleTitle(currentTitle, MAX_PATH))
                 return string(currentTitle);
@@ -279,7 +378,7 @@ namespace lambdacommon
 
         bool LAMBDACOMMON_API setTerminalTitle(string title, ostream &stream)
         {
-#ifdef LAMBDA_WINDOWS
+#ifdef WIN_FRIENDLY
             if (is_atty(stream))
                 return (bool) SetConsoleTitle(TEXT(title.c_str()));
             else
@@ -294,3 +393,5 @@ namespace lambdacommon
 
     }
 }
+
+#undef WIN_FRIENDLY

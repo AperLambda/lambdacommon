@@ -27,6 +27,9 @@ namespace lambdacommon
             MAC_OSX = 3,
             LINUX = 5,
             FREEBSD = 6,
+            NETBSD = 7,
+            OPENBSD = 8,
+            CYGWIN = 11,
             UNKNOWN = 0
         };
 
@@ -52,11 +55,11 @@ namespace lambdacommon
              */
             extern OS LAMBDACOMMON_API getOS();
 
-            extern std::string LAMBDACOMMON_API getOSName(OS os);
+            extern std::string LAMBDACOMMON_API getOSName(OS os = getOS());
 
             extern OSArchitecture LAMBDACOMMON_API getOSArch();
 
-            extern std::string LAMBDACOMMON_API getArchName(OSArchitecture arch);
+            extern std::string LAMBDACOMMON_API getArchName(OSArchitecture arch = getOSArch());
         }
     }
 }
