@@ -281,7 +281,7 @@ namespace lambdacommon
                 }
                 return stream;
 #else
-                goto writeANSI
+                goto writeANSI;
 #endif
             }
             else
