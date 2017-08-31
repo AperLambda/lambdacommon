@@ -15,7 +15,6 @@
 
 #  define INFO_BUFFER_SIZE 32767
 
-#include <windows.h>
 #include <intrin.h>
 #include <ShlObj.h>
 #include <VersionHelpers.h>

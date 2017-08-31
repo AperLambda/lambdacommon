@@ -279,21 +279,26 @@ namespace lambdacommon
                             break;
                     }
                 }
+                return stream;
 #else
-                string ansiSequence = "\033[";
-                auto formattings = termFormatting.size();
-                for (int i = 0; i < formattings; i++)
-                {
-                    string str = to_string(static_cast<int>(termFormatting[i]));
-                    if (i != formattings - 1)
-                        ansiSequence += (str + ";");
-                    else
-                        ansiSequence += str;
-                }
-                ansiSequence += "m";
-                stream << ansiSequence;
+                goto writeANSI
 #endif
             }
+            else
+                goto writeANSI;
+            writeANSI:
+            string ansiSequence = "\033[";
+            auto formattings = termFormatting.size();
+            for (int i = 0; i < formattings; i++)
+            {
+                string str = to_string(static_cast<int>(termFormatting[i]));
+                if (i != formattings - 1)
+                    ansiSequence += (str + ";");
+                else
+                    ansiSequence += str;
+            }
+            ansiSequence += "m";
+            stream << ansiSequence;
             return stream;
         }
 

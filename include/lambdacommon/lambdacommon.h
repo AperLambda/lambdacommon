@@ -47,6 +47,8 @@
 
 namespace lambdacommon
 {
+    typedef std::string *pstring;
+
     extern std::string LAMBDACOMMON_API getVersion();
 }
 

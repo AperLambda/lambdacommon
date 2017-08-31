@@ -41,12 +41,12 @@ namespace lambdacommon
         class LAMBDACOMMON_API URL : public Path
         {
         protected:
-            std::string *_scheme;
-            std::string *_username;
-            std::string *_password;
+            pstring _scheme;
+            pstring _username;
+            pstring _password;
             Address _address;
             std::vector<std::pair<std::string, std::string>> *_queries;
-            std::string *_fragment;
+            pstring _fragment;
 
         public:
             URL(const std::string &scheme, const std::string &username, const std::string &password,
