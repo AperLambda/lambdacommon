@@ -289,7 +289,7 @@ namespace lambdacommon
             writeANSI:
             string ansiSequence = "\033[";
             auto formattings = termFormatting.size();
-            for (int i = 0; i < formattings; i++)
+            for (size_t i = 0; i < formattings; i++)
             {
                 string str = to_string(static_cast<int>(termFormatting[i]));
                 if (i != formattings - 1)
