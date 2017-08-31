@@ -17,7 +17,9 @@
 
 #include <intrin.h>
 #include <ShlObj.h>
-#include <VersionHelpers.h>
+#  ifndef __MINGW32__
+#    include <VersionHelpers.h>
+#  endif
 
 #else
 
@@ -107,6 +109,11 @@ namespace lambdacommon
 
         string LAMBDACOMMON_API getOSName()
         {
+#  ifdef __MINGW32__
+            return "MinGW ¯\\_(ツ)_/¯";
+#  elif defined(LAMBDA_CYGWIN)
+            return "CYGWIN";
+#  else
             // Holy shit, what the fuck is this shitty code?
             // Fuck you Microsoft!
             string winName = "Windows ";
@@ -133,6 +140,7 @@ namespace lambdacommon
             else if (IsWindowsXPOrGreater())
                 winName += "XP";
             return winName;
+#  endif
         }
 
         string LAMBDACOMMON_API getKernelVersion()
