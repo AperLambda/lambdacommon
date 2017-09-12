@@ -4,11 +4,14 @@
 
 # JetBrains
 .idea/
+*.iml
 ## CLion
 cmake-build-debug/
 cmake-build-release/
 
 # Build system
+## Cargo
+Cargo.lock
 ## CMake
 CMakeCache.txt
 ## Gradle

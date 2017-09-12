@@ -7,18 +7,19 @@
  * see the LICENSE file.
  */
 
-#ifndef LAMBDACOMMON_DEVICES_H
-#define LAMBDACOMMON_DEVICES_H
+#ifndef LAMBDACOMMON_DOCUMENT_H
+#define LAMBDACOMMON_DOCUMENT_H
 
 #include "../lambdacommon.h"
+#include <map>
 
 namespace lambdacommon
 {
-    enum DeviceStatus
-    {
-        CONNECTED = 1,
-        DISCONNECTED = 0
-    };
+    class LAMBDACOMMON_API Content
+    {};
+
+    class LAMBDACOMMON_API Document
+    {};
 }
 
-#endif //LAMBDACOMMON_DEVICES_H
+#endif //LAMBDACOMMON_DOCUMENT_H

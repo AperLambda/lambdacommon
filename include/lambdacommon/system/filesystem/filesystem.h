@@ -31,7 +31,6 @@ namespace lambdacommon
         class LAMBDACOMMON_API FilePath : public Path
         {
         protected:
-            PathType _type;
             //std::vector<std::string> *_path;
             bool _absolute;
 
@@ -56,17 +55,17 @@ namespace lambdacommon
 
             void set(const std::string &str, PathType type = NATIVE);
 
-            bool remove();
-
-            bool mkdir(bool recursive = false);
-
-            bool empty() const;
-
             /**
              * Checks whether the path is absolute or not.
              * @return True if the path is absolute else false.
              */
             bool isAbsolute() const;
+
+            bool empty() const;
+
+            bool remove() const;
+
+            bool mkdir(bool recursive = false) const;
 
             /**
              * Checks whether the path exists or not.

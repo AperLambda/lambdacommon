@@ -45,13 +45,13 @@ namespace lambdacommon
          * Returns the size of the available physical memory (RAM) in bytes.
          * @return The available physical memory in bytes.
          */
-        extern uint64_t LAMBDACOMMON_API getAvailablePhysicalMemory();
+        extern uint64_t LAMBDACOMMON_API getPhysicalMemoryFree();
 
         /*!
          * Returns the size of the used physical memory (RAM) in bytes.
          * @return The used physical memory in bytes.
          */
-        extern uint64_t LAMBDACOMMON_API getUsedPhysicalMemory();
+        extern uint64_t LAMBDACOMMON_API getPhysicalMemoryUsed();
 
         /*
          * Computer

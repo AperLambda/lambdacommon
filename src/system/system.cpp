@@ -83,7 +83,7 @@ namespace lambdacommon
             return statex.ullTotalPhys;
         }
 
-        uint64_t LAMBDACOMMON_API getAvailablePhysicalMemory()
+        uint64_t LAMBDACOMMON_API getPhysicalMemoryFree()
         {
             MEMORYSTATUSEX statex;
             statex.dwLength = sizeof(statex);
@@ -91,9 +91,9 @@ namespace lambdacommon
             return statex.ullAvailPhys;
         }
 
-        uint64_t LAMBDACOMMON_API getUsedPhysicalMemory()
+        uint64_t LAMBDACOMMON_API getPhysicalMemoryUsed()
         {
-            return getPhysicalMemory() - getAvailablePhysicalMemory();
+            return getPhysicalMemory() - getPhysicalMemoryFree();
         }
 
         string LAMBDACOMMON_API getComputerName()
@@ -244,7 +244,7 @@ namespace lambdacommon
 #  endif
         }
 
-        uint64_t LAMBDACOMMON_API getAvailablePhysicalMemory()
+        uint64_t LAMBDACOMMON_API getPhysicalMemoryFree()
         {
             struct sysinfo memInfo;
 
@@ -253,7 +253,7 @@ namespace lambdacommon
             return (memInfo.freeram * memInfo.mem_unit);
         }
 
-        uint64_t LAMBDACOMMON_API getUsedPhysicalMemory()
+        uint64_t LAMBDACOMMON_API getPhysicalMemoryUsed()
         {
             struct sysinfo memInfo;
 

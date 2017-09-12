@@ -20,20 +20,22 @@ endif ()
 # All files
 # There is the C++ headers files.
 set(HEADERS_CONNECTION include/lambdacommon/connection/url.h include/lambdacommon/connection/address.h)
+set(HEADERS_DOCUMENT include/lambdacommon/document/document.h)
 set(HEADERS_GRAPHICS include/lambdacommon/graphics/color.h)
 set(HEADERS_FILESYSTEM include/lambdacommon/system/filesystem/filesystem.h)
 set(HEADERS_EXCEPTIONS include/lambdacommon/exceptions/exceptions.h)
 set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/lambdacommon/system/os.h include/lambdacommon/system/devices.h include/lambdacommon/system/terminal.h include/lambdacommon/system/system.h)
 set(HEADERS_BASE include/lambdacommon/lambdacommon.h include/lambdacommon/serializable.h include/lambdacommon/string.h include/lambdacommon/path.h)
-set(HEADERS_FILES ${HEADERS_CONNECTION} ${HEADERS_GRAPHICS} ${HEADERS_EXCEPTIONS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
+set(HEADERS_FILES ${HEADERS_CONNECTION} ${HEADERS_DOCUMENT} ${HEADERS_GRAPHICS} ${HEADERS_EXCEPTIONS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
 # There is the C++ sources files.
 set(SOURCES_CONNECTION src/connection/address.cpp src/connection/url.cpp)
+set(SOURCES_DOCUMENT)
 set(SOURCES_GRAPHICS src/graphics/color.cpp)
 set(SOURCES_FILESYSTEM src/system/filesystem/filesystem.cpp)
 set(SOURCES_SERIALIZERS)
 set(SOURCES_SYSTEM ${SOURCES_FILESYSTEM} src/system/os.cpp src/system/terminal.cpp src/system/system.cpp)
 set(SOURCES_BASE src/lambdacommon.cpp src/serializable.cpp src/string.cpp src/path.cpp)
-set(SOURCES_FILES ${SOURCES_CONNECTION} ${SOURCES_GRAPHICS} ${SOURCES_SERIALIZERS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
+set(SOURCES_FILES ${SOURCES_CONNECTION} ${SOURCES_DOCUMENT} ${SOURCES_GRAPHICS} ${SOURCES_SERIALIZERS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
 
 # Now build the library
 # Build static if the option is on.

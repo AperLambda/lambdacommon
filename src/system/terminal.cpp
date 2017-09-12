@@ -355,6 +355,16 @@ namespace lambdacommon
         }
 
         /*
+         * Sound manipulations
+         */
+
+        ostream LAMBDACOMMON_API &doBeep(ostream &stream)
+        {
+            stream << "\a";
+            return stream;
+        }
+
+        /*
          * Terminal manipulations
          */
 

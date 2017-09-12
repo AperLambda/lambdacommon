@@ -38,7 +38,7 @@ namespace lambdacommon
 {
     namespace filesystem
     {
-        FilePath::FilePath() : Path(), _type(NATIVE), _absolute(false)
+        FilePath::FilePath() : Path(), _absolute(false)
         {
 
         }
@@ -67,17 +67,15 @@ namespace lambdacommon
 
 #endif
 
-        FilePath::FilePath(const FilePath &path) : _type(path._type), Path(*path._path),
-                                                   _absolute(path._absolute)
+        FilePath::FilePath(const FilePath &path) : Path(*path._path), _absolute(path._absolute)
         {}
 
-        FilePath::FilePath(FilePath &&path) noexcept : _type(path._type), Path(vector<string>(move(*path._path))),
-                                              _absolute(path._absolute)
+        FilePath::FilePath(FilePath &&path) noexcept : Path(vector<string>(move(*path._path))),
+                                                       _absolute(path._absolute)
         {}
 
         void FilePath::set(const string &str, PathType type)
         {
-            _type = type;
             if (type == WINDOWS)
             {
                 *_path = serializable::tokenize(str, "/\\");
@@ -90,7 +88,7 @@ namespace lambdacommon
             }
         }
 
-        bool FilePath::remove()
+        bool FilePath::remove() const
         {
 #ifdef LAMBDA_WINDOWS
             return DeleteFileA(toString().c_str()) != 0;
@@ -99,7 +97,7 @@ namespace lambdacommon
 #endif
         }
 
-        bool FilePath::mkdir(bool recursive)
+        bool FilePath::mkdir(bool recursive) const
         {
             if (recursive)
             {
@@ -211,7 +209,6 @@ namespace lambdacommon
         FilePath FilePath::getParent() const
         {
             FilePath result;
-            result._type = _type;
             result._absolute = _absolute;
 
             if (empty())
@@ -266,7 +263,6 @@ namespace lambdacommon
 
         FilePath &FilePath::operator=(const FilePath &path)
         {
-            _type = path._type;
             delete _path;
             _path = new vector<string>(*path._path);
             _absolute = path._absolute;
@@ -277,7 +273,6 @@ namespace lambdacommon
         {
             if (this != &path)
             {
-                _type = path._type;
                 delete _path;
                 _path = new vector<string>(move(*path._path));
                 _absolute = path._absolute;

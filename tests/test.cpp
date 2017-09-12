@@ -15,8 +15,8 @@ int main()
 
     cout << "Starting λcommon-tests with " << CYAN << "λcommon" << RESET << " v" << lambdacommon::getVersion()
          << " (Compiled with "
-         << LAMBDACOMMON_VERSION_HIGH_MAJOR << LAMBDACOMMON_VERSION_MAJOR << LAMBDACOMMON_VERSION_MINOR
-         << LAMBDACOMMON_VERSION_BUILD << ")" << endl;
+         << LAMBDACOMMON_VERSION_HIGH_MAJOR << '.' << LAMBDACOMMON_VERSION_MAJOR << '.' << LAMBDACOMMON_VERSION_MINOR
+         << '-' << LAMBDACOMMON_VERSION_BUILD << ")" << endl;
     cout << endl;
     cout << "OS running: " << LIGHT_YELLOW << system::getOSName() << RESET << " (kernel: " << system::getKernelVersion()
          << ", arch: " << system::os::getArchName(system::os::getOSArch()) << ")" << endl;
@@ -31,9 +31,9 @@ int main()
          << " cores)" << RESET << endl;
     cout << " OS Physical Memory: " << LIGHT_GREEN << to_string((system::getPhysicalMemory() / (1024 * 1024))) << "MB"
          << RESET << endl;
-    cout << " OS Available RAM: " << LIGHT_GREEN << to_string((system::getAvailablePhysicalMemory() / (1024 * 1024)))
+    cout << " OS Available RAM: " << LIGHT_GREEN << to_string((system::getPhysicalMemoryFree() / (1024 * 1024)))
          << "MB" << RESET << endl;
-    cout << " OS used RAM: " << LIGHT_GREEN << to_string((system::getUsedPhysicalMemory() / (1024 * 1024))) << "MB"
+    cout << " OS used RAM: " << LIGHT_GREEN << to_string((system::getPhysicalMemoryUsed() / (1024 * 1024))) << "MB"
          << RESET << endl;
     cout << endl;
 
@@ -111,8 +111,7 @@ int main()
         return 1;
     }
 
-    cout
-            << "TESTING URL (WRITER) ...\nRESULT: ";
+    cout << "TESTING URL (WRITER) ...\nRESULT: ";
 
     auto url = URL::URL("https", "user", "pwd", {"something.com"}, {"test", "file_or_folder"}, {{"foo",               "bar"},
                                                                                                 {"queryWithoutValue", ""},
