@@ -15,7 +15,7 @@
 
 namespace lambdacommon
 {
-    namespace URL
+    namespace url
     {
         enum SchemeType
         {

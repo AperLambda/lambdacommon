@@ -5,6 +5,7 @@
 #include <lambdacommon/exceptions/exceptions.h>
 
 using namespace lambdacommon;
+using namespace url;
 using namespace terminal;
 using namespace std;
 
@@ -113,7 +114,7 @@ int main()
 
     cout << "TESTING URL (WRITER) ...\nRESULT: ";
 
-    auto url = URL::URL("https", "user", "pwd", {"something.com"}, {"test", "file_or_folder"}, {{"foo",               "bar"},
+    auto url = URL("https", "user", "pwd", {"something.com"}, {"test", "file_or_folder"}, {{"foo",               "bar"},
                                                                                                 {"queryWithoutValue", ""},
                                                                                                 {"invalid query",     "but fixed"}},
                         "bar");
@@ -130,7 +131,7 @@ int main()
 
     cout << "TESTING URL::fromFilePath(FILESYSTEM::FILEPATH) WITH \"" << herePath.toString(filesystem::COMMON)
          << "\"...\nRESULT: ";
-    auto fileURL = URL::fromFilePath(herePath);
+    auto fileURL = url::fromFilePath(herePath);
     expected = ("file://" + herePath.toString(filesystem::COMMON));
     url_toString = fileURL.toString();
     if (lambdastring::equals(url_toString, expected))
@@ -146,7 +147,7 @@ int main()
     cout << "TESTING URL::fromString(STD::STRING) WITH \"" << expected << "\"...\nRESULT: ";
     try
     {
-        url = URL::fromString("https://www.youtube.com/watch?v=wh10k2LPZiI");
+        url = url::fromString("https://www.youtube.com/watch?v=wh10k2LPZiI");
         url_toString = url.toString();
         if (lambdastring::equals(url_toString, expected))
             cout << LIGHT_GREEN << "OK. (" << url_toString << ")" << RESET << endl;

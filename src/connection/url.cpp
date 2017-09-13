@@ -17,7 +17,7 @@ using namespace std;
 
 namespace lambdacommon
 {
-    namespace URL
+    namespace url
     {
         SchemeType LAMBDACOMMON_API getSchemeTypeByString(const string &scheme)
         {
