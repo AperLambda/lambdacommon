@@ -15,7 +15,7 @@
 
 namespace lambdacommon
 {
-    class LAMBDACOMMON_API Content
+    class LAMBDACOMMON_API Element
     {};
 
     class LAMBDACOMMON_API Document
