@@ -7,7 +7,7 @@
  * see the LICENSE file.
  */
 
-#include "../../include/lambdacommon/connection/url.h"
+#include "../../include/lambdacommon/system/uri.h"
 #include "../../include/lambdacommon/string.h"
 #include "../../include/lambdacommon/exceptions/exceptions.h"
 #include <sstream>
@@ -17,7 +17,7 @@ using namespace std;
 
 namespace lambdacommon
 {
-    namespace url
+    namespace uri
     {
         SchemeType LAMBDACOMMON_API getSchemeTypeByString(const string &scheme)
         {
@@ -70,7 +70,7 @@ namespace lambdacommon
         }
 
         /*
-         * URL
+         * URI
          */
 
         vector<pair<string, string>> fixQueries(const vector<pair<string, string>> &queries)
@@ -82,7 +82,7 @@ namespace lambdacommon
             return newQueries;
         };
 
-        URL::URL(const string &scheme, const string &username, const string &password, const Address &address,
+        URI::URI(const string &scheme, const string &username, const string &password, const Address &address,
                  const vector<string> &path, const vector<pair<string, string>> &queries, const string &fragment)
                 : Path(path),
                   _scheme(new string(scheme)),
@@ -93,19 +93,19 @@ namespace lambdacommon
                   _fragment(new string(fragment))
         {}
 
-        URL::URL(const URL &url) : Path(*url._path), _scheme(new string(*url._scheme)),
+        URI::URI(const URI &url) : Path(*url._path), _scheme(new string(*url._scheme)),
                                    _username(new string(*url._username)), _password(new string(*url._password)),
                                    _address(url._address), _queries(new vector<pair<string, string>>(*url._queries)),
                                    _fragment(new string(*url._fragment))
         {}
 
-        URL::URL(URL &&url) : Path(*url._path), _scheme(new string(move(*url._scheme))),
+        URI::URI(URI &&url) : Path(*url._path), _scheme(new string(move(*url._scheme))),
                               _username(new string(move(*url._username))), _password(new string(move(*url._password))),
                               _address(url._address), _queries(new vector<pair<string, string>>(move(*url._queries))),
                               _fragment(new string(move(*url._fragment)))
         {}
 
-        URL::~URL()
+        URI::~URI()
         {
             delete _scheme;
             delete _username;
@@ -113,22 +113,22 @@ namespace lambdacommon
             delete _fragment;
         }
 
-        string URL::getScheme() const
+        string URI::getScheme() const
         {
             return *_scheme;
         }
 
-        string URL::getUsername() const
+        string URI::getUsername() const
         {
             return *_username;
         }
 
-        string URL::getPassword() const
+        string URI::getPassword() const
         {
             return *_password;
         }
 
-        void URL::setUserAndPassword(const string &username, const string &password)
+        void URI::setUserAndPassword(const string &username, const string &password)
         {
             if (username.empty() || password.empty())
             {
@@ -142,12 +142,12 @@ namespace lambdacommon
             }
         }
 
-        Address URL::getAddress() const
+        Address URI::getAddress() const
         {
             return _address;
         }
 
-        void URL::setAddress(const Address &address)
+        void URI::setAddress(const Address &address)
         {
             if (address.getHost().empty() && isSchemeTypeNonFileSpecial(getSchemeType()))
                 throw IllegalArgumentException("Hostname cannot be null for this scheme.");
@@ -155,17 +155,17 @@ namespace lambdacommon
             _address = address;
         }
 
-        vector<pair<string, string>> URL::getQueries() const
+        vector<pair<string, string>> URI::getQueries() const
         {
             return *_queries;
         }
 
-        void URL::setQueries(const vector<pair<string, string>> &queries)
+        void URI::setQueries(const vector<pair<string, string>> &queries)
         {
             *_queries = fixQueries(queries);
         }
 
-        bool URL::hasQuery(string query) const
+        bool URI::hasQuery(string query) const
         {
             bool hasQuery = false;
             for (auto q : *_queries)
@@ -177,7 +177,7 @@ namespace lambdacommon
             return hasQuery;
         }
 
-        string URL::getQuery(string query) const
+        string URI::getQuery(string query) const
         {
             string result = "";
             for (auto q : *_queries)
@@ -189,44 +189,48 @@ namespace lambdacommon
             return result;
         }
 
-        string URL::getFragment() const
+        string URI::getFragment() const
         {
             return *_fragment;
         }
 
-        void URL::setFragment(const string &fragment)
+        void URI::setFragment(const string &fragment)
         {
             *_fragment = fragment;
         }
 
-        string URL::toString() const
+        string URI::toString(char delimiter) const
         {
             ostringstream oss;
 
-            // Write the scheme
+            // Write the scheme.
             if (!_scheme->empty())
-                oss << getScheme() << "://";
+                oss << getScheme() << ':';
 
             if (!_address.isEmpty())
             {
-                // Write the username and the password
+                oss << "//";
+                // Write the username and the password.
                 if (!_username->empty() && !_password->empty())
                     oss << getUsername() << ':' << getPassword() << '@';
 
                 // Write the address.
                 oss << _address.toString();
             }
+            else if (*_scheme == "file")
+                oss << "//";
 
             // Write the path.
             if (!_path->empty())
-                oss << '/' << Path::toString();
+                oss << '/' << Path::toString(delimiter);
 
+            // Write the queries.
             if (!_queries->empty())
             {
                 oss << '?';
                 for (size_t i = 0; i < _queries->size(); i++)
                 {
-                    pair<string, string> query = (*_queries)[i];
+                    pair < string, string > query = (*_queries)[i];
                     oss << query.first;
                     if (!query.second.empty())
                         oss << '=' << query.second;
@@ -236,13 +240,14 @@ namespace lambdacommon
                 }
             }
 
+            // Write the fragment.
             if (!_fragment->empty())
                 oss << '#' << getFragment();
 
             return oss.str();
         }
 
-        URL &URL::operator=(const URL &url)
+        URI &URI::operator=(const URI &url)
         {
             delete _path;
             _path = new vector<string>(*url._path);
@@ -260,7 +265,7 @@ namespace lambdacommon
             return *this;
         }
 
-        URL &URL::operator=(URL &&url) noexcept
+        URI &URI::operator=(URI &&url) noexcept
         {
             if (this != &url)
             {
@@ -281,26 +286,42 @@ namespace lambdacommon
             return *this;
         }
 
-        bool URL::operator==(const URL &url)
+        bool URI::operator==(const URI &url)
         {
             return *_scheme == (*url._scheme) && *_username == (*url._username) && *_password == (*url._password) &&
                    _address == url._address && *_path == (*url._path) && *_queries == (*url._queries) &&
                    *_fragment == (*url._fragment);
         }
 
-        bool URL::operator!=(const URL &url)
+        bool URI::operator!=(const URI &url)
         {
             return *_scheme != (*url._scheme) || *_username != (*url._username) || *_password != (*url._password) ||
                    _address != url._address || *_path != (*url._path) || *_queries != (*url._queries) ||
                    *_fragment != (*url._fragment);
         }
 
-        URL LAMBDACOMMON_API fromFilePath(filesystem::FilePath path)
+        URI URI::operator/(const URI &uri)
+        {
+            URI newURI = URI(*this);
+            for (string s : uri.getPath())
+                newURI._path->emplace_back(s);
+            return newURI;
+        }
+
+        URI URI::operator/(const Path &path)
+        {
+            URI newURI = URI(*this);
+            for (string s : path.getPath())
+                newURI._path->emplace_back(s);
+            return newURI;
+        }
+
+        URI LAMBDACOMMON_API fromFilePath(filesystem::FilePath path)
         {
             if (!path.isAbsolute())
                 path = path.toAbsolute();
 
-            return URL("file", "", "", Address::EMPTY, path.getPath());
+            return URI("file", "", "", Address::EMPTY, path.getPath());
         }
 
         int str2int(const string &str)
@@ -320,14 +341,19 @@ namespace lambdacommon
             return i;
         }
 
-        URL LAMBDACOMMON_API fromString(const string &url)
+        URI LAMBDACOMMON_API fromString(const string &url)
         {
             if (url.empty())
-                throw IllegalArgumentException("URL cannot be empty.");
+                throw IllegalArgumentException("URI cannot be empty.");
 
             auto schemeSeparator = url.find_first_of("://");
             if (schemeSeparator == string::npos)
-                throw ParseException("Cannot parse url '" + url + "': cannot find the scheme separator ('://')!");
+            {
+                schemeSeparator = url.find_first_of(':');
+                if (schemeSeparator == string::npos)
+                    throw ParseException(
+                            "Cannot parse uri '" + url + "': cannot find the scheme separator (':' or '://')!");
+            }
             string scheme = url.substr(0, schemeSeparator);
             auto tmpUrl = url.substr(schemeSeparator + 3, url.size());
 
@@ -339,7 +365,7 @@ namespace lambdacommon
                 string userAndPwd = tmpUrl.substr(0, authSeparator);
                 auto split = lambdastring::split(userAndPwd, ':');
                 if (split.size() == 1)
-                    throw ParseException("Cannot parse url '" + url + "': missing username or password!");
+                    throw ParseException("Cannot parse uri '" + url + "': missing username or password!");
                 username = split[0];
                 password = split[1];
 
@@ -353,7 +379,7 @@ namespace lambdacommon
             if ((querySeparator != string::npos && pathSeparator > querySeparator) ||
                 (fragmentSeparator != string::npos && pathSeparator > fragmentSeparator))
                 throw ParseException(
-                        "Cannot parse url '" + url + "', malformed URL: path is before query and fragment!");
+                        "Cannot parse uri '" + url + "', malformed URI: path is before query and fragment!");
 
             string tmpAddress;
 
@@ -428,15 +454,15 @@ namespace lambdacommon
                 {
                     if ((port = static_cast<lambdacommon::port>(str2int(
                             tmpAddress.substr(addressSeparator + 1, tmpAddress.size())))) == 0)
-                        throw ParseException("Cannot parse url '" + url + "': invalid port!");
+                        throw ParseException("Cannot parse uri '" + url + "': invalid port!");
                 }
                 address = {host, port};
             }
 
-            URL resultURL{scheme, username, password, address, serializable::tokenize(path, "/"), queries, fragment};
+            URI resultURL{scheme, username, password, address, serializable::tokenize(path, "/"), queries, fragment};
 
             if (resultURL.getAddress().isEmpty() && isSchemeTypeNonFileSpecial(resultURL.getSchemeType()))
-                throw ParseException("Cannot parse url '" + url + "': the scheme doesn't support empty address!");
+                throw ParseException("Cannot parse uri '" + url + "': the scheme doesn't support empty address!");
 
             return resultURL;
         }

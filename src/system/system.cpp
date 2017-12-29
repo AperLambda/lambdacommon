@@ -8,7 +8,6 @@
  */
 
 #include "../../include/lambdacommon/system/system.h"
-#include "../../include/lambdacommon/string.h"
 #include <sstream>
 
 #ifdef LAMBDA_WINDOWS
@@ -17,6 +16,7 @@
 
 #include <intrin.h>
 #include <ShlObj.h>
+
 #  ifndef __MINGW32__
 #    include <VersionHelpers.h>
 #  endif
@@ -68,11 +68,64 @@ namespace lambdacommon
             return cpuName;
         }
 
+        typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
+
+        LPFN_ISWOW64PROCESS fnIsWow64Process;
+
+        BOOL isWow64()
+        {
+            BOOL bIsWow64 = FALSE;
+
+            //IsWow64Process is not available on all supported versions of Windows.
+            //Use GetModuleHandle to get a handle to the DLL that contains the function
+            //and GetProcAddress to get a pointer to the function if available.
+
+            fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
+                    GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
+
+            if (NULL != fnIsWow64Process)
+            {
+                if (!fnIsWow64Process(GetCurrentProcess(), &bIsWow64))
+                {
+                    //handle error
+                }
+            }
+            return bIsWow64;
+        }
+
+        SysArchitecture LAMBDACOMMON_API getProcessorArch()
+        {
+            SYSTEM_INFO sysInfo;
+            if (isWow64())
+                GetNativeSystemInfo(&sysInfo);
+            else
+                GetSystemInfo(&sysInfo);
+
+            switch (sysInfo.wProcessorArchitecture)
+            {
+                case PROCESSOR_ARCHITECTURE_AMD64:
+                    return SysArchitecture::X86_64;
+                case PROCESSOR_ARCHITECTURE_INTEL:
+                    return SysArchitecture::I386;
+                case PROCESSOR_ARCHITECTURE_ARM:
+                    return SysArchitecture::ARM;
+                case PROCESSOR_ARCHITECTURE_UNKNOWN:
+                    return SysArchitecture::UNKNOWN;
+                default:
+                    return SysArchitecture::UNKNOWN;
+            }
+        }
+
+        string LAMBDACOMMON_API getProcessorArchStr()
+        {
+            return getProcessorArchEnumStr();
+        }
+
         uint32_t LAMBDACOMMON_API getProcessorCores()
         {
-            SYSTEM_INFO sysinfo;
-            GetSystemInfo(&sysinfo);
-            return sysinfo.dwNumberOfProcessors;
+            SYSTEM_INFO systemInfo;
+            GetSystemInfo(&systemInfo);
+            return systemInfo.dwNumberOfProcessors;
         }
 
         uint64_t LAMBDACOMMON_API getPhysicalMemory()
@@ -110,9 +163,9 @@ namespace lambdacommon
         string LAMBDACOMMON_API getOSName()
         {
 #  ifdef __MINGW32__
-            return "MinGW ¯\\_(ツ)_/¯";
+            return "Windows with MinGW";
 #  elif defined(LAMBDA_CYGWIN)
-            return "CYGWIN";
+            return "Windows with CYGWIN";
 #  else
             // Holy shit, what the fuck is this shitty code?
             // Fuck you Microsoft!
@@ -188,28 +241,42 @@ namespace lambdacommon
             ifstream cpuinfo;
             cpuinfo.open("/proc/cpuinfo", ios::in);
             string word;
-            bool record = false;
+            //bool record = false;
             string cpu;
             if (cpuinfo.is_open())
             {
-                while (cpuinfo >> word)
+                for (string line; getline(cpuinfo, line);)
                 {
-                    if (word == "model" && cpuinfo >> word && word == "name" && cpuinfo >> word && cpuinfo >> word)
+                    if (lambdastring::equalsIgnoreCase(line.substr(0, 10), "model name"))
                     {
-                        cpu = word;
-                        record = true;
-                    }
-                    else if (record)
-                    {
-                        if (word == "stepping")
-                            break;
-                        else
-                            cpu += (" " + word);
+                        size_t separatorIndex = line.find_first_of(':');
+                        cpu = line.substr(separatorIndex + 2);
+                        break;
                     }
                 }
                 cpuinfo.close();
             }
             return cpu;
+        }
+
+        SysArchitecture LAMBDACOMMON_API getProcessorArch()
+        {
+            if (lambdastring::equals(getProcessorArchStr(), "x86_64"))
+                return SysArchitecture::X86_64;
+            else if (lambdastring::equals(getProcessorArchStr(), "i386"))
+                return SysArchitecture::I386;
+            else if (lambdastring::equalsIgnoreCase(getProcessorArchStr().substr(0, 3), "ARM"))
+                return SysArchitecture::ARM;
+            else
+                return SysArchitecture::UNKNOWN;
+        }
+
+        string LAMBDACOMMON_API getProcessorArchStr()
+        {
+            utsname uName;
+            if (uname(&uName) != 0)
+                return "Unknown";
+            return uName.machine;
         }
 
         uint32_t LAMBDACOMMON_API getProcessorCores()
@@ -350,6 +417,23 @@ namespace lambdacommon
         }
 
 #endif
+
+        std::string LAMBDACOMMON_API getProcessorArchEnumStr(SysArchitecture arch)
+        {
+            switch (arch)
+            {
+                case SysArchitecture::ARM:
+                    return "ARM";
+                case SysArchitecture::ARM64:
+                    return "ARM64";
+                case SysArchitecture::I386:
+                    return "i386";
+                case SysArchitecture::X86_64:
+                    return "x86_64";
+                case SysArchitecture::UNKNOWN:
+                    return "Unknown";
+            }
+        }
 
         filesystem::FilePath LAMBDACOMMON_API getUserDirectory()
         {

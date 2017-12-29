@@ -10,12 +10,12 @@
 #ifndef LAMBDACOMMON_URL_H
 #define LAMBDACOMMON_URL_H
 
-#include "../system/filesystem/filesystem.h"
-#include "address.h"
+#include "filesystem/filesystem.h"
+#include "../connection/address.h"
 
 namespace lambdacommon
 {
-    namespace url
+    namespace uri
     {
         enum SchemeType
         {
@@ -38,7 +38,7 @@ namespace lambdacommon
         /**
          * Based on https://url.spec.whatwg.org
          */
-        class LAMBDACOMMON_API URL : public Path
+        class LAMBDACOMMON_API URI : public Path
         {
         protected:
             pstring _scheme;
@@ -49,16 +49,16 @@ namespace lambdacommon
             pstring _fragment;
 
         public:
-            URL(const std::string &scheme, const std::string &username, const std::string &password,
+            URI(const std::string &scheme, const std::string &username, const std::string &password,
                 const Address &address, const std::vector<std::string> &path = std::vector<std::string>(),
                 const std::vector<std::pair<std::string, std::string>> &queries = std::vector<std::pair<std::string, std::string>>(),
                 const std::string &fragment = "");
 
-            URL(const URL &url);
+            URI(const URI &uri);
 
-            URL(URL &&url);
+            URI(URI &&uri);
 
-            ~URL();
+            ~URI();
 
             std::string getScheme() const;
 
@@ -89,15 +89,19 @@ namespace lambdacommon
 
             void setFragment(const std::string &fragment);
 
-            std::string toString() const;
+            std::string toString(char delimiter = '/') const override;
 
-            URL &operator=(const URL &url);
+            URI &operator=(const URI &uri);
 
-            URL &operator=(URL &&url) noexcept;
+            URI &operator=(URI &&uri) noexcept;
 
-            bool operator==(const URL &url);
+            bool operator==(const URI &uri);
 
-            bool operator!=(const URL &url);
+            bool operator!=(const URI &uri);
+
+            URI operator/(const URI &uri);
+
+            URI operator/(const Path &path);
         };
 
         /**
@@ -105,9 +109,9 @@ namespace lambdacommon
          * @param path Filesystem's file path.
          * @return An URL.
          */
-        extern URL LAMBDACOMMON_API fromFilePath(filesystem::FilePath path = filesystem::getCurrentWorkingDirectory());
+        extern URI LAMBDACOMMON_API fromFilePath(filesystem::FilePath path = filesystem::getCurrentWorkingDirectory());
 
-        extern URL LAMBDACOMMON_API fromString(const std::string &url);
+        extern URI LAMBDACOMMON_API fromString(const std::string &uri);
     }
 }
 

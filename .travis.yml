@@ -19,8 +19,8 @@ before_install:
   - sudo apt-get update -y -qq
   - sudo apt-get install -y -qq libyajl-dev libxml2-dev libxqilla-dev
   - if [ "$CXX" = "clang++" ]; then sudo apt-get install -y  -qq libstdc++-6-dev; fi
-  - if [ "$CXX" = "g++" ]; then sudo apt-get install -y -qq g++-6; fi
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
+  - if [ "$CXX" = "g++" ]; then sudo apt-get install -y -qq g++-7; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-7" CC="gcc-7"; fi
 
 script:
   - sh build.sh

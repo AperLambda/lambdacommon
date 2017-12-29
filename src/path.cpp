@@ -32,12 +32,17 @@ namespace lambdacommon
 
     string Path::toString() const
     {
+        return toString('/');
+    }
+
+    string Path::toString(char delimiter) const
+    {
         ostringstream oss;
         for (size_t i = 0; i < _path->size(); i++)
         {
             oss << (*_path)[i];
             if (i + 1 < _path->size())
-                oss << '/';
+                oss << delimiter;
         }
         return oss.str();
     }

@@ -311,12 +311,6 @@ namespace lambdacommon
             return stream;
         }
 
-        ostream &carriageReturn(ostream &stream)
-        {
-            stream << string("\r");
-            return stream;
-        }
-
         std::ostream LAMBDACOMMON_API &clear(ostream &stream)
         {
 #ifdef WIN_FRIENDLY
@@ -325,12 +319,7 @@ namespace lambdacommon
                 cls(getTermHandle(stream));
                 return stream;
             }
-            else
-                goto writeANSI;
-#else
-            goto writeANSI;
 #endif
-            writeANSI:
             stream << "\033[2J";
             return stream;
         }
@@ -344,13 +333,9 @@ namespace lambdacommon
                 coord.X = x;
                 coord.Y = y;
                 SetConsoleCursorPosition(getTermHandle(stream), coord);
+                return;
             }
-            else
-                goto writeANSI;
-#else
-            goto writeANSI;
 #endif
-            writeANSI:
             stream << ("\033[" + to_string(y) + ';' + to_string(x) + "H");
         }
 
@@ -358,9 +343,9 @@ namespace lambdacommon
          * Sound manipulations
          */
 
-        ostream LAMBDACOMMON_API &doBeep(ostream &stream)
+        ostream LAMBDACOMMON_API &bell(ostream &stream)
         {
-            stream << "\a";
+            stream << ((char) 0x7);
             return stream;
         }
 
@@ -396,12 +381,7 @@ namespace lambdacommon
 #ifdef WIN_FRIENDLY
             if (is_atty(stream))
                 return (bool) SetConsoleTitle(TEXT(title.c_str()));
-            else
-                goto writeANSI;
-#else
-            goto writeANSI;
 #endif
-            writeANSI:
             stream << ("\033]0;" + title + "\007");
             return true;
         }

@@ -30,19 +30,7 @@ namespace lambdacommon
             NETBSD = 7,
             OPENBSD = 8,
             CYGWIN = 11,
-            UNKNOWN = 0
-        };
-
-        /*! @brief Enumeration of different Architectures of a CPU
-         *
-         * Enum of different CPU Architectures. Not complete.
-         */
-        enum OSArchitecture
-        {
-            ARM,
-            ARM64,
-            I386,
-            X86_64
+            OS_UNKNOWN = 0
         };
 
         namespace os
@@ -56,10 +44,6 @@ namespace lambdacommon
             extern OS LAMBDACOMMON_API getOS();
 
             extern std::string LAMBDACOMMON_API getOSName(OS os = getOS());
-
-            extern OSArchitecture LAMBDACOMMON_API getOSArch();
-
-            extern std::string LAMBDACOMMON_API getArchName(OSArchitecture arch = getOSArch());
         }
     }
 }

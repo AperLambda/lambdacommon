@@ -263,8 +263,7 @@ namespace lambdacommon
 
         FilePath &FilePath::operator=(const FilePath &path)
         {
-            delete _path;
-            _path = new vector<string>(*path._path);
+            *_path = *path._path;
             _absolute = path._absolute;
             return *this;
         }

@@ -38,7 +38,7 @@ namespace lambdacommon
 #elif defined(LAMBDA_CYGWIN)
             return OS::CYGWIN;
 #else
-            return OS::UNKNOWN;
+            return OS::OS_UNKNOWN;
 #endif
         }
 
@@ -71,41 +71,11 @@ namespace lambdacommon
                 case CYGWIN:
                     osName = "Cygwin";
                     break;
-                case UNKNOWN:
+                case OS_UNKNOWN:
                     osName = "Unknown";
                     break;
             }
             return osName;
-        }
-
-        OSArchitecture os::getOSArch()
-        {
-#ifdef LAMBDA_ARM
-            return OSArchitecture::ARM;
-#elif __aarch64__
-            return OSArchitecture::ARM64;
-#elif i386 || __i386 || __i386__ || _M_IX86 || __X86__ || _X86_
-            return OSArchitecture::I386;
-#elif __amd64__ || __amd64 || __x86_64__ || __x86_64 || _M_X64 || _M_AMD64
-            return OSArchitecture::X86_64;
-#endif
-        }
-
-        string os::getArchName(OSArchitecture arch)
-        {
-            string archName;
-            switch (arch)
-            {
-                case ARM:
-                    archName = "ARM";
-                case ARM64:
-                    archName = "ARM 64bits";
-                case I386:
-                    archName = "i386";
-                case X86_64:
-                    archName = "x86_64";
-            }
-            return archName;
         }
     }
 }

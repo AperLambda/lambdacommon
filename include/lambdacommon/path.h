@@ -29,6 +29,8 @@ namespace lambdacommon
         std::vector<std::string> getPath() const;
 
         virtual std::string toString() const;
+
+        virtual std::string toString(char delimiter = '/') const;
     };
 }
 

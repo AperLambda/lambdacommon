@@ -1,11 +1,11 @@
 #include <lambdacommon/graphics/color.h>
 #include <lambdacommon/system/system.h>
 #include <lambdacommon/string.h>
-#include <lambdacommon/connection/url.h>
+#include <lambdacommon/system/uri.h>
 #include <lambdacommon/exceptions/exceptions.h>
 
 using namespace lambdacommon;
-using namespace url;
+using namespace uri;
 using namespace terminal;
 using namespace std;
 
@@ -20,7 +20,7 @@ int main()
          << '-' << LAMBDACOMMON_VERSION_BUILD << ")" << endl;
     cout << endl;
     cout << "OS running: " << LIGHT_YELLOW << system::getOSName() << RESET << " (kernel: " << system::getKernelVersion()
-         << ", arch: " << system::os::getArchName(system::os::getOSArch()) << ")" << endl;
+         << ", arch: " << system::getProcessorArchStr() << " [" + system::getProcessorArchEnumStr() << "])" << endl;
     cout << endl;
 
     cout << "Computer DATA:" << endl;
@@ -112,48 +112,48 @@ int main()
         return 1;
     }
 
-    cout << "TESTING URL (WRITER) ...\nRESULT: ";
+    cout << "TESTING URI (WRITER) ...\nRESULT: ";
 
-    auto url = URL("https", "user", "pwd", {"something.com"}, {"test", "file_or_folder"}, {{"foo",               "bar"},
+    auto uri = URI("https", "user", "pwd", {"something.com"}, {"test", "file_or_folder"}, {{"foo",               "bar"},
                                                                                                 {"queryWithoutValue", ""},
                                                                                                 {"invalid query",     "but fixed"}},
                         "bar");
-    string url_toString = url.toString();
+    string uri_toString = uri.toString();
     expected = "https://user:pwd@something.com/test/file_or_folder?foo=bar&queryWithoutValue&invalid%20query=but%20fixed#bar";
-    if (lambdastring::equals(url_toString, expected))
-        cout << LIGHT_GREEN << "OK. (" << url_toString << ")" << RESET << endl;
+    if (lambdastring::equals(uri_toString, expected))
+        cout << LIGHT_GREEN << "OK. (" << uri_toString << ")" << RESET << endl;
     else
     {
-        cout << LIGHT_RED << "FAILED. (" << url_toString << ", expected: " + expected + ")"
+        cout << LIGHT_RED << "FAILED. (" << uri_toString << ", expected: " + expected + ")"
              << RESET << endl;
         return 1;
     }
 
-    cout << "TESTING URL::fromFilePath(FILESYSTEM::FILEPATH) WITH \"" << herePath.toString(filesystem::COMMON)
+    cout << "TESTING URI::fromFilePath(FILESYSTEM::FILEPATH) WITH \"" << herePath.toString(filesystem::COMMON)
          << "\"...\nRESULT: ";
-    auto fileURL = url::fromFilePath(herePath);
+    auto fileURL = uri::fromFilePath(herePath);
     expected = ("file://" + herePath.toString(filesystem::COMMON));
-    url_toString = fileURL.toString();
-    if (lambdastring::equals(url_toString, expected))
-        cout << LIGHT_GREEN << "OK. (" << url_toString << ")" << RESET << endl;
+    uri_toString = fileURL.toString();
+    if (lambdastring::equals(uri_toString, expected))
+        cout << LIGHT_GREEN << "OK. (" << uri_toString << ")" << RESET << endl;
     else
     {
-        cout << LIGHT_RED << "FAILED. (" << url_toString << ", expected: " + expected + ")"
+        cout << LIGHT_RED << "FAILED. (" << uri_toString << ", expected: " + expected + ")"
              << RESET << endl;
         return 1;
     }
 
     expected = "https://www.youtube.com/watch?v=wh10k2LPZiI";
-    cout << "TESTING URL::fromString(STD::STRING) WITH \"" << expected << "\"...\nRESULT: ";
+    cout << "TESTING URI::fromString(STD::STRING) WITH \"" << expected << "\"...\nRESULT: ";
     try
     {
-        url = url::fromString("https://www.youtube.com/watch?v=wh10k2LPZiI");
-        url_toString = url.toString();
-        if (lambdastring::equals(url_toString, expected))
-            cout << LIGHT_GREEN << "OK. (" << url_toString << ")" << RESET << endl;
+        uri = uri::fromString("https://www.youtube.com/watch?v=wh10k2LPZiI");
+        uri_toString = uri.toString();
+        if (lambdastring::equals(uri_toString, expected))
+            cout << LIGHT_GREEN << "OK. (" << uri_toString << ")" << RESET << endl;
         else
         {
-            cout << LIGHT_RED << "FAILED. (" << url_toString << ", expected: " + expected + ")"
+            cout << LIGHT_RED << "FAILED. (" << uri_toString << ", expected: " + expected + ")"
                  << RESET << endl;
             return 1;
         }

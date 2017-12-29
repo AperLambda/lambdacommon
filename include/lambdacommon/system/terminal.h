@@ -88,14 +88,6 @@ namespace lambdacommon
          */
         extern std::ostream LAMBDACOMMON_API &eraseCurrentLine(std::ostream &stream);
 
-        /*!
-         * This function will do a carriage return in the stream.
-         *
-         * @param stream Stream will be affect.
-         * @return The current stream.
-         */
-        extern std::ostream LAMBDACOMMON_API &carriageReturn(std::ostream &stream);
-
         extern std::ostream LAMBDACOMMON_API &clear(std::ostream &stream = std::cout);
 
         /*!
@@ -118,10 +110,10 @@ namespace lambdacommon
 
         /*!
          * Do a beep/bell in the terminal.
-         * @param stream ¯\_(ツ)_/¯
-         * @return ¯\_(ツ)_/¯
+         * @param stream The stream to affect.
+         * @return The affected stream.
          */
-        extern std::ostream LAMBDACOMMON_API &doBeep(std::ostream &stream = std::cout);
+        extern std::ostream LAMBDACOMMON_API &bell(std::ostream &stream = std::cout);
 
         /*
          * Terminal manipulations

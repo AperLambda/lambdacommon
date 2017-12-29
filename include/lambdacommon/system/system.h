@@ -14,11 +14,25 @@
 #include "devices.h"
 #include "os.h"
 #include "terminal.h"
+#include "../string.h"
 
 namespace lambdacommon
 {
     namespace system
     {
+        /*! @brief Enumeration of different Architectures of a CPU
+         *
+         * Enum of different CPU Architectures. Not complete.
+         */
+        enum SysArchitecture
+        {
+            ARM,
+            ARM64,
+            I386,
+            X86_64,
+            UNKNOWN
+        };
+
         /*
          * Hardware
          */
@@ -28,6 +42,12 @@ namespace lambdacommon
          * @return The CPU's name.
          */
         extern std::string LAMBDACOMMON_API getProcessorName();
+
+        extern SysArchitecture LAMBDACOMMON_API getProcessorArch();
+
+        extern std::string LAMBDACOMMON_API getProcessorArchEnumStr(SysArchitecture arch = getProcessorArch());
+
+        extern std::string LAMBDACOMMON_API getProcessorArchStr();
 
         /*!
          * Returns the count of the processor (CPU) cores as an int.
