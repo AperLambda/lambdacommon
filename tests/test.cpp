@@ -14,10 +14,10 @@ int main()
     useUTF8();
     setTerminalTitle("λcommon - tests");
 
-    cout << "Starting λcommon-tests with " << CYAN << "λcommon" << RESET << " v" << lambdacommon::getVersion()
+    cout << "Starting λcommon-tests with" << CYAN << " λcommon" << RESET << " v" << lambdacommon::getVersion()
          << " (Compiled with "
-         << LAMBDACOMMON_VERSION_HIGH_MAJOR << '.' << LAMBDACOMMON_VERSION_MAJOR << '.' << LAMBDACOMMON_VERSION_MINOR
-         << '-' << LAMBDACOMMON_VERSION_BUILD << ")" << endl;
+         << LAMBDACOMMON_VERSION_MAJOR << '.' << LAMBDACOMMON_VERSION_MINOR << '.' << LAMBDACOMMON_VERSION_DEBUG
+         << ")" << endl;
     cout << endl;
     cout << "OS running: " << LIGHT_YELLOW << system::getOSName() << RESET << " (kernel: " << system::getKernelVersion()
          << ", arch: " << system::getProcessorArchStr() << " [" + system::getProcessorArchEnumStr() << "])" << endl;
@@ -115,9 +115,9 @@ int main()
     cout << "TESTING URI (WRITER) ...\nRESULT: ";
 
     auto uri = URI("https", "user", "pwd", {"something.com"}, {"test", "file_or_folder"}, {{"foo",               "bar"},
-                                                                                                {"queryWithoutValue", ""},
-                                                                                                {"invalid query",     "but fixed"}},
-                        "bar");
+                                                                                           {"queryWithoutValue", ""},
+                                                                                           {"invalid query",     "but fixed"}},
+                   "bar");
     string uri_toString = uri.toString();
     expected = "https://user:pwd@something.com/test/file_or_folder?foo=bar&queryWithoutValue&invalid%20query=but%20fixed#bar";
     if (lambdastring::equals(uri_toString, expected))
