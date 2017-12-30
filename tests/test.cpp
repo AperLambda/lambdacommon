@@ -16,7 +16,7 @@ int main()
 
     cout << "Starting λcommon-tests with" << CYAN << " λcommon" << RESET << " v" << lambdacommon::getVersion()
          << " (Compiled with "
-         << LAMBDACOMMON_VERSION_MAJOR << '.' << LAMBDACOMMON_VERSION_MINOR << '.' << LAMBDACOMMON_VERSION_DEBUG
+         << LAMBDACOMMON_VERSION_MAJOR << '.' << LAMBDACOMMON_VERSION_MINOR << '.' << LAMBDACOMMON_VERSION_PATCH
          << ")" << endl;
     cout << endl;
     cout << "OS running: " << LIGHT_YELLOW << system::getOSName() << RESET << " (kernel: " << system::getKernelVersion()
