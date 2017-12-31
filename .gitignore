@@ -1,7 +1,7 @@
 #
 # AperLambda ignore file
 #
-# v0.2
+# v0.3
 
 # JetBrains
 .idea/
@@ -37,7 +37,12 @@ package-lock.json
 # Logging
 logs/
 
+# Languages
+## Rust
+**/*.rs.bk
+
 # Common
 bin/
 build/
 run/
+target/
