@@ -11,13 +11,12 @@ using namespace std;
 
 int main()
 {
-    useUTF8();
+    setup();
     setTerminalTitle("λcommon - tests");
 
-    cout << "Starting λcommon-tests with" << CYAN << " λcommon" << RESET << " v" << lambdacommon::getVersion()
-         << " (Compiled with "
-         << LAMBDACOMMON_VERSION_MAJOR << '.' << LAMBDACOMMON_VERSION_MINOR << '.' << LAMBDACOMMON_VERSION_PATCH
-         << ")" << endl;
+    cout << "Starting lambdacommon-tests with" << CYAN << " lambdacommon" << RESET << " v" << lambdacommon::getVersion()
+         << " (Compiled with " << LAMBDACOMMON_VERSION_MAJOR << '.' << LAMBDACOMMON_VERSION_MINOR << '.'
+         << LAMBDACOMMON_VERSION_PATCH << ")" << endl;
     cout << endl;
     cout << "OS running: " << LIGHT_YELLOW << system::getOSName() << RESET << " (kernel: " << system::getKernelVersion()
          << ", arch: " << system::getProcessorArchStr() << " [" + system::getProcessorArchEnumStr() << "])" << endl;

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -42,7 +42,7 @@
 
 #define LAMBDACOMMON_VERSION_MAJOR 1
 #define LAMBDACOMMON_VERSION_MINOR 5
-#define LAMBDACOMMON_VERSION_PATCH 5
+#define LAMBDACOMMON_VERSION_PATCH 6
 
 namespace lambdacommon
 {

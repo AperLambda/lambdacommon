@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -10,20 +10,22 @@
 #include "../../include/lambdacommon/system/terminal.h"
 
 #if defined(LAMBDA_WINDOWS) || defined(__CYGWIN__)
-#define WIN_FRIENDLY
+#  define WIN_FRIENDLY
 
-#include <io.h>
-#include <windows.h>
+#  include <io.h>
+#  include <windows.h>
 
 #  ifdef __CYGWIN__
+#    include <unistd.h>
+#  endif
 
-#include <unistd.h>
-
+#  ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+#    define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #  endif
 
 #else
 
-#include <unistd.h>
+#  include <unistd.h>
 
 #endif
 
@@ -33,6 +35,8 @@ namespace lambdacommon
 {
     namespace terminal
     {
+        bool useANSIEscapeCodes = false;
+
         /*
          * INTERNAL
          */
@@ -172,114 +176,120 @@ namespace lambdacommon
             if (is_atty(stream))
             {
 #ifdef WIN_FRIENDLY
-                for (auto format : termFormatting)
+                if (!useANSIEscapeCodes)
                 {
-                    switch (format)
+                    for (auto format : termFormatting)
                     {
-                        case RESET:
-                            win_change_attributes(stream, -1, -1);
-                            break;
-                        case BLACK:
-                            win_change_attributes(stream, 0x0, -1);
-                            break;
-                        case BLUE:
-                            win_change_attributes(stream, FOREGROUND_BLUE, -1);
-                            break;
-                        case GREEN:
-                            win_change_attributes(stream, FOREGROUND_GREEN, -1);
-                            break;
-                        case CYAN:
-                            win_change_attributes(stream, 0x3, -1);
-                            break;
-                        case RED:
-                            win_change_attributes(stream, FOREGROUND_RED, -1);
-                            break;
-                        case MAGENTA:
-                            win_change_attributes(stream, 0x5, -1);
-                            break;
-                        case YELLOW:
-                            win_change_attributes(stream, 0x6, -1);
-                            break;
-                        case LIGHT_GRAY:
-                            win_change_attributes(stream, 0x7, -1);
-                            break;
-                        case DARK_GRAY:
-                            win_change_attributes(stream, 0x8, -1);
-                            break;
-                        case LIGHT_BLUE:
-                            win_change_attributes(stream, 0x9, -1);
-                            break;
-                        case LIGHT_GREEN:
-                            win_change_attributes(stream, 0xA, -1);
-                            break;
-                        case LIGHT_CYAN:
-                            win_change_attributes(stream, 0xB, -1);
-                            break;
-                        case LIGHT_RED:
-                            win_change_attributes(stream, 0xC, -1);
-                            break;
-                        case LIGHT_MAGENTA:
-                            win_change_attributes(stream, 0xD, -1);
-                            break;
-                        case LIGHT_YELLOW:
-                            win_change_attributes(stream, 0xE, -1);
-                            break;
-                        case WHITE:
-                            win_change_attributes(stream, 0xF, -1);
-                            break;
-                        case B_BLACK:
-                            win_change_attributes(stream, -1, 0x00);
-                            break;
-                        case B_BLUE:
-                            win_change_attributes(stream, -1, BACKGROUND_BLUE);
-                            break;
-                        case B_GREEN:
-                            win_change_attributes(stream, -1, BACKGROUND_GREEN);
-                            break;
-                        case B_CYAN:
-                            win_change_attributes(stream, -1, (0x3 << 4));
-                            break;
-                        case B_RED:
-                            win_change_attributes(stream, -1, BACKGROUND_RED);
-                            break;
-                        case B_MAGENTA:
-                            win_change_attributes(stream, -1, (0x5 << 4));
-                            break;
-                        case B_YELLOW:
-                            win_change_attributes(stream, -1, (0x6 << 4));
-                            break;
-                        case B_LIGHT_GRAY:
-                            win_change_attributes(stream, -1, (0x7 << 4));
-                            break;
-                        case B_DARK_GRAY:
-                            win_change_attributes(stream, -1, (0x8 << 4));
-                            break;
-                        case B_LIGHT_BLUE:
-                            win_change_attributes(stream, -1, (0x9 << 4));
-                            break;
-                        case B_LIGHT_GREEN:
-                            win_change_attributes(stream, -1, (0xA << 4));
-                            break;
-                        case B_LIGHT_CYAN:
-                            win_change_attributes(stream, -1, (0xB << 4));
-                            break;
-                        case B_LIGHT_RED:
-                            win_change_attributes(stream, -1, (0xC << 4));
-                            break;
-                        case B_LIGHT_MAGENTA:
-                            win_change_attributes(stream, -1, (0xD << 4));
-                            break;
-                        case B_LIGHT_YELLOW:
-                            win_change_attributes(stream, -1, (0xE << 4));
-                            break;
-                        case B_WHITE:
-                            win_change_attributes(stream, -1, (0xF << 4));
-                            break;
-                        default:
-                            break;
+                        switch (format)
+                        {
+                            case RESET:
+                                win_change_attributes(stream, -1, -1);
+                                break;
+                            case BLACK:
+                                win_change_attributes(stream, 0x0, -1);
+                                break;
+                            case BLUE:
+                                win_change_attributes(stream, FOREGROUND_BLUE, -1);
+                                break;
+                            case GREEN:
+                                win_change_attributes(stream, FOREGROUND_GREEN, -1);
+                                break;
+                            case CYAN:
+                                win_change_attributes(stream, FOREGROUND_BLUE | FOREGROUND_GREEN, -1);
+                                break;
+                            case RED:
+                                win_change_attributes(stream, FOREGROUND_RED, -1);
+                                break;
+                            case MAGENTA:
+                                win_change_attributes(stream, 0x5, -1);
+                                break;
+                            case YELLOW:
+                                win_change_attributes(stream, 0x6, -1);
+                                break;
+                            case LIGHT_GRAY:
+                                win_change_attributes(stream, 0x7, -1);
+                                break;
+                            case DARK_GRAY:
+                                win_change_attributes(stream, 0x8, -1);
+                                break;
+                            case LIGHT_BLUE:
+                                win_change_attributes(stream, FOREGROUND_BLUE | FOREGROUND_INTENSITY, -1);
+                                break;
+                            case LIGHT_GREEN:
+                                win_change_attributes(stream, FOREGROUND_GREEN | FOREGROUND_INTENSITY, -1);
+                                break;
+                            case LIGHT_CYAN:
+                                win_change_attributes(stream, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY,
+                                                      -1);
+                                break;
+                            case LIGHT_RED:
+                                win_change_attributes(stream, FOREGROUND_RED | FOREGROUND_INTENSITY, -1);
+                                break;
+                            case LIGHT_MAGENTA:
+                                win_change_attributes(stream, 0xD, -1);
+                                break;
+                            case LIGHT_YELLOW:
+                                win_change_attributes(stream, 0xE, -1);
+                                break;
+                            case WHITE:
+                                win_change_attributes(stream, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE, -1);
+                                break;
+                            case B_BLACK:
+                                win_change_attributes(stream, -1, 0x00);
+                                break;
+                            case B_BLUE:
+                                win_change_attributes(stream, -1, BACKGROUND_BLUE);
+                                break;
+                            case B_GREEN:
+                                win_change_attributes(stream, -1, BACKGROUND_GREEN);
+                                break;
+                            case B_CYAN:
+                                win_change_attributes(stream, -1, BACKGROUND_BLUE | BACKGROUND_GREEN);
+                                break;
+                            case B_RED:
+                                win_change_attributes(stream, -1, BACKGROUND_RED);
+                                break;
+                            case B_MAGENTA:
+                                win_change_attributes(stream, -1, (0x5 << 4));
+                                break;
+                            case B_YELLOW:
+                                win_change_attributes(stream, -1, (0x6 << 4));
+                                break;
+                            case B_LIGHT_GRAY:
+                                win_change_attributes(stream, -1, (0x7 << 4));
+                                break;
+                            case B_DARK_GRAY:
+                                win_change_attributes(stream, -1, (0x8 << 4));
+                                break;
+                            case B_LIGHT_BLUE:
+                                win_change_attributes(stream, -1, (0x9 << 4));
+                                break;
+                            case B_LIGHT_GREEN:
+                                win_change_attributes(stream, -1, (0xA << 4));
+                                break;
+                            case B_LIGHT_CYAN:
+                                win_change_attributes(stream, -1, (0xB << 4));
+                                break;
+                            case B_LIGHT_RED:
+                                win_change_attributes(stream, -1, (0xC << 4));
+                                break;
+                            case B_LIGHT_MAGENTA:
+                                win_change_attributes(stream, -1, (0xD << 4));
+                                break;
+                            case B_LIGHT_YELLOW:
+                                win_change_attributes(stream, -1, (0xE << 4));
+                                break;
+                            case B_WHITE:
+                                win_change_attributes(stream, -1, (0xF << 4));
+                                break;
+                            default:
+                                break;
+                        }
                     }
+                    return stream;
                 }
-                return stream;
+                else
+                    goto writeANSI;
 #else
                 goto writeANSI;
 #endif
@@ -287,7 +297,8 @@ namespace lambdacommon
             else
                 goto writeANSI;
             writeANSI:
-            string ansiSequence = "\033[";
+            string ansiSequence{((char) 0x1B)};
+            ansiSequence += "[";
             auto formattings = termFormatting.size();
             for (size_t i = 0; i < formattings; i++)
             {
@@ -306,7 +317,7 @@ namespace lambdacommon
         {
 #ifdef WIN_FRIENDLY
 #else
-            stream << string("\33[2K");
+            stream << string("\033[2K");
 #endif
             return stream;
         }
@@ -352,6 +363,26 @@ namespace lambdacommon
         /*
          * Terminal manipulations
          */
+
+        bool LAMBDACOMMON_API setup()
+        {
+#ifdef  WIN_FRIENDLY
+            HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+            if (hOut != INVALID_HANDLE_VALUE)
+            {
+                DWORD dwMode = 0;
+                if (GetConsoleMode(hOut, &dwMode))
+                {
+                    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+                    if (SetConsoleMode(hOut, dwMode))
+                        useANSIEscapeCodes = true;
+                }
+            }
+#else
+#endif
+            useUTF8();
+            return useANSIEscapeCodes;
+        }
 
         void LAMBDACOMMON_API useUTF8()
         {

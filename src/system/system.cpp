@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -168,7 +168,6 @@ namespace lambdacommon
             return "Windows with CYGWIN";
 #  else
             // Holy shit, what the fuck is this shitty code?
-            // Fuck you Microsoft!
             string winName = "Windows ";
 
             if (IsWindowsServer())
@@ -198,6 +197,7 @@ namespace lambdacommon
 
         string LAMBDACOMMON_API getKernelVersion()
         {
+#if defined(__MINGW32__) || defined(LAMBDA_CYGWIN)
             OSVERSIONINFO vi;
             vi.dwOSVersionInfoSize = sizeof(vi);
             if (GetVersionEx(&vi) == 0) return "UNKNOWN";
@@ -206,6 +206,10 @@ namespace lambdacommon
             if (vi.szCSDVersion[0]) str << ": " << vi.szCSDVersion;
             str << ")";
             return str.str();
+#else
+            // I don't know how to get it using Visual Studio compiler :/
+            return "UNKNOWN";
+#endif
         }
 
         string LAMBDACOMMON_API getUserName()
@@ -431,6 +435,8 @@ namespace lambdacommon
                 case SysArchitecture::X86_64:
                     return "x86_64";
                 case SysArchitecture::UNKNOWN:
+                    return "Unknown";
+                default:
                     return "Unknown";
             }
         }

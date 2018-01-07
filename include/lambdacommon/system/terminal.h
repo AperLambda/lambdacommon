@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -118,6 +118,15 @@ namespace lambdacommon
         /*
          * Terminal manipulations
          */
+
+        /*!
+         * Setup the terminal.
+         * On Windows it enables ANSI escape codes if available.
+         * On every system:
+         *   - Calls useUTF8().
+         * @return True if success else false.
+         */
+        extern bool LAMBDACOMMON_API setup();
 
         extern void LAMBDACOMMON_API useUTF8();
 
