@@ -76,6 +76,14 @@ namespace lambdacommon
             return subject;
         }
 
+        std::string LAMBDACOMMON_API to_string(bool value)
+        {
+            if (value)
+                return "true";
+            else
+                return "false";
+        }
+
 #ifdef LAMBDA_WINDOWS
 #ifndef __GNUC__
 

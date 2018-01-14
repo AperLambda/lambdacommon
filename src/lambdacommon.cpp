@@ -13,7 +13,7 @@ using namespace std;
 
 namespace lambdacommon
 {
-    string getVersion()
+    string LAMBDACOMMON_API getVersion()
     {
         return to_string(LAMBDACOMMON_VERSION_MAJOR) + "." + to_string(LAMBDACOMMON_VERSION_MINOR) + "." +
                to_string(LAMBDACOMMON_VERSION_PATCH);

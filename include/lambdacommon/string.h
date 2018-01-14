@@ -57,6 +57,8 @@ namespace lambdacommon
         extern std::string LAMBDACOMMON_API
         replaceAll(std::string subject, const std::string &from, const std::string &to);
 
+        extern std::string LAMBDACOMMON_API to_string(bool value);
+
 #ifdef LAMBDA_WINDOWS
 
         /**
