@@ -14,11 +14,11 @@
 
 namespace lambdacommon
 {
-    enum DeviceStatus
-    {
-        CONNECTED = 1,
-        DISCONNECTED = 0
-    };
+	enum DeviceStatus
+	{
+		CONNECTED = 1,
+		DISCONNECTED = 0
+	};
 }
 
 #endif //LAMBDACOMMON_DEVICES_H

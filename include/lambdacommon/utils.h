@@ -15,13 +15,13 @@
 
 namespace lambdacommon
 {
-    namespace utils
-    {
-        extern std::string LAMBDACOMMON_API toStringForVector(const std::vector<std::string> &vec);
+	namespace utils
+	{
+		extern std::string LAMBDACOMMON_API toStringForVector(const std::vector<std::string> &vec);
 
-        extern std::ostream LAMBDACOMMON_API &
-        operator<<(std::ostream &stream, const std::vector<std::string> &vectorToPrint);
-    }
+		extern std::ostream LAMBDACOMMON_API &
+		operator<<(std::ostream &stream, const std::vector<std::string> &vectorToPrint);
+	}
 }
 
 #endif //LAMBDACOMMON_UTILS_H

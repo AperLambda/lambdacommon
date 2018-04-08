@@ -19,63 +19,63 @@ using namespace std;
 
 namespace lambdacommon
 {
-    namespace system
-    {
-        OS os::getOS()
-        {
+	namespace system
+	{
+		OS os::getOS()
+		{
 #ifdef LAMBDA_WINDOWS
 #ifdef LAMBDA_WIN64
-            return OS::WINDOWS_64;
+			return OS::WINDOWS_64;
 #else
-            return OS::WINDOWS_32;
+			return OS::WINDOWS_32;
 #endif
 #elif defined(LAMBDA_MAC_OSX)
-            return OS::MAC_OSX;
+			return OS::MAC_OSX;
 #elif defined(__linux__)
-            return OS::LINUX;
+			return OS::LINUX;
 #elif defined(LAMBDA_FREEBSD)
-            return OS::FREEBSD;
+			return OS::FREEBSD;
 #elif defined(LAMBDA_CYGWIN)
-            return OS::CYGWIN;
+			return OS::CYGWIN;
 #else
-            return OS::OS_UNKNOWN;
+			return OS::OS_UNKNOWN;
 #endif
-        }
+		}
 
-        string os::getOSName(OS os)
-        {
-            string osName = string();
-            switch (os)
-            {
-                case WINDOWS_32:
-                    osName = "Windows 32-bits";
-                    break;
-                case WINDOWS_64:
-                    osName = "Windows 64-bits";
-                    break;
-                case MAC_OSX:
-                    osName = "Mac OSX";
-                    break;
-                case LINUX:
-                    osName = "Linux";
-                    break;
-                case FREEBSD:
-                    osName = "FreeBSD";
-                    break;
-                case NETBSD:
-                    osName = "NetBSD";
-                    break;
-                case OPENBSD:
-                    osName = "OpenBSD";
-                    break;
-                case CYGWIN:
-                    osName = "Cygwin";
-                    break;
-                case OS_UNKNOWN:
-                    osName = "Unknown";
-                    break;
-            }
-            return osName;
-        }
-    }
+		string os::getOSName(OS os)
+		{
+			string osName = string();
+			switch (os)
+			{
+				case WINDOWS_32:
+					osName = "Windows 32-bits";
+					break;
+				case WINDOWS_64:
+					osName = "Windows 64-bits";
+					break;
+				case MAC_OSX:
+					osName = "Mac OSX";
+					break;
+				case LINUX:
+					osName = "Linux";
+					break;
+				case FREEBSD:
+					osName = "FreeBSD";
+					break;
+				case NETBSD:
+					osName = "NetBSD";
+					break;
+				case OPENBSD:
+					osName = "OpenBSD";
+					break;
+				case CYGWIN:
+					osName = "Cygwin";
+					break;
+				case OS_UNKNOWN:
+					osName = "Unknown";
+					break;
+			}
+			return osName;
+		}
+	}
 }

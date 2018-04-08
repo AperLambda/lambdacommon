@@ -14,36 +14,36 @@ using namespace std;
 
 namespace lambdacommon
 {
-    Path::Path() : _path(new vector<string>())
-    {}
+	Path::Path() : _path(new vector<string>())
+	{}
 
-    Path::Path(const vector<string> &path) : _path(new vector<string>(path))
-    {}
+	Path::Path(const vector<string> &path) : _path(new vector<string>(path))
+	{}
 
-    Path::~Path()
-    {
-        delete _path;
-    }
+	Path::~Path()
+	{
+		delete _path;
+	}
 
-    vector<string> Path::getPath() const
-    {
-        return *_path;
-    }
+	vector<string> Path::getPath() const
+	{
+		return *_path;
+	}
 
-    string Path::toString() const
-    {
-        return toString('/');
-    }
+	string Path::toString() const
+	{
+		return toString('/');
+	}
 
-    string Path::toString(char delimiter) const
-    {
-        ostringstream oss;
-        for (size_t i = 0; i < _path->size(); i++)
-        {
-            oss << (*_path)[i];
-            if (i + 1 < _path->size())
-                oss << delimiter;
-        }
-        return oss.str();
-    }
+	string Path::toString(char delimiter) const
+	{
+		ostringstream oss;
+		for (size_t i = 0; i < _path->size(); i++)
+		{
+			oss << (*_path)[i];
+			if (i + 1 < _path->size())
+				oss << delimiter;
+		}
+		return oss.str();
+	}
 }

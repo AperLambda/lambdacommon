@@ -15,104 +15,104 @@
 
 namespace lambdacommon
 {
-    namespace uri
-    {
-        enum SchemeType
-        {
-            FILE,
-            FTP,
-            GOPHER,
-            HTTP,
-            HTTPS,
-            WS,
-            WSS,
-            OTHER
-        };
+	namespace uri
+	{
+		enum SchemeType
+		{
+			FILE,
+			FTP,
+			GOPHER,
+			HTTP,
+			HTTPS,
+			WS,
+			WSS,
+			OTHER
+		};
 
-        extern SchemeType LAMBDACOMMON_API getSchemeTypeByString(const std::string &scheme);
+		extern SchemeType LAMBDACOMMON_API getSchemeTypeByString(const std::string &scheme);
 
-        extern port LAMBDACOMMON_API getSchemeDefaultPort(SchemeType scheme);
+		extern port LAMBDACOMMON_API getSchemeDefaultPort(SchemeType scheme);
 
-        extern bool LAMBDACOMMON_API isSchemeTypeNonFileSpecial(SchemeType scheme);
+		extern bool LAMBDACOMMON_API isSchemeTypeNonFileSpecial(SchemeType scheme);
 
-        /**
-         * Based on https://url.spec.whatwg.org
-         */
-        class LAMBDACOMMON_API URI : public Path
-        {
-        protected:
-            pstring _scheme;
-            pstring _username;
-            pstring _password;
-            Address _address;
-            std::vector<std::pair<std::string, std::string>> *_queries;
-            pstring _fragment;
+		/**
+		 * Based on https://url.spec.whatwg.org
+		 */
+		class LAMBDACOMMON_API URI : public Path
+		{
+		protected:
+			pstring _scheme;
+			pstring _username;
+			pstring _password;
+			Address _address;
+			std::vector<std::pair<std::string, std::string>> *_queries;
+			pstring _fragment;
 
-        public:
-            URI(const std::string &scheme, const std::string &username, const std::string &password,
-                const Address &address, const std::vector<std::string> &path = std::vector<std::string>(),
-                const std::vector<std::pair<std::string, std::string>> &queries = std::vector<std::pair<std::string, std::string>>(),
-                const std::string &fragment = "");
+		public:
+			URI(const std::string &scheme, const std::string &username, const std::string &password,
+			    const Address &address, const std::vector<std::string> &path = std::vector<std::string>(),
+			    const std::vector<std::pair<std::string, std::string>> &queries = std::vector<std::pair<std::string, std::string>>(),
+			    const std::string &fragment = "");
 
-            URI(const URI &uri);
+			URI(const URI &uri);
 
-            URI(URI &&uri);
+			URI(URI &&uri) noexcept;
 
-            ~URI();
+			~URI() override;
 
-            std::string getScheme() const;
+			std::string getScheme() const;
 
-            inline SchemeType getSchemeType() const
-            {
-                return getSchemeTypeByString(getScheme());
-            }
+			inline SchemeType getSchemeType() const
+			{
+				return getSchemeTypeByString(getScheme());
+			}
 
-            std::string getUsername() const;
+			std::string getUsername() const;
 
-            std::string getPassword() const;
+			std::string getPassword() const;
 
-            void setUserAndPassword(const std::string &username, const std::string &password);
+			void setUserAndPassword(const std::string &username, const std::string &password);
 
-            Address getAddress() const;
+			Address getAddress() const;
 
-            void setAddress(const Address &address);
+			void setAddress(const Address &address);
 
-            std::vector<std::pair<std::string, std::string>> getQueries() const;
+			std::vector<std::pair<std::string, std::string>> getQueries() const;
 
-            void setQueries(const std::vector<std::pair<std::string, std::string>> &queries);
+			void setQueries(const std::vector<std::pair<std::string, std::string>> &queries);
 
-            bool hasQuery(std::string query) const;
+			bool hasQuery(std::string query) const;
 
-            std::string getQuery(std::string query) const;
+			std::string getQuery(std::string query) const;
 
-            std::string getFragment() const;
+			std::string getFragment() const;
 
-            void setFragment(const std::string &fragment);
+			void setFragment(const std::string &fragment);
 
-            std::string toString(char delimiter = '/') const override;
+			std::string toString(char delimiter = '/') const override;
 
-            URI &operator=(const URI &uri);
+			URI &operator=(const URI &uri);
 
-            URI &operator=(URI &&uri) noexcept;
+			URI &operator=(URI &&uri) noexcept;
 
-            bool operator==(const URI &uri);
+			bool operator==(const URI &uri);
 
-            bool operator!=(const URI &uri);
+			bool operator!=(const URI &uri);
 
-            URI operator/(const URI &uri);
+			URI operator/(const URI &uri);
 
-            URI operator/(const Path &path);
-        };
+			URI operator/(const Path &path);
+		};
 
-        /**
-         * Returns an URL from a file path.
-         * @param path Filesystem's file path.
-         * @return An URL.
-         */
-        extern URI LAMBDACOMMON_API fromFilePath(filesystem::FilePath path = filesystem::getCurrentWorkingDirectory());
+		/**
+		 * Returns an URL from a file path.
+		 * @param path Filesystem's file path.
+		 * @return An URL.
+		 */
+		extern URI LAMBDACOMMON_API fromFilePath(filesystem::FilePath path = filesystem::getCurrentWorkingDirectory());
 
-        extern URI LAMBDACOMMON_API fromString(const std::string &uri);
-    }
+		extern URI LAMBDACOMMON_API fromString(const std::string &uri);
+	}
 }
 
 #endif //LAMBDACOMMON_URL_H

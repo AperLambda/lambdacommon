@@ -13,24 +13,24 @@ using namespace std;
 
 namespace lambdacommon
 {
-    namespace serializable
-    {
-        vector<string> LAMBDACOMMON_API tokenize(const string &_string, const string &delim)
-        {
-            string::size_type lastPos = 0, pos = _string.find_first_of(delim, lastPos);
-            vector<string> tokens;
+	namespace serializable
+	{
+		vector<string> LAMBDACOMMON_API tokenize(const string &_string, const string &delim)
+		{
+			string::size_type lastPos = 0, pos = _string.find_first_of(delim, lastPos);
+			vector<string> tokens;
 
-            while (lastPos != string::npos)
-            {
-                if (pos != lastPos)
-                    tokens.push_back(_string.substr(lastPos, pos - lastPos));
-                lastPos = pos;
-                if (lastPos == string::npos || lastPos + 1 == _string.length())
-                    break;
-                pos = _string.find_first_of(delim, ++lastPos);
-            }
+			while (lastPos != string::npos)
+			{
+				if (pos != lastPos)
+					tokens.push_back(_string.substr(lastPos, pos - lastPos));
+				lastPos = pos;
+				if (lastPos == string::npos || lastPos + 1 == _string.length())
+					break;
+				pos = _string.find_first_of(delim, ++lastPos);
+			}
 
-            return tokens;
-        }
-    }
+			return tokens;
+		}
+	}
 }

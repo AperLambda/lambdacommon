@@ -42,13 +42,13 @@
 
 #define LAMBDACOMMON_VERSION_MAJOR 1
 #define LAMBDACOMMON_VERSION_MINOR 5
-#define LAMBDACOMMON_VERSION_PATCH 7
+#define LAMBDACOMMON_VERSION_PATCH 8
 
 namespace lambdacommon
 {
-    typedef std::string *pstring;
+	typedef std::string *pstring;
 
-    extern std::string LAMBDACOMMON_API getVersion();
+	extern std::string LAMBDACOMMON_API getVersion();
 }
 
 #endif // LAMBDACOMMON_LIBRARY_H

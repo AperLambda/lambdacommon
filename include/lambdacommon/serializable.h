@@ -15,16 +15,16 @@
 
 namespace lambdacommon
 {
-    class LAMBDACOMMON_API Serializable
-    {
-    public:
-        virtual std::string toString() const = 0;
-    };
+	class LAMBDACOMMON_API Serializable
+	{
+	public:
+		virtual std::string toString() const = 0;
+	};
 
-    namespace serializable
-    {
-        std::vector<std::string> LAMBDACOMMON_API tokenize(const std::string &_string, const std::string &delim);
-    }
+	namespace serializable
+	{
+		std::vector<std::string> LAMBDACOMMON_API tokenize(const std::string &_string, const std::string &delim);
+	}
 }
 
 #endif //LAMBDACOMMON_SERIALIZABLE_H

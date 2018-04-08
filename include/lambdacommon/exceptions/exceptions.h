@@ -12,38 +12,39 @@
 
 #include <exception>
 #include <string>
+#include <utility>
 
 namespace lambdacommon
 {
-    class IllegalArgumentException : public std::exception
-    {
-    private:
-        std::string _msg;
+	class IllegalArgumentException : public std::exception
+	{
+	private:
+		std::string _msg;
 
-    public:
-        IllegalArgumentException(std::string msg) : _msg(msg)
-        {}
+	public:
+		explicit IllegalArgumentException(std::string msg) : _msg(std::move(msg))
+		{}
 
-        const char *what() const noexcept override
-        {
-            return _msg.c_str();
-        }
-    };
+		const char *what() const noexcept override
+		{
+			return _msg.c_str();
+		}
+	};
 
-    class ParseException : public std::exception
-    {
-    private:
-        std::string _msg;
+	class ParseException : public std::exception
+	{
+	private:
+		std::string _msg;
 
-    public:
-        ParseException(std::string msg) : _msg(msg)
-        {}
+	public:
+		explicit ParseException(std::string msg) : _msg(std::move(msg))
+		{}
 
-        const char *what() const noexcept override
-        {
-            return _msg.c_str();
-        }
-    };
+		const char *what() const noexcept override
+		{
+			return _msg.c_str();
+		}
+	};
 }
 
 #endif //LAMBDACOMMON_EXCEPTIONS_H

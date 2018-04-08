@@ -15,11 +15,13 @@
 
 namespace lambdacommon
 {
-    class LAMBDACOMMON_API Element
-    {};
+	class LAMBDACOMMON_API Element
+	{
+	};
 
-    class LAMBDACOMMON_API Document
-    {};
+	class LAMBDACOMMON_API Document
+	{
+	};
 }
 
 #endif //LAMBDACOMMON_DOCUMENT_H
