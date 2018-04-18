@@ -109,7 +109,7 @@ namespace lambdacommon
 		 * @param path Filesystem's file path.
 		 * @return An URL.
 		 */
-		extern URI LAMBDACOMMON_API fromFilePath(filesystem::FilePath path = filesystem::getCurrentWorkingDirectory());
+		extern URI LAMBDACOMMON_API fromFilePath(fs::FilePath path = fs::getCurrentWorkingDirectory());
 
 		extern URI LAMBDACOMMON_API fromString(const std::string &uri);
 	}

@@ -74,7 +74,7 @@ int main()
 		return 1;
 	}
 
-	filesystem::FilePath path{"404_non_existent"};
+	fs::FilePath path{"404_non_existent"};
 	cout << "TESTING FILEPATH::EXISTS() WITH RELATIVE PATH \"" << path.toString() << "\"...\nRESULT: ";
 	if (!path.exists())
 		cout << LIGHT_GREEN << "OK." << RESET << endl;
@@ -84,7 +84,7 @@ int main()
 		return 1;
 	}
 
-	filesystem::FilePath herePath = filesystem::getCurrentWorkingDirectory();
+	fs::FilePath herePath = fs::getCurrentWorkingDirectory();
 	cout << "TESTING FILEPATH::EXISTS() WITH ABSOLUTE PATH \"" << herePath.toString() << "\"...\nRESULT: ";
 	if (herePath.exists())
 		cout << LIGHT_GREEN << "OK." << RESET << endl;
@@ -131,10 +131,10 @@ int main()
 		return 1;
 	}
 
-	cout << "TESTING URI::fromFilePath(FILESYSTEM::FILEPATH) WITH \"" << herePath.toString(filesystem::COMMON)
+	cout << "TESTING URI::fromFilePath(FILESYSTEM::FILEPATH) WITH \"" << herePath.toString(fs::COMMON)
 	     << "\"...\nRESULT: ";
 	auto fileURL = uri::fromFilePath(herePath);
-	expected = ("file://" + herePath.toString(filesystem::COMMON));
+	expected = ("file://" + herePath.toString(fs::COMMON));
 	uri_toString = fileURL.toString();
 	if (lambdastring::equals(uri_toString, expected))
 		cout << LIGHT_GREEN << "OK. (" << uri_toString << ")" << RESET << endl;

@@ -382,8 +382,8 @@ namespace lambdacommon
 		{
 			if (!osName.empty())
 				return osName;
-			filesystem::FilePath etc_os_release{"/etc/os-release"};
-			filesystem::FilePath lsb_release{"/etc/lsb-release"};
+			fs::FilePath etc_os_release{"/etc/os-release"};
+			fs::FilePath lsb_release{"/etc/lsb-release"};
 			struct utsname uts{};
 			uname(&uts);
 			if (!lsb_release.exists() && !etc_os_release.exists())
@@ -477,7 +477,7 @@ namespace lambdacommon
 			}
 		}
 
-		filesystem::FilePath LAMBDACOMMON_API getUserDirectory()
+		fs::FilePath LAMBDACOMMON_API getUserDirectory()
 		{
 			return {getUserDirectoryStr()};
 		}

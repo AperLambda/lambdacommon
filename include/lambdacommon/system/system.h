@@ -103,7 +103,7 @@ namespace lambdacommon
 
 		extern std::string LAMBDACOMMON_API getUserDirectoryStr();
 
-		extern filesystem::FilePath LAMBDACOMMON_API getUserDirectory();
+		extern fs::FilePath LAMBDACOMMON_API getUserDirectory();
 	}
 }
 

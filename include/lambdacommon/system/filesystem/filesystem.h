@@ -15,7 +15,7 @@
 
 namespace lambdacommon
 {
-	namespace filesystem
+	namespace fs
 	{
 		enum PathType
 		{

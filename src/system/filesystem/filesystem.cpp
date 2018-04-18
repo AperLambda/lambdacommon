@@ -23,7 +23,7 @@
 
 #include <unistd.h>
 #include <cstring>
-#include <limits.h>
+#include <climits>
 
 #define STAT_STRUCT stat
 #define STAT_METHOD stat
@@ -36,7 +36,7 @@ using namespace std;
 
 namespace lambdacommon
 {
-	namespace filesystem
+	namespace fs
 	{
 		FilePath::FilePath() : Path(), _absolute(false)
 		{

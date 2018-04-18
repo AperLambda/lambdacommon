@@ -18,7 +18,7 @@ namespace lambdacommon
 		string LAMBDACOMMON_API toStringForVector(const vector<string> &vector1)
 		{
 			string final{"{"};
-			for (auto str : vector1)
+			for (const auto &str : vector1)
 				final += (str + ", ");
 			final = final.substr(0, final.size() - 2) + '}';
 			return final;

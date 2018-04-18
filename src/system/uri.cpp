@@ -316,7 +316,7 @@ namespace lambdacommon
 			return newURI;
 		}
 
-		URI LAMBDACOMMON_API fromFilePath(filesystem::FilePath path)
+		URI LAMBDACOMMON_API fromFilePath(fs::FilePath path)
 		{
 			if (!path.isAbsolute())
 				path = path.toAbsolute();
