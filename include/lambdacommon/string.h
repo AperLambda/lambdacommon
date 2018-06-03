@@ -59,6 +59,12 @@ namespace lambdacommon
 
 		extern std::string LAMBDACOMMON_API to_string(bool value);
 
+		extern bool LAMBDACOMMON_API endsWith(const std::string &str, const std::string &suffix);
+
+		extern bool LAMBDACOMMON_API startsWith(const std::string &str, const std::string &suffix);
+
+		extern const std::string LAMBDACOMMON_API mergePath(std::string parent, const std::string &child);
+
 #ifdef LAMBDA_WINDOWS
 
 		/**
