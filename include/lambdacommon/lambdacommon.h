@@ -42,12 +42,16 @@
 
 #define LAMBDACOMMON_VERSION_MAJOR 1
 #define LAMBDACOMMON_VERSION_MINOR 5
-#define LAMBDACOMMON_VERSION_PATCH 10
+#define LAMBDACOMMON_VERSION_PATCH 11
 
 namespace lambdacommon
 {
 	typedef std::string *pstring;
 
+	/*!
+	 * Gets the runtime version of lambdacommon as a string.
+	 * @return The runtime version of lambdacommon.
+	 */
 	extern std::string LAMBDACOMMON_API getVersion();
 }
 

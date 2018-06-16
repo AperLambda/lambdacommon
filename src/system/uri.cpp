@@ -8,7 +8,7 @@
  */
 
 #include "../../include/lambdacommon/system/uri.h"
-#include "../../include/lambdacommon/string.h"
+#include "../../include/lambdacommon/lstring.h"
 #include "../../include/lambdacommon/exceptions/exceptions.h"
 #include <sstream>
 #include <regex>

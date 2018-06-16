@@ -14,7 +14,7 @@
 #include "devices.h"
 #include "os.h"
 #include "terminal.h"
-#include "../string.h"
+#include "../lstring.h"
 
 namespace lambdacommon
 {

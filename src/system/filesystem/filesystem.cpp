@@ -8,7 +8,7 @@
  */
 
 #include "../../../include/lambdacommon/system/filesystem/filesystem.h"
-#include "../../../include/lambdacommon/string.h"
+#include "../../../include/lambdacommon/lstring.h"
 #include <stdexcept>
 #include <sstream>
 
@@ -198,7 +198,7 @@ namespace lambdacommon
 			return FilePath(temp);
 #else
 			char temp[PATH_MAX];
-			if (realpath(toString().c_str(), temp) == NULL)
+			if (realpath(toString().c_str(), temp) == nullptr)
 				throw runtime_error(
 						"Internal error in lambdacommon::path::FilePath::toAbsolute(): " + string(strerror(errno)));
 			return FilePath(temp);
@@ -307,7 +307,7 @@ namespace lambdacommon
 			return lambdastring::convertWStringToString(getCurrentWorkingDirectoryWStr());
 #else
 			char temp[PATH_MAX];
-			if (getcwd(temp, PATH_MAX) == NULL)
+			if (getcwd(temp, PATH_MAX) == nullptr)
 				throw runtime_error("Internal error in lambdacommon::path::getCurrentWorkingDirectoryStr(): " +
 				                    string(strerror(errno)));
 			return string(temp);
@@ -324,10 +324,10 @@ namespace lambdacommon
 			return mkdir(string(path), recursive);
 		}
 
-		FilePath LAMBDACOMMON_API mkdir(const string &path, bool recusrive)
+		FilePath LAMBDACOMMON_API mkdir(const string &path, bool recursive)
 		{
 			FilePath result{path};
-			result.mkdir(recusrive);
+			result.mkdir(recursive);
 			return result;
 		}
 	}

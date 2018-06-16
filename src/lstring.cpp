@@ -8,8 +8,9 @@
  */
 
 #include <sstream>
-#include "../include/lambdacommon/string.h"
+#include "../include/lambdacommon/lstring.h"
 #include <iterator>
+#include <utility>
 
 using namespace std;
 
@@ -61,7 +62,7 @@ namespace lambdacommon
 
 		string replaceAll(string subject, const char &from, const char &to)
 		{
-			return replaceAll(subject, to_string(from), to_string(to));
+			return replaceAll(std::move(subject), to_string(from), to_string(to));
 		}
 
 		string replaceAll(string subject, const string &from, const string &to)
@@ -103,6 +104,7 @@ namespace lambdacommon
 			return merged;
 		}
 
+// Some windows shit.
 #ifdef LAMBDA_WINDOWS
 #ifndef __GNUC__
 

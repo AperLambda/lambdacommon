@@ -34,7 +34,7 @@ namespace lambdacommon
 		 * @param b One of two chars.
 		 * @return True if they are equal with case insensitive else false.
 		 */
-		extern bool LAMBDACOMMON_API equalsIgnoreCase(const char a, const char b);
+		extern bool LAMBDACOMMON_API equalsIgnoreCase(char a, char b);
 
 		/**
 		 * Checks if two strings are equal.
@@ -57,6 +57,11 @@ namespace lambdacommon
 		extern std::string LAMBDACOMMON_API
 		replaceAll(std::string subject, const std::string &from, const std::string &to);
 
+		/*!
+		 * Transforms a boolean value into a string value.
+		 * @param value A boolean value.
+		 * @return The boolean value as a string.
+		 */
 		extern std::string LAMBDACOMMON_API to_string(bool value);
 
 		extern bool LAMBDACOMMON_API endsWith(const std::string &str, const std::string &suffix);

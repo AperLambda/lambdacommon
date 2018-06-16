@@ -1,6 +1,6 @@
 #include <lambdacommon/graphics/color.h>
 #include <lambdacommon/system/system.h>
-#include <lambdacommon/string.h>
+#include <lambdacommon/resources.h>
 #include <lambdacommon/system/uri.h>
 #include <lambdacommon/exceptions/exceptions.h>
 
@@ -8,6 +8,19 @@ using namespace lambdacommon;
 using namespace uri;
 using namespace terminal;
 using namespace std;
+
+const ResourceName BASE_RESOURCENAME{"tests", "value/path"};
+
+bool test(const string &testName, bool (*func)())
+{
+	cout << "TESTING " << testName << "...\n  RESULT: ";
+	bool result = func();
+	if (result)
+		cout << LIGHT_GREEN << "OK." << RESET << endl;
+	else
+		cout << LIGHT_RED << "FAILED." << RESET << endl;
+	return result;
+}
 
 int main()
 {
@@ -46,6 +59,9 @@ int main()
 	char bChar = 'W';
 	string aString = "wAperClem";
 	string bString = "wApErClEm";
+
+	uint32_t testsCount = 0;
+	uint32_t testsPassed = 0;
 
 	cout << "TESTING LAMBDASTRING::EQUALSIGNORECASE(CONST CHAR, CONST CHAR)...\nRESULT: ";
 	if (lambdastring::equalsIgnoreCase(aChar, bChar))
@@ -167,5 +183,41 @@ int main()
 		     << RESET << endl;
 		return 1;
 	}
+
+	cout << "===== ResourceNames SECTION =====" << endl;
+	testsCount = 0;
+	testsPassed = 0;
+
+	testsCount++;
+	if (test("RESOURCENAME(\"tests:value/path\")", []()
+		{
+			ResourceName base{"tests:value/path"};
+			return base.getDomain() == "tests" && base.getName() == "value/path";
+		}))
+		testsPassed++;
+
+	testsCount++;
+	if (test(R"(ResourceName::operator=({"tests:value/OwO"}) with object {"tests:value/path"})", []()
+		{
+			auto newRes = BASE_RESOURCENAME;
+			ResourceName owo{"tests", "value/OwO"};
+			newRes = owo;
+			return newRes.getName() == "value/OwO";
+		}))
+		testsPassed++;
+
+	testsCount++;
+	if (test(R"(ResourceName::operator/ with base object {"tests:value/path"} and argument "owo")", []()
+		{
+			auto base = BASE_RESOURCENAME;
+			auto newRes = base / "owo";
+			return newRes.getName() == "value/path/owo";
+		}))
+		testsPassed++;
+
+	cout << "Tests results: " + to_string(testsPassed) << '/' << to_string(testsCount) << endl;
+	if (testsPassed != testsCount)
+		return 1;
+
 	return 0;
 }

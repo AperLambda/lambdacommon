@@ -10,7 +10,7 @@
 #ifndef LAMBDACOMMON_RESOURCES_H
 #define LAMBDACOMMON_RESOURCES_H
 
-#include "string.h"
+#include "lstring.h"
 
 namespace lambdacommon
 {
@@ -23,7 +23,11 @@ namespace lambdacommon
 	public:
 		ResourceName(const std::string &name);
 
-		ResourceName(std::string domain, std::string path);
+		ResourceName(std::string domain, std::string path) noexcept;
+
+		ResourceName(const ResourceName &resourceName);
+
+		ResourceName(ResourceName &&resourceName) noexcept;
 
 		/*!
 		 * Gets the domain of the resource.
@@ -53,6 +57,12 @@ namespace lambdacommon
 		{
 			return sub(path);
 		}
+
+		ResourceName &operator=(const ResourceName &resourceName);
+
+		ResourceName &operator=(ResourceName &&resourceName) noexcept;
+
+		bool operator==(const ResourceName &resourceName);
 	};
 }
 
