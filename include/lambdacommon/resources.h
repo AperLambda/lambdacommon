@@ -11,10 +11,13 @@
 #define LAMBDACOMMON_RESOURCES_H
 
 #include "lstring.h"
+#include <utility>
 
 namespace lambdacommon
 {
-	class ResourceName
+	using namespace std::rel_ops;
+
+	class LAMBDACOMMON_API ResourceName
 	{
 	private:
 		std::string _domain;
@@ -33,27 +36,27 @@ namespace lambdacommon
 		 * Gets the domain of the resource.
 		 * @return The domain.
 		 */
-		std::string getDomain();
+		std::string getDomain() const;
 
 		/*!
 		 * Gets the name of the resource.
 		 * @return The name of the resource.
 		 */
-		std::string getName();
+		std::string getName() const;
 
 		/*!
 		 * Creates a new {@code ResourceName} from this resource name.
 		 * @param path The path to append.
 		 * @return The new {@code ResourceName} with the appended path.
 		 */
-		ResourceName sub(const std::string &path);
+		ResourceName sub(const std::string &path) const;
 
 		/*!
 		 * Creates a new {@code ResourceName} from this resource name.
 		 * @param path The path to append.
 		 * @return The new {@code ResourceName} with the appended path.
 		 */
-		ResourceName operator/(const std::string &path)
+		inline ResourceName operator/(const std::string &path) const
 		{
 			return sub(path);
 		}
@@ -62,7 +65,9 @@ namespace lambdacommon
 
 		ResourceName &operator=(ResourceName &&resourceName) noexcept;
 
-		bool operator==(const ResourceName &resourceName);
+		bool operator==(const ResourceName &other) const;
+
+		bool operator<(const ResourceName &other) const;
 	};
 }
 

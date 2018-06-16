@@ -9,6 +9,7 @@
 
 #include "../include/lambdacommon/resources.h"
 #include <stdexcept>
+#include <tuple>
 
 namespace lambdacommon
 {
@@ -31,17 +32,17 @@ namespace lambdacommon
 	                                                                   _path(std::move(resourceName._path))
 	{}
 
-	std::string ResourceName::getDomain()
+	std::string ResourceName::getDomain() const
 	{
 		return _domain;
 	}
 
-	std::string ResourceName::getName()
+	std::string ResourceName::getName() const
 	{
 		return _path;
 	}
 
-	ResourceName ResourceName::sub(const std::string &path)
+	ResourceName ResourceName::sub(const std::string &path) const
 	{
 		return ResourceName(_domain, lambdastring::mergePath(_path, path));
 	}
@@ -68,8 +69,13 @@ namespace lambdacommon
 		return *this;
 	}
 
-	bool ResourceName::operator==(const ResourceName &resourceName)
+	bool ResourceName::operator==(const ResourceName &other) const
 	{
-		return _domain == resourceName._domain && _path == resourceName._path;
+		return _domain == other._domain && _path == other._path;
+	}
+
+	bool ResourceName::operator<(const ResourceName &other) const
+	{
+		return std::tie(_domain, _path) < std::tie(other._domain, other._path);
 	}
 }

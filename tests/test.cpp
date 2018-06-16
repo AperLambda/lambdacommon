@@ -197,6 +197,15 @@ int main()
 		testsPassed++;
 
 	testsCount++;
+	if (test(R"(ResourceName::operator!=({"tests:value/OwO"}) with object {"tests:value/path"}, expect: true)", []()
+		{
+			auto base = BASE_RESOURCENAME;
+			ResourceName owo{"tests:value/OwO"};
+			return base != owo;
+		}))
+		testsPassed++;
+
+	testsCount++;
 	if (test(R"(ResourceName::operator=({"tests:value/OwO"}) with object {"tests:value/path"})", []()
 		{
 			auto newRes = BASE_RESOURCENAME;
