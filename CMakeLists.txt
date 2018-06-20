@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.8)
 project(λcommon)
 
-include(GenerateExportHeader)
-
-set(CMAKE_CXX_STANDARD 17)
-
 option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)
 option(LAMBDACOMMON_INSTALL "Generate installation target" ON)
 option(LAMBDACOMMON_BUILD_TESTS "Build the λcommon test programs" ON)
+
+include(GenerateExportHeader)
+
+set(CMAKE_CXX_STANDARD 17)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -march=native -mtune=native -ffast-math -D__extern_always_inline=\"extern __always_inline\"")
