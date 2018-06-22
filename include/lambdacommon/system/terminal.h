@@ -75,6 +75,12 @@ namespace lambdacommon
 			B_WHITE = 107
 		};
 
+		struct TermSize
+		{
+			unsigned short columns;
+			unsigned short rows;
+		};
+
 		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting termFormatting);
 
 		extern std::ostream LAMBDACOMMON_API &
@@ -86,7 +92,7 @@ namespace lambdacommon
 		 * @param stream Stream will be affect.
 		 * @return The current stream.
 		 */
-		extern std::ostream LAMBDACOMMON_API &eraseCurrentLine(std::ostream &stream);
+		extern std::ostream LAMBDACOMMON_API &eraseCurrentLine(std::ostream &stream = std::cout);
 
 		extern std::ostream LAMBDACOMMON_API &clear(std::ostream &stream = std::cout);
 
@@ -130,6 +136,13 @@ namespace lambdacommon
 
 		extern void LAMBDACOMMON_API useUTF8();
 
+		 /*!
+		  * Gets whether the specified stream is a TTY.
+		  * @param stream THe specified stream to check, default is {@code std::cout}.
+		  * @return True if the stream is a TTY, else false.
+		  */
+		extern bool LAMBDACOMMON_API isTTY(const std::ostream &stream = std::cout);
+
 		/*!
 		 * Returns the title of the terminal. Warning: Only works on Windows, on Unix system this returns an empty string.
 		 * @return The title of the terminal.
@@ -141,7 +154,13 @@ namespace lambdacommon
 		 * @param title The new title of the terminal.
 		 * @return True if success else false.
 		 */
-		extern bool LAMBDACOMMON_API setTerminalTitle(std::string title, std::ostream &stream = std::cout);
+		extern bool LAMBDACOMMON_API setTerminalTitle(const std::string &title, std::ostream &stream = std::cout);
+
+		/*!
+		 * Gets the terminal's size.
+		 * @return The {@code TermSize} struct describing the terminal's size.
+		 */
+		extern TermSize LAMBDACOMMON_API getTerminalSize();
 	}
 }
 

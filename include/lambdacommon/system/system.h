@@ -99,11 +99,25 @@ namespace lambdacommon
 		 * User
 		 */
 
+		/*!
+		 * Gets the user name of the user running the program.
+		 * @return The user name.
+		 */
 		extern std::string LAMBDACOMMON_API getUserName();
 
 		extern std::string LAMBDACOMMON_API getUserDirectoryStr();
 
 		extern fs::FilePath LAMBDACOMMON_API getUserDirectory();
+
+		/*
+		 * Others
+		 */
+
+		/*!
+		 * Sleeps the current thread for the specified time in milliseconds.
+		 * @param time Time to wait in milliseconds.
+		 */
+		extern void LAMBDACOMMON_API sleep(uint32_t time);
 	}
 }
 

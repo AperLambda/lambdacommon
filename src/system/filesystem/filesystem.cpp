@@ -242,14 +242,10 @@ namespace lambdacommon
 			return oss.str();
 		}
 
-		/*
-		 * OPERATORS
-		 */
-
-		FilePath FilePath::operator/(const FilePath &other)
+		FilePath FilePath::sub(const FilePath &other) const
 		{
 			if (other._absolute)
-				throw runtime_error("lambdacommon::path::FilePath::operator/(): Expected a relative path!");
+				throw runtime_error("lambdacommon->system/filesystem/filesystem.cpp@FilePath.sub(const FilePath&)(Line " + to_string(__LINE__ - 1) + "): Expected a relative path as argument!");
 
 			FilePath result(*this);
 
@@ -257,6 +253,15 @@ namespace lambdacommon
 				(*result._path).push_back(part);
 
 			return result;
+		}
+
+		/*
+		 * OPERATORS
+		 */
+
+		FilePath FilePath::operator/(const FilePath &other)
+		{
+			return sub(other);
 		}
 
 		FilePath &FilePath::operator=(const FilePath &path)

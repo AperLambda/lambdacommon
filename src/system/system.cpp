@@ -481,6 +481,16 @@ namespace lambdacommon
 		{
 			return {getUserDirectoryStr()};
 		}
+
+		void LAMBDACOMMON_API sleep(uint32_t time)
+		{
+#ifdef LAMBDA_WINDOWS
+			Sleep(time);
+#else
+			auto goal = time / 1000 * CLOCKS_PER_SEC + clock();
+			while (goal > clock());
+#endif
+		}
 	}
 }
 

@@ -7,10 +7,11 @@
  * see the LICENSE file.
  */
 
-#include <sstream>
 #include "../include/lambdacommon/lstring.h"
+#include <sstream>
 #include <iterator>
 #include <utility>
+#include <algorithm>
 
 using namespace std;
 
@@ -58,6 +59,20 @@ namespace lambdacommon
 					{ return equalsIgnoreCase(charA, charB); });
 			} else
 				return false;
+		}
+
+		string LAMBDACOMMON_API toLowerCase(const string &from)
+		{
+			string result = from;
+			std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+			return result;
+		}
+
+		string LAMBDACOMMON_API toUpperCase(const string &from)
+		{
+			string result = from;
+			std::transform(result.begin(), result.end(), result.begin(), ::toupper);
+			return result;
 		}
 
 		string replaceAll(string subject, const char &from, const char &to)

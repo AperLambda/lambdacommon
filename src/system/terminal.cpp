@@ -10,6 +10,7 @@
 #include "../../include/lambdacommon/system/terminal.h"
 
 #if defined(LAMBDA_WINDOWS) || defined(__CYGWIN__)
+
 #  define WIN_FRIENDLY
 
 #  include <io.h>
@@ -25,6 +26,7 @@
 
 #else
 
+#  include <sys/ioctl.h>
 #  include <unistd.h>
 
 #endif
@@ -49,18 +51,6 @@ namespace lambdacommon
 				return stderr;
 
 			return nullptr;
-		}
-
-		inline
-		bool is_atty(const ostream &stream)
-		{
-			FILE *std_stream = get_standard_stream(stream);
-
-#ifdef LAMBDA_WINDOWS
-			return ::_isatty(_fileno(std_stream)) != 0;
-#else
-			return static_cast<bool>(::isatty(fileno(std_stream)));
-#endif
 		}
 
 #ifdef WIN_FRIENDLY
@@ -173,7 +163,7 @@ namespace lambdacommon
 
 		ostream &operator<<(ostream &stream, vector<TermFormatting> termFormatting)
 		{
-			if (is_atty(stream))
+			if (isTTY(stream))
 			{
 #ifdef WIN_FRIENDLY
 				if (!useANSIEscapeCodes)
@@ -324,7 +314,7 @@ namespace lambdacommon
 		std::ostream LAMBDACOMMON_API &clear(ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
-			if (is_atty(stream))
+			if (isTTY(stream))
 			{
 				cls(getTermHandle(stream));
 				return stream;
@@ -337,7 +327,7 @@ namespace lambdacommon
 		void LAMBDACOMMON_API setCursorPosition(unsigned short x, unsigned short y, ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
-			if (is_atty(stream))
+			if (isTTY(stream))
 			{
 				COORD coord;
 				coord.X = x;
@@ -393,6 +383,17 @@ namespace lambdacommon
 #endif
 		}
 
+		bool LAMBDACOMMON_API isTTY(const ostream &stream)
+		{
+		FILE *std_stream = get_standard_stream(stream);
+
+#ifdef LAMBDA_WINDOWS
+		return ::_isatty(_fileno(std_stream)) != 0;
+#else
+		return static_cast<bool>(::isatty(fileno(std_stream)));
+#endif
+		}
+
 		string LAMBDACOMMON_API getTerminalTitle()
 		{
 #ifdef WIN_FRIENDLY
@@ -406,16 +407,33 @@ namespace lambdacommon
 #endif
 		}
 
-		bool LAMBDACOMMON_API setTerminalTitle(string title, ostream &stream)
+		bool LAMBDACOMMON_API setTerminalTitle(const string &title, ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
-			if (is_atty(stream))
+			if (isTTY(stream))
 				return (bool) SetConsoleTitle(TEXT(title.c_str()));
 #endif
 			stream << ("\033]0;" + title + "\007");
 			return true;
 		}
 
+		TermSize LAMBDACOMMON_API getTerminalSize()
+		{
+			TermSize size{};
+#ifdef WIN_FRIENDLY
+			CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+			GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+			size.columns = csbi.dwSize.X;
+			size.rows = csbi.dwSize.Y;
+#else
+			struct winsize w{};
+			ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+			size.columns = w.ws_col;
+			size.rows = w.ws_row;
+#endif
+			return size;
+		}
 	}
 }
 

@@ -20,7 +20,7 @@ namespace lambdacommon
 		template<typename Out>
 		extern void LAMBDACOMMON_API split(const std::string &s, char delim, Out result);
 
-		/**
+		/*!
 		 * Splits a string into a vector with a delimiter.
 		 * @param s String to split.
 		 * @param delim Delimiter.
@@ -28,7 +28,7 @@ namespace lambdacommon
 		 */
 		extern std::vector<std::string> LAMBDACOMMON_API split(const std::string &s, char delim);
 
-		/**
+		/*!
 		 * Checks if two chars are equal with case insensitive.
 		 * @param a One of two chars.
 		 * @param b One of two chars.
@@ -36,7 +36,7 @@ namespace lambdacommon
 		 */
 		extern bool LAMBDACOMMON_API equalsIgnoreCase(char a, char b);
 
-		/**
+		/*!
 		 * Checks if two strings are equal.
 		 * @param a One of two strings.
 		 * @param b One of two strings.
@@ -44,13 +44,27 @@ namespace lambdacommon
 		 */
 		extern bool LAMBDACOMMON_API equals(std::string const &a, std::string const &b);
 
-		/**
+		/*!
 		 * Checks if two strings are equal with case insensitive.
 		 * @param a One of two strings.
 		 * @param b One of two strings.
 		 * @return True if they are equal with case insensitive else false.
 		 */
 		extern bool LAMBDACOMMON_API equalsIgnoreCase(std::string const &a, std::string const &b);
+
+		/*!
+		 * Transforms a string to a full lower case string.
+		 * @param from The string to transform.
+		 * @return The new string.
+		 */
+		extern std::string LAMBDACOMMON_API toLowerCase(const std::string &from);
+
+		/*!
+		 * Transforms a string to a full lower case string.
+		 * @param from The string to transform.
+		 * @return The new string.
+		 */
+		extern std::string LAMBDACOMMON_API toUpperCase(const std::string &from);
 
 		extern std::string LAMBDACOMMON_API replaceAll(std::string subject, const char &from, const char &to);
 

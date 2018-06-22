@@ -93,6 +93,8 @@ namespace lambdacommon
 
 			std::string toString(PathType type = NATIVE) const;
 
+			FilePath sub(const FilePath &other) const;
+
 			/*
 			 * Operators
 			 */
