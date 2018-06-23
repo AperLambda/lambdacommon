@@ -502,7 +502,7 @@ namespace lambdacommon
 				goto end;
 
 			BOOL fIsAdmin = FALSE;
-			if (!CheckTokenMemberShip(nullptr, &AdminSID, &fIsAdmin))
+			if (!CheckTokenMemberShip(NULL, &AdminSID, &fIsAdmin))
 				goto end;
 
 			if (fIsAdmin)
