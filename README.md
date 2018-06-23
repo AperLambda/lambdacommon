@@ -26,7 +26,7 @@ Please install from the source.
 
 #### ArchLinux (and variants)
 
-Just install [lambdacommon-git](https://aur.archlinux.org/packages/lambdacommon-git/) from AUR
+Just install [lambdacommon](https://aur.archlinux.org/packages/lambdacommon/) from AUR
 
 #### Others
 
