@@ -488,15 +488,16 @@ namespace lambdacommon
 		{
 #ifdef LAMBDA_WINDOWS
 			bool result = false;
-			auto hProcess = getCurrentProcess();
+			auto hProcess = GetCurrentProcess();
 			HANDLE hProcessToken = nullptr;
 			HANDLE hLinkedToken = nullptr;
+			DWORD dwLength = 0;
 
 			if (!OpenProcessToken(hProcess, TOKEN_QUERY, &hProcessToken))
 				goto end;
 
 			char AdminSID[SECURITY_MAX_SID_SIZE];
-			auto dwLength = sizeof(AdminSID);
+			dwLength = sizeof(AdminSID);
 			if (!CreateWellKnownSid(WinBuiltinAdministratorsSid, nullptr, &AdminSID, &dwLength))
 				goto end;
 
@@ -510,11 +511,7 @@ namespace lambdacommon
 				goto end;
 			}
 
-			OSVERSIONINFO osver = {sizeof(OSVERSIONINFO)};
-			if (!GetVersionEx(&osver))
-				goto end;
-
-			if (osver.dwMajorVersion < 6)
+			if (!IsWindowsVistaOrGreater())
 				goto end;
 
 			if (!GetTokenInformation(hProcessToken, TokenLinkedToken, (VOID*) &hLinkedToken, sizeof(HANDLE), &dwLength))
