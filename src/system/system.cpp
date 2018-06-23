@@ -404,12 +404,14 @@ namespace lambdacommon
 							size_t a = word.find_last_of("N=") + 1;
 							osName = word.substr(a + 1, word.length() - a);
 							record = true;
-						} else if (record)
+						}
+						else if (record)
 							osName += " " + lambdastring::replaceAll(word, "\"", "");
 					}
 					lsb_release_in.close();
 				}
-			} else
+			}
+			else
 			{
 				ifstream in;
 				in.open(etc_os_release.toString(), ios::in);
@@ -480,6 +482,62 @@ namespace lambdacommon
 		fs::FilePath LAMBDACOMMON_API getUserDirectory()
 		{
 			return {getUserDirectoryStr()};
+		}
+
+		bool LAMBDACOMMON_API isProcessRunningAsRoot()
+		{
+#ifdef LAMBDA_WINDOWS
+			bool result = false;
+			auto hProcess = getCurrentProcess();
+			HANDLE hProcessToken = nullptr;
+			HANDLE hLinkedToken = nullptr;
+
+			if (!OpenProcessToken(hProcess, TOKEN_QUERY, &hProcessToken))
+				goto end;
+
+			char AdminSID[SECURITY_MAX_SID_SIZE];
+			auto dwLength = sizeof(AdminSID);
+			if (!CreateWellKnownSid(WinBuiltinAdministratorsSid, nullptr, &AdminSID, &dwLength))
+				goto end;
+
+			BOOL fIsAdmin = FALSE;
+			if (!CheckTokenMemberShip(nullptr, &AdminSID, &fIsAdmin))
+				goto end;
+
+			if (fIsAdmin)
+			{
+				result = true;
+				goto end;
+			}
+
+			OSVERSIONINFO osver = {sizeof(OSVERSIONINFO)};
+			if (!GetVersionEx(&osver))
+				goto end;
+
+			if (osver.dwMajorVersion < 6)
+				goto end;
+
+			if (!GetTokenInformation(hProcessToken, TokenLinkedToken, (VOID*) &hLinkedToken, sizeof(HANDLE), &dwLength))
+				goto end;
+
+			if (!CheckTokenMembership(hLinkedToken, &AdminSID, &fIsAdmin))
+				goto end;
+
+			if (fIsAdmin)
+				result = true;
+
+			end:
+			if (hProcess)
+				CloseHandle(hProcess);
+			if (hProcessToken)
+				CloseHandle(hProcessToken);
+			if (hLinkedToken)
+				CloseHandle(hLinkedToken);
+
+			return result;
+#else
+			return getuid() == 0;
+#endif
 		}
 
 		void LAMBDACOMMON_API sleep(uint32_t time)

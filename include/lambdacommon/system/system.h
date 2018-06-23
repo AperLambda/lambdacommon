@@ -113,6 +113,8 @@ namespace lambdacommon
 		 * Others
 		 */
 
+		extern bool LAMBDACOMMON_API isProcessRunningAsRoot();
+
 		/*!
 		 * Sleeps the current thread for the specified time in milliseconds.
 		 * @param time Time to wait in milliseconds.
