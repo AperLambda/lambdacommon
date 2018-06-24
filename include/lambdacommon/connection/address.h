@@ -42,7 +42,7 @@ namespace lambdacommon
 
 		~Address();
 
-		host getHost() const;
+		const host &getHost() const;
 
 		port getPort() const;
 

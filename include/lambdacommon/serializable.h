@@ -23,7 +23,7 @@ namespace lambdacommon
 
 	namespace serializable
 	{
-		std::vector<std::string> LAMBDACOMMON_API tokenize(const std::string &_string, const std::string &delim);
+		extern std::vector<std::string> LAMBDACOMMON_API tokenize(const std::string &_string, const std::string &delim);
 	}
 }
 

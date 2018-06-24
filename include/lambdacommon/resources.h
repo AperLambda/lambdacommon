@@ -40,13 +40,13 @@ namespace lambdacommon
 		 * Gets the domain of the resource.
 		 * @return The domain.
 		 */
-		std::string getDomain() const;
+		const std::string &getDomain() const;
 
 		/*!
 		 * Gets the name of the resource.
 		 * @return The name of the resource.
 		 */
-		std::string getName() const;
+		const std::string &getName() const;
 
 		/*!
 		 * Creates a new {@code ResourceName} from this resource name.

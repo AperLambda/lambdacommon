@@ -40,7 +40,7 @@ namespace lambdacommon
 		delete _host;
 	}
 
-	host Address::getHost() const
+	const host &Address::getHost() const
 	{
 		return *_host;
 	}
@@ -109,14 +109,16 @@ namespace lambdacommon
 				if (segsize == 0) //fail for abc..com
 					return false;
 				segsize = 0;
-			} else if (('0' <= s[i] && s[i] <= '9')
-			           || ('a' <= s[i] && s[i] <= 'z')
-			           || ('A' <= s[i] && s[i] <= 'Z')
-			           || (s[i] == '-' && segsize != 0 && i + 1 < ix && s[i + 1] != '.')
+			}
+			else if (('0' <= s[i] && s[i] <= '9')
+			         || ('a' <= s[i] && s[i] <= 'z')
+			         || ('A' <= s[i] && s[i] <= 'Z')
+			         || (s[i] == '-' && segsize != 0 && i + 1 < ix && s[i + 1] != '.')
 					)
 			{
 				segsize++;
-			} else
+			}
+			else
 				return false; //invalid char...
 
 			if (segsize > 63)

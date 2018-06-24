@@ -32,12 +32,12 @@ namespace lambdacommon
 	                                                                   _path(std::move(resourceName._path))
 	{}
 
-	std::string ResourceName::getDomain() const
+	const std::string &ResourceName::getDomain() const
 	{
 		return _domain;
 	}
 
-	std::string ResourceName::getName() const
+	const std::string &ResourceName::getName() const
 	{
 		return _path;
 	}
