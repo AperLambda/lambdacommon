@@ -12,6 +12,10 @@
 
 #include "lstring.h"
 #include <utility>
+#ifdef LAMBDA_WINDOWS
+#  pragma warning(push)
+#  pragma warning(disable:4251)
+#endif
 
 namespace lambdacommon
 {
@@ -70,5 +74,9 @@ namespace lambdacommon
 		bool operator<(const ResourceName &other) const;
 	};
 }
+
+#ifdef LAMBDA_WINDOWS
+#  pragma warning(pop)
+#endif
 
 #endif //LAMBDACOMMON_RESOURCES_H

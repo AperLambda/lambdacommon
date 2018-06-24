@@ -15,11 +15,14 @@
 #  define INFO_BUFFER_SIZE 32767
 
 #include <windows.h>
+#include <WinBase.h>
 #include <intrin.h>
 #include <ShlObj.h>
 
 #  ifndef __MINGW32__
+
 #    include <VersionHelpers.h>
+
 #  endif
 
 #else
@@ -49,7 +52,7 @@ namespace lambdacommon
 			int cpuInfo[4] = {-1};
 			char cpuBrandStr[0x40];
 			__cpuid(cpuInfo, 0x80000000);
-			unsigned int nExIds = static_cast<unsigned int>(cpuInfo[0]);
+			auto nExIds = static_cast<unsigned int>(cpuInfo[0]);
 
 			memset(cpuBrandStr, 0, sizeof(cpuBrandStr));
 
@@ -84,7 +87,7 @@ namespace lambdacommon
 			fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
 					GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
 
-			if (NULL != fnIsWow64Process)
+			if (nullptr != fnIsWow64Process)
 			{
 				if (!fnIsWow64Process(GetCurrentProcess(), &bIsWow64))
 				{
@@ -129,7 +132,7 @@ namespace lambdacommon
 			return systemInfo.dwNumberOfProcessors;
 		}
 
-		uint64_t LAMBDACOMMON_API getPhysicalMemory()
+		uint64_t LAMBDACOMMON_API getMemoryTotal()
 		{
 			MEMORYSTATUSEX statex;
 			statex.dwLength = sizeof(statex);
@@ -137,7 +140,7 @@ namespace lambdacommon
 			return statex.ullTotalPhys;
 		}
 
-		uint64_t LAMBDACOMMON_API getPhysicalMemoryFree()
+		uint64_t LAMBDACOMMON_API getMemoryAvailable()
 		{
 			MEMORYSTATUSEX statex;
 			statex.dwLength = sizeof(statex);
@@ -145,9 +148,9 @@ namespace lambdacommon
 			return statex.ullAvailPhys;
 		}
 
-		uint64_t LAMBDACOMMON_API getPhysicalMemoryUsed()
+		uint64_t LAMBDACOMMON_API getMemoryUsed()
 		{
-			return getPhysicalMemory() - getPhysicalMemoryFree();
+			return getMemoryTotal() - getMemoryAvailable();
 		}
 
 		string LAMBDACOMMON_API getComputerName()
@@ -488,51 +491,34 @@ namespace lambdacommon
 		bool LAMBDACOMMON_API isProcessRunningAsRoot()
 		{
 #ifdef LAMBDA_WINDOWS
-			bool result = false;
-			auto hProcess = GetCurrentProcess();
-			HANDLE hProcessToken = nullptr;
-			HANDLE hLinkedToken = nullptr;
-			DWORD dwLength = 0;
+			BOOL fIsRunAsAdmin = FALSE;
+			PSID pAdministratorsGroup = nullptr;
 
-			if (!OpenProcessToken(hProcess, TOKEN_QUERY, &hProcessToken))
-				goto end;
+			// Allocate and initialize a SID of the administrators group.
+			SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
+			if (!AllocateAndInitializeSid(
+					&NtAuthority,
+					2,
+					SECURITY_BUILTIN_DOMAIN_RID,
+					DOMAIN_ALIAS_RID_ADMINS,
+					0, 0, 0, 0, 0, 0,
+					&pAdministratorsGroup))
+				goto cleanup;
 
-			char AdminSID[SECURITY_MAX_SID_SIZE];
-			dwLength = sizeof(AdminSID);
-			if (!CreateWellKnownSid(WinBuiltinAdministratorsSid, nullptr, &AdminSID, &dwLength))
-				goto end;
+			// Determine whether the SID of administrators group is enabled in
+			// the primary access token of the process.
+			if (!CheckTokenMembership(nullptr, pAdministratorsGroup, &fIsRunAsAdmin))
+				goto cleanup;
 
-			BOOL fIsAdmin = FALSE;
-			if (!CheckTokenMemberShip(NULL, &AdminSID, &fIsAdmin))
-				goto end;
-
-			if (fIsAdmin)
+			cleanup:
+			// Centralized cleanup for all allocated resources.
+			if (pAdministratorsGroup)
 			{
-				result = true;
-				goto end;
+				FreeSid(pAdministratorsGroup);
+				pAdministratorsGroup = nullptr;
 			}
 
-			if (!IsWindowsVistaOrGreater())
-				goto end;
-
-			if (!GetTokenInformation(hProcessToken, TokenLinkedToken, (VOID*) &hLinkedToken, sizeof(HANDLE), &dwLength))
-				goto end;
-
-			if (!CheckTokenMembership(hLinkedToken, &AdminSID, &fIsAdmin))
-				goto end;
-
-			if (fIsAdmin)
-				result = true;
-
-			end:
-			if (hProcess)
-				CloseHandle(hProcess);
-			if (hProcessToken)
-				CloseHandle(hProcessToken);
-			if (hLinkedToken)
-				CloseHandle(hLinkedToken);
-
-			return result;
+			return fIsRunAsAdmin == TRUE;
 #else
 			return getuid() == 0;
 #endif
