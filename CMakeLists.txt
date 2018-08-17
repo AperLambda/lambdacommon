@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(λcommon)
+project(lambdacommon)
 
 option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)
 option(LAMBDACOMMON_INSTALL "Generate installation target" ON)
