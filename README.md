@@ -39,6 +39,6 @@ Please install from the source.
 
 Build the sources with CMake and make and install with `make install`, and keep the install manifest to allow the uninstallation with `make uninstall`. 
 
-##Use in CMake
+## Use in CMake
 
 Use `Findlambdacommon.cmake` in [LambdaCMakeModules](https://github.com/AperLambda/LambdaCMakeModules.git) to find λcommon on your computer.
