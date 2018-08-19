@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -14,7 +14,7 @@
 
 #  define INFO_BUFFER_SIZE 32767
 
-#include <windows.h>
+#include <Windows.h>
 #include <WinBase.h>
 #include <intrin.h>
 #include <ShlObj.h>
@@ -37,8 +37,6 @@
 
 #endif
 
-using namespace std;
-
 namespace lambdacommon
 {
 	namespace system
@@ -47,7 +45,7 @@ namespace lambdacommon
 
 #ifdef LAMBDA_WINDOWS
 
-		string LAMBDACOMMON_API getProcessorName()
+		std::string LAMBDACOMMON_API getProcessorName()
 		{
 			int cpuInfo[4] = {-1};
 			char cpuBrandStr[0x40];
@@ -68,7 +66,7 @@ namespace lambdacommon
 				else if (i == 0x80000004)
 					memcpy(cpuBrandStr + 32, cpuInfo, sizeof(cpuInfo));
 			}
-			string cpuName{cpuBrandStr};
+			std::string cpuName{cpuBrandStr};
 			return cpuName;
 		}
 
@@ -120,7 +118,7 @@ namespace lambdacommon
 			}
 		}
 
-		string LAMBDACOMMON_API getProcessorArchStr()
+		std::string LAMBDACOMMON_API getProcessorArchStr()
 		{
 			return getProcessorArchEnumStr();
 		}
@@ -153,7 +151,7 @@ namespace lambdacommon
 			return getMemoryTotal() - getMemoryAvailable();
 		}
 
-		string LAMBDACOMMON_API getComputerName()
+		std::string LAMBDACOMMON_API getComputerName()
 		{
 			char infoBuf[INFO_BUFFER_SIZE];
 			DWORD bufCharCount = INFO_BUFFER_SIZE;
@@ -161,10 +159,10 @@ namespace lambdacommon
 			if (!GetComputerName(infoBuf, &bufCharCount))
 				return "";
 
-			return string(infoBuf);
+			return std::string(infoBuf);
 		}
 
-		string LAMBDACOMMON_API getOSName()
+		std::string LAMBDACOMMON_API getOSName()
 		{
 #  ifdef __MINGW32__
 			return "Windows with MinGW";
@@ -172,7 +170,7 @@ namespace lambdacommon
 			return "Windows with CYGWIN";
 #  else
 			// Holy shit, what the fuck is this shitty code?
-			string winName = "Windows ";
+			std::string winName = "Windows ";
 
 			if (IsWindowsServer())
 				winName += "Server ";
@@ -199,7 +197,7 @@ namespace lambdacommon
 #  endif
 		}
 
-		string LAMBDACOMMON_API getKernelVersion()
+		std::string LAMBDACOMMON_API getKernelVersion()
 		{
 #if defined(__MINGW32__) || defined(LAMBDA_CYGWIN)
 			OSVERSIONINFO vi;
@@ -216,7 +214,7 @@ namespace lambdacommon
 #endif
 		}
 
-		string LAMBDACOMMON_API getUserName()
+		std::string LAMBDACOMMON_API getUserName()
 		{
 			char infoBuf[INFO_BUFFER_SIZE];
 			DWORD bufCharCount = INFO_BUFFER_SIZE;
@@ -224,36 +222,36 @@ namespace lambdacommon
 			if (!GetUserName(infoBuf, &bufCharCount))
 				return "";
 
-			return string(infoBuf);
+			return std::string(infoBuf);
 		}
 
-		string LAMBDACOMMON_API getUserDirectoryStr()
+		std::string LAMBDACOMMON_API getUserDirectoryStr()
 		{
 #  ifdef __MINGW32__
 			TCHAR path[MAX_PATH];
 			if (FAILED(SHGetFolderPath(NULL, CSIDL_PROFILE, NULL, 0, path)))
 				return "";
-			return string(path);
+			return std::string(path);
 #  else // __MINGW32__
 			PWSTR szPath;
 			if (FAILED(SHGetKnownFolderPath(FOLDERID_Profile, KF_FLAG_NO_ALIAS, NULL, &szPath)))
 				return "";
-			return string(lambdastring::convertWStringToString(wstring(szPath)));
+			return std::string(lambdastring::convertWStringToString(std::wstring(szPath)));
 #  endif // __MINGW32__
 		}
 
 #else
 
-		string LAMBDACOMMON_API getProcessorName()
+		std::string LAMBDACOMMON_API getProcessorName()
 		{
-			ifstream cpuinfo;
-			cpuinfo.open("/proc/cpuinfo", ios::in);
-			string word;
+			std::ifstream cpuinfo;
+			cpuinfo.open("/proc/cpuinfo", std::ios::in);
+			std::string word;
 			//bool record = false;
-			string cpu;
+			std::string cpu;
 			if (cpuinfo.is_open())
 			{
-				for (string line; getline(cpuinfo, line);)
+				for (std::string line; std::getline(cpuinfo, line);)
 				{
 					if (lambdastring::equalsIgnoreCase(line.substr(0, 10), "model name"))
 					{
@@ -279,7 +277,7 @@ namespace lambdacommon
 				return SysArchitecture::UNKNOWN;
 		}
 
-		string LAMBDACOMMON_API getProcessorArchStr()
+		std::string LAMBDACOMMON_API getProcessorArchStr()
 		{
 			utsname uName{};
 			if (uname(&uName) != 0)
@@ -289,9 +287,9 @@ namespace lambdacommon
 
 		uint32_t LAMBDACOMMON_API getProcessorCores()
 		{
-			ifstream cpuinfo;
-			cpuinfo.open("/proc/cpuinfo", ios::in);
-			string word;
+			std::ifstream cpuinfo;
+			cpuinfo.open("/proc/cpuinfo", std::ios::in);
+			std::string word;
 			uint32_t cpucount = 0;
 			if (cpuinfo.is_open())
 			{
@@ -321,14 +319,14 @@ namespace lambdacommon
 
 		uint64_t LAMBDACOMMON_API getMemoryAvailable()
 		{
-			ifstream meminfo;
-			meminfo.open("/proc/meminfo", ios::in);
+			std::ifstream meminfo;
+			meminfo.open("/proc/meminfo", std::ios::in);
 
 			uint64_t memFree = 0;
 
 			if (meminfo.is_open())
 			{
-				string last;
+				std::string last;
 
 				while (meminfo >> last)
 				{
@@ -349,14 +347,14 @@ namespace lambdacommon
 
 		uint64_t LAMBDACOMMON_API getMemoryUsed()
 		{
-			ifstream meminfo;
-			meminfo.open("/proc/meminfo", ios::in);
+			std::ifstream meminfo;
+			meminfo.open("/proc/meminfo", std::ios::in);
 
 			uint64_t memUsed = 0;
 
 			if (meminfo.is_open())
 			{
-				string last;
+				std::string last;
 
 				while (meminfo >> last)
 				{
@@ -375,14 +373,14 @@ namespace lambdacommon
 			return memUsed;
 		}
 
-		string LAMBDACOMMON_API getComputerName()
+		std::string LAMBDACOMMON_API getComputerName()
 		{
 			char hostname[HOST_NAME_MAX];
 			gethostname(hostname, HOST_NAME_MAX);
-			return string(hostname);
+			return std::string(hostname);
 		}
 
-		string LAMBDACOMMON_API getOSName()
+		std::string LAMBDACOMMON_API getOSName()
 		{
 			if (!osName.empty())
 				return osName;
@@ -395,15 +393,15 @@ namespace lambdacommon
 
 			if (lsb_release.exists())
 			{
-				ifstream lsb_release_in;
-				lsb_release_in.open(lsb_release.toString(), ios::in);
-				string word;
+				std::ifstream lsb_release_in;
+				lsb_release_in.open(lsb_release.toString(), std::ios::in);
+				std::string word;
 				bool record = false;
 				if (lsb_release_in.is_open())
 				{
 					while (lsb_release_in >> word)
 					{
-						if (word.find("DISTRIB_DESCRIPTION") != string::npos)
+						if (word.find("DISTRIB_DESCRIPTION") != std::string::npos)
 						{
 							size_t a = word.find_last_of("N=") + 1;
 							osName = word.substr(a + 1, word.length() - a);
@@ -417,15 +415,15 @@ namespace lambdacommon
 			}
 			else
 			{
-				ifstream in;
-				in.open(etc_os_release.toString(), ios::in);
+				std::ifstream in;
+				in.open(etc_os_release.toString(), std::ios::in);
 				char line[256];
 				if (in.is_open())
 				{
 					while (in.getline(line, 256))
 					{
-						string line_{line};
-						if (line_.find("PRETTY_NAME=") != string::npos)
+						std::string line_{line};
+						if (line_.find("PRETTY_NAME=") != std::string::npos)
 						{
 							size_t equalSign = line_.find_first_of('"');
 							osName = line_.substr(equalSign + 1, line_.length() - equalSign - 2);
@@ -436,26 +434,26 @@ namespace lambdacommon
 				}
 			}
 
-			if (string(uts.release).find("Microsoft") != string::npos)
+			if (std::string(uts.release).find("Microsoft") != std::string::npos)
 				osName += " on Windows";
 			return osName;
 		}
 
-		string LAMBDACOMMON_API getKernelVersion()
+		std::string LAMBDACOMMON_API getKernelVersion()
 		{
 			struct utsname uts{};
 			uname(&uts);
 			return uts.release;
 		}
 
-		string LAMBDACOMMON_API getUserName()
+		std::string LAMBDACOMMON_API getUserName()
 		{
 			struct passwd *userInfo;
 			userInfo = getpwuid(getuid());
 			return userInfo->pw_name;
 		}
 
-		string LAMBDACOMMON_API getUserDirectoryStr()
+		std::string LAMBDACOMMON_API getUserDirectoryStr()
 		{
 			struct passwd *userInfo;
 			userInfo = getpwuid(getuid());

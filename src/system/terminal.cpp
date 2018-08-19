@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -8,13 +8,14 @@
  */
 
 #include "../../include/lambdacommon/system/terminal.h"
+#include "../../include/lambdacommon/lstring.h"
 
 #if defined(LAMBDA_WINDOWS) || defined(__CYGWIN__)
 
 #  define WIN_FRIENDLY
 
 #  include <io.h>
-#  include <windows.h>
+#  include <Windows.h>
 
 #  ifdef __CYGWIN__
 #    include <unistd.h>
@@ -155,13 +156,13 @@ namespace lambdacommon
 		 * IMPLEMENTATION
 		 */
 
-		ostream &operator<<(ostream &stream, TermFormatting termFormatting)
+		ostream LAMBDACOMMON_API &operator<<(ostream &stream, TermFormatting termFormatting)
 		{
 			vector<TermFormatting> formats = {termFormatting};
 			return stream << formats;
 		}
 
-		ostream &operator<<(ostream &stream, vector<TermFormatting> termFormatting)
+		ostream LAMBDACOMMON_API &operator<<(ostream &stream, vector<TermFormatting> termFormatting)
 		{
 			if (isTTY(stream))
 			{
@@ -286,12 +287,12 @@ namespace lambdacommon
 			} else
 				goto writeANSI;
 			writeANSI:
-			string ansiSequence{((char) 0x1B)};
+			std::string ansiSequence{((char) 0x1B)};
 			ansiSequence += "[";
 			auto formattings = termFormatting.size();
 			for (size_t i = 0; i < formattings; i++)
 			{
-				string str = to_string(static_cast<int>(termFormatting[i]));
+				std::string str = to_string(static_cast<int>(termFormatting[i]));
 				if (i != formattings - 1)
 					ansiSequence += (str + ";");
 				else
@@ -302,7 +303,13 @@ namespace lambdacommon
 			return stream;
 		}
 
-		ostream &eraseCurrentLine(ostream &stream)
+		ostream LAMBDACOMMON_API &operator<<(ostream &stream, vector<string> stringVector)
+		{
+			stream << lambdastring::to_string(stringVector);
+			return stream;
+		}
+
+		ostream LAMBDACOMMON_API &eraseCurrentLine(ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
 #else
@@ -394,7 +401,7 @@ namespace lambdacommon
 #endif
 		}
 
-		string LAMBDACOMMON_API getTerminalTitle()
+		std::string LAMBDACOMMON_API getTerminalTitle()
 		{
 #ifdef WIN_FRIENDLY
 			TCHAR currentTitle[MAX_PATH];
@@ -407,7 +414,7 @@ namespace lambdacommon
 #endif
 		}
 
-		bool LAMBDACOMMON_API setTerminalTitle(const string &title, ostream &stream)
+		bool LAMBDACOMMON_API setTerminalTitle(const std::string &title, ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
 			if (isTTY(stream))
@@ -424,8 +431,8 @@ namespace lambdacommon
 			CONSOLE_SCREEN_BUFFER_INFO csbi;
 
 			GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-			size.columns = csbi.dwSize.X;
-			size.rows = csbi.dwSize.Y;
+			size.columns = static_cast<unsigned short>(csbi.srWindow.Right - csbi.srWindow.Left + 1);
+			size.rows = static_cast<unsigned short>(csbi.srWindow.Bottom - csbi.srWindow.Top + 1);
 #else
 			struct winsize w{};
 			ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);

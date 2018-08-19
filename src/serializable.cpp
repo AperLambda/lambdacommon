@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -9,23 +9,21 @@
 
 #include "../include/lambdacommon/serializable.h"
 
-using namespace std;
-
 namespace lambdacommon
 {
 	namespace serializable
 	{
-		vector<string> LAMBDACOMMON_API tokenize(const string &_string, const string &delim)
+		std::vector<std::string> LAMBDACOMMON_API tokenize(const std::string &_string, const std::string &delim)
 		{
-			string::size_type lastPos = 0, pos = _string.find_first_of(delim, lastPos);
-			vector<string> tokens;
+			std::string::size_type lastPos = 0, pos = _string.find_first_of(delim, lastPos);
+			std::vector<std::string> tokens;
 
-			while (lastPos != string::npos)
+			while (lastPos != std::string::npos)
 			{
 				if (pos != lastPos)
 					tokens.push_back(_string.substr(lastPos, pos - lastPos));
 				lastPos = pos;
-				if (lastPos == string::npos || lastPos + 1 == _string.length())
+				if (lastPos == std::string::npos || lastPos + 1 == _string.length())
 					break;
 				pos = _string.find_first_of(delim, ++lastPos);
 			}

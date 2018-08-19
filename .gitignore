@@ -1,7 +1,7 @@
 #
 # AperLambda ignore file
 #
-# v0.3
+# v0.4
 
 # JetBrains
 .idea/
@@ -18,6 +18,8 @@ eclipse
 .metadata
 .classpath
 .project
+## Visual Studio
+.vs/
 
 # Build system
 ## Cargo

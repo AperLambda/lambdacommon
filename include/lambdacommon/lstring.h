@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -77,6 +77,20 @@ namespace lambdacommon
 		 * @return The boolean value as a string.
 		 */
 		extern std::string LAMBDACOMMON_API to_string(bool value);
+
+		/*!
+		 * Transforms a pointer address into a string value.
+		 * @param pointer The pointer address.
+		 * @return The pointer address as a string.
+		 */
+		extern std::string LAMBDACOMMON_API to_string(const void *pointer);
+
+		/*!
+		 * Transforms a string vector into a string value.
+		 * @param vec The vector.
+		 * @return The vector value as a string.
+		 */
+		extern std::string LAMBDACOMMON_API to_string(const std::vector<std::string> &vec);
 
 		extern bool LAMBDACOMMON_API endsWith(const std::string &str, const std::string &suffix);
 

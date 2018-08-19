@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -13,13 +13,11 @@
 #include <sstream>
 #include <regex>
 
-using namespace std;
-
 namespace lambdacommon
 {
 	namespace uri
 	{
-		SchemeType LAMBDACOMMON_API getSchemeTypeByString(const string &scheme)
+		SchemeType LAMBDACOMMON_API getSchemeTypeByString(const std::string &scheme)
 		{
 			if (lambdastring::equalsIgnoreCase(scheme, "file"))
 				return FILE;
@@ -73,38 +71,41 @@ namespace lambdacommon
 		 * URI
 		 */
 
-		vector<pair<string, string>> fixQueries(const vector<pair<string, string>> &queries)
+		std::vector<std::pair<std::string, std::string>>
+		fixQueries(const std::vector<std::pair<std::string, std::string>> &queries)
 		{
-			vector<pair<string, string>> newQueries;
+			std::vector<std::pair<std::string, std::string>> newQueries;
 			for (auto query : queries)
 				newQueries.emplace_back(lambdastring::replaceAll(query.first, " ", "%20"),
-				                        lambdastring::replaceAll(query.second, " ", "%20"));
+										lambdastring::replaceAll(query.second, " ", "%20"));
 			return newQueries;
 		};
 
-		URI::URI(const string &scheme, const string &username, const string &password, const Address &address,
-		         const vector<string> &path, const vector<pair<string, string>> &queries, const string &fragment)
+		URI::URI(const std::string &scheme, const std::string &username, const std::string &password,
+				 const Address &address, const std::vector<std::string> &path,
+				 const std::vector<std::pair<std::string, std::string>> &queries,
+				 const std::string &fragment)
 				: Path(path),
-				  _scheme(new string(scheme)),
-				  _username(new string(username)),
-				  _password(new string(password)),
+				  _scheme(new std::string(scheme)),
+				  _username(new std::string(username)),
+				  _password(new std::string(password)),
 				  _address(address),
-				  _queries(new vector<pair<string, string>>(fixQueries(queries))),
-				  _fragment(new string(fragment))
+				  _queries(new std::vector<std::pair<std::string, std::string>>(fixQueries(queries))),
+				  _fragment(new std::string(fragment))
 		{}
 
-		URI::URI(const URI &url) : Path(*url._path), _scheme(new string(*url._scheme)),
-		                           _username(new string(*url._username)), _password(new string(*url._password)),
-		                           _address(url._address), _queries(new vector<pair<string, string>>(*url._queries)),
-		                           _fragment(new string(*url._fragment))
+		URI::URI(const URI &url) : Path(*url._path), _scheme(new std::string(*url._scheme)),
+								   _username(new std::string(*url._username)), _password(new std::string(*url._password)),
+								   _address(url._address), _queries(new std::vector<std::pair<std::string, std::string>>(*url._queries)),
+								   _fragment(new std::string(*url._fragment))
 		{}
 
-		URI::URI(URI &&url) noexcept : Path(*url._path), _scheme(new string(move(*url._scheme))),
-		                               _username(new string(move(*url._username))),
-		                               _password(new string(move(*url._password))),
-		                               _address(url._address),
-		                               _queries(new vector<pair<string, string>>(move(*url._queries))),
-		                               _fragment(new string(move(*url._fragment)))
+		URI::URI(URI &&url) noexcept : Path(*url._path), _scheme(new std::string(move(*url._scheme))),
+									   _username(new std::string(move(*url._username))),
+									   _password(new std::string(move(*url._password))),
+									   _address(url._address),
+									   _queries(new std::vector<std::pair<std::string, std::string>>(move(*url._queries))),
+									   _fragment(new std::string(move(*url._fragment)))
 		{}
 
 		URI::~URI()
@@ -115,28 +116,29 @@ namespace lambdacommon
 			delete _fragment;
 		}
 
-		string URI::getScheme() const
+		std::string URI::getScheme() const
 		{
 			return *_scheme;
 		}
 
-		string URI::getUsername() const
+		std::string URI::getUsername() const
 		{
 			return *_username;
 		}
 
-		string URI::getPassword() const
+		std::string URI::getPassword() const
 		{
 			return *_password;
 		}
 
-		void URI::setUserAndPassword(const string &username, const string &password)
+		void URI::setUserAndPassword(const std::string &username, const std::string &password)
 		{
 			if (username.empty() || password.empty())
 			{
 				*_username = "";
 				*_password = "";
-			} else
+			}
+			else
 			{
 				*_username = username;
 				*_password = password;
@@ -156,17 +158,17 @@ namespace lambdacommon
 			_address = address;
 		}
 
-		vector<pair<string, string>> URI::getQueries() const
+		std::vector<std::pair<std::string, std::string>> URI::getQueries() const
 		{
 			return *_queries;
 		}
 
-		void URI::setQueries(const vector<pair<string, string>> &queries)
+		void URI::setQueries(const std::vector<std::pair<std::string, std::string>> &queries)
 		{
 			*_queries = fixQueries(queries);
 		}
 
-		bool URI::hasQuery(string query) const
+		bool URI::hasQuery(std::string query) const
 		{
 			bool hasQuery = false;
 			for (auto q : *_queries)
@@ -178,9 +180,9 @@ namespace lambdacommon
 			return hasQuery;
 		}
 
-		string URI::getQuery(string query) const
+		std::string URI::getQuery(std::string query) const
 		{
-			string result = "";
+			std::string result = "";
 			for (auto q : *_queries)
 				if (lambdastring::equals(q.first, query))
 				{
@@ -190,19 +192,19 @@ namespace lambdacommon
 			return result;
 		}
 
-		string URI::getFragment() const
+		std::string URI::getFragment() const
 		{
 			return *_fragment;
 		}
 
-		void URI::setFragment(const string &fragment)
+		void URI::setFragment(const std::string &fragment)
 		{
 			*_fragment = fragment;
 		}
 
-		string URI::toString(char delimiter) const
+		std::string URI::toString(char delimiter) const
 		{
-			ostringstream oss;
+			std::ostringstream oss;
 
 			// Write the scheme.
 			if (!_scheme->empty())
@@ -217,7 +219,8 @@ namespace lambdacommon
 
 				// Write the address.
 				oss << _address.toString();
-			} else if (*_scheme == "file")
+			}
+			else if (*_scheme == "file")
 				oss << "//";
 
 			// Write the path.
@@ -230,7 +233,7 @@ namespace lambdacommon
 				oss << '?';
 				for (size_t i = 0; i < _queries->size(); i++)
 				{
-					pair<string, string> query = (*_queries)[i];
+					std::pair<std::string, std::string> query = (*_queries)[i];
 					oss << query.first;
 					if (!query.second.empty())
 						oss << '=' << query.second;
@@ -250,18 +253,18 @@ namespace lambdacommon
 		URI &URI::operator=(const URI &url)
 		{
 			delete _path;
-			_path = new vector<string>(*url._path);
+			_path = new std::vector<std::string>(*url._path);
 			delete _scheme;
-			_scheme = new string(*url._scheme);
+			_scheme = new std::string(*url._scheme);
 			delete _username;
-			_username = new string(*url._username);
+			_username = new std::string(*url._username);
 			delete _password;
-			_password = new string(*url._password);
+			_password = new std::string(*url._password);
 			_address = url._address;
 			delete _queries;
-			_queries = new vector<pair<string, string>>(*url._queries);
+			_queries = new std::vector<std::pair<std::string, std::string>>(*url._queries);
 			delete _fragment;
-			_fragment = new string(*url._fragment);
+			_fragment = new std::string(*url._fragment);
 			return *this;
 		}
 
@@ -270,18 +273,18 @@ namespace lambdacommon
 			if (this != &url)
 			{
 				delete _path;
-				_path = new vector<string>(move(*url._path));
+				_path = new std::vector<std::string>(move(*url._path));
 				delete _scheme;
-				_scheme = new string(move(*url._scheme));
+				_scheme = new std::string(move(*url._scheme));
 				delete _username;
-				_username = new string(move(*url._username));
+				_username = new std::string(move(*url._username));
 				delete _password;
-				_password = new string(move(*url._password));
+				_password = new std::string(move(*url._password));
 				_address = url._address;
 				delete _queries;
-				_queries = new vector<pair<string, string>>(move(*url._queries));
+				_queries = new std::vector<std::pair<std::string, std::string>>(move(*url._queries));
 				delete _fragment;
-				_fragment = new string(move(*url._fragment));
+				_fragment = new std::string(move(*url._fragment));
 			}
 			return *this;
 		}
@@ -289,21 +292,21 @@ namespace lambdacommon
 		bool URI::operator==(const URI &url)
 		{
 			return *_scheme == (*url._scheme) && *_username == (*url._username) && *_password == (*url._password) &&
-			       _address == url._address && *_path == (*url._path) && *_queries == (*url._queries) &&
-			       *_fragment == (*url._fragment);
+				   _address == url._address && *_path == (*url._path) && *_queries == (*url._queries) &&
+				   *_fragment == (*url._fragment);
 		}
 
 		bool URI::operator!=(const URI &url)
 		{
 			return *_scheme != (*url._scheme) || *_username != (*url._username) || *_password != (*url._password) ||
-			       _address != url._address || *_path != (*url._path) || *_queries != (*url._queries) ||
-			       *_fragment != (*url._fragment);
+				   _address != url._address || *_path != (*url._path) || *_queries != (*url._queries) ||
+				   *_fragment != (*url._fragment);
 		}
 
 		URI URI::operator/(const URI &uri)
 		{
 			URI newURI = URI(*this);
-			for (string s : uri.getPath())
+			for (auto s : uri.getPath())
 				newURI._path->emplace_back(s);
 			return newURI;
 		}
@@ -311,7 +314,7 @@ namespace lambdacommon
 		URI URI::operator/(const Path &path)
 		{
 			URI newURI = URI(*this);
-			for (string s : path.getPath())
+			for (auto s : path.getPath())
 				newURI._path->emplace_back(s);
 			return newURI;
 		}
@@ -324,45 +327,46 @@ namespace lambdacommon
 			return URI("file", "", "", Address::EMPTY, path.getPath());
 		}
 
-		int str2int(const string &str)
+		int str2int(const std::string &str)
 		{
 			int i;
 			try
 			{
 				i = stoi(str);
-			} catch (invalid_argument e)
+			}
+			catch (std::invalid_argument e)
 			{
 				i = 0;
 			}
-			catch (out_of_range e)
+			catch (std::out_of_range e)
 			{
 				i = 0;
 			}
 			return i;
 		}
 
-		URI LAMBDACOMMON_API fromString(const string &url)
+		URI LAMBDACOMMON_API fromString(const std::string &url)
 		{
 			if (url.empty())
 				throw IllegalArgumentException("URI cannot be empty.");
 
 			auto schemeSeparator = url.find_first_of("://");
-			if (schemeSeparator == string::npos)
+			if (schemeSeparator == std::string::npos)
 			{
 				schemeSeparator = url.find_first_of(':');
-				if (schemeSeparator == string::npos)
+				if (schemeSeparator == std::string::npos)
 					throw ParseException(
 							"Cannot parse uri '" + url + "': cannot find the scheme separator (':' or '://')!");
 			}
-			string scheme = url.substr(0, schemeSeparator);
+			auto scheme = url.substr(0, schemeSeparator);
 			auto tmpUrl = url.substr(schemeSeparator + 3, url.size());
 
 			auto authSeparator = tmpUrl.find_first_of('@');
-			string username;
-			string password;
-			if (authSeparator != string::npos)
+			std::string username;
+			std::string password;
+			if (authSeparator != std::string::npos)
 			{
-				string userAndPwd = tmpUrl.substr(0, authSeparator);
+				auto userAndPwd = tmpUrl.substr(0, authSeparator);
 				auto split = lambdastring::split(userAndPwd, ':');
 				if (split.size() == 1)
 					throw ParseException("Cannot parse uri '" + url + "': missing username or password!");
@@ -376,37 +380,39 @@ namespace lambdacommon
 			auto querySeparator = tmpUrl.find_first_of('?');
 			auto fragmentSeparator = tmpUrl.find_first_of('#');
 
-			if ((querySeparator != string::npos && pathSeparator > querySeparator) ||
-			    (fragmentSeparator != string::npos && pathSeparator > fragmentSeparator))
+			if ((querySeparator != std::string::npos && pathSeparator > querySeparator) ||
+				(fragmentSeparator != std::string::npos && pathSeparator > fragmentSeparator))
 				throw ParseException(
 						"Cannot parse uri '" + url + "', malformed URI: path is before query and fragment!");
 
-			string tmpAddress;
+			std::string tmpAddress;
 
-			string path;
-			if (pathSeparator != string::npos)
+			std::string path;
+			if (pathSeparator != std::string::npos)
 			{
 				tmpAddress = tmpUrl.substr(0, pathSeparator);
-				if (querySeparator != string::npos || fragmentSeparator != string::npos)
+				if (querySeparator != std::string::npos || fragmentSeparator != std::string::npos)
 				{
-					if (querySeparator < fragmentSeparator || fragmentSeparator == string::npos)
+					if (querySeparator < fragmentSeparator || fragmentSeparator == std::string::npos)
 						path = tmpUrl.substr(pathSeparator + 1, (querySeparator - pathSeparator - 1));
 					else
 						path = tmpUrl.substr(pathSeparator + 1, (fragmentSeparator - pathSeparator - 1));
-				} else
+				}
+				else
 					path = tmpUrl;
 			}
 
-			vector<pair<string, string>> queries;
-			if (querySeparator != string::npos)
+			std::vector<std::pair<std::string, std::string>> queries;
+			if (querySeparator != std::string::npos)
 			{
-				string strQueries;
+				std::string strQueries;
 				if (fragmentSeparator > querySeparator)
 				{
 					strQueries = tmpUrl.substr(querySeparator + 1, (fragmentSeparator - querySeparator - 1));
 					if (tmpAddress.empty())
 						tmpAddress = tmpUrl.substr(0, querySeparator);
-				} else
+				}
+				else
 					strQueries = tmpUrl.substr(querySeparator + 1, tmpUrl.size());
 
 				if (!strQueries.empty())
@@ -415,7 +421,7 @@ namespace lambdacommon
 					for (auto query : splittedQueries)
 					{
 						size_t j;
-						if ((j = query.find_first_of('=')) != string::npos)
+						if ((j = query.find_first_of('=')) != std::string::npos)
 							queries.emplace_back(query.substr(0, j), query.substr(j + 1, query.size()));
 						else
 							queries.emplace_back(query, "");
@@ -423,15 +429,16 @@ namespace lambdacommon
 				}
 			}
 
-			string fragment;
-			if (fragmentSeparator != string::npos)
+			std::string fragment;
+			if (fragmentSeparator != std::string::npos)
 			{
 				if (querySeparator > fragmentSeparator)
 				{
 					fragment = tmpUrl.substr(fragmentSeparator + 1, (querySeparator - fragmentSeparator - 1));
 					if (tmpAddress.empty())
 						tmpAddress = tmpUrl.substr(0, fragmentSeparator);
-				} else
+				}
+				else
 					fragment = tmpUrl.substr(fragmentSeparator + 1, tmpUrl.size());
 			}
 
@@ -440,14 +447,14 @@ namespace lambdacommon
 			{
 				auto addressSeparator = tmpAddress.find_last_of(':');
 				auto endIPv6 = tmpAddress.find_last_of(']');
-				string host;
-				if (endIPv6 != string::npos && endIPv6 > addressSeparator)
+				std::string host;
+				if (endIPv6 != std::string::npos && endIPv6 > addressSeparator)
 					host = tmpAddress;
 				else
 					host = tmpAddress.substr(0, addressSeparator);
 				host = lambdastring::replaceAll(lambdastring::replaceAll(host, "[", ""), "]", "");
 				port port = 0;
-				if (addressSeparator != string::npos && addressSeparator > endIPv6)
+				if (addressSeparator != std::string::npos && addressSeparator > endIPv6)
 				{
 					if ((port = static_cast<lambdacommon::port>(str2int(
 							tmpAddress.substr(addressSeparator + 1, tmpAddress.size())))) == 0)

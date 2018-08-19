@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -85,6 +85,8 @@ namespace lambdacommon
 
 		extern std::ostream LAMBDACOMMON_API &
 		operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting);
+
+		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<std::string> stringVector);
 
 		/*!
 		 * This function will erase the current line in the stream.

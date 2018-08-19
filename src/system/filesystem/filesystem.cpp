@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -14,7 +14,7 @@
 
 #ifdef LAMBDA_WINDOWS
 
-#include <windows.h>
+#include <Windows.h>
 
 #define STAT_STRUCT _stati64
 #define STAT_METHOD _stati64
@@ -32,8 +32,6 @@
 
 #include <sys/stat.h>
 
-using namespace std;
-
 namespace lambdacommon
 {
 	namespace fs
@@ -45,10 +43,10 @@ namespace lambdacommon
 
 		FilePath::FilePath(const char *path) : Path()
 		{
-			set(string(path));
+			set(std::string(path));
 		}
 
-		FilePath::FilePath(const string &path) : Path()
+		FilePath::FilePath(const std::string &path) : Path()
 		{
 			set(path);
 		}
@@ -57,10 +55,10 @@ namespace lambdacommon
 
 		FilePath::FilePath(const wchar_t *path) : Path()
 		{
-			set(lambdastring::convertWStringToString(wstring(path)));
+			set(lambdastring::convertWStringToString(std::wstring(path)));
 		}
 
-		FilePath::FilePath(const wstring &path) : Path()
+		FilePath::FilePath(const std::wstring &path) : Path()
 		{
 			set(lambdastring::convertWStringToString(path));
 		}
@@ -70,11 +68,11 @@ namespace lambdacommon
 		FilePath::FilePath(const FilePath &path) : Path(*path._path), _absolute(path._absolute)
 		{}
 
-		FilePath::FilePath(FilePath &&path) noexcept : Path(vector<string>(move(*path._path))),
+		FilePath::FilePath(FilePath &&path) noexcept : Path(std::vector<std::string>(move(*path._path))),
 		                                               _absolute(path._absolute)
 		{}
 
-		void FilePath::set(const string &str, PathType type)
+		void FilePath::set(const std::string &str, PathType type)
 		{
 			if (type == WINDOWS)
 			{
@@ -157,19 +155,19 @@ namespace lambdacommon
 #endif
 		}
 
-		string FilePath::getFileName() const
+		std::string FilePath::getFileName() const
 		{
 			if (empty())
 				return "";
-			const string &last = (*_path)[_path->size() - 1];
+			const std::string &last = (*_path)[_path->size() - 1];
 			return last;
 		}
 
-		string FilePath::getExtension() const
+		std::string FilePath::getExtension() const
 		{
-			const string &name = getFileName();
+			const std::string &name = getFileName();
 			size_t pos = name.find_last_of('.');
-			if (pos == string::npos)
+			if (pos == std::string::npos)
 				return "";
 			return name.substr(pos + 1);
 		}
@@ -180,7 +178,7 @@ namespace lambdacommon
 				return 0;
 			struct STAT_STRUCT sb;
 			if (STAT_METHOD(toString().c_str(), &sb) != 0)
-				throw runtime_error(
+				throw std::runtime_error(
 						"lambdacommon::path::FilePath.getFileSize(): cannot stat file \"" + toString() + "\"!");
 			return (size_t) sb.st_size;
 		}
@@ -193,14 +191,14 @@ namespace lambdacommon
 			char temp[MAX_PATH];
 			auto length = GetFullPathNameA(toString().c_str(), MAX_PATH, temp, nullptr);
 			if (length == 0)
-				throw runtime_error(
-						"Internal error in lambdacommon::path::FilePath.toAbsolute(): " + to_string(GetLastError()));
+				throw std::runtime_error(
+						"Internal error in lambdacommon::path::FilePath.toAbsolute(): " + std::to_string(GetLastError()));
 			return FilePath(temp);
 #else
 			char temp[PATH_MAX];
 			if (realpath(toString().c_str(), temp) == nullptr)
-				throw runtime_error(
-						"Internal error in lambdacommon::path::FilePath::toAbsolute(): " + string(strerror(errno)));
+				throw std::runtime_error(
+						"Internal error in lambdacommon::path::FilePath::toAbsolute(): " + std::string(strerror(errno)));
 			return FilePath(temp);
 #endif
 		}
@@ -220,9 +218,9 @@ namespace lambdacommon
 			return result;
 		}
 
-		string FilePath::toString(PathType type) const
+		std::string FilePath::toString(PathType type) const
 		{
-			ostringstream oss;
+			std::ostringstream oss;
 
 			if (type == COMMON && _absolute)
 				oss << "/";
@@ -245,7 +243,7 @@ namespace lambdacommon
 		FilePath FilePath::sub(const FilePath &other) const
 		{
 			if (other._absolute)
-				throw runtime_error("lambdacommon->system/filesystem/filesystem.cpp@FilePath.sub(const FilePath&)(Line " + to_string(__LINE__ - 1) + "): Expected a relative path as argument!");
+				throw std::runtime_error("lambdacommon->system/filesystem/filesystem.cpp@FilePath.sub(const FilePath&)(Line " + std::to_string(__LINE__ - 1) + "): Expected a relative path as argument!");
 
 			FilePath result(*this);
 
@@ -276,7 +274,7 @@ namespace lambdacommon
 			if (this != &path)
 			{
 				delete _path;
-				_path = new vector<string>(move(*path._path));
+				_path = new std::vector<std::string>(move(*path._path));
 				_absolute = path._absolute;
 			}
 			return *this;
@@ -294,42 +292,42 @@ namespace lambdacommon
 
 #ifdef LAMBDA_WINDOWS
 
-		wstring getCurrentWorkingDirectoryWStr()
+		std::wstring LAMBDACOMMON_API getCurrentWorkingDirectoryWStr()
 		{
 			wchar_t temp[MAX_PATH];
 			if (!_wgetcwd(temp, MAX_PATH))
-				throw runtime_error(
+				throw std::runtime_error(
 						"Internal error in lambdacommon::path::getCurrentWorkingDirectoryWStr(): " +
-						to_string(GetLastError()));
-			return wstring(temp);
+						std::to_string(GetLastError()));
+			return std::wstring(temp);
 		}
 
 #endif
 
-		string getCurrentWorkingDirectoryStr()
+		std::string LAMBDACOMMON_API getCurrentWorkingDirectoryStr()
 		{
 #ifdef LAMBDA_WINDOWS
 			return lambdastring::convertWStringToString(getCurrentWorkingDirectoryWStr());
 #else
 			char temp[PATH_MAX];
 			if (getcwd(temp, PATH_MAX) == nullptr)
-				throw runtime_error("Internal error in lambdacommon::path::getCurrentWorkingDirectoryStr(): " +
-				                    string(strerror(errno)));
-			return string(temp);
+				throw std::runtime_error("Internal error in lambdacommon::path::getCurrentWorkingDirectoryStr(): " +
+				                    std::string(strerror(errno)));
+			return std::string(temp);
 #endif
 		}
 
-		FilePath getCurrentWorkingDirectory()
+		FilePath LAMBDACOMMON_API getCurrentWorkingDirectory()
 		{
 			return FilePath(getCurrentWorkingDirectoryStr());
 		}
 
 		FilePath LAMBDACOMMON_API mkdir(const char *path, bool recursive)
 		{
-			return mkdir(string(path), recursive);
+			return mkdir(std::string(path), recursive);
 		}
 
-		FilePath LAMBDACOMMON_API mkdir(const string &path, bool recursive)
+		FilePath LAMBDACOMMON_API mkdir(const std::string &path, bool recursive)
 		{
 			FilePath result{path};
 			result.mkdir(recursive);

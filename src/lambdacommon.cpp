@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -9,13 +9,11 @@
 
 #include "../include/lambdacommon/lambdacommon.h"
 
-using namespace std;
-
 namespace lambdacommon
 {
-	string LAMBDACOMMON_API getVersion()
+	std::string LAMBDACOMMON_API getVersion()
 	{
-		return to_string(LAMBDACOMMON_VERSION_MAJOR) + "." + to_string(LAMBDACOMMON_VERSION_MINOR) + "." +
-		       to_string(LAMBDACOMMON_VERSION_PATCH);
+		return std::to_string(LAMBDACOMMON_VERSION_MAJOR) + "." + std::to_string(LAMBDACOMMON_VERSION_MINOR) + "." +
+		       std::to_string(LAMBDACOMMON_VERSION_PATCH);
 	}
 }

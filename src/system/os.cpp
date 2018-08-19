@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -15,13 +15,11 @@
 #  define LAMBDA_ARM
 #endif
 
-using namespace std;
-
 namespace lambdacommon
 {
 	namespace system
 	{
-		OS os::getOS()
+		OS LAMBDACOMMON_API os::getOS()
 		{
 #ifdef LAMBDA_WINDOWS
 #ifdef LAMBDA_WIN64
@@ -42,9 +40,9 @@ namespace lambdacommon
 #endif
 		}
 
-		string os::getOSName(OS os)
+		std::string LAMBDACOMMON_API os::getOSName(OS os)
 		{
-			string osName = string();
+			std::string osName = std::string();
 			switch (os)
 			{
 				case WINDOWS_32:

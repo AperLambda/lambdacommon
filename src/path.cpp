@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -10,14 +10,12 @@
 #include "../include/lambdacommon/path.h"
 #include <sstream>
 
-using namespace std;
-
 namespace lambdacommon
 {
-	Path::Path() : _path(new vector<string>())
+	Path::Path() : _path(new std::vector<std::string>())
 	{}
 
-	Path::Path(const vector<string> &path) : _path(new vector<string>(path))
+	Path::Path(const std::vector<std::string> &path) : _path(new std::vector<std::string>(path))
 	{}
 
 	Path::~Path()
@@ -25,19 +23,19 @@ namespace lambdacommon
 		delete _path;
 	}
 
-	vector<string> Path::getPath() const
+	std::vector<std::string> Path::getPath() const
 	{
 		return *_path;
 	}
 
-	string Path::toString() const
+	std::string Path::toString() const
 	{
 		return toString('/');
 	}
 
-	string Path::toString(char delimiter) const
+	std::string Path::toString(char delimiter) const
 	{
-		ostringstream oss;
+		std::ostringstream oss;
 		for (size_t i = 0; i < _path->size(); i++)
 		{
 			oss << (*_path)[i];

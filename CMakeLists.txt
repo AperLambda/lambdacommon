@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.6)
 project(lambdacommon)
 
 option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)
@@ -25,7 +25,7 @@ set(HEADERS_GRAPHICS include/lambdacommon/graphics/color.h)
 set(HEADERS_FILESYSTEM include/lambdacommon/system/filesystem/filesystem.h)
 set(HEADERS_EXCEPTIONS include/lambdacommon/exceptions/exceptions.h)
 set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/lambdacommon/system/os.h include/lambdacommon/system/devices.h include/lambdacommon/system/terminal.h include/lambdacommon/system/system.h include/lambdacommon/system/uri.h)
-set(HEADERS_BASE include/lambdacommon/lambdacommon.h include/lambdacommon/serializable.h include/lambdacommon/lstring.h include/lambdacommon/path.h include/lambdacommon/utils.h include/lambdacommon/resources.h)
+set(HEADERS_BASE include/lambdacommon/lambdacommon.h include/lambdacommon/serializable.h include/lambdacommon/lstring.h include/lambdacommon/path.h include/lambdacommon/resources.h)
 set(HEADERS_FILES ${HEADERS_CONNECTION} ${HEADERS_DOCUMENT} ${HEADERS_GRAPHICS} ${HEADERS_EXCEPTIONS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
 # There is the C++ sources files.
 set(SOURCES_CONNECTION src/connection/address.cpp)
@@ -34,7 +34,7 @@ set(SOURCES_GRAPHICS src/graphics/color.cpp)
 set(SOURCES_FILESYSTEM src/system/filesystem/filesystem.cpp)
 set(SOURCES_SERIALIZERS)
 set(SOURCES_SYSTEM ${SOURCES_FILESYSTEM} src/system/os.cpp src/system/terminal.cpp src/system/system.cpp src/system/uri.cpp)
-set(SOURCES_BASE src/lambdacommon.cpp src/serializable.cpp src/lstring.cpp src/path.cpp src/utils.cpp src/resources.cpp)
+set(SOURCES_BASE src/lambdacommon.cpp src/serializable.cpp src/lstring.cpp src/path.cpp src/resources.cpp)
 set(SOURCES_FILES ${SOURCES_CONNECTION} ${SOURCES_DOCUMENT} ${SOURCES_GRAPHICS} ${SOURCES_SERIALIZERS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
 
 # Now build the library
@@ -49,10 +49,10 @@ GENERATE_EXPORT_HEADER(lambdacommon
         BASE_NAME lambdacommon
         EXPORT_MACRO_NAME LAMBDACOMMON_API
         EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/lambdacommon_exports.h
-        STATIC_DEFINE SHARED_EXPORTS_BUILT_AS_STATIC)
+        STATIC_DEFINE LAMBDACOMMON_SHARED_EXPORTS_BUILT_AS_STATIC)
 target_include_directories(lambdacommon PUBLIC ${CMAKE_BINARY_DIR}/exports)
 if (LAMBDACOMMON_BUILD_STATIC)
-    target_compile_definitions(lambdacommon_static PUBLIC -DSHARED_EXPORTS_BUILT_AS_STATIC)
+    target_compile_definitions(lambdacommon_static PUBLIC -DLAMBDACOMMON_SHARED_EXPORTS_BUILT_AS_STATIC)
     target_include_directories(lambdacommon_static PUBLIC ${CMAKE_BINARY_DIR}/exports)
 endif ()
 

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aper.entertainment@gmail.com>
+ * Copyright © 2018 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -13,37 +13,35 @@
 #include <utility>
 #include <algorithm>
 
-using namespace std;
-
 namespace lambdacommon
 {
 	namespace lambdastring
 	{
 		template<typename Out>
-		void split(const string &s, char delim, Out result)
+		void LAMBDACOMMON_API split(const std::string &s, char delim, Out result)
 		{
-			stringstream ss;
+			std::stringstream ss;
 			ss.str(s);
-			string item;
+			std::string item;
 			while (getline(ss, item, delim))
 			{
 				*(result++) = item;
 			}
 		}
 
-		vector<string> split(const string &s, char delimiter)
+		std::vector<std::string> LAMBDACOMMON_API split(const std::string &s, char delimiter)
 		{
-			vector<string> elems;
+			std::vector<std::string> elems;
 			split(s, delimiter, back_inserter(elems));
 			return elems;
 		}
 
-		bool equalsIgnoreCase(const char a, const char b)
+		bool LAMBDACOMMON_API equalsIgnoreCase(const char a, const char b)
 		{
 			return tolower(a) == tolower(b);
 		}
 
-		bool equals(string const &a, string const &b)
+		bool LAMBDACOMMON_API equals(std::string const &a, std::string const &b)
 		{
 			if (a.length() == b.length())
 				return a == b;
@@ -51,7 +49,7 @@ namespace lambdacommon
 				return false;
 		}
 
-		bool equalsIgnoreCase(string const &a, string const &b)
+		bool LAMBDACOMMON_API equalsIgnoreCase(std::string const &a, std::string const &b)
 		{
 			if (a.length() == b.length())
 			{
@@ -61,29 +59,29 @@ namespace lambdacommon
 				return false;
 		}
 
-		string LAMBDACOMMON_API toLowerCase(const string &from)
+		std::string LAMBDACOMMON_API toLowerCase(const std::string &from)
 		{
-			string result = from;
+			std::string result = from;
 			std::transform(result.begin(), result.end(), result.begin(), ::tolower);
 			return result;
 		}
 
-		string LAMBDACOMMON_API toUpperCase(const string &from)
+		std::string LAMBDACOMMON_API toUpperCase(const std::string &from)
 		{
-			string result = from;
+			std::string result = from;
 			std::transform(result.begin(), result.end(), result.begin(), ::toupper);
 			return result;
 		}
 
-		string replaceAll(string subject, const char &from, const char &to)
+		std::string LAMBDACOMMON_API replaceAll(std::string subject, const char &from, const char &to)
 		{
-			return replaceAll(std::move(subject), to_string(from), to_string(to));
+			return replaceAll(std::move(subject), std::to_string(from), std::to_string(to));
 		}
 
-		string replaceAll(string subject, const string &from, const string &to)
+		std::string LAMBDACOMMON_API replaceAll(std::string subject, const std::string &from, const std::string &to)
 		{
 			size_t start_pos = 0;
-			while ((start_pos = subject.find(from, start_pos)) != string::npos)
+			while ((start_pos = subject.find(from, start_pos)) != std::string::npos)
 			{
 				subject.replace(start_pos, from.length(), to);
 				start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
@@ -91,7 +89,7 @@ namespace lambdacommon
 			return subject;
 		}
 
-		string LAMBDACOMMON_API to_string(bool value)
+		std::string LAMBDACOMMON_API to_string(bool value)
 		{
 			if (value)
 				return "true";
@@ -99,17 +97,36 @@ namespace lambdacommon
 				return "false";
 		}
 
-		bool endsWith(const std::string& str, const std::string& suffix)
+		std::string LAMBDACOMMON_API to_string(const void *pointer)
+		{
+			std::ostringstream ss;
+			ss << std::hex << pointer;
+			auto result = ss.str();
+			if (!startsWith(result, "0x"))
+				result = "0x" + result;
+			return result;
+		}
+
+		std::string LAMBDACOMMON_API to_string(const std::vector<std::string> &vec)
+		{
+			std::string result{"{"};
+			for (const auto &str : vec)
+				result += (str + ", ");
+			result = result.substr(0, result.size() - 2) + '}';
+			return result;
+		}
+
+		bool LAMBDACOMMON_API endsWith(const std::string& str, const std::string& suffix)
 		{
 			return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
 		}
 
-		bool startsWith(const std::string& str, const std::string& prefix)
+		bool LAMBDACOMMON_API startsWith(const std::string& str, const std::string& prefix)
 		{
 			return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
 		}
 
-		const string LAMBDACOMMON_API mergePath(string parent, const string &child)
+		const std::string LAMBDACOMMON_API mergePath(std::string parent, const std::string &child)
 		{
 			auto merged = parent;
 			if (endsWith(parent, "/") || startsWith(child, "/"))
@@ -123,11 +140,11 @@ namespace lambdacommon
 #ifdef LAMBDA_WINDOWS
 #ifndef __GNUC__
 
-#include <windows.h>
+#include <Windows.h>
 
-		string convertWStringToString(wstring wstring)
+		std::string LAMBDACOMMON_API convertWStringToString(std::wstring wstring)
 		{
-			string string;
+			std::string string;
 			if (!wstring.empty())
 			{
 				int size = WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int) wstring.size(), NULL, 0, NULL, NULL);
@@ -137,27 +154,27 @@ namespace lambdacommon
 			return string;
 		}
 
-		wstring convertStringToWString(string string)
+		std::wstring LAMBDACOMMON_API convertStringToWString(std::string string)
 		{
 			int size = MultiByteToWideChar(CP_UTF8, 0, &string[0], (int) string.size(), NULL, 0);
-			wstring result(size, 0);
+			std::wstring result(size, 0);
 			MultiByteToWideChar(CP_UTF8, 0, &string[0], (int) string.size(), &result[0], size);
 			return result;
 		}
 
 #else
 
-		string convertWStringToString(wstring wstring)
+		std::string LAMBDACOMMON_API convertWStringToString(std::wstring wstring)
 		{
-			string out;
-			copy(wstring.begin(), wstring.end(), back_inserter(out));
+			std::string out;
+			std::copy(wstring.begin(), wstring.end(), std::back_inserter(out));
 			return out;
 		}
 
-		wstring convertStringToWString(string string)
+		std::wstring LAMBDACOMMON_API convertStringToWString(std::string string)
 		{
-			wstring out;
-			copy(string.begin(), string.end(), back_inserter(out));
+			std::wstring out;
+			std::copy(string.begin(), string.end(), std::back_inserter(out));
 			return out;
 		}
 
