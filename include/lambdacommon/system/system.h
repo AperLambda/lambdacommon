@@ -10,7 +10,7 @@
 #ifndef LAMBDACOMMON_SYSTEM_H
 #define LAMBDACOMMON_SYSTEM_H
 
-#include "filesystem/filesystem.h"
+#include "fs/filesystem.h"
 #include "devices.h"
 #include "os.h"
 #include "terminal.h"

@@ -41,4 +41,4 @@ Build the sources with CMake and make and install with `make install`, and keep 
 
 ## Use in CMake
 
-Use `Findlambdacommon.cmake` in [LambdaCMakeModules](https://github.com/AperLambda/LambdaCMakeModules.git) to find λcommon on your computer.
+Use `FindLAMBDACOMMON.cmake` in [LambdaCMakeModules](https://github.com/AperLambda/LambdaCMakeModules.git) to find λcommon on your computer.

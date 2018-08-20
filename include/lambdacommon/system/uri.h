@@ -10,7 +10,7 @@
 #ifndef LAMBDACOMMON_URL_H
 #define LAMBDACOMMON_URL_H
 
-#include "filesystem/filesystem.h"
+#include "fs/filesystem.h"
 #include "../connection/address.h"
 
 namespace lambdacommon

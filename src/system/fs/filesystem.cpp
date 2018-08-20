@@ -7,7 +7,7 @@
  * see the LICENSE file.
  */
 
-#include "../../../include/lambdacommon/system/filesystem/filesystem.h"
+#include "../../../include/lambdacommon/system/fs/filesystem.h"
 #include "../../../include/lambdacommon/lstring.h"
 #include <stdexcept>
 #include <sstream>
@@ -243,7 +243,7 @@ namespace lambdacommon
 		FilePath FilePath::sub(const FilePath &other) const
 		{
 			if (other._absolute)
-				throw std::runtime_error("lambdacommon->system/filesystem/filesystem.cpp@FilePath.sub(const FilePath&)(Line " + std::to_string(__LINE__ - 1) + "): Expected a relative path as argument!");
+				throw std::runtime_error("lambdacommon->system/fs/filesystem.cpp@FilePath.sub(const FilePath&)(Line " + std::to_string(__LINE__ - 1) + "): Expected a relative path as argument!");
 
 			FilePath result(*this);
 
@@ -257,7 +257,7 @@ namespace lambdacommon
 		 * OPERATORS
 		 */
 
-		FilePath FilePath::operator/(const FilePath &other)
+		FilePath FilePath::operator/(const FilePath &other) const
 		{
 			return sub(other);
 		}
@@ -280,12 +280,12 @@ namespace lambdacommon
 			return *this;
 		}
 
-		bool FilePath::operator==(const FilePath &_p)
+		bool FilePath::operator==(const FilePath &_p) const
 		{
 			return _p._path == _path;
 		}
 
-		bool FilePath::operator!=(const FilePath &_p)
+		bool FilePath::operator!=(const FilePath &_p) const
 		{
 			return _p._path != _path;
 		}

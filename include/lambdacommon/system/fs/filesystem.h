@@ -99,15 +99,15 @@ namespace lambdacommon
 			 * Operators
 			 */
 
-			FilePath operator/(const FilePath &other);
+			FilePath operator/(const FilePath &other) const;
 
 			FilePath &operator=(const FilePath &path);
 
 			FilePath &operator=(FilePath &&path) noexcept;
 
-			bool operator==(const FilePath &_path);
+			bool operator==(const FilePath &_path) const;
 
-			bool operator!=(const FilePath &_path);
+			bool operator!=(const FilePath &_path) const;
 		};
 
 #ifdef LAMBDA_WINDOWS
