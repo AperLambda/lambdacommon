@@ -49,6 +49,11 @@ namespace lambdacommon
 		return ResourceName(_domain, lambdastring::mergePath(_path, path));
 	}
 
+	std::string ResourceName::toString() const
+	{
+		return _domain + ":" + _path;
+	}
+
 	ResourceName &ResourceName::operator=(const ResourceName &other)
 	{
 		if (this != &other)

@@ -58,6 +58,12 @@ namespace lambdacommon
 		ResourceName sub(const std::string &path) const;
 
 		/*!
+		 * Gets the resource name as a string.
+		 * @return The resource name as a string.
+		 */
+		std::string toString() const;
+
+		/*!
 		 * Creates a new {@code ResourceName} from this resource name.
 		 * @param path The path to append.
 		 * @return The new {@code ResourceName} with the appended path.
