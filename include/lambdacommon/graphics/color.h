@@ -11,9 +11,12 @@
 #define LAMBDACOMMON_COLOR_H
 
 #include "../lambdacommon.h"
+#include <utility>
 
 namespace lambdacommon
 {
+	using namespace std::rel_ops;
+
 	class LAMBDACOMMON_API Color
 	{
 	private:
@@ -89,31 +92,105 @@ namespace lambdacommon
 		 */
 		uint8_t alphaAsInt() const;
 
+		/*!
+		 * Blends this color with a background color.
+		 * @param bgColor The background color.
+		 * @return The blended color.
+		 */
+		const Color blend(const Color &bgColor) const;
+
+		/*!
+		 * Mixes this color with another color.
+		 * @param b The other color.
+		 * @param ratio The mix ratio.
+		 * @return The mixed color.
+		 */
+		const Color mix(const Color &b, float ratio) const;
+
+		/*!
+		 * Gets the color as an hexadecimal color.
+		 * @return The hexadecimal color.
+		 */
+		uint64_t toHex() const;
+
+		/*!
+		 * Gets the color as a string.
+		 * @return The color as a string.
+		 */
+		std::string toString(bool hex = true) const;
+
+		bool operator==(const Color &other) const;
+
+		bool operator<(const Color &other) const;
+
+		const Color operator+(const Color &other) const;
+
+		/*!
+		 * Subtracts the specified color to the current color. Alpha is not subtracted.
+		 * @param other The color to subtract.
+		 * @return The subtracted color.
+		 */
+		const Color operator-(const Color &other) const;
+
+		const Color operator*(const Color &other) const;
+
+		const Color operator*(float coefficient) const;
+
+		Color &operator+=(const Color &other);
+
+		Color &operator-=(const Color &other);
+
+		Color &operator*=(const Color &other);
+
 		/**
 		 * Represents the black color.
 		 */
-		static Color BLACK;
+		static Color COLOR_BLACK;
 
 		/**
 		 * Represents the white color.
 		 */
-		static Color WHITE;
+		static Color COLOR_WHITE;
 
 		/**
 		 * Represents the red color.
 		 */
-		static Color RED;
+		static Color COLOR_RED;
 
 		/**
 		 * Represents the green color.
 		 */
-		static Color GREEN;
+		static Color COLOR_GREEN;
 
 		/**
 		 * Represents the blue color.
 		 */
-		static Color BLUE;
+		static Color COLOR_BLUE;
 	};
+
+	namespace color
+	{
+		/*!
+		 * Blends two colors.
+		 * @param fg The foreground color.
+		 * @param bg The background color.
+		 * @return The blended color.
+		 */
+		extern Color LAMBDACOMMON_API blend(const Color &fg, const Color &bg);
+
+		/*!
+		 * Mixes two different colors with a ratio.
+		 * @param a The first color to mix.
+		 * @param b The second color to mix.
+		 * @param ratio The mix ratio.
+		 * @return The mixed color.
+		 */
+		extern Color LAMBDACOMMON_API mix(const Color &a, const Color &b, float ratio);
+
+		extern Color LAMBDACOMMON_API fromHex(uint64_t hexColor, bool hasAlpha = true);
+
+		extern Color LAMBDACOMMON_API fromHex(const std::string &hexColor);
+	}
 
 	extern Color LAMBDACOMMON_API getColorByIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 }

@@ -11,6 +11,7 @@
 #define LAMBDACOMMON_TERMINAL_H
 
 #include "os.h"
+#include "../graphics/color.h"
 #include <vector>
 #include <iostream>
 
@@ -87,6 +88,8 @@ namespace lambdacommon
 		operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting);
 
 		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<std::string> stringVector);
+
+		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const Color &color);
 
 		/*!
 		 * This function will erase the current line in the stream.

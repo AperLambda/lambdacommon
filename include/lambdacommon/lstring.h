@@ -98,6 +98,10 @@ namespace lambdacommon
 
 		extern const std::string LAMBDACOMMON_API mergePath(std::string parent, const std::string &child);
 
+		extern int LAMBDACOMMON_API parseInt(const std::string &integer, int base = 10);
+
+		extern long LAMBDACOMMON_API parseLong(const std::string &longNumber, int base = 10);
+
 #ifdef LAMBDA_WINDOWS
 
 		/**

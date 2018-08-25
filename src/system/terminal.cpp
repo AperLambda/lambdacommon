@@ -32,8 +32,6 @@
 
 #endif
 
-using namespace std;
-
 namespace lambdacommon
 {
 	namespace terminal
@@ -44,11 +42,11 @@ namespace lambdacommon
 		 * INTERNAL
 		 */
 		inline
-		FILE *get_standard_stream(const ostream &stream)
+		FILE *get_standard_stream(const std::ostream &stream)
 		{
-			if (&stream == &cout)
+			if (&stream == &std::cout)
 				return stdout;
-			else if ((&stream == &cerr) || (&stream == &clog))
+			else if ((&stream == &std::cerr) || (&stream == &std::clog))
 				return stderr;
 
 			return nullptr;
@@ -56,13 +54,13 @@ namespace lambdacommon
 
 #ifdef WIN_FRIENDLY
 
-		HANDLE getTermHandle(ostream &stream)
+		HANDLE getTermHandle(std::ostream &stream)
 		{
 			// Get terminal handle
 			HANDLE hTerminal = INVALID_HANDLE_VALUE;
-			if (&stream == &cout)
+			if (&stream == &std::cout)
 				hTerminal = GetStdHandle(STD_OUTPUT_HANDLE);
-			else if (&stream == &cerr)
+			else if (&stream == &std::cerr)
 				hTerminal = GetStdHandle(STD_ERROR_HANDLE);
 			return hTerminal;
 		}
@@ -107,7 +105,7 @@ namespace lambdacommon
 			SetConsoleCursorPosition(hConsole, coordScreen);
 		}
 
-		inline void win_change_attributes(ostream &stream, int foreground, int background)
+		inline void win_change_attributes(std::ostream &stream, int foreground, int background)
 		{
 			static WORD defaultAttributes = 0;
 
@@ -156,13 +154,13 @@ namespace lambdacommon
 		 * IMPLEMENTATION
 		 */
 
-		ostream LAMBDACOMMON_API &operator<<(ostream &stream, TermFormatting termFormatting)
+		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting termFormatting)
 		{
-			vector<TermFormatting> formats = {termFormatting};
+			std::vector<TermFormatting> formats{termFormatting};
 			return stream << formats;
 		}
 
-		ostream LAMBDACOMMON_API &operator<<(ostream &stream, vector<TermFormatting> termFormatting)
+		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting)
 		{
 			if (isTTY(stream))
 			{
@@ -292,7 +290,7 @@ namespace lambdacommon
 			auto formattings = termFormatting.size();
 			for (size_t i = 0; i < formattings; i++)
 			{
-				std::string str = to_string(static_cast<int>(termFormatting[i]));
+				std::string str = std::to_string(static_cast<int>(termFormatting[i]));
 				if (i != formattings - 1)
 					ansiSequence += (str + ";");
 				else
@@ -303,22 +301,28 @@ namespace lambdacommon
 			return stream;
 		}
 
-		ostream LAMBDACOMMON_API &operator<<(ostream &stream, vector<string> stringVector)
+		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<std::string> stringVector)
 		{
 			stream << lambdastring::to_string(stringVector);
 			return stream;
 		}
 
-		ostream LAMBDACOMMON_API &eraseCurrentLine(ostream &stream)
+		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const Color &color)
+		{
+			stream << color.toString();
+			return stream;
+		}
+
+		std::ostream LAMBDACOMMON_API &eraseCurrentLine(std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
 #else
-			stream << string("\033[2K");
+			stream << "\033[2K";
 #endif
 			return stream;
 		}
 
-		std::ostream LAMBDACOMMON_API &clear(ostream &stream)
+		std::ostream LAMBDACOMMON_API &clear(std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
 			if (isTTY(stream))
@@ -331,7 +335,7 @@ namespace lambdacommon
 			return stream;
 		}
 
-		void LAMBDACOMMON_API setCursorPosition(unsigned short x, unsigned short y, ostream &stream)
+		void LAMBDACOMMON_API setCursorPosition(unsigned short x, unsigned short y, std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
 			if (isTTY(stream))
@@ -343,14 +347,14 @@ namespace lambdacommon
 				return;
 			}
 #endif
-			stream << ("\033[" + to_string(y) + ';' + to_string(x) + "H");
+			stream << ("\033[" + std::to_string(y) + ';' + std::to_string(x) + "H");
 		}
 
 		/*
 		 * Sound manipulations
 		 */
 
-		ostream LAMBDACOMMON_API &bell(ostream &stream)
+		std::ostream LAMBDACOMMON_API &bell(std::ostream &stream)
 		{
 			stream << ((char) 0x7);
 			return stream;
@@ -390,7 +394,7 @@ namespace lambdacommon
 #endif
 		}
 
-		bool LAMBDACOMMON_API isTTY(const ostream &stream)
+		bool LAMBDACOMMON_API isTTY(const std::ostream &stream)
 		{
 		FILE *std_stream = get_standard_stream(stream);
 
@@ -414,7 +418,7 @@ namespace lambdacommon
 #endif
 		}
 
-		bool LAMBDACOMMON_API setTerminalTitle(const std::string &title, ostream &stream)
+		bool LAMBDACOMMON_API setTerminalTitle(const std::string &title, std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
 			if (isTTY(stream))

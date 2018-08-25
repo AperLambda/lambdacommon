@@ -136,6 +136,38 @@ namespace lambdacommon
 			return merged;
 		}
 
+		int LAMBDACOMMON_API parseInt(const std::string &integer, int base)
+		{
+			try
+			{
+				return std::stoi(integer, nullptr, base);
+			}
+			catch (const std::invalid_argument &error)
+			{
+				return 0;
+			}
+			catch (const std::out_of_range &error)
+			{
+				return 0;
+			}
+		}
+
+		long LAMBDACOMMON_API parseLong(const std::string &longNumber, int base)
+		{
+			try
+			{
+				return std::stol(longNumber, nullptr, base);
+			}
+			catch (const std::invalid_argument &error)
+			{
+				return 0;
+			}
+			catch (const std::out_of_range &error)
+			{
+				return 0;
+			}
+		}
+
 // Some windows shit.
 #ifdef LAMBDA_WINDOWS
 #ifndef __GNUC__

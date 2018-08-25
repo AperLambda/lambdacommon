@@ -334,11 +334,11 @@ namespace lambdacommon
 			{
 				i = stoi(str);
 			}
-			catch (std::invalid_argument e)
+			catch (const std::invalid_argument &e)
 			{
 				i = 0;
 			}
-			catch (std::out_of_range e)
+			catch (const std::out_of_range &e)
 			{
 				i = 0;
 			}

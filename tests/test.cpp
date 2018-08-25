@@ -3,6 +3,7 @@
 #include <lambdacommon/resources.h>
 #include <lambdacommon/system/uri.h>
 #include <lambdacommon/exceptions/exceptions.h>
+#include <lambdacommon/maths.h>
 
 using namespace lambdacommon;
 using namespace uri;
@@ -184,6 +185,70 @@ int main()
 		return 1;
 	}
 
+	cout << "===== MATHS SECTION =====" << endl;
+	testsCount = 0;
+	testsPassed = 0;
+
+	testsCount++;
+	if (test("maths::abs((int) 42)", []()
+		{
+			return maths::abs((int) 42) == 42;
+		}))
+		testsPassed++;
+
+	testsCount++;
+	if (test("maths::abs((float) -64.0f)", []()
+		{
+			return maths::abs(-64.f) == 64.f;
+		}))
+		testsPassed++;
+
+	testsCount++;
+	if (test("maths::min(42, 64)", []()
+		{
+			return maths::min(42, 64) == 42;
+		}))
+		testsPassed++;
+
+	testsCount++;
+	if (test("maths::max(42.0f, 64.0f)", []()
+		{
+			return maths::max(42.f, 64.f) == 64.f;
+		}))
+		testsPassed++;
+
+	testsCount++;
+	if (test("maths::min({-5.0, 2.0, 42.0, -56.0, 64.0})", []()
+		{
+			return maths::min({-5.0, 2.0, 42.0, -56.0, 64.0}) == -56.0;
+		}))
+		testsPassed++;
+
+	testsCount++;
+	if (test("maths::max({-5, 2, 42, -56, 64})", []()
+		{
+			return maths::max({-5, 2, 42, -56, 64}) == 64;
+		}))
+		testsPassed++;
+
+	testsCount++;
+	if (test("maths::clamp(128, 0, 255)", []()
+		{
+			return maths::clamp(128, 0, 255) == 128;
+		}))
+		testsPassed++;
+
+	testsCount++;
+	if (test("maths::clamp(32.f, 0.f, 1.f)", []()
+		{
+			return maths::clamp(32.f, 0.f, 1.f) == 1.f;
+		}))
+		testsPassed++;
+
+	cout << "Tests results: " + to_string(testsPassed) << '/' << to_string(testsCount) << endl;
+	if (testsPassed != testsCount)
+		return 1;
+
 	cout << "===== ResourceNames SECTION =====" << endl;
 	testsCount = 0;
 	testsPassed = 0;
@@ -221,6 +286,21 @@ int main()
 			auto base = BASE_RESOURCENAME;
 			auto newRes = base / "owo";
 			return newRes.getName() == "value/path/owo";
+		}))
+		testsPassed++;
+
+	cout << "Tests results: " + to_string(testsPassed) << '/' << to_string(testsCount) << endl;
+	if (testsPassed != testsCount)
+		return 1;
+
+	cout << "===== Color SECTION =====" << endl;
+	testsCount = 0;
+	testsPassed = 0;
+
+	testsCount++;
+	if (test("color::fromHex(0xCE0031AA) => rgba(206, 0, 49, 170)", []()
+		{
+			return color::fromHex(0xCE0031AA).toString(false) == "rgba(206, 0, 49, 170)";
 		}))
 		testsPassed++;
 
