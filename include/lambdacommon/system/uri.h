@@ -13,6 +13,11 @@
 #include "fs/filesystem.h"
 #include "../connection/address.h"
 
+#ifdef LAMBDA_WINDOWS
+#  pragma warning(push)
+#  pragma warning(disable:4101)
+#endif
+
 namespace lambdacommon
 {
 	namespace uri

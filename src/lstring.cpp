@@ -13,6 +13,11 @@
 #include <utility>
 #include <algorithm>
 
+#ifdef LAMBDA_WINDOWS
+#  pragma warning(push)
+#  pragma warning(disable:4101)
+#endif
+
 namespace lambdacommon
 {
 	namespace lambdastring

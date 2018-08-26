@@ -410,7 +410,7 @@ namespace lambdacommon
 #ifdef WIN_FRIENDLY
 			TCHAR currentTitle[MAX_PATH];
 			if (GetConsoleTitle(currentTitle, MAX_PATH))
-				return string(currentTitle);
+				return {currentTitle};
 			else
 				return "";
 #else

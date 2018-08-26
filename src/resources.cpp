@@ -13,6 +13,11 @@
 #include <fstream>
 #include <sstream>
 
+#ifdef LAMBDA_WINDOWS
+#  pragma warning(push)
+#  pragma warning(disable:4101)
+#endif
+
 namespace lambdacommon
 {
 	ResourceName::ResourceName(const std::string &name)
