@@ -1,7 +1,7 @@
 #
 # AperLambda ignore file
 #
-# v0.4
+# v0.5
 
 # JetBrains
 .idea/
@@ -20,6 +20,7 @@ eclipse
 .project
 ## Visual Studio
 .vs/
+CMakeSettings.json
 
 # Build system
 ## Cargo
