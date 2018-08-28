@@ -12,6 +12,9 @@
 #include <iterator>
 #include <utility>
 #include <algorithm>
+#include <cuchar>
+#include <codecvt>
+#include <locale>
 
 #ifdef LAMBDA_WINDOWS
 #  pragma warning(push)
@@ -58,9 +61,10 @@ namespace lambdacommon
 		{
 			if (a.length() == b.length())
 			{
-				return equal(begin(a), end(a), begin(b), [](const char charA, const char charB)
-					{ return equalsIgnoreCase(charA, charB); });
-			} else
+				return equal(begin(a), end(a), begin(b),
+							 [](const char charA, const char charB) { return equalsIgnoreCase(charA, charB); });
+			}
+			else
 				return false;
 		}
 
@@ -121,12 +125,12 @@ namespace lambdacommon
 			return result;
 		}
 
-		bool LAMBDACOMMON_API endsWith(const std::string& str, const std::string& suffix)
+		bool LAMBDACOMMON_API endsWith(const std::string &str, const std::string &suffix)
 		{
-			return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
+			return str.size() >= suffix.size() && 0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix);
 		}
 
-		bool LAMBDACOMMON_API startsWith(const std::string& str, const std::string& prefix)
+		bool LAMBDACOMMON_API startsWith(const std::string &str, const std::string &prefix)
 		{
 			return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
 		}
@@ -173,7 +177,6 @@ namespace lambdacommon
 			}
 		}
 
-// Some windows shit.
 #ifdef LAMBDA_WINDOWS
 #ifndef __GNUC__
 
@@ -184,16 +187,17 @@ namespace lambdacommon
 			std::string string;
 			if (!wstring.empty())
 			{
-				int size = WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int) wstring.size(), NULL, 0, NULL, NULL);
+				int size = WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int) wstring.size(), nullptr, 0, nullptr,
+											   nullptr);
 				string.resize(size, 0);
-				WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int) wstring.size(), &string[0], size, NULL, NULL);
+				WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int) wstring.size(), &string[0], size, nullptr, nullptr);
 			}
 			return string;
 		}
 
 		std::wstring LAMBDACOMMON_API convertStringToWString(std::string string)
 		{
-			int size = MultiByteToWideChar(CP_UTF8, 0, &string[0], (int) string.size(), NULL, 0);
+			int size = MultiByteToWideChar(CP_UTF8, 0, &string[0], (int) string.size(), nullptr, 0);
 			std::wstring result(size, 0);
 			MultiByteToWideChar(CP_UTF8, 0, &string[0], (int) string.size(), &result[0], size);
 			return result;

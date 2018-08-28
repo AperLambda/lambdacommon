@@ -58,8 +58,8 @@ int main()
 
 	char aChar = 'w';
 	char bChar = 'W';
-	string aString = "wAperClem";
-	string bString = "wApErClEm";
+	string aString = "LambdAurora";
+	string bString = "lAmbdaUrOrA";
 
 	uint32_t testsCount = 0;
 	uint32_t testsPassed = 0;
