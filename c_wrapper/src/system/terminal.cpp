@@ -9,6 +9,7 @@
 
 #include "../../include/clambdacommon/system/terminal.h"
 #include <lambdacommon/system/terminal.h>
+#include <stdarg.h>
 
 #if defined(LAMBDA_WINDOWS) || defined(__CYGWIN__)
 
