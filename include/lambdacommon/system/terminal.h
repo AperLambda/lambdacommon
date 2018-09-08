@@ -99,16 +99,26 @@ namespace lambdacommon
 		 */
 		extern std::ostream LAMBDACOMMON_API &eraseCurrentLine(std::ostream &stream = std::cout);
 
+		/*!
+		 * Clears the specified stream.
+		 * @param stream The stream to affect.
+		 * @return The affected stream.
+		 */
 		extern std::ostream LAMBDACOMMON_API &clear(std::ostream &stream = std::cout);
 
 		/*!
-		 * This function set the cursor on a new position.
+		 * Sets the cursor at the specified position.
+		 * @param x The x position.
+		 * @param y The y position.
+		 * @param stream The stream to which it applies.
 		 */
 		extern void LAMBDACOMMON_API
 		setCursorPosition(unsigned short x, unsigned short y, std::ostream &stream = std::cout);
 
 		/*!
-		 * This function set the cursor on a new position.
+		 * Sets the cursor at the specified position.
+		 * @param pos The position.
+		 * @param stream The stream to which it applies.
 		 */
 		inline void setCursorPosition(std::pair<unsigned short, unsigned short> pos, std::ostream &stream = std::cout)
 		{
@@ -131,7 +141,7 @@ namespace lambdacommon
 		 */
 
 		/*!
-		 * Setup the terminal.
+		 * Setups the terminal.
 		 * On Windows it enables ANSI escape codes if available.
 		 * On every system:
 		 *   - Calls useUTF8().
@@ -149,7 +159,8 @@ namespace lambdacommon
 		extern bool LAMBDACOMMON_API isTTY(const std::ostream &stream = std::cout);
 
 		/*!
-		 * Returns the title of the terminal. Warning: Only works on Windows, on Unix system this returns an empty string.
+		 * Gets the title of the terminal.
+		 * Warning: Only works on Windows, on Unix systems this returns an empty string.
 		 * @return The title of the terminal.
 		 */
 		extern std::string LAMBDACOMMON_API getTerminalTitle();

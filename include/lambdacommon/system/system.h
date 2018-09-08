@@ -81,7 +81,7 @@ namespace lambdacommon
 		 * Returns the computer's name as a string.
 		 * @return The computer's name.
 		 */
-		extern std::string LAMBDACOMMON_API getComputerName();
+		extern std::string LAMBDACOMMON_API getHostName();
 
 		/*!
 		 * Returns the OS' name at runtime.

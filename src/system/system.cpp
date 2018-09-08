@@ -151,7 +151,7 @@ namespace lambdacommon
 			return getMemoryTotal() - getMemoryAvailable();
 		}
 
-		std::string LAMBDACOMMON_API getComputerName()
+		std::string LAMBDACOMMON_API getHostName()
 		{
 			char infoBuf[INFO_BUFFER_SIZE];
 			DWORD bufCharCount = INFO_BUFFER_SIZE;
@@ -373,7 +373,7 @@ namespace lambdacommon
 			return memUsed;
 		}
 
-		std::string LAMBDACOMMON_API getComputerName()
+		std::string LAMBDACOMMON_API getHostName()
 		{
 			char hostname[HOST_NAME_MAX];
 			gethostname(hostname, HOST_NAME_MAX);

@@ -86,10 +86,11 @@ if (LAMBDACOMMON_INSTALL)
 
         add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
     endif()
-
 endif ()
 
 # Build the tests if the option is on.
 if (LAMBDACOMMON_BUILD_TESTS)
     add_subdirectory(tests)
 endif ()
+
+add_subdirectory(c_wrapper)
