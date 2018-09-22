@@ -126,8 +126,6 @@ namespace lambdacommon
 		 */
 		extern long LAMBDACOMMON_API parseLong(const std::string &longNumber, int base = 10);
 
-#ifdef LAMBDA_WINDOWS
-
 		/**
 		 * Converts a std::wstring to a std::string.
 		 * @param wstring The std::wstring to convert.
@@ -141,8 +139,6 @@ namespace lambdacommon
 		 * @return The converted wstring.
 		 */
 		extern std::wstring LAMBDACOMMON_API convertStringToWString(std::string string);
-
-#endif
 	}
 }
 

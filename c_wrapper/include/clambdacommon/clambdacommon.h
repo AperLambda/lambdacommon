@@ -39,6 +39,8 @@
 #  define CLAMBDA_CYGWIN
 #endif
 
+#include "maths.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

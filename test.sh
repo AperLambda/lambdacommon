@@ -14,6 +14,5 @@ return 1;
 fi
 
 cd build/
-cp liblambdacommon.so tests
-cd tests
-./lambdacommon_test
+./tests/lambdacommon_test
+./c_wrapper/tests/clambdacommon_test

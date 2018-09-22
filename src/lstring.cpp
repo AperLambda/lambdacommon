@@ -179,7 +179,11 @@ namespace lambdacommon
 
 #ifdef LAMBDA_WINDOWS
 #ifndef __GNUC__
+#define CONVERT_WSTRING_WINDOWS_WAY
+#endif
+#endif
 
+#ifdef CONVERT_WSTRING_WINDOWS_WAY
 #include <Windows.h>
 
 		std::string LAMBDACOMMON_API convertWStringToString(std::wstring wstring)
@@ -219,7 +223,6 @@ namespace lambdacommon
 			return out;
 		}
 
-#endif
 #endif
 
 	}

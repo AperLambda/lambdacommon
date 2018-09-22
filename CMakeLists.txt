@@ -34,7 +34,7 @@ set(SOURCES_GRAPHICS src/graphics/color.cpp)
 set(SOURCES_FILESYSTEM src/system/fs/filesystem.cpp)
 set(SOURCES_SERIALIZERS)
 set(SOURCES_SYSTEM ${SOURCES_FILESYSTEM} src/system/os.cpp src/system/terminal.cpp src/system/system.cpp src/system/uri.cpp)
-set(SOURCES_BASE src/lambdacommon.cpp src/serializable.cpp src/lstring.cpp src/path.cpp src/resources.cpp)
+set(SOURCES_BASE src/lambdacommon.cpp src/serializable.cpp src/lstring.cpp src/path.cpp src/resources.cpp src/maths.cpp)
 set(SOURCES_FILES ${SOURCES_CONNECTION} ${SOURCES_DOCUMENT} ${SOURCES_GRAPHICS} ${SOURCES_SERIALIZERS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
 
 # Now build the library

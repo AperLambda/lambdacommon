@@ -10,7 +10,15 @@
 #ifndef LAMBDACOMMON_MATHS_H
 #define LAMBDACOMMON_MATHS_H
 
+/*
+ * maths.h
+ *
+ * Note: Never use `using namespace maths;` with this header, else the std and this will be conflicting.
+ */
+
 #include "lambdacommon.h"
+
+#define LCOMMON_PI 3.14159265359
 
 namespace lambdacommon
 {
@@ -116,6 +124,62 @@ namespace lambdacommon
 		N clamp(N number, N min, N max)
 		{
 			return maths::min(maths::max(number, min), max);
+		}
+
+		/*
+		 * Trigonometric functions.
+		 */
+
+		/*!
+		 * Converts a degree value to a radian value.
+		 * @param degrees Value representing an angle, expressed in degrees.
+		 * @return The radian value.
+		 */
+		double radians(double degrees);
+
+		/*!
+		 * Converts a degree value to a radian value.
+		 * @param degrees Value representing an angle, expressed in degrees.
+		 * @return The radian value.
+		 */
+		float radians(float degrees);
+
+		/*!
+		 * Converts a degree value to a radian value.
+		 * @tparam N The type of the value.
+		 * @param degrees Value representing an angle, expressed in degrees.
+		 * @return The radian value.
+		 */
+		template<typename N>
+		double radians(N degrees)
+		{
+			return radians(static_cast<double>(degrees));
+		}
+
+		/*!
+		 * Converts a radian value to a radian value.
+		 * @param degrees Value representing an angle, expressed in radians.
+		 * @return The degree value.
+		 */
+		double degrees(double radians);
+
+		/*!
+		 * Converts a radian value to a radian value.
+		 * @param degrees Value representing an angle, expressed in radians.
+		 * @return The degree value.
+		 */
+		float degrees(float radians);
+
+		/*!
+		 * Converts a radian value to a radian value.
+		 * @tparam N The type of the value.
+		 * @param degrees Value representing an angle, expressed in radians.
+		 * @return The degree value.
+		 */
+		template<typename N>
+		double degrees(N radians)
+		{
+			return degrees(static_cast<double>(degrees));
 		}
 	}
 }
