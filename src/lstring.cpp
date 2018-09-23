@@ -177,6 +177,41 @@ namespace lambdacommon
 			}
 		}
 
+		namespace utf8
+		{
+			char32_t LAMBDACOMMON_API toUTF32(const std::string &character)
+			{
+				return toUTF32(character.c_str());
+			}
+
+			char32_t LAMBDACOMMON_API toUTF32(const char *character)
+			{
+				auto result = static_cast<char32_t>(-1);
+
+				if (!character)
+					return result;
+
+				if ((character[0] & 0x80) == 0x0)
+					result = (char32_t) character[0];
+
+				if ((character[0] & 0xC0) == 0xC0)
+					result = static_cast<char32_t>(((character[0] & 0x3F) << 6) | (character[1] & 0x3F));
+
+				if ((character[0] & 0xE0) == 0xE0)
+					result = static_cast<char32_t>(((character[0] & 0x1F) << (6 + 6)) | ((character[1] & 0x3F) << 6) | (character[2] & 0x3F));
+
+				if ((character[0] & 0xF0) == 0xF0)
+					result = static_cast<char32_t>(((character[0] & 0x0F) << (6 + 6 + 6)) | ((character[1] & 0x3F) << (6 + 6)) |
+												   ((character[2] & 0x3F) << 6) | (character[3] & 0x3F));
+
+				if ((character[0] & 0xF8) == 0xF8)
+					result = static_cast<char32_t>(((character[0] & 0x07) << (6 + 6 + 6 + 6)) | ((character[1] & 0x3F) << (6 + 6 + 6)) |
+												   ((character[2] & 0x3F) << (6 + 6)) | ((character[3] & 0x3F) << 6) | (character[4] & 0x3F));
+
+				return result;
+			}
+		}
+
 #ifdef LAMBDA_WINDOWS
 #ifndef __GNUC__
 #define CONVERT_WSTRING_WINDOWS_WAY
@@ -184,6 +219,7 @@ namespace lambdacommon
 #endif
 
 #ifdef CONVERT_WSTRING_WINDOWS_WAY
+
 #include <Windows.h>
 
 		std::string LAMBDACOMMON_API convertWStringToString(std::wstring wstring)

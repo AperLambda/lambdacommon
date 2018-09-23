@@ -126,6 +126,27 @@ namespace lambdacommon
 		 */
 		extern long LAMBDACOMMON_API parseLong(const std::string &longNumber, int base = 10);
 
+		/*
+		 * String conversions
+		 */
+
+		namespace utf8
+		{
+			/*!
+			 * Converts an UTF-8 character to an UTF-32 character.
+			 * @param character Value representing an UTF-8 character.
+			 * @return The UTF-32 character.
+			 */
+			extern char32_t LAMBDACOMMON_API toUTF32(const std::string &character);
+
+			/*!
+			 * Converts an UTF-8 character to an UTF-32 character.
+			 * @param character Value representing an UTF-8 character.
+			 * @return The UTF-32 character.
+			 */
+			extern char32_t LAMBDACOMMON_API toUTF32(const char *character);
+		}
+
 		/**
 		 * Converts a std::wstring to a std::string.
 		 * @param wstring The std::wstring to convert.
