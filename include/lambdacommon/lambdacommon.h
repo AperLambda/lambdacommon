@@ -42,7 +42,7 @@
 
 #define LAMBDACOMMON_VERSION_MAJOR 1
 #define LAMBDACOMMON_VERSION_MINOR 6
-#define LAMBDACOMMON_VERSION_PATCH 11
+#define LAMBDACOMMON_VERSION_PATCH 12
 
 // Deletes the pointer and sets the variable to null. It's just simpler to write like this.
 #define LCOMMON_DELETE_POINTER(pointer) delete pointer; pointer = nullptr;

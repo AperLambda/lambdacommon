@@ -179,7 +179,7 @@ namespace lambdacommon
 		template<typename N>
 		double degrees(N radians)
 		{
-			return degrees(static_cast<double>(degrees));
+			return degrees(static_cast<double>(radians));
 		}
 	}
 }
