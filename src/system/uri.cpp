@@ -8,7 +8,7 @@
  */
 
 #include "../../include/lambdacommon/system/uri.h"
-#include "../../include/lambdacommon/lstring.h"
+#include "../../include/lambdacommon/system/system.h"
 #include "../../include/lambdacommon/exceptions/exceptions.h"
 #include <sstream>
 #include <regex>
@@ -19,19 +19,19 @@ namespace lambdacommon
 	{
 		SchemeType LAMBDACOMMON_API getSchemeTypeByString(const std::string &scheme)
 		{
-			if (lambdastring::equalsIgnoreCase(scheme, "file"))
+			if (lstring::equalsIgnoreCase(scheme, "file"))
 				return FILE;
-			else if (lambdastring::equalsIgnoreCase(scheme, "ftp"))
+			else if (lstring::equalsIgnoreCase(scheme, "ftp"))
 				return FTP;
-			else if (lambdastring::equalsIgnoreCase(scheme, "gopher"))
+			else if (lstring::equalsIgnoreCase(scheme, "gopher"))
 				return GOPHER;
-			else if (lambdastring::equalsIgnoreCase(scheme, "http"))
+			else if (lstring::equalsIgnoreCase(scheme, "http"))
 				return HTTP;
-			else if (lambdastring::equalsIgnoreCase(scheme, "https"))
+			else if (lstring::equalsIgnoreCase(scheme, "https"))
 				return HTTPS;
-			else if (lambdastring::equalsIgnoreCase(scheme, "ws"))
+			else if (lstring::equalsIgnoreCase(scheme, "ws"))
 				return WS;
-			else if (lambdastring::equalsIgnoreCase(scheme, "wss"))
+			else if (lstring::equalsIgnoreCase(scheme, "wss"))
 				return WSS;
 			else
 				return OTHER;
@@ -76,8 +76,8 @@ namespace lambdacommon
 		{
 			std::vector<std::pair<std::string, std::string>> newQueries;
 			for (auto query : queries)
-				newQueries.emplace_back(lambdastring::replaceAll(query.first, " ", "%20"),
-										lambdastring::replaceAll(query.second, " ", "%20"));
+				newQueries.emplace_back(lstring::replaceAll(query.first, " ", "%20"),
+										lstring::replaceAll(query.second, " ", "%20"));
 			return newQueries;
 		};
 
@@ -172,7 +172,7 @@ namespace lambdacommon
 		{
 			bool hasQuery = false;
 			for (auto q : *_queries)
-				if (lambdastring::equals(q.first, query))
+				if (lstring::equals(q.first, query))
 				{
 					hasQuery = true;
 					break;
@@ -184,7 +184,7 @@ namespace lambdacommon
 		{
 			std::string result = "";
 			for (auto q : *_queries)
-				if (lambdastring::equals(q.first, query))
+				if (lstring::equals(q.first, query))
 				{
 					result = q.second;
 					break;
@@ -248,6 +248,11 @@ namespace lambdacommon
 				oss << '#' << getFragment();
 
 			return oss.str();
+		}
+
+		void URI::openInSystem() const
+		{
+			system::openURI(toString('/'));
 		}
 
 		URI &URI::operator=(const URI &url)
@@ -367,7 +372,7 @@ namespace lambdacommon
 			if (authSeparator != std::string::npos)
 			{
 				auto userAndPwd = tmpUrl.substr(0, authSeparator);
-				auto split = lambdastring::split(userAndPwd, ':');
+				auto split = lstring::split(userAndPwd, ':');
 				if (split.size() == 1)
 					throw ParseException("Cannot parse uri '" + url + "': missing username or password!");
 				username = split[0];
@@ -399,7 +404,7 @@ namespace lambdacommon
 						path = tmpUrl.substr(pathSeparator + 1, (fragmentSeparator - pathSeparator - 1));
 				}
 				else
-					path = tmpUrl;
+					path = tmpUrl.substr(pathSeparator);
 			}
 
 			std::vector<std::pair<std::string, std::string>> queries;
@@ -417,7 +422,7 @@ namespace lambdacommon
 
 				if (!strQueries.empty())
 				{
-					auto splittedQueries = lambdastring::split(strQueries, '&');
+					auto splittedQueries = lstring::split(strQueries, '&');
 					for (auto query : splittedQueries)
 					{
 						size_t j;
@@ -452,7 +457,7 @@ namespace lambdacommon
 					host = tmpAddress;
 				else
 					host = tmpAddress.substr(0, addressSeparator);
-				host = lambdastring::replaceAll(lambdastring::replaceAll(host, "[", ""), "]", "");
+				host = lstring::replaceAll(lstring::replaceAll(host, "[", ""), "]", "");
 				port port = 0;
 				if (addressSeparator != std::string::npos && addressSeparator > endIPv6)
 				{

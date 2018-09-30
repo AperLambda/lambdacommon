@@ -65,7 +65,7 @@ int main()
 	bool root = system::isProcessRunningAsRoot();
 	cout << " Is run as root: "
 		 << (root ? vector<TermFormatting>{LIGHT_GREEN, BOLD} : vector<TermFormatting>{LIGHT_RED, BOLD})
-		 << lambdastring::to_string(root) << RESET << endl;
+		 << lstring::to_string(root) << RESET << endl;
 	cout << " CPU: " << LIGHT_GREEN << system::getProcessorName() << " (" << to_string(system::getProcessorCores())
 		 << " cores)" << RESET << endl;
 	uint64_t totalMem = system::getMemoryTotal();
@@ -91,23 +91,23 @@ int main()
 
 	cout << "===== STRING SECTION =====" << endl;
 	testsCount++;
-	if (test("lambdastring::equalsIgnoreCase((const char) 'w', (const char) 'W')", []()
+	if (test("lstring::equalsIgnoreCase((const char) 'w', (const char) 'W')", []()
 	{
-		return lambdastring::equalsIgnoreCase('w', 'W');
+		return lstring::equalsIgnoreCase('w', 'W');
 	}))
 		testsPassed++;
 
 	testsCount++;
-	if (test("lambdastring::equals(const std::string &, const std::string &)", []()
+	if (test("lstring::equals(const std::string &, const std::string &)", []()
 	{
-		return !lambdastring::equals("LambdAurora", "lAmbdaUrOrA");
+		return !lstring::equals("LambdAurora", "lAmbdaUrOrA");
 	}))
 		testsPassed++;
 
 	testsCount++;
-	if (test("lambdastring::equalsIgnoreCase(const std::string &, const std::string &)", []()
+	if (test("lstring::equalsIgnoreCase(const std::string &, const std::string &)", []()
 	{
-		return lambdastring::equalsIgnoreCase("LambdAurora", "lAmbdaUrOrA");
+		return lstring::equalsIgnoreCase("LambdAurora", "lAmbdaUrOrA");
 	}))
 		testsPassed++;
 
@@ -147,7 +147,7 @@ int main()
 			 "\" and string \"notFoundDir\"", [herePath]()
 			 {
 				 auto h404rePath = herePath / "notFoundDir";
-				 return lambdastring::equals(h404rePath.getFileName(), "notFoundDir");
+				 return lstring::equals(h404rePath.getFileName(), "notFoundDir");
 			 }))
 		testsPassed++;
 
@@ -170,7 +170,7 @@ int main()
 	testsCount++;
 	if (test("URI.toString(): expected: \"" + expected + "\" got: \"" + uri_toString + "\"", [uri_toString, expected]()
 	{
-		return lambdastring::equals(uri_toString, expected);
+		return lstring::equals(uri_toString, expected);
 	}))
 		testsPassed++;
 
@@ -183,17 +183,17 @@ int main()
 	if (test("URI.fromFilePath(const fs::FilePath&) (with \"" + herePath.toString() + "\"): expected: \"" + expected +
 			 "\" got: \"" + uri_toString + "\"", [uri_toString, expected]()
 			 {
-				 return lambdastring::equals(uri_toString, expected);
+				 return lstring::equals(uri_toString, expected);
 			 }))
 		testsPassed++;
 
-	expected = "https://www.youtube.com/watch?v=wh10k2LPZiI";
+	expected = "https://www.youtube.com/channel/UC2i7nj6wnh1Z2GQwvFeeKoA";
 	cout << "TESTING URI::fromString(STD::STRING) WITH \"" << expected << "\"...\nRESULT: ";
 	try
 	{
-		uri = uri::fromString("https://www.youtube.com/watch?v=wh10k2LPZiI");
+		uri = uri::fromString("https://www.youtube.com/channel/UC2i7nj6wnh1Z2GQwvFeeKoA");
 		uri_toString = uri.toString();
-		if (lambdastring::equals(uri_toString, expected))
+		if (lstring::equals(uri_toString, expected))
 			cout << LIGHT_GREEN << "OK. (" << uri_toString << ")" << RESET << endl;
 		else
 		{

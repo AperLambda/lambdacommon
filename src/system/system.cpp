@@ -11,29 +11,37 @@
 #include <sstream>
 
 #ifdef LAMBDA_WINDOWS
-
 #  define INFO_BUFFER_SIZE 32767
 
-#include <Windows.h>
-#include <WinBase.h>
-#include <intrin.h>
-#include <ShlObj.h>
+#  include <Windows.h>
+#  include <WinBase.h>
+#  include <intrin.h>
+#  include <ShlObj.h>
 
 #  ifndef __MINGW32__
 
 #    include <VersionHelpers.h>
 
 #  endif
-
 #else
+#  ifdef LAMBDA_MAC_OSX
 
-#include <unistd.h>
-#include <climits>
-#include <sys/types.h>
-#include <sys/sysinfo.h>
-#include <sys/utsname.h>
-#include <pwd.h>
-#include <fstream>
+#    include <CoreFoundation/CFBundle.h>
+#    include <ApplicationServices/ApplicationServices.h>
+
+#  elif defined(LAMBDA_CYGWIN)
+
+#    include <windows.h>
+
+#  endif
+
+#  include <unistd.h>
+#  include <climits>
+#  include <sys/types.h>
+#  include <sys/sysinfo.h>
+#  include <sys/utsname.h>
+#  include <pwd.h>
+#  include <fstream>
 
 #endif
 
@@ -236,7 +244,7 @@ namespace lambdacommon
 			PWSTR szPath;
 			if (FAILED(SHGetKnownFolderPath(FOLDERID_Profile, KF_FLAG_NO_ALIAS, NULL, &szPath)))
 				return "";
-			return std::string(lambdastring::convertWStringToString(std::wstring(szPath)));
+			return std::string(lstring::convertWStringToString(std::wstring(szPath)));
 #  endif // __MINGW32__
 		}
 
@@ -253,7 +261,7 @@ namespace lambdacommon
 			{
 				for (std::string line; std::getline(cpuinfo, line);)
 				{
-					if (lambdastring::equalsIgnoreCase(line.substr(0, 10), "model name"))
+					if (lstring::equalsIgnoreCase(line.substr(0, 10), "model name"))
 					{
 						size_t separatorIndex = line.find_first_of(':');
 						cpu = line.substr(separatorIndex + 2);
@@ -267,11 +275,11 @@ namespace lambdacommon
 
 		SysArchitecture LAMBDACOMMON_API getProcessorArch()
 		{
-			if (lambdastring::equals(getProcessorArchStr(), "x86_64"))
+			if (lstring::equals(getProcessorArchStr(), "x86_64"))
 				return SysArchitecture::X86_64;
-			else if (lambdastring::equals(getProcessorArchStr(), "i386"))
+			else if (lstring::equals(getProcessorArchStr(), "i386"))
 				return SysArchitecture::I386;
-			else if (lambdastring::equalsIgnoreCase(getProcessorArchStr().substr(0, 3), "ARM"))
+			else if (lstring::equalsIgnoreCase(getProcessorArchStr().substr(0, 3), "ARM"))
 				return SysArchitecture::ARM;
 			else
 				return SysArchitecture::UNKNOWN;
@@ -330,7 +338,7 @@ namespace lambdacommon
 
 				while (meminfo >> last)
 				{
-					if (lambdastring::equalsIgnoreCase(last, "MemAvailable:"))
+					if (lstring::equalsIgnoreCase(last, "MemAvailable:"))
 					{
 						meminfo >> memFree;
 						// kB to B
@@ -358,7 +366,7 @@ namespace lambdacommon
 
 				while (meminfo >> last)
 				{
-					if (lambdastring::equalsIgnoreCase(last, "Active:"))
+					if (lstring::equalsIgnoreCase(last, "Active:"))
 					{
 						meminfo >> memUsed;
 						// kB to B
@@ -408,7 +416,7 @@ namespace lambdacommon
 							record = true;
 						}
 						else if (record)
-							osName += " " + lambdastring::replaceAll(word, "\"", "");
+							osName += " " + lstring::replaceAll(word, "\"", "");
 					}
 					lsb_release_in.close();
 				}
@@ -519,6 +527,33 @@ namespace lambdacommon
 			return fIsRunAsAdmin == TRUE;
 #else
 			return getuid() == 0;
+#endif
+		}
+
+		void LAMBDACOMMON_API openURI(const std::string &uri)
+		{
+#ifdef LAMBDA_WINDOWS
+			// Use the Windows API.
+			ShellExecuteA(nullptr, "open", uri.c_str(), nullptr, nullptr, SW_SHOW);
+#elif defined(LAMBDA_MAC_OSX)
+			// Use the Apple's framework.
+			CFURLRef url = CFURLCreateWithBytes (
+				  nullptr,                        // allocator
+				  (UInt8*) uri.c_str(),     		// URLBytes
+				  url_str.length(),            	// length
+				  kCFStringEncodingASCII,      	// encoding
+				  nullptr                         // baseURL
+			);
+			LSOpenCFURLRef(url, nullptr);
+			CFRelease(url);
+#elif defined(LAMBDA_CYGWIN)
+			// Use of system is not recommended but none alternatives exist.
+			if (::system(nullptr))
+				::system((std::string("cygstart ") + uri).c_str());
+#else
+			// Use of system is not recommended but none alternatives exist.
+			if (::system(nullptr))
+				::system((std::string("xdg-open ") + uri).c_str());
 #endif
 		}
 

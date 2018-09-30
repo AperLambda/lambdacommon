@@ -7,7 +7,11 @@ option(LAMBDACOMMON_BUILD_TESTS "Build the λcommon test programs" ON)
 
 include(GenerateExportHeader)
 
-set(CMAKE_CXX_STANDARD 17)
+if(CYGWIN)
+	set(CMAKE_CXX_STANDARD 14)
+else()
+	set(CMAKE_CXX_STANDARD 17)
+endif()
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -march=native -mtune=native -ffast-math -D__extern_always_inline=\"extern __always_inline\"")
@@ -16,6 +20,10 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 elseif (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 endif ()
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework CoreFoundation -framework ApplicationServices")
+endif()
 
 # All files
 # There is the C++ headers files.

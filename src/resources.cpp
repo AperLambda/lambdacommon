@@ -51,7 +51,7 @@ namespace lambdacommon
 
 	ResourceName ResourceName::sub(const std::string &path) const
 	{
-		return ResourceName(_domain, lambdastring::mergePath(_path, path));
+		return ResourceName(_domain, lstring::mergePath(_path, path));
 	}
 
 	std::string ResourceName::toString() const

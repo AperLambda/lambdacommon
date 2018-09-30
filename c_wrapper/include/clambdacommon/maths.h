@@ -13,23 +13,23 @@
 #define LCOMMON_PI 3.14159265359
 
 // Define every functions that include templates as preprocessor defines.
-#define lcommon_maths_abs(number) (number < 0 ? -(number) : number)
-#define lcommon_maths_min(a, b) (a < b ? a : b)
-#define lcommon_maths_max(a, b) (a > b ? a : b)
-#define lcommon_maths_clamp(number, min, max) lcommon_maths_min(lcommon_maths_max(number, min), max) //maths::min(maths::max(number, min), max)
+#define lc_maths_abs(number) (number < 0 ? -(number) : number)
+#define lc_maths_min(a, b) (a < b ? a : b)
+#define lc_maths_max(a, b) (a > b ? a : b)
+#define lc_maths_clamp(number, min, max) lc_maths_min(lc_maths_max(number, min), max) //maths::min(maths::max(number, min), max)
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-double lcommon_maths_radians(double degrees);
+double lc_maths_radians(double degrees);
 
-float lcommon_maths_fradians(float degrees);
+float lc_maths_fradians(float degrees);
 
-double lcommon_maths_degrees(double radians);
+double lc_maths_degrees(double radians);
 
-float lcommon_maths_fdegrees(float radians);
+float lc_maths_fdegrees(float radians);
 
 #ifdef __cplusplus
 }

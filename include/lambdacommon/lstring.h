@@ -15,7 +15,7 @@
 
 namespace lambdacommon
 {
-	namespace lambdastring
+	namespace lstring
 	{
 		template<typename Out>
 		extern void LAMBDACOMMON_API split(const std::string &s, char delim, Out result);

@@ -40,7 +40,7 @@ namespace lambdacommon
 
 		/*!
 		 * Gets the domain of the resource.
-		 * @return The domain.
+		 * @return The domain of the resource.
 		 */
 		const std::string &getDomain() const;
 

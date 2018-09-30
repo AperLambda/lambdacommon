@@ -96,6 +96,11 @@ namespace lambdacommon
 
 			std::string toString(char delimiter = '/') const override;
 
+			/*!
+			 * Opens the URI in the default assigned application.
+			 */
+			void openInSystem() const;
+
 			URI &operator=(const URI &uri);
 
 			URI &operator=(URI &&uri) noexcept;

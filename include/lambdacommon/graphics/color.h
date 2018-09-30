@@ -123,6 +123,11 @@ namespace lambdacommon
 
 		bool operator<(const Color &other) const;
 
+		/*!
+		 * Adds the specified color to the current color.
+		 * @param other The color to add.
+		 * @return The added color.
+		 */
 		const Color operator+(const Color &other) const;
 
 		/*!
@@ -132,8 +137,18 @@ namespace lambdacommon
 		 */
 		const Color operator-(const Color &other) const;
 
+		/*!
+		 * Multiplies the specified color to the current color.
+		 * @param other The color to multiply.
+		 * @return The multiplied color.
+		 */
 		const Color operator*(const Color &other) const;
 
+		/*!
+		 * Multiplies the current color with a specified coefficient.
+		 * @param coefficient The multiplication coefficient.
+		 * @return The multiplied color.
+		 */
 		const Color operator*(float coefficient) const;
 
 		Color &operator+=(const Color &other);
@@ -172,11 +187,11 @@ namespace lambdacommon
 	{
 		/*!
 		 * Blends two colors.
-		 * @param fg The foreground color.
 		 * @param bg The background color.
+		 * @param fg The foreground color.
 		 * @return The blended color.
 		 */
-		extern Color LAMBDACOMMON_API blend(const Color &fg, const Color &bg);
+		extern Color LAMBDACOMMON_API blend(const Color &bg, const Color &fg);
 
 		/*!
 		 * Mixes two different colors with a ratio.
@@ -190,9 +205,9 @@ namespace lambdacommon
 		extern Color LAMBDACOMMON_API fromHex(uint64_t hexColor, bool hasAlpha = true);
 
 		extern Color LAMBDACOMMON_API fromHex(const std::string &hexColor);
-	}
 
-	extern Color LAMBDACOMMON_API getColorByIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+		extern Color LAMBDACOMMON_API fromIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	}
 }
 
 #endif //LAMBDACOMMON_COLOR_H

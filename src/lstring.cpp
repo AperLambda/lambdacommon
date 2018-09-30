@@ -12,7 +12,6 @@
 #include <iterator>
 #include <utility>
 #include <algorithm>
-#include <cuchar>
 #include <codecvt>
 #include <locale>
 
@@ -23,7 +22,7 @@
 
 namespace lambdacommon
 {
-	namespace lambdastring
+	namespace lstring
 	{
 		template<typename Out>
 		void LAMBDACOMMON_API split(const std::string &s, char delim, Out result)

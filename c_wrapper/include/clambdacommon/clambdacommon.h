@@ -51,7 +51,9 @@ extern "C" {
  * Gets the runtime version of lambdacommon as a string.
  * @param version The runtime version of lambdacommon.
  */
-const char* lcommon_getVersion();
+const char* lc_getVersion();
+
+void lc_deletePointer(void **pointer);
 
 #ifdef __cplusplus
 }

@@ -116,6 +116,12 @@ namespace lambdacommon
 		extern bool LAMBDACOMMON_API isProcessRunningAsRoot();
 
 		/*!
+		 * Opens the specified URI with the default application assigned to.
+		 * @param uri The URI to open.
+		 */
+		extern void LAMBDACOMMON_API openURI(const std::string &uri);
+
+		/*!
 		 * Sleeps the current thread for the specified time in milliseconds.
 		 * @param time Time to wait in milliseconds.
 		 */

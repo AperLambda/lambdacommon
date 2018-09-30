@@ -24,7 +24,7 @@ extern "C"
  * @param delim Delimiter.
  * @return The split string count.
  */
-//uint64_t lcommon_str_split(const char *s, char delim, char **output);
+//uint64_t lc_str_split(const char *s, char delim, char **output);
 
 /*!
  * Checks if two chars are equal with case insensitive.
@@ -32,7 +32,7 @@ extern "C"
  * @param b One of two chars.
  * @return True if they are equal with case insensitive else false.
  */
-bool lcommon_char_equalsIgnoreCase(char a, char b);
+bool lc_char_equalsIgnoreCase(char a, char b);
 
 /*!
  * Checks if two strings are equal.
@@ -40,7 +40,7 @@ bool lcommon_char_equalsIgnoreCase(char a, char b);
  * @param b One of two strings.
  * @return True if they are equal else false.
  */
-bool lcommon_str_equals(const char *a, const char *b);
+bool lc_str_equals(const char *a, const char *b);
 
 /*!
  * Checks if two strings are equal with case insensitive.
@@ -48,7 +48,7 @@ bool lcommon_str_equals(const char *a, const char *b);
  * @param b One of two strings.
  * @return True if they are equal with case insensitive else false.
  */
-bool lcommon_str_equalsIgnoreCase(const char *a, const char *b);
+bool lc_str_equalsIgnoreCase(const char *a, const char *b);
 
 /*!
  * Transforms a string to a full lower case string.
@@ -78,26 +78,26 @@ const char *to
  * @param value A boolean value.
  * @return The boolean value as a string.
  */
-const char *lcommon_bool_to_string(bool value);
+const char *lc_bool_to_string(bool value);
 
 /*!
  * Transforms a pointer address into a string value.
  * @param pointer The pointer address.
  * @return The pointer address as a string.
  */
-const char *lcommon_pointer_to_string(const void *pointer);
+const char *lc_pointer_to_string(const void *pointer);
 
-bool lcommon_str_endsWith(const char *str, const char *suffix);
+bool lc_str_endsWith(const char *str, const char *suffix);
 
-bool lcommon_str_startsWith(const char *str, const char *prefix);
+bool lc_str_startsWith(const char *str, const char *prefix);
 
-int lcommon_str_parseInt(const char *integer);
+int lc_str_parseInt(const char *integer);
 
-int lcommon_str_parseIntBase(const char *integer, int base);
+int lc_str_parseIntBase(const char *integer, int base);
 
-long lcommon_str_parseLong(const char *longNumber);
+long lc_str_parseLong(const char *longNumber);
 
-long lcommon_str_parseLongBase(const char *longNumber, int base);
+long lc_str_parseLongBase(const char *longNumber, int base);
 
 #ifdef __cplusplus
 }

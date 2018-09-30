@@ -55,12 +55,12 @@ namespace lambdacommon
 
 		FilePath::FilePath(const wchar_t *path) : Path()
 		{
-			set(lambdastring::convertWStringToString(std::wstring(path)));
+			set(lstring::convertWStringToString(std::wstring(path)));
 		}
 
 		FilePath::FilePath(const std::wstring &path) : Path()
 		{
-			set(lambdastring::convertWStringToString(path));
+			set(lstring::convertWStringToString(path));
 		}
 
 #endif
@@ -307,7 +307,7 @@ namespace lambdacommon
 		std::string LAMBDACOMMON_API getCurrentWorkingDirectoryStr()
 		{
 #ifdef LAMBDA_WINDOWS
-			return lambdastring::convertWStringToString(getCurrentWorkingDirectoryWStr());
+			return lstring::convertWStringToString(getCurrentWorkingDirectoryWStr());
 #else
 			char temp[PATH_MAX];
 			if (getcwd(temp, PATH_MAX) == nullptr)

@@ -303,7 +303,7 @@ namespace lambdacommon
 
 		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<std::string> stringVector)
 		{
-			stream << lambdastring::to_string(stringVector);
+			stream << lstring::to_string(stringVector);
 			return stream;
 		}
 

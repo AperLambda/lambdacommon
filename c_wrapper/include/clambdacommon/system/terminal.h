@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-enum lcommon_TermFormatting
+enum lc_TermFormatting
 {
 	/*
 	 * RESET
@@ -72,27 +72,27 @@ enum lcommon_TermFormatting
 	LC_TERM_B_LIGHT_CYAN = 106,
 	LC_TERM_B_WHITE = 107
 };
-typedef enum lcommon_TermFormatting lcommon_TermFormatting;
+typedef enum lc_TermFormatting lc_TermFormatting;
 
-struct lcommon_TermSize
+struct lc_TermSize
 {
 	unsigned short columns;
 	unsigned short rows;
 };
-typedef struct lcommon_TermSize lcommon_TermSize;
+typedef struct lc_TermSize lc_TermSize;
 
-void lcommon_term_setFormat(lcommon_TermFormatting formatting);
+void lc_term_setFormat(lc_TermFormatting formatting);
 
-void lcommon_term_setFormats(int count, ...);
+void lc_term_setFormats(int count, ...);
 
-void lcommon_term_clear();
+void lc_term_clear();
 
 /*!
  * Sets the cursor at the specified position.
  * @param x The x position.
  * @param y The y position.
  */
-void lcommon_term_setCursorPosition(unsigned short x, unsigned short y);
+void lc_term_setCursorPosition(unsigned short x, unsigned short y);
 
 /*
  * Sound manipulations
@@ -103,7 +103,7 @@ void lcommon_term_setCursorPosition(unsigned short x, unsigned short y);
  * @param stream The stream to affect.
  * @return The affected stream.
  */
-void lcommon_term_bell();
+void lc_term_bell();
 
 /*
  * Terminal manipulations
@@ -116,29 +116,29 @@ void lcommon_term_bell();
  *   - Calls useUTF8().
  * @return True if success else false.
  */
-bool lcommon_term_setup();
+bool lc_term_setup();
 
-void lcommon_term_useUTF8();
+void lc_term_useUTF8();
 
 /*!
  * Gets the title of the terminal.
  * Warning: Only works on Windows, on Unix system this returns an empty string.
  * @return The title of the terminal.
  */
-const char *lcommon_term_getTerminalTitle();
+const char *lc_term_getTerminalTitle();
 
 /*!
  * Sets the title of the terminal.
  * @param title The new title of the terminal.
  * @return True if success else false.
  */
-bool lcommon_term_setTerminalTitle(const char *title);
+bool lc_term_setTerminalTitle(const char *title);
 
 /*!
  * Gets the terminal's size.
  * @return The {@code TermSize} struct describing the terminal's size.
  */
-lcommon_TermSize lcommon_term_getTerminalSize();
+lc_TermSize lc_term_getTerminalSize();
 
 #ifdef __cplusplus
 }

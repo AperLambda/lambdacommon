@@ -20,19 +20,19 @@ extern "C" {
  *
  * Enum of different Operating system. Not complete.
  */
-enum lcommon_sys_OS
+enum lc_sys_OS
 {
-	WINDOWS_32 = 1,
-	WINDOWS_64 = 2,
-	MAC_OSX = 3,
-	LINUX = 5,
-	FREEBSD = 6,
-	NETBSD = 7,
-	OPENBSD = 8,
-	CYGWIN = 11,
-	OS_UNKNOWN = 0
+	LC_OS_WINDOWS_32 = 1,
+	LC_OS_WINDOWS_64 = 2,
+	LC_OS_MAC_OSX = 3,
+	LC_OS_LINUX = 5,
+	LC_OS_FREEBSD = 6,
+	LC_OS_NETBSD = 7,
+	LC_OS_OPENBSD = 8,
+	LC_OS_CYGWIN = 11,
+	LC_OS_OS_UNKNOWN = 0
 };
-typedef enum lcommon_sys_OS lcommon_sys_OS;
+typedef enum lc_sys_OS lc_sys_OS;
 
 /*! @brief Gets the Operating system used.
  *
@@ -40,9 +40,9 @@ typedef enum lcommon_sys_OS lcommon_sys_OS;
  *
  * @return The OS used.
  */
-lcommon_sys_OS lcommon_os_getOS();
+lc_sys_OS lc_os_getOS();
 
-const char *lcommon_os_getOSName(lcommon_sys_OS os);
+const char *lc_os_getOSName(lc_sys_OS os);
 
 #ifdef __cplusplus
 }
