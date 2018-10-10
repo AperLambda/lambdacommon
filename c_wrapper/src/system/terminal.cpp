@@ -35,7 +35,7 @@ void lc_term_setFormats(int count, ...)
 
 	va_start(vaList, count);
 
-	for (size_t i = 0; i < count; i++)
+	for (size_t i = 0; i < static_cast<size_t>(count); i++)
 	{
 		formats.push_back(static_cast<lambdacommon::terminal::TermFormatting>(va_arg(vaList, int)));
 	}

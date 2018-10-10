@@ -19,6 +19,7 @@
 #include "lambdacommon.h"
 
 #define LCOMMON_PI 3.14159265359
+#define LCOMMON_TAU 6.28318530718
 
 namespace lambdacommon
 {
@@ -135,14 +136,14 @@ namespace lambdacommon
 		 * @param degrees Value representing an angle, expressed in degrees.
 		 * @return The radian value.
 		 */
-		double radians(double degrees);
+		extern double LAMBDACOMMON_API radians(double degrees);
 
 		/*!
 		 * Converts a degree value to a radian value.
 		 * @param degrees Value representing an angle, expressed in degrees.
 		 * @return The radian value.
 		 */
-		float radians(float degrees);
+		extern float LAMBDACOMMON_API radians(float degrees);
 
 		/*!
 		 * Converts a degree value to a radian value.
@@ -161,14 +162,14 @@ namespace lambdacommon
 		 * @param degrees Value representing an angle, expressed in radians.
 		 * @return The degree value.
 		 */
-		double degrees(double radians);
+		extern double LAMBDACOMMON_API degrees(double radians);
 
 		/*!
 		 * Converts a radian value to a radian value.
 		 * @param degrees Value representing an angle, expressed in radians.
 		 * @return The degree value.
 		 */
-		float degrees(float radians);
+		extern float LAMBDACOMMON_API degrees(float radians);
 
 		/*!
 		 * Converts a radian value to a radian value.

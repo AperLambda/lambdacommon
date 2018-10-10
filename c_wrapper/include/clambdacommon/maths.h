@@ -11,6 +11,7 @@
 #define CLAMBDACOMMON_MATHS_H
 
 #define LCOMMON_PI 3.14159265359
+#define LCOMMON_TAU 6.28318530718
 
 // Define every functions that include templates as preprocessor defines.
 #define lc_maths_abs(number) (number < 0 ? -(number) : number)
