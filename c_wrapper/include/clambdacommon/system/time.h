@@ -10,7 +10,7 @@
 #ifndef CLAMBDACOMMON_TIME_H
 #define CLAMBDACOMMON_TIME_H
 
-#include <inttypes.h>
+#include <time.h>
 
 #ifdef __cplusplus
 extern "C" {

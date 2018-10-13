@@ -102,7 +102,7 @@ int main()
 	if (testsPassed != testsCount)
 		return 1;
 
-	printf("\nTests execution time: %lldms", (lc_time_getTimeMillis() - start));
+	printf("\nTests execution time: %lldms", (long long) (lc_time_getTimeMillis() - start));
 
 	return 0;
 }
