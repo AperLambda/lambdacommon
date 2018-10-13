@@ -5,5 +5,9 @@ set(CMAKE_CXX_STANDARD 11)
 
 include_directories(../include)
 
-add_executable(lambdacommon_test test.cpp)
+if (WIN32)
+	set(LCOMMON_ICON lambdacommon.rc)
+endif ()
+
+add_executable(lambdacommon_test test.cpp ${LCOMMON_ICON})
 target_link_libraries(lambdacommon_test lambdacommon)

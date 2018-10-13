@@ -12,6 +12,7 @@
 
 #include "os.h"
 #include "terminal.h"
+#include "time.h"
 
 #include <inttypes.h>
 

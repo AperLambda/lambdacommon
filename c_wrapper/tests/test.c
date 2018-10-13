@@ -20,6 +20,7 @@ else \
 
 int main()
 {
+	time_t start = lc_time_getTimeMillis();
 	lc_term_setup();
 	lc_term_setTerminalTitle(u8"cλcommon - tests");
 
@@ -100,6 +101,8 @@ int main()
 	printf("Tests results: %u/%u\n", testsPassed, testsCount);
 	if (testsPassed != testsCount)
 		return 1;
+
+	printf("\nTests execution time: %lldms", (lc_time_getTimeMillis() - start));
 
 	return 0;
 }

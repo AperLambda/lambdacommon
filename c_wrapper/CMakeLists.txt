@@ -7,12 +7,12 @@ include_directories(../include)
 # All files
 # This is the C headers files.
 set(C_HEADERS_GRAPHICS include/clambdacommon/graphics/color.h)
-set(C_HEADERS_SYSTEM include/clambdacommon/system/os.h include/clambdacommon/system/terminal.h include/clambdacommon/system/system.h)
+set(C_HEADERS_SYSTEM include/clambdacommon/system/os.h include/clambdacommon/system/terminal.h include/clambdacommon/system/system.h include/clambdacommon/system/time.h)
 set(C_HEADERS_BASE include/clambdacommon/clambdacommon.h include/clambdacommon/lstring.h include/clambdacommon/maths.h include/clambdacommon/resources.h)
 set(C_HEADERS_FILES ${C_HEADERS_GRAPHICS} ${C_HEADERS_SYSTEM} ${C_HEADERS_BASE})
 # This is the C sources files.
 set(C_SOURCES_GRAPHICS src/graphics/color.cpp)
-set(C_SOURCES_SYSTEM src/system/os.cpp src/system/terminal.cpp src/system/system.cpp)
+set(C_SOURCES_SYSTEM src/system/os.cpp src/system/terminal.cpp src/system/system.cpp src/time.cpp)
 set(C_SOURCES_BASE src/clambdacommon.cpp src/lstring.cpp src/maths.cpp src/resources.cpp)
 set(C_SOURCES_FILES ${C_SOURCES_GRAPHICS} ${C_SOURCES_SYSTEM} ${C_SOURCES_BASE})
 

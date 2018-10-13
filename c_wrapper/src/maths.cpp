@@ -12,20 +12,20 @@
 
 double lc_maths_radians(double degrees)
 {
-	return lambdacommon::maths::degrees(degrees);
+	return lambdacommon::maths::radians(degrees);
 }
 
 float lc_maths_fradians(float degrees)
 {
-	return lambdacommon::maths::degrees(degrees);
+	return lambdacommon::maths::radians(degrees);
 }
 
 double lc_maths_degrees(double radians)
 {
-	return lambdacommon::maths::radians(radians);
+	return lambdacommon::maths::degrees(radians);
 }
 
 float lc_maths_fdegrees(float radians)
 {
-	return lambdacommon::maths::radians(radians);
+	return lambdacommon::maths::degrees(radians);
 }

@@ -14,6 +14,7 @@
 #include "devices.h"
 #include "os.h"
 #include "terminal.h"
+#include "time.h"
 #include "../lstring.h"
 
 namespace lambdacommon

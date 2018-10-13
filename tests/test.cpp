@@ -36,16 +36,19 @@ bool test(const string &testName, std::function<bool()> func)
 	}
 	else
 		cout << "TESTING " << testName << "...\n  RESULT: ";
+	time_t start = time::getTimeMillis();
 	bool result = func();
+	time_t end = time::getTimeMillis();
 	if (result)
-		cout << LIGHT_GREEN << "OK." << RESET << endl;
+		cout << LIGHT_GREEN << "OK." << RESET << " (in " << to_string(end - start) << "ms)" << endl;
 	else
-		cout << LIGHT_RED << "FAILED." << RESET << endl;
+		cout << LIGHT_RED << "FAILED." << RESET << " (in " << to_string(end - start) << "ms)" << endl;
 	return result;
 }
 
 int main()
 {
+	time_t start = time::getTimeMillis();
 	setup();
 	setTerminalTitle("λcommon - tests");
 
@@ -336,6 +339,9 @@ int main()
 	cout << "Tests results: " + to_string(testsPassed) << '/' << to_string(testsCount) << endl;
 	if (testsPassed != testsCount)
 		return 1;
+
+	time_t end = time::getTimeMillis();
+	cout << endl << "Tests execution time: " << to_string(end - start) << "ms" << endl;
 
 	return 0;
 }
