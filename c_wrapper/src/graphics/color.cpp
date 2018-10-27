@@ -13,74 +13,74 @@
 #define COLOR_CPP(COLOR) reinterpret_cast<lambdacommon::Color *>(COLOR)
 #define CONST_COLOR_CPP(COLOR) reinterpret_cast<const lambdacommon::Color *>(COLOR)
 
-lcColor *lc_newColor(float red, float green, float blue, float alpha)
+lcColor *lc_new_Color(float red, float green, float blue, float alpha)
 {
 	return reinterpret_cast<lcColor *>(new lambdacommon::Color(red, green, blue, alpha));
 }
 
-void lc_deleteColor(lcColor *color)
+void lc_delete_Color(lcColor *color)
 {
 	delete COLOR_CPP(color);
 }
 
-float lc_Color_getRed(const lcColor *color)
+float lc_Color_get_red(const lcColor *color)
 {
 	return CONST_COLOR_CPP(color)->red();
 }
 
-float lc_Color_getGreen(const lcColor *color)
+float lc_Color_get_green(const lcColor *color)
 {
 	return CONST_COLOR_CPP(color)->green();
 }
 
-float lc_Color_getBlue(const lcColor *color)
+float lc_Color_get_blue(const lcColor *color)
 {
 	return CONST_COLOR_CPP(color)->blue();
 }
 
-float lc_Color_getAlpha(const lcColor *color)
+float lc_Color_get_alpha(const lcColor *color)
 {
 	return CONST_COLOR_CPP(color)->alpha();
 }
 
-uint8_t lc_Color_getRedAsInt(const lcColor *color)
+uint8_t lc_Color_get_red_as_int(const lcColor *color)
 {
-	return CONST_COLOR_CPP(color)->redAsInt();
+	return CONST_COLOR_CPP(color)->red_as_int();
 }
 
-uint8_t lc_Color_getGreenAsInt(const lcColor *color)
+uint8_t lc_Color_get_green_as_int(const lcColor *color)
 {
-	return CONST_COLOR_CPP(color)->greenAsInt();
+	return CONST_COLOR_CPP(color)->green_as_int();
 }
 
-uint8_t lc_Color_getBlueAsInt(const lcColor *color)
+uint8_t lc_Color_get_blue_as_int(const lcColor *color)
 {
-	return CONST_COLOR_CPP(color)->blueAsInt();
+	return CONST_COLOR_CPP(color)->blue_as_int();
 }
 
-uint8_t lc_Color_getAlphaAsInt(const lcColor *color)
+uint8_t lc_Color_get_alpha_as_int(const lcColor *color)
 {
-	return CONST_COLOR_CPP(color)->alphaAsInt();
+	return CONST_COLOR_CPP(color)->alpha_as_int();
 }
 
-uint64_t lc_Color_toHex(const lcColor *color)
+uint64_t lc_Color_to_hex(const lcColor *color)
 {
-	return CONST_COLOR_CPP(color)->toHex();
+	return CONST_COLOR_CPP(color)->to_hex();
 }
 
-const char *lc_Color_toString(const lcColor *color, bool hex)
+const char *lc_Color_to_string(const lcColor *color, bool hex)
 {
 	if (hex)
 	{
-		static char toString[9];
-		CONST_COLOR_CPP(color)->toString(hex).copy(toString, 9);
-		return toString;
+		static char to_string[9];
+		CONST_COLOR_CPP(color)->to_string(hex).copy(to_string, 9);
+		return to_string;
 	}
 	else
 	{
-		static char toString[24];
-		CONST_COLOR_CPP(color)->toString(hex).copy(toString, 24);
-		return toString;
+		static char to_string[24];
+		CONST_COLOR_CPP(color)->to_string(hex).copy(to_string, 24);
+		return to_string;
 	}
 }
 
@@ -103,23 +103,23 @@ lcColor *lc_color_mix(const lcColor *a, const lcColor *b, float ratio)
 	return reinterpret_cast<lcColor *>(new lambdacommon::Color(color));
 }
 
-lcColor *lc_color_fromHex(uint64_t hexColor, bool hasAlpha)
+lcColor *lc_color_from_hex(uint64_t hex_color, bool has_alpha)
 {
-	auto color = lambdacommon::color::fromHex(hexColor, hasAlpha);
+	auto color = lambdacommon::color::from_hex(hex_color, has_alpha);
 	// Pass to heap and cast.
 	return reinterpret_cast<lcColor *>(new lambdacommon::Color(color));
 }
 
-lcColor *lc_color_fromHexStr(const char *hexColor)
+lcColor *lc_color_from_hex_str(const char *hex_color)
 {
-	auto color = lambdacommon::color::fromHex({hexColor});
+	auto color = lambdacommon::color::from_hex({hex_color});
 	// Pass to heap and cast.
 	return reinterpret_cast<lcColor *>(new lambdacommon::Color(color));
 }
 
-lcColor *lc_color_fromIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+lcColor *lc_color_from_int_rgba(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
-	auto color = lambdacommon::color::fromIntRGBA(red, green, blue, alpha);
+	auto color = lambdacommon::color::from_int_rgba(red, green, blue, alpha);
 	// Pass to heap and cast.
 	return reinterpret_cast<lcColor *>(new lambdacommon::Color(color));
 }

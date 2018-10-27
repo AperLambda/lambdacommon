@@ -51,19 +51,15 @@ namespace lambdacommon
 			set(path);
 		}
 
-#ifdef LAMBDA_WINDOWS
-
 		FilePath::FilePath(const wchar_t *path) : Path()
 		{
-			set(lstring::convertWStringToString(std::wstring(path)));
+			set(lstring::convert_wstring_to_string(std::wstring(path)));
 		}
 
 		FilePath::FilePath(const std::wstring &path) : Path()
 		{
-			set(lstring::convertWStringToString(path));
+			set(lstring::convert_wstring_to_string(path));
 		}
-
-#endif
 
 		FilePath::FilePath(const FilePath &path) : Path(*path._path), _absolute(path._absolute)
 		{}
@@ -88,9 +84,9 @@ namespace lambdacommon
 		bool FilePath::remove() const
 		{
 #ifdef LAMBDA_WINDOWS
-			return DeleteFileA(toString().c_str()) != 0;
+			return DeleteFileA(to_string().c_str()) != 0;
 #else
-			return std::remove(toString().c_str()) == 0;
+			return std::remove(to_string().c_str()) == 0;
 #endif
 		}
 
@@ -98,14 +94,14 @@ namespace lambdacommon
 		{
 			if (recursive)
 			{
-				auto parent = getParent();
+				auto parent = get_parent();
 				if (!parent.exists())
 					parent.mkdir(true);
 			}
 #ifdef LAMBDA_WINDOWS
-			return CreateDirectoryA(toString().c_str(), nullptr) != 0;
+			return CreateDirectoryA(to_string().c_str(), nullptr) != 0;
 #else
-			return ::mkdir(toString().c_str(), S_IRUSR | S_IWUSR | S_IXUSR) == 0;
+			return ::mkdir(to_string().c_str(), S_IRUSR | S_IWUSR | S_IXUSR) == 0;
 #endif
 		}
 
@@ -114,7 +110,7 @@ namespace lambdacommon
 			return _path->empty();
 		}
 
-		bool FilePath::isAbsolute() const
+		bool FilePath::is_absolute() const
 		{
 			return _absolute;
 		}
@@ -122,40 +118,40 @@ namespace lambdacommon
 		bool FilePath::exists() const
 		{
 #ifdef LAMBDA_WINDOWS
-			return GetFileAttributesA(toString().c_str()) != INVALID_FILE_ATTRIBUTES;
+			return GetFileAttributesA(to_string().c_str()) != INVALID_FILE_ATTRIBUTES;
 #else
 			struct STAT_STRUCT sb;
-			return stat(toString().c_str(), &sb) == 0;
+			return stat(to_string().c_str(), &sb) == 0;
 #endif
 		}
 
-		bool FilePath::isDirectory() const
+		bool FilePath::is_directory() const
 		{
 #ifdef LAMBDA_WINDOWS
-			auto attr = GetFileAttributesA(toString().c_str());
+			auto attr = GetFileAttributesA(to_string().c_str());
 			return (attr != INVALID_FILE_ATTRIBUTES && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0);
 #else
 			struct STAT_STRUCT sb;
-			if (stat(toString().c_str(), &sb))
+			if (stat(to_string().c_str(), &sb))
 				return false;
 			return S_ISDIR(sb.st_mode);
 #endif
 		}
 
-		bool FilePath::isFile() const
+		bool FilePath::is_file() const
 		{
 #ifdef LAMBDA_WINDOWS
-			auto attr = GetFileAttributesA(toString().c_str());
+			auto attr = GetFileAttributesA(to_string().c_str());
 			return (attr != INVALID_FILE_ATTRIBUTES && (attr & FILE_ATTRIBUTE_DIRECTORY) == 0);
 #else
 			struct STAT_STRUCT sb;
-			if (stat(toString().c_str(), &sb))
+			if (stat(to_string().c_str(), &sb))
 				return false;
 			return S_ISREG(sb.st_mode);
 #endif
 		}
 
-		std::string FilePath::getFileName() const
+		std::string FilePath::get_filename() const
 		{
 			if (empty())
 				return "";
@@ -163,47 +159,47 @@ namespace lambdacommon
 			return last;
 		}
 
-		std::string FilePath::getExtension() const
+		std::string FilePath::get_extension() const
 		{
-			const std::string &name = getFileName();
+			const std::string &name = get_filename();
 			size_t pos = name.find_last_of('.');
 			if (pos == std::string::npos)
 				return "";
 			return name.substr(pos + 1);
 		}
 
-		size_t FilePath::getFileSize() const
+		size_t FilePath::get_file_size() const
 		{
 			if (!exists())
 				return 0;
-			struct STAT_STRUCT sb;
-			if (STAT_METHOD(toString().c_str(), &sb) != 0)
+			struct STAT_STRUCT sb{};
+			if (STAT_METHOD(to_string().c_str(), &sb) != 0)
 				throw std::runtime_error(
-						"lambdacommon::path::FilePath.getFileSize(): cannot stat file \"" + toString() + "\"!");
+						"lambdacommon::path::FilePath.get_file_size(): cannot stat file \"" + to_string() + "\"!");
 			return (size_t) sb.st_size;
 		}
 
-		FilePath FilePath::toAbsolute() const
+		FilePath FilePath::to_absolute() const
 		{
 #ifdef LAMBDA_WINDOWS
-			if (toString().empty())
-				return getCurrentWorkingDirectory();
+			if (to_string().empty())
+				return get_current_working_directory();
 			char temp[MAX_PATH];
-			auto length = GetFullPathNameA(toString().c_str(), MAX_PATH, temp, nullptr);
+			auto length = GetFullPathNameA(to_string().c_str(), MAX_PATH, temp, nullptr);
 			if (length == 0)
 				throw std::runtime_error(
-						"Internal error in lambdacommon::path::FilePath.toAbsolute(): " + std::to_string(GetLastError()));
+						"Internal error in lambdacommon::path::FilePath.to_absolute(): " + std::to_string(GetLastError()));
 			return FilePath(temp);
 #else
 			char temp[PATH_MAX];
-			if (realpath(toString().c_str(), temp) == nullptr)
+			if (realpath(to_string().c_str(), temp) == nullptr)
 				throw std::runtime_error(
-						"Internal error in lambdacommon::path::FilePath::toAbsolute(): " + std::string(strerror(errno)));
+						"Internal error in lambdacommon::path::FilePath::to_absolute(): " + std::string(strerror(errno)));
 			return FilePath(temp);
 #endif
 		}
 
-		FilePath FilePath::getParent() const
+		FilePath FilePath::get_parent() const
 		{
 			FilePath result;
 			result._absolute = _absolute;
@@ -218,7 +214,7 @@ namespace lambdacommon
 			return result;
 		}
 
-		std::string FilePath::toString(PathType type) const
+		std::string FilePath::to_string(PathType type) const
 		{
 			std::ostringstream oss;
 
@@ -292,22 +288,22 @@ namespace lambdacommon
 
 #ifdef LAMBDA_WINDOWS
 
-		std::wstring LAMBDACOMMON_API getCurrentWorkingDirectoryWStr()
+		std::wstring LAMBDACOMMON_API get_current_working_directory_wstr()
 		{
 			wchar_t temp[MAX_PATH];
 			if (!_wgetcwd(temp, MAX_PATH))
 				throw std::runtime_error(
-						"Internal error in lambdacommon::path::getCurrentWorkingDirectoryWStr(): " +
+						"Internal error in lambdacommon::path::get_current_working_directory_wstr(): " +
 						std::to_string(GetLastError()));
 			return std::wstring(temp);
 		}
 
 #endif
 
-		std::string LAMBDACOMMON_API getCurrentWorkingDirectoryStr()
+		std::string LAMBDACOMMON_API get_current_working_directory_str()
 		{
 #ifdef LAMBDA_WINDOWS
-			return lstring::convertWStringToString(getCurrentWorkingDirectoryWStr());
+			return lstring::convert_wstring_to_string(get_current_working_directory_wstr());
 #else
 			char temp[PATH_MAX];
 			if (getcwd(temp, PATH_MAX) == nullptr)
@@ -317,9 +313,9 @@ namespace lambdacommon
 #endif
 		}
 
-		FilePath LAMBDACOMMON_API getCurrentWorkingDirectory()
+		FilePath LAMBDACOMMON_API get_current_working_directory()
 		{
-			return FilePath(getCurrentWorkingDirectoryStr());
+			return FilePath(get_current_working_directory_str());
 		}
 
 		FilePath LAMBDACOMMON_API mkdir(const char *path, bool recursive)

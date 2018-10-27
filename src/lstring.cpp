@@ -43,7 +43,7 @@ namespace lambdacommon
 			return elems;
 		}
 
-		bool LAMBDACOMMON_API equalsIgnoreCase(const char a, const char b)
+		bool LAMBDACOMMON_API equals_ignore_case(const char a, const char b)
 		{
 			return tolower(a) == tolower(b);
 		}
@@ -56,37 +56,37 @@ namespace lambdacommon
 				return false;
 		}
 
-		bool LAMBDACOMMON_API equalsIgnoreCase(std::string const &a, std::string const &b)
+		bool LAMBDACOMMON_API equals_ignore_case(std::string const &a, std::string const &b)
 		{
 			if (a.length() == b.length())
 			{
 				return equal(begin(a), end(a), begin(b),
-							 [](const char charA, const char charB) { return equalsIgnoreCase(charA, charB); });
+							 [](const char charA, const char charB) { return equals_ignore_case(charA, charB); });
 			}
 			else
 				return false;
 		}
 
-		std::string LAMBDACOMMON_API toLowerCase(const std::string &from)
+		std::string LAMBDACOMMON_API to_lower_case(const std::string &from)
 		{
 			std::string result = from;
 			std::transform(result.begin(), result.end(), result.begin(), ::tolower);
 			return result;
 		}
 
-		std::string LAMBDACOMMON_API toUpperCase(const std::string &from)
+		std::string LAMBDACOMMON_API to_upper_case(const std::string &from)
 		{
 			std::string result = from;
 			std::transform(result.begin(), result.end(), result.begin(), ::toupper);
 			return result;
 		}
 
-		std::string LAMBDACOMMON_API replaceAll(std::string subject, const char &from, const char &to)
+		std::string LAMBDACOMMON_API replace_all(std::string subject, const char &from, const char &to)
 		{
-			return replaceAll(std::move(subject), std::to_string(from), std::to_string(to));
+			return replace_all(std::move(subject), std::to_string(from), std::to_string(to));
 		}
 
-		std::string LAMBDACOMMON_API replaceAll(std::string subject, const std::string &from, const std::string &to)
+		std::string LAMBDACOMMON_API replace_all(std::string subject, const std::string &from, const std::string &to)
 		{
 			size_t start_pos = 0;
 			while ((start_pos = subject.find(from, start_pos)) != std::string::npos)
@@ -110,7 +110,7 @@ namespace lambdacommon
 			std::ostringstream ss;
 			ss << std::hex << pointer;
 			auto result = ss.str();
-			if (!startsWith(result, "0x"))
+			if (!starts_with(result, "0x"))
 				result = "0x" + result;
 			return result;
 		}
@@ -124,27 +124,27 @@ namespace lambdacommon
 			return result;
 		}
 
-		bool LAMBDACOMMON_API endsWith(const std::string &str, const std::string &suffix)
+		bool LAMBDACOMMON_API ends_with(const std::string &str, const std::string &suffix)
 		{
 			return str.size() >= suffix.size() && 0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix);
 		}
 
-		bool LAMBDACOMMON_API startsWith(const std::string &str, const std::string &prefix)
+		bool LAMBDACOMMON_API starts_with(const std::string &str, const std::string &prefix)
 		{
 			return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
 		}
 
-		const std::string LAMBDACOMMON_API mergePath(std::string parent, const std::string &child)
+		const std::string LAMBDACOMMON_API merge_path(std::string parent, const std::string &child)
 		{
 			auto merged = parent;
-			if (endsWith(parent, "/") || startsWith(child, "/"))
+			if (ends_with(parent, "/") || starts_with(child, "/"))
 				merged += child;
 			else
 				merged += '/' + child;
 			return merged;
 		}
 
-		int LAMBDACOMMON_API parseInt(const std::string &integer, int base)
+		int LAMBDACOMMON_API parse_int(const std::string &integer, int base)
 		{
 			try
 			{
@@ -160,11 +160,11 @@ namespace lambdacommon
 			}
 		}
 
-		long LAMBDACOMMON_API parseLong(const std::string &longNumber, int base)
+		long LAMBDACOMMON_API parse_long(const std::string &long_number, int base)
 		{
 			try
 			{
-				return std::stol(longNumber, nullptr, base);
+				return std::stol(long_number, nullptr, base);
 			}
 			catch (const std::invalid_argument &error)
 			{
@@ -178,12 +178,12 @@ namespace lambdacommon
 
 		namespace utf8
 		{
-			char32_t LAMBDACOMMON_API toUTF32(const std::string &character)
+			char32_t LAMBDACOMMON_API to_utf32(const std::string &character)
 			{
-				return toUTF32(character.c_str());
+				return to_utf32(character.c_str());
 			}
 
-			char32_t LAMBDACOMMON_API toUTF32(const char *character)
+			char32_t LAMBDACOMMON_API to_utf32(const char *character)
 			{
 				auto result = static_cast<char32_t>(-1);
 
@@ -221,7 +221,7 @@ namespace lambdacommon
 
 #include <Windows.h>
 
-		std::string LAMBDACOMMON_API convertWStringToString(std::wstring wstring)
+		std::string LAMBDACOMMON_API convert_wstring_to_string(std::wstring wstring)
 		{
 			std::string string;
 			if (!wstring.empty())
@@ -234,7 +234,7 @@ namespace lambdacommon
 			return string;
 		}
 
-		std::wstring LAMBDACOMMON_API convertStringToWString(std::string string)
+		std::wstring LAMBDACOMMON_API convert_string_to_wstring(std::string string)
 		{
 			int size = MultiByteToWideChar(CP_UTF8, 0, &string[0], (int) string.size(), nullptr, 0);
 			std::wstring result(size, 0);
@@ -244,14 +244,14 @@ namespace lambdacommon
 
 #else
 
-		std::string LAMBDACOMMON_API convertWStringToString(std::wstring wstring)
+		std::string LAMBDACOMMON_API convert_wstring_to_string(std::wstring wstring)
 		{
 			std::string out;
 			std::copy(wstring.begin(), wstring.end(), std::back_inserter(out));
 			return out;
 		}
 
-		std::wstring LAMBDACOMMON_API convertStringToWString(std::string string)
+		std::wstring LAMBDACOMMON_API convert_string_to_wstring(std::string string)
 		{
 			std::wstring out;
 			std::copy(string.begin(), string.end(), std::back_inserter(out));

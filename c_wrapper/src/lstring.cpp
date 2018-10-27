@@ -24,9 +24,9 @@ size_t lc_str_split(const char *s, char delim, char **output)
 	return result.size();
 }
 
-bool lc_char_equalsIgnoreCase(char a, char b)
+bool lc_char_equals_ignore_case(char a, char b)
 {
-	return lambdacommon::lstring::equalsIgnoreCase(a, b);
+	return lambdacommon::lstring::equals_ignore_case(a, b);
 }
 
 bool lc_str_equals(const char *a, const char *b)
@@ -34,9 +34,9 @@ bool lc_str_equals(const char *a, const char *b)
 	return lambdacommon::lstring::equals({a}, {b});
 }
 
-bool lc_str_equalsIgnoreCase(const char *a, const char *b)
+bool lc_str_equals_ignore_case(const char *a, const char *b)
 {
-	return lambdacommon::lstring::equalsIgnoreCase({a}, {b});
+	return lambdacommon::lstring::equals_ignore_case({a}, {b});
 }
 
 const char *lc_bool_to_string(bool value)
@@ -52,32 +52,32 @@ const char *lc_pointer_to_string(const void *pointer)
 	return result;
 }
 
-bool lc_str_endsWith(const char *str, const char *suffix)
+bool lc_str_ends_with(const char *str, const char *suffix)
 {
-	return lambdacommon::lstring::endsWith({str}, {suffix});
+	return lambdacommon::lstring::ends_with({str}, {suffix});
 }
 
-bool lc_str_startsWith(const char *str, const char *prefix)
+bool lc_str_starts_with(const char *str, const char *prefix)
 {
-	return lambdacommon::lstring::startsWith({str}, {prefix});
+	return lambdacommon::lstring::starts_with({str}, {prefix});
 }
 
-int lc_str_parseInt(const char *integer)
+int lc_str_parse_int(const char *integer)
 {
-	return lc_str_parseIntBase(integer, 10);
+	return lc_str_parse_int_base(integer, 10);
 }
 
-int lc_str_parseIntBase(const char *integer, int base)
+int lc_str_parse_int_base(const char *integer, int base)
 {
-	return lambdacommon::lstring::parseInt(integer, base);
+	return lambdacommon::lstring::parse_int(integer, base);
 }
 
-long lc_str_parseLong(const char *longNumber)
+long lc_str_parse_long(const char *longNumber)
 {
-	return lc_str_parseLongBase(longNumber, 10);
+	return lc_str_parse_long_base(longNumber, 10);
 }
 
-long lc_str_parseLongBase(const char *longNumber, int base)
+long lc_str_parse_long_base(const char *longNumber, int base)
 {
-	return lambdacommon::lstring::parseLong(longNumber, base);
+	return lambdacommon::lstring::parse_long(longNumber, base);
 }

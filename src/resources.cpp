@@ -33,28 +33,28 @@ namespace lambdacommon
 	                                                                            _path(std::move(path))
 	{}
 
-	ResourceName::ResourceName(const ResourceName &resourceName) = default;
+	ResourceName::ResourceName(const ResourceName &other) = default;
 
-	ResourceName::ResourceName(ResourceName &&resourceName) noexcept : _domain(std::move(resourceName._domain)),
-	                                                                   _path(std::move(resourceName._path))
+	ResourceName::ResourceName(ResourceName &&other) noexcept : _domain(std::move(other._domain)),
+	                                                                   _path(std::move(other._path))
 	{}
 
-	const std::string &ResourceName::getDomain() const
+	const std::string &ResourceName::get_domain() const
 	{
 		return _domain;
 	}
 
-	const std::string &ResourceName::getName() const
+	const std::string &ResourceName::get_name() const
 	{
 		return _path;
 	}
 
 	ResourceName ResourceName::sub(const std::string &path) const
 	{
-		return ResourceName(_domain, lstring::mergePath(_path, path));
+		return ResourceName(_domain, lstring::merge_path(_path, path));
 	}
 
-	std::string ResourceName::toString() const
+	std::string ResourceName::to_string() const
 	{
 		return _domain + ":" + _path;
 	}
@@ -92,45 +92,45 @@ namespace lambdacommon
 	}
 
 
-	ResourcesManager::ResourcesManager(const fs::FilePath &workingDirectory) : _workingDirectory(
-			workingDirectory / "resources")
+	ResourcesManager::ResourcesManager(const fs::FilePath &working_directory) : _working_directory(
+			working_directory / "resources")
 	{}
 
-	ResourcesManager::ResourcesManager(const ResourcesManager &resourcesManager) = default;
+	ResourcesManager::ResourcesManager(const ResourcesManager &other) = default;
 
-	ResourcesManager::ResourcesManager(ResourcesManager &&resourcesManager) noexcept : _workingDirectory(
-			std::move(resourcesManager._workingDirectory))
+	ResourcesManager::ResourcesManager(ResourcesManager &&other) noexcept : _working_directory(
+			std::move(other._working_directory))
 	{}
 
-	const lambdacommon::fs::FilePath &ResourcesManager::getWorkingDirectory() const
+	const lambdacommon::fs::FilePath &ResourcesManager::get_working_directory() const
 	{
-		return _workingDirectory;
+		return _working_directory;
 	}
 
-	bool ResourcesManager::doesResourceExist(const ResourceName &resourceName, const std::string &extension) const
+	bool ResourcesManager::does_resource_exist(const ResourceName &resource_name, const std::string &extension) const
 	{
-		return getResourcePath(resourceName, extension).exists();
+		return get_resource_path(resource_name, extension).exists();
 	}
 
 	lambdacommon::fs::FilePath
-	ResourcesManager::getResourcePath(const ResourceName &resourceName, const std::string &extension) const
+	ResourcesManager::get_resource_path(const ResourceName &resource_name, const std::string &extension) const
 	{
-		return (_workingDirectory / resourceName.getDomain()) / (resourceName.getName() + "." + extension);
+		return (_working_directory / resource_name.get_domain()) / (resource_name.get_name() + "." + extension);
 	}
 
 	std::string
-	ResourcesManager::loadResource(const ResourceName &resourceName, const std::string &extension) const
+	ResourcesManager::load_resource(const ResourceName &resource_name, const std::string &extension) const
 	{
-		auto resourcePath = getResourcePath(resourceName, extension);
-		if (!resourcePath.exists())
+		auto resource_path = get_resource_path(resource_name, extension);
+		if (!resource_path.exists())
 			return "";
 		try
 		{
-			std::ifstream fileStream{resourcePath.toString()};
-			std::stringstream outputStream;
-			outputStream << fileStream.rdbuf();
-			fileStream.close();
-			return outputStream.str();
+			std::ifstream file_stream{resource_path.to_string()};
+			std::stringstream output_stream;
+			output_stream << file_stream.rdbuf();
+			file_stream.close();
+			return output_stream.str();
 		}
 		catch (std::exception &e)
 		{
@@ -142,8 +142,8 @@ namespace lambdacommon
 	{
 		if (this != &other)
 		{
-			if (other._workingDirectory != _workingDirectory)
-				_workingDirectory = other._workingDirectory;
+			if (other._working_directory != _working_directory)
+				_working_directory = other._working_directory;
 		}
 		return *this;
 	}
@@ -151,12 +151,12 @@ namespace lambdacommon
 	ResourcesManager &ResourcesManager::operator=(ResourcesManager &&other) noexcept
 	{
 		if (this != &other)
-			_workingDirectory = std::move(other._workingDirectory);
+			_working_directory = std::move(other._working_directory);
 		return *this;
 	}
 
 	bool ResourcesManager::operator==(const ResourcesManager &other) const
 	{
-		return other._workingDirectory == _workingDirectory;
+		return other._working_directory == _working_directory;
 	}
 }

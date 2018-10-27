@@ -11,10 +11,10 @@
 #include <lambdacommon/lambdacommon.h>
 #include <cstring>
 
-const char* lc_getVersion()
+const char* lc_get_version()
 {
 	static char version[10];
-	lambdacommon::getVersion().copy(version, 10);
+	lambdacommon::get_version().copy(version, 10);
 	return version;
 }
 
@@ -25,7 +25,7 @@ const char* lc_getVersion()
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdelete-incomplete"
 #endif
-void lc_deletePointer(void **pointer)
+void lc_delete_pointer(void **pointer)
 {
 	delete *pointer;
 	*pointer = nullptr;

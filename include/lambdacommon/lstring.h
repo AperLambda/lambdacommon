@@ -34,7 +34,7 @@ namespace lambdacommon
 		 * @param b One of two chars.
 		 * @return True if they are equal with case insensitive else false.
 		 */
-		extern bool LAMBDACOMMON_API equalsIgnoreCase(char a, char b);
+		extern bool LAMBDACOMMON_API equals_ignore_case(const char a, const char b);
 
 		/*!
 		 * Checks if two strings are equal.
@@ -50,26 +50,26 @@ namespace lambdacommon
 		 * @param b One of two strings.
 		 * @return True if they are equal with case insensitive else false.
 		 */
-		extern bool LAMBDACOMMON_API equalsIgnoreCase(const std::string &a, const std::string &b);
+		extern bool LAMBDACOMMON_API equals_ignore_case(const std::string &a, const std::string &b);
 
 		/*!
 		 * Transforms a string to a full lower case string.
 		 * @param from The string to transform.
 		 * @return The new string.
 		 */
-		extern std::string LAMBDACOMMON_API toLowerCase(const std::string &from);
+		extern std::string LAMBDACOMMON_API to_lower_case(const std::string &from);
 
 		/*!
-		 * Transforms a string to a full lower case string.
+		 * Transforms a string to a full upper case string.
 		 * @param from The string to transform.
 		 * @return The new string.
 		 */
-		extern std::string LAMBDACOMMON_API toUpperCase(const std::string &from);
+		extern std::string LAMBDACOMMON_API to_upper_case(const std::string &from);
 
-		extern std::string LAMBDACOMMON_API replaceAll(std::string subject, const char &from, const char &to);
+		extern std::string LAMBDACOMMON_API replace_all(std::string subject, const char &from, const char &to);
 
 		extern std::string LAMBDACOMMON_API
-		replaceAll(std::string subject, const std::string &from, const std::string &to);
+		replace_all(std::string subject, const std::string &from, const std::string &to);
 
 		/*!
 		 * Transforms a boolean value into a string value.
@@ -98,7 +98,7 @@ namespace lambdacommon
 		 * @param suffix The suffix.
 		 * @return True if the string ended with the specified suffix, else false.
 		 */
-		extern bool LAMBDACOMMON_API endsWith(const std::string &str, const std::string &suffix);
+		extern bool LAMBDACOMMON_API ends_with(const std::string &str, const std::string &suffix);
 
 		/*!
 		 * Checks whether the specified string does start with the specified prefix.
@@ -106,9 +106,9 @@ namespace lambdacommon
 		 * @param prefix The prefix.
 		 * @return True if the string started with the specified prefix, else false.
 		 */
-		extern bool LAMBDACOMMON_API startsWith(const std::string &str, const std::string &prefix);
+		extern bool LAMBDACOMMON_API starts_with(const std::string &str, const std::string &prefix);
 
-		extern const std::string LAMBDACOMMON_API mergePath(std::string parent, const std::string &child);
+		extern const std::string LAMBDACOMMON_API merge_path(std::string parent, const std::string &child);
 
 		/*!
 		 * Parses int from a string.
@@ -116,15 +116,15 @@ namespace lambdacommon
 		 * @param base The base of the integer.
 		 * @return The parsed integer, may be 0 if parse failed.
 		 */
-		extern int LAMBDACOMMON_API parseInt(const std::string &integer, int base = 10);
+		extern int LAMBDACOMMON_API parse_int(const std::string &integer, int base = 10);
 
 		/*!
 		 * Parses long from a string.
-		 * @param longNumber The long to parse.
+		 * @param long_number The long to parse.
 		 * @param base The base of the long.
 		 * @return The parsed long, may be 0 if parse failed.
 		 */
-		extern long LAMBDACOMMON_API parseLong(const std::string &longNumber, int base = 10);
+		extern long LAMBDACOMMON_API parse_long(const std::string &long_number, int base = 10);
 
 		/*
 		 * String conversions
@@ -137,14 +137,14 @@ namespace lambdacommon
 			 * @param character Value representing an UTF-8 character.
 			 * @return The UTF-32 character.
 			 */
-			extern char32_t LAMBDACOMMON_API toUTF32(const std::string &character);
+			extern char32_t LAMBDACOMMON_API to_utf32(const std::string &character);
 
 			/*!
 			 * Converts an UTF-8 character to an UTF-32 character.
 			 * @param character Value representing an UTF-8 character.
 			 * @return The UTF-32 character.
 			 */
-			extern char32_t LAMBDACOMMON_API toUTF32(const char *character);
+			extern char32_t LAMBDACOMMON_API to_utf32(const char *character);
 		}
 
 		/**
@@ -152,14 +152,14 @@ namespace lambdacommon
 		 * @param wstring The std::wstring to convert.
 		 * @return The converted string.
 		 */
-		extern std::string LAMBDACOMMON_API convertWStringToString(std::wstring wstring);
+		extern std::string LAMBDACOMMON_API convert_wstring_to_string(std::wstring wstring);
 
 		/**
 		 * Converts a std::string to a std::wstring.
 		 * @param wstring The std::string to convert.
 		 * @return The converted wstring.
 		 */
-		extern std::wstring LAMBDACOMMON_API convertStringToWString(std::string string);
+		extern std::wstring LAMBDACOMMON_API convert_string_to_wstring(std::string string);
 	}
 }
 

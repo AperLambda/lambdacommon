@@ -18,7 +18,7 @@ namespace lambdacommon
 	class LAMBDACOMMON_API Serializable
 	{
 	public:
-		virtual std::string toString() const = 0;
+		virtual std::string to_string() const = 0;
 	};
 
 	namespace serializable

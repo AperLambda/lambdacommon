@@ -42,29 +42,29 @@ namespace lambdacommon
 
 		~Address();
 
-		const host &getHost() const;
+		const host &get_host() const;
 
-		port getPort() const;
+		port get_port() const;
 
-		bool isIPv4() const;
+		bool is_ipv4() const;
 
-		bool isIPv6() const;
+		bool is_ipv6() const;
 
-		bool isValidDomain() const;
+		bool is_domain_valid() const;
 
-		bool isEmpty() const;
+		bool is_empty() const;
 
-		AddressType getType() const;
+		AddressType get_type() const;
 
-		std::string toString() const;
+		std::string to_string() const;
 
-		Address &operator=(const Address &address);
+		Address &operator=(const Address &other);
 
-		Address &operator=(Address &&address) noexcept;
+		Address &operator=(Address &&other) noexcept;
 
-		bool operator==(const Address &address);
+		bool operator==(const Address &other);
 
-		bool operator!=(const Address &address);
+		bool operator!=(const Address &other);
 
 		static Address EMPTY;
 	};

@@ -41,13 +41,9 @@ namespace lambdacommon
 
 			FilePath(const std::string &path);
 
-#ifdef LAMBDA_WINDOWS
+			explicit FilePath(const wchar_t *path);
 
-			FilePath(const wchar_t *path);
-
-			FilePath(const std::wstring &path);
-
-#endif
+			explicit FilePath(const std::wstring &path);
 
 			FilePath(const FilePath &path);
 
@@ -59,7 +55,7 @@ namespace lambdacommon
 			 * Checks whether the path is absolute or not.
 			 * @return True if the path is absolute else false.
 			 */
-			bool isAbsolute() const;
+			bool is_absolute() const;
 
 			bool empty() const;
 
@@ -73,25 +69,25 @@ namespace lambdacommon
 			 */
 			bool exists() const;
 
-			bool isDirectory() const;
+			bool is_directory() const;
 
-			bool isFile() const;
+			bool is_file() const;
 
-			std::string getFileName() const;
+			std::string get_filename() const;
 
-			std::string getExtension() const;
+			std::string get_extension() const;
 
-			size_t getFileSize() const;
+			size_t get_file_size() const;
 
-			FilePath toAbsolute() const;
+			FilePath to_absolute() const;
 
 			/**
 			 * Gets the parent path.
 			 * @return Parent path.
 			 */
-			FilePath getParent() const;
+			FilePath get_parent() const;
 
-			std::string toString(PathType type = NATIVE) const;
+			std::string to_string(PathType type = NATIVE) const;
 
 			FilePath sub(const FilePath &other) const;
 
@@ -112,13 +108,13 @@ namespace lambdacommon
 
 #ifdef LAMBDA_WINDOWS
 
-		extern std::wstring LAMBDACOMMON_API getCurrentWorkingDirectoryWStr();
+		extern std::wstring LAMBDACOMMON_API get_current_working_directory_wstr();
 
 #endif
 
-		extern std::string LAMBDACOMMON_API getCurrentWorkingDirectoryStr();
+		extern std::string LAMBDACOMMON_API get_current_working_directory_str();
 
-		extern FilePath LAMBDACOMMON_API getCurrentWorkingDirectory();
+		extern FilePath LAMBDACOMMON_API get_current_working_directory();
 
 		extern FilePath LAMBDACOMMON_API mkdir(const char *path, bool recursive = false);
 

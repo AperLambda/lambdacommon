@@ -23,17 +23,17 @@ namespace lambdacommon
 		delete _path;
 	}
 
-	std::vector<std::string> Path::getPath() const
+	std::vector<std::string> Path::get_path() const
 	{
 		return *_path;
 	}
 
-	std::string Path::toString() const
+	std::string Path::to_string() const
 	{
-		return toString('/');
+		return to_string('/');
 	}
 
-	std::string Path::toString(char delimiter) const
+	std::string Path::to_string(char delimiter) const
 	{
 		std::ostringstream oss;
 		for (size_t i = 0; i < _path->size(); i++)

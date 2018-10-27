@@ -34,21 +34,21 @@ namespace lambdacommon
 
 		ResourceName(std::string domain, std::string path) noexcept;
 
-		ResourceName(const ResourceName &resourceName);
+		ResourceName(const ResourceName &other);
 
-		ResourceName(ResourceName &&resourceName) noexcept;
+		ResourceName(ResourceName &&other) noexcept;
 
 		/*!
 		 * Gets the domain of the resource.
 		 * @return The domain of the resource.
 		 */
-		const std::string &getDomain() const;
+		const std::string &get_domain() const;
 
 		/*!
 		 * Gets the name of the resource.
 		 * @return The name of the resource.
 		 */
-		const std::string &getName() const;
+		const std::string &get_name() const;
 
 		/*!
 		 * Creates a new {@code ResourceName} from this resource name.
@@ -61,7 +61,7 @@ namespace lambdacommon
 		 * Gets the resource name as a string.
 		 * @return The resource name as a string.
 		 */
-		std::string toString() const;
+		std::string to_string() const;
 
 		/*!
 		 * Creates a new {@code ResourceName} from this resource name.
@@ -73,9 +73,9 @@ namespace lambdacommon
 			return sub(path);
 		}
 
-		ResourceName &operator=(const ResourceName &resourceName);
+		ResourceName &operator=(const ResourceName &other);
 
-		ResourceName &operator=(ResourceName &&resourceName) noexcept;
+		ResourceName &operator=(ResourceName &&other) noexcept;
 
 		bool operator==(const ResourceName &other) const;
 
@@ -85,43 +85,43 @@ namespace lambdacommon
 	class LAMBDACOMMON_API ResourcesManager
 	{
 	private:
-		lambdacommon::fs::FilePath _workingDirectory;
+		lambdacommon::fs::FilePath _working_directory;
 
 	public:
-		ResourcesManager(const lambdacommon::fs::FilePath &workingDirectory = fs::getCurrentWorkingDirectory());
+		ResourcesManager(const lambdacommon::fs::FilePath &working_directory = fs::get_current_working_directory());
 
-		ResourcesManager(const ResourcesManager &resourcesManager);
+		ResourcesManager(const ResourcesManager &other);
 
-		ResourcesManager(ResourcesManager &&resourcesManager) noexcept;
+		ResourcesManager(ResourcesManager &&other) noexcept;
 
 		/*! @brief Gets the working directory of the resource manager.
 		 *
 		 * @return The working directory.
 		 */
-		const lambdacommon::fs::FilePath &getWorkingDirectory() const;
+		const lambdacommon::fs::FilePath &get_working_directory() const;
 
 		/*! @brief Checks whether the resource exists or not.
 		 *
-		 * @param resourceName The resource to check.
+		 * @param resource_name The resource to check.
 		 * @param extension The extension of the resource file.
 		 * @return True if the resource exists else false.
 		 */
-		bool doesResourceExist(const ResourceName &resourceName, const std::string &extension) const;
+		bool does_resource_exist(const ResourceName &resource_name, const std::string &extension) const;
 
 		lambdacommon::fs::FilePath
-		getResourcePath(const ResourceName &resourceName, const std::string &extension) const;
+		get_resource_path(const ResourceName &resource_name, const std::string &extension) const;
 
 		/*! @brief Loads the resource content into a string value.
 		 *
-		 * @param resourceName The resource to load.
+		 * @param resource_name The resource to load.
 		 * @param extension The extension of the resource file.
 		 * @return The resource content if successfully loaded else an empty string.
 		 */
-		std::string loadResource(const ResourceName &resourceName, const std::string &extension) const;
+		std::string load_resource(const ResourceName &resource_name, const std::string &extension) const;
 
-		ResourcesManager &operator=(const ResourcesManager &resourcesManager);
+		ResourcesManager &operator=(const ResourcesManager &other);
 
-		ResourcesManager &operator=(ResourcesManager &&resourcesManager) noexcept;
+		ResourcesManager &operator=(ResourcesManager &&other) noexcept;
 
 		bool operator==(const ResourcesManager &other) const;
 	};

@@ -81,9 +81,9 @@ struct lc_TermSize
 };
 typedef struct lc_TermSize lc_TermSize;
 
-void lc_term_setFormat(lc_TermFormatting formatting);
+void lc_term_set_format(lc_TermFormatting formatting);
 
-void lc_term_setFormats(int count, ...);
+void lc_term_set_formats(int count, ...);
 
 void lc_term_clear();
 
@@ -92,7 +92,7 @@ void lc_term_clear();
  * @param x The x position.
  * @param y The y position.
  */
-void lc_term_setCursorPosition(unsigned short x, unsigned short y);
+void lc_term_set_cursor_position(unsigned short x, unsigned short y);
 
 /*
  * Sound manipulations
@@ -118,27 +118,27 @@ void lc_term_bell();
  */
 bool lc_term_setup();
 
-void lc_term_useUTF8();
+void lc_term_use_ut8();
 
 /*!
  * Gets the title of the terminal.
  * Warning: Only works on Windows, on Unix system this returns an empty string.
  * @return The title of the terminal.
  */
-const char *lc_term_getTerminalTitle();
+const char *lc_term_get_terminal_title();
 
 /*!
  * Sets the title of the terminal.
  * @param title The new title of the terminal.
  * @return True if success else false.
  */
-bool lc_term_setTerminalTitle(const char *title);
+bool lc_term_set_terminal_title(const char *title);
 
 /*!
  * Gets the terminal's size.
  * @return The {@code TermSize} struct describing the terminal's size.
  */
-lc_TermSize lc_term_getTerminalSize();
+lc_TermSize lc_term_get_terminal_size();
 
 #ifdef __cplusplus
 }

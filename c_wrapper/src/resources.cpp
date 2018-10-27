@@ -13,42 +13,42 @@
 #define RESOURCENAME_CPP(RESOURCENAME) reinterpret_cast<lambdacommon::ResourceName *>(RESOURCENAME)
 #define CONST_RESOURCENAME_CPP(RESOURCENAME) reinterpret_cast<const lambdacommon::ResourceName *>(RESOURCENAME)
 
-lc_ResourceName *lc_newResourceName(const char *name)
+lc_ResourceName *lc_new_ResourceName(const char *name)
 {
 	return reinterpret_cast<lc_ResourceName *>(new lambdacommon::ResourceName(std::string(name)));
 }
 
-lc_ResourceName *lc_newResourceNameDP(const char *domain, const char *path)
+lc_ResourceName *lc_new_ResourceName_DP(const char *domain, const char *path)
 {
 	return reinterpret_cast<lc_ResourceName *>(new lambdacommon::ResourceName({domain}, {path}));
 }
 
-void lc_deleteResourceName(lc_ResourceName *resourceName)
+void lc_delete_ResourceName(lc_ResourceName *resourceName)
 {
 	delete RESOURCENAME_CPP(resourceName);
 }
 
-const char *lc_ResourceName_getDomain(const lc_ResourceName *resourceName)
+const char *lc_ResourceName_get_domain(const lc_ResourceName *resourceName)
 {
-	auto domainCpp = CONST_RESOURCENAME_CPP(resourceName)->getDomain();
-	char *domain = new char[domainCpp.size()];
-	domainCpp.copy(domain, domainCpp.size());
+	auto domain_cpp = CONST_RESOURCENAME_CPP(resourceName)->get_domain();
+	char *domain = new char[domain_cpp.size()];
+	domain_cpp.copy(domain, domain_cpp.size());
 	return domain;
 }
 
-const char *lc_ResourceName_getName(const lc_ResourceName *resourceName)
+const char *lc_ResourceName_get_name(const lc_ResourceName *resourceName)
 {
-	auto nameCpp = CONST_RESOURCENAME_CPP(resourceName)->getName();
-	char *name = new char[nameCpp.size()];
-	nameCpp.copy(name, nameCpp.size());
+	auto name_cpp = CONST_RESOURCENAME_CPP(resourceName)->get_name();
+	char *name = new char[name_cpp.size()];
+	name_cpp.copy(name, name_cpp.size());
 	return name;
 }
 
-const char *lc_ResourceName_toString(const lc_ResourceName *resourceName)
+const char *lc_ResourceName_to_string(const lc_ResourceName *resourceName)
 {
-	auto toStringCpp = CONST_RESOURCENAME_CPP(resourceName)->toString();
-	char *toString = new char[toStringCpp.size()];
-	toStringCpp.copy(toString, toStringCpp.size());
+	auto to_string_cpp = CONST_RESOURCENAME_CPP(resourceName)->to_string();
+	char *toString = new char[to_string_cpp.size()];
+	to_string_cpp.copy(toString, to_string_cpp.size());
 	return toString;
 }
 

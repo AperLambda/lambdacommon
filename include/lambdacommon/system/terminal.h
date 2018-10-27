@@ -12,6 +12,7 @@
 
 #include "os.h"
 #include "../graphics/color.h"
+#include "../maths/geometry/geometry.h"
 #include <vector>
 #include <iostream>
 
@@ -82,14 +83,28 @@ namespace lambdacommon
 			unsigned short rows;
 		};
 
-		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting termFormatting);
+		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting term_formatting);
 
 		extern std::ostream LAMBDACOMMON_API &
-		operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting);
+		operator<<(std::ostream &stream, std::vector<TermFormatting> term_formatting);
 
-		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<std::string> stringVector);
+		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<std::string> string_vector);
 
 		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const Color &color);
+
+		template<typename T>
+		extern std::ostream &operator<<(std::ostream &stream, const maths::geometry::Dimension2D<T> &dimension)
+		{
+			stream << dimension.to_string();
+			return stream;
+		}
+
+		template<typename T>
+		extern std::ostream &operator<<(std::ostream &stream, const maths::geometry::Dimension3D<T> &dimension)
+		{
+			stream << dimension.to_string();
+			return stream;
+		}
 
 		/*!
 		 * This function will erase the current line in the stream.
@@ -97,7 +112,7 @@ namespace lambdacommon
 		 * @param stream Stream will be affect.
 		 * @return The current stream.
 		 */
-		extern std::ostream LAMBDACOMMON_API &eraseCurrentLine(std::ostream &stream = std::cout);
+		extern std::ostream LAMBDACOMMON_API &erase_current_line(std::ostream &stream = std::cout);
 
 		/*!
 		 * Clears the specified stream.
@@ -113,16 +128,16 @@ namespace lambdacommon
 		 * @param stream The stream to which it applies.
 		 */
 		extern void LAMBDACOMMON_API
-		setCursorPosition(unsigned short x, unsigned short y, std::ostream &stream = std::cout);
+		set_cursor_position(unsigned short x, unsigned short y, std::ostream &stream = std::cout);
 
 		/*!
 		 * Sets the cursor at the specified position.
 		 * @param pos The position.
 		 * @param stream The stream to which it applies.
 		 */
-		inline void setCursorPosition(std::pair<unsigned short, unsigned short> pos, std::ostream &stream = std::cout)
+		inline void set_cursor_position(std::pair<unsigned short, unsigned short> pos, std::ostream &stream = std::cout)
 		{
-			setCursorPosition(pos.first, pos.second, stream);
+			set_cursor_position(pos.first, pos.second, stream);
 		}
 
 		/*
@@ -149,34 +164,34 @@ namespace lambdacommon
 		 */
 		extern bool LAMBDACOMMON_API setup();
 
-		extern void LAMBDACOMMON_API useUTF8();
+		extern void LAMBDACOMMON_API use_utf8();
 
 		 /*!
 		  * Gets whether the specified stream is a TTY.
 		  * @param stream THe specified stream to check, default is {@code std::cout}.
 		  * @return True if the stream is a TTY, else false.
 		  */
-		extern bool LAMBDACOMMON_API isTTY(const std::ostream &stream = std::cout);
+		extern bool LAMBDACOMMON_API is_tty(const std::ostream &stream = std::cout);
 
 		/*!
 		 * Gets the title of the terminal.
 		 * Warning: Only works on Windows, on Unix systems this returns an empty string.
 		 * @return The title of the terminal.
 		 */
-		extern std::string LAMBDACOMMON_API getTerminalTitle();
+		extern std::string LAMBDACOMMON_API get_title();
 
 		/*!
 		 * Sets the title of the terminal.
 		 * @param title The new title of the terminal.
 		 * @return True if success else false.
 		 */
-		extern bool LAMBDACOMMON_API setTerminalTitle(const std::string &title, std::ostream &stream = std::cout);
+		extern bool LAMBDACOMMON_API set_title(const std::string &title, std::ostream &stream = std::cout);
 
 		/*!
 		 * Gets the terminal's size.
 		 * @return The {@code TermSize} struct describing the terminal's size.
 		 */
-		extern TermSize LAMBDACOMMON_API getTerminalSize();
+		extern TermSize LAMBDACOMMON_API get_size();
 	}
 }
 

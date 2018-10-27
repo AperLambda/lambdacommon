@@ -20,7 +20,7 @@ extern "C" {
  * Gets the current time in milliseconds.
  * @return The difference, measured in milliseconds, between the current time and midnight, January 1, 1970 UTC.
  */
-time_t lc_time_getTimeMillis();
+time_t lc_time_get_time_millis();
 
 #ifdef __cplusplus
 }

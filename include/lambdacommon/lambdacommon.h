@@ -41,8 +41,8 @@
 #endif
 
 #define LAMBDACOMMON_VERSION_MAJOR 1
-#define LAMBDACOMMON_VERSION_MINOR 7
-#define LAMBDACOMMON_VERSION_PATCH 3
+#define LAMBDACOMMON_VERSION_MINOR 8
+#define LAMBDACOMMON_VERSION_PATCH 0
 
 // Deletes the pointer and sets the variable to null. It's just simpler to write like this.
 #define LCOMMON_DELETE_POINTER(pointer) delete pointer; pointer = nullptr;
@@ -55,7 +55,7 @@ namespace lambdacommon
 	 * Gets the runtime version of lambdacommon as a string.
 	 * @return The runtime version of lambdacommon.
 	 */
-	extern std::string LAMBDACOMMON_API getVersion();
+	extern std::string LAMBDACOMMON_API get_version();
 }
 
 #endif // LAMBDACOMMON_LIBRARY_H

@@ -34,11 +34,11 @@ namespace lambdacommon
 			OTHER
 		};
 
-		extern SchemeType LAMBDACOMMON_API getSchemeTypeByString(const std::string &scheme);
+		extern SchemeType LAMBDACOMMON_API get_scheme_type_by_string(const std::string &scheme);
 
-		extern port LAMBDACOMMON_API getSchemeDefaultPort(SchemeType scheme);
+		extern port LAMBDACOMMON_API get_scheme_default_port(SchemeType scheme);
 
-		extern bool LAMBDACOMMON_API isSchemeTypeNonFileSpecial(SchemeType scheme);
+		extern bool LAMBDACOMMON_API is_scheme_type_non_file_special(SchemeType scheme);
 
 		/**
 		 * Based on https://url.spec.whatwg.org
@@ -65,41 +65,41 @@ namespace lambdacommon
 
 			~URI() override;
 
-			std::string getScheme() const;
+			std::string get_scheme() const;
 
-			inline SchemeType getSchemeType() const
+			inline SchemeType get_scheme_type() const
 			{
-				return getSchemeTypeByString(getScheme());
+				return get_scheme_type_by_string(get_scheme());
 			}
 
-			std::string getUsername() const;
+			std::string get_username() const;
 
-			std::string getPassword() const;
+			std::string get_password() const;
 
-			void setUserAndPassword(const std::string &username, const std::string &password);
+			void set_username_and_password(const std::string &username, const std::string &password);
 
-			Address getAddress() const;
+			Address get_address() const;
 
-			void setAddress(const Address &address);
+			void set_address(const Address &address);
 
-			std::vector<std::pair<std::string, std::string>> getQueries() const;
+			std::vector<std::pair<std::string, std::string>> get_queries() const;
 
-			void setQueries(const std::vector<std::pair<std::string, std::string>> &queries);
+			void set_queries(const std::vector<std::pair<std::string, std::string>> &queries);
 
-			bool hasQuery(std::string query) const;
+			bool has_query(std::string query) const;
 
-			std::string getQuery(std::string query) const;
+			std::string get_query(std::string query) const;
 
-			std::string getFragment() const;
+			std::string get_fragment() const;
 
-			void setFragment(const std::string &fragment);
+			void set_fragment(const std::string &fragment);
 
-			std::string toString(char delimiter = '/') const override;
+			std::string to_string(char delimiter = '/') const override;
 
 			/*!
 			 * Opens the URI in the default assigned application.
 			 */
-			void openInSystem() const;
+			void open_in_system() const;
 
 			URI &operator=(const URI &uri);
 
@@ -119,9 +119,9 @@ namespace lambdacommon
 		 * @param path Filesystem's file path.
 		 * @return An URL.
 		 */
-		extern URI LAMBDACOMMON_API fromFilePath(fs::FilePath path = fs::getCurrentWorkingDirectory());
+		extern URI LAMBDACOMMON_API from_file_path(fs::FilePath path = fs::get_current_working_directory());
 
-		extern URI LAMBDACOMMON_API fromString(const std::string &uri);
+		extern URI LAMBDACOMMON_API from_string(const std::string &uri);
 	}
 }
 

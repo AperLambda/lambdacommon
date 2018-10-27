@@ -26,11 +26,11 @@ namespace lambdacommon
 
 		virtual ~Path();
 
-		std::vector<std::string> getPath() const;
+		std::vector<std::string> get_path() const;
 
-		virtual std::string toString() const;
+		virtual std::string to_string() const;
 
-		virtual std::string toString(char delimiter = '/') const;
+		virtual std::string to_string(char delimiter = '/') const;
 	};
 }
 

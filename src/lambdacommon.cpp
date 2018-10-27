@@ -11,7 +11,7 @@
 
 namespace lambdacommon
 {
-	std::string LAMBDACOMMON_API getVersion()
+	std::string LAMBDACOMMON_API get_version()
 	{
 		return std::to_string(LAMBDACOMMON_VERSION_MAJOR) + "." + std::to_string(LAMBDACOMMON_VERSION_MINOR) + "." +
 		       std::to_string(LAMBDACOMMON_VERSION_PATCH);

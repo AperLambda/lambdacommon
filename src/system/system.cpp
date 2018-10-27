@@ -49,69 +49,68 @@ namespace lambdacommon
 {
 	namespace system
 	{
-		std::string osName;
+		std::string os_name;
 
 #ifdef LAMBDA_WINDOWS
 
-		std::string LAMBDACOMMON_API getProcessorName()
+		std::string LAMBDACOMMON_API get_cpu_name()
 		{
-			int cpuInfo[4] = {-1};
-			char cpuBrandStr[0x40];
-			__cpuid(cpuInfo, 0x80000000);
-			auto nExIds = static_cast<unsigned int>(cpuInfo[0]);
+			int cpu_info[4] = {-1};
+			char cpu_brand_str[0x40];
+			__cpuid(cpu_info, 0x80000000);
+			auto n_ex_ids = static_cast<unsigned int>(cpu_info[0]);
 
-			memset(cpuBrandStr, 0, sizeof(cpuBrandStr));
+			memset(cpu_brand_str, 0, sizeof(cpu_brand_str));
 
 			// Get the information associated with each extended ID.
-			for (unsigned int i = 0x80000000; i <= nExIds; ++i)
+			for (unsigned int i = 0x80000000; i <= n_ex_ids; ++i)
 			{
-				__cpuid(cpuInfo, i);
+				__cpuid(cpu_info, i);
 				// Interpret CPU brand string.
 				if (i == 0x80000002)
-					memcpy(cpuBrandStr, cpuInfo, sizeof(cpuInfo));
+					memcpy(cpu_brand_str, cpu_info, sizeof(cpu_info));
 				else if (i == 0x80000003)
-					memcpy(cpuBrandStr + 16, cpuInfo, sizeof(cpuInfo));
+					memcpy(cpu_brand_str + 16, cpu_info, sizeof(cpu_info));
 				else if (i == 0x80000004)
-					memcpy(cpuBrandStr + 32, cpuInfo, sizeof(cpuInfo));
+					memcpy(cpu_brand_str + 32, cpu_info, sizeof(cpu_info));
 			}
-			std::string cpuName{cpuBrandStr};
-			return cpuName;
+			return {cpu_brand_str};
 		}
 
 		typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
 
-		LPFN_ISWOW64PROCESS fnIsWow64Process;
+		LPFN_ISWOW64PROCESS fn_IsWow64Process;
 
-		BOOL isWow64()
+		BOOL is_wow64()
 		{
-			BOOL bIsWow64 = FALSE;
+			BOOL b_is_wow64 = FALSE;
 
 			//IsWow64Process is not available on all supported versions of Windows.
 			//Use GetModuleHandle to get a handle to the DLL that contains the function
 			//and GetProcAddress to get a pointer to the function if available.
 
-			fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
+			fn_IsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
 					GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
 
-			if (nullptr != fnIsWow64Process)
+			if (nullptr != fn_IsWow64Process)
 			{
-				if (!fnIsWow64Process(GetCurrentProcess(), &bIsWow64))
+				if (!fn_IsWow64Process(GetCurrentProcess(), &b_is_wow64))
 				{
 					//handle error
 				}
 			}
-			return bIsWow64;
+			return b_is_wow64;
 		}
 
-		SysArchitecture LAMBDACOMMON_API getProcessorArch()
+		SysArchitecture LAMBDACOMMON_API get_processor_arch()
 		{
-			SYSTEM_INFO sysInfo;
-			if (isWow64())
-				GetNativeSystemInfo(&sysInfo);
+			SYSTEM_INFO sys_info;
+			if (is_wow64())
+				GetNativeSystemInfo(&sys_info);
 			else
-				GetSystemInfo(&sysInfo);
+				GetSystemInfo(&sys_info);
 
-			switch (sysInfo.wProcessorArchitecture)
+			switch (sys_info.wProcessorArchitecture)
 			{
 				case PROCESSOR_ARCHITECTURE_AMD64:
 					return SysArchitecture::X86_64;
@@ -126,19 +125,19 @@ namespace lambdacommon
 			}
 		}
 
-		std::string LAMBDACOMMON_API getProcessorArchStr()
+		std::string LAMBDACOMMON_API get_processor_arch_str()
 		{
-			return getProcessorArchEnumStr();
+			return get_processor_arch_enum_str();
 		}
 
-		uint32_t LAMBDACOMMON_API getProcessorCores()
+		uint32_t LAMBDACOMMON_API get_cpu_cores()
 		{
-			SYSTEM_INFO systemInfo;
-			GetSystemInfo(&systemInfo);
-			return systemInfo.dwNumberOfProcessors;
+			SYSTEM_INFO system_info;
+			GetSystemInfo(&system_info);
+			return system_info.dwNumberOfProcessors;
 		}
 
-		uint64_t LAMBDACOMMON_API getMemoryTotal()
+		uint64_t LAMBDACOMMON_API get_memory_total()
 		{
 			MEMORYSTATUSEX statex;
 			statex.dwLength = sizeof(statex);
@@ -146,7 +145,7 @@ namespace lambdacommon
 			return statex.ullTotalPhys;
 		}
 
-		uint64_t LAMBDACOMMON_API getMemoryAvailable()
+		uint64_t LAMBDACOMMON_API get_memory_available()
 		{
 			MEMORYSTATUSEX statex;
 			statex.dwLength = sizeof(statex);
@@ -154,23 +153,23 @@ namespace lambdacommon
 			return statex.ullAvailPhys;
 		}
 
-		uint64_t LAMBDACOMMON_API getMemoryUsed()
+		uint64_t LAMBDACOMMON_API get_memory_used()
 		{
-			return getMemoryTotal() - getMemoryAvailable();
+			return get_memory_total() - get_memory_available();
 		}
 
-		std::string LAMBDACOMMON_API getHostName()
+		std::string LAMBDACOMMON_API get_host_name()
 		{
-			char infoBuf[INFO_BUFFER_SIZE];
-			DWORD bufCharCount = INFO_BUFFER_SIZE;
+			char info_buf[INFO_BUFFER_SIZE];
+			DWORD buf_char_count = INFO_BUFFER_SIZE;
 
-			if (!GetComputerName(infoBuf, &bufCharCount))
+			if (!GetComputerName(info_buf, &buf_char_count))
 				return "";
 
-			return std::string(infoBuf);
+			return {info_buf, buf_char_count};
 		}
 
-		std::string LAMBDACOMMON_API getOSName()
+		std::string LAMBDACOMMON_API get_os_name()
 		{
 #  ifdef __MINGW32__
 			return "Windows with MinGW";
@@ -178,34 +177,34 @@ namespace lambdacommon
 			return "Windows with CYGWIN";
 #  else
 			// Holy shit, what the fuck is this shitty code?
-			std::string winName = "Windows ";
+			std::string win_name = "Windows ";
 
 			if (IsWindowsServer())
-				winName += "Server ";
+				win_name += "Server ";
 
 			if (IsWindows10OrGreater())
-				winName += "10";
+				win_name += "10";
 			else if (IsWindows8Point1OrGreater())
-				winName += "8.1";
+				win_name += "8.1";
 			else if (IsWindows8OrGreater())
-				winName += "8";
+				win_name += "8";
 			else if (IsWindows7SP1OrGreater())
-				winName += "7 SP1";
+				win_name += "7 SP1";
 			else if (IsWindows7OrGreater())
-				winName += "7";
+				win_name += "7";
 			else if (IsWindowsVistaSP2OrGreater())
-				winName += "Vista SP2";
+				win_name += "Vista SP2";
 			else if (IsWindowsVistaSP1OrGreater())
-				winName += "Vista SP1";
+				win_name += "Vista SP1";
 			else if (IsWindowsVistaOrGreater())
-				winName += "Vista";
+				win_name += "Vista";
 			else if (IsWindowsXPOrGreater())
-				winName += "XP";
-			return winName;
+				win_name += "XP";
+			return win_name;
 #  endif
 		}
 
-		std::string LAMBDACOMMON_API getKernelVersion()
+		std::string LAMBDACOMMON_API get_kernel_version()
 		{
 #if defined(__MINGW32__) || defined(LAMBDA_CYGWIN)
 			OSVERSIONINFO vi;
@@ -222,18 +221,18 @@ namespace lambdacommon
 #endif
 		}
 
-		std::string LAMBDACOMMON_API getUserName()
+		std::string LAMBDACOMMON_API get_user_name()
 		{
-			char infoBuf[INFO_BUFFER_SIZE];
-			DWORD bufCharCount = INFO_BUFFER_SIZE;
+			char info_buf[INFO_BUFFER_SIZE];
+			DWORD buf_char_count = INFO_BUFFER_SIZE;
 
-			if (!GetUserName(infoBuf, &bufCharCount))
+			if (!GetUserName(info_buf, &buf_char_count))
 				return "";
 
-			return std::string(infoBuf);
+			return {info_buf, buf_char_count};
 		}
 
-		std::string LAMBDACOMMON_API getUserDirectoryStr()
+		std::string LAMBDACOMMON_API get_user_directory_str()
 		{
 #  ifdef __MINGW32__
 			TCHAR path[MAX_PATH];
@@ -241,16 +240,16 @@ namespace lambdacommon
 				return "";
 			return std::string(path);
 #  else // __MINGW32__
-			PWSTR szPath;
-			if (FAILED(SHGetKnownFolderPath(FOLDERID_Profile, KF_FLAG_NO_ALIAS, NULL, &szPath)))
+			PWSTR sz_path;
+			if (FAILED(SHGetKnownFolderPath(FOLDERID_Profile, KF_FLAG_NO_ALIAS, nullptr, &sz_path)))
 				return "";
-			return std::string(lstring::convertWStringToString(std::wstring(szPath)));
+			return std::string(lstring::convert_wstring_to_string(std::wstring(sz_path)));
 #  endif // __MINGW32__
 		}
 
 #else
 
-		std::string LAMBDACOMMON_API getProcessorName()
+		std::string LAMBDACOMMON_API get_cpu_name()
 		{
 			std::ifstream cpuinfo;
 			cpuinfo.open("/proc/cpuinfo", std::ios::in);
@@ -261,10 +260,10 @@ namespace lambdacommon
 			{
 				for (std::string line; std::getline(cpuinfo, line);)
 				{
-					if (lstring::equalsIgnoreCase(line.substr(0, 10), "model name"))
+					if (lstring::equals_ignore_case(line.substr(0, 10), "model name"))
 					{
-						size_t separatorIndex = line.find_first_of(':');
-						cpu = line.substr(separatorIndex + 2);
+						size_t sperator_index = line.find_first_of(':');
+						cpu = line.substr(sperator_index + 2);
 						break;
 					}
 				}
@@ -273,27 +272,27 @@ namespace lambdacommon
 			return cpu;
 		}
 
-		SysArchitecture LAMBDACOMMON_API getProcessorArch()
+		SysArchitecture LAMBDACOMMON_API get_processor_arch()
 		{
-			if (lstring::equals(getProcessorArchStr(), "x86_64"))
+			if (lstring::equals(get_processor_arch_str(), "x86_64"))
 				return SysArchitecture::X86_64;
-			else if (lstring::equals(getProcessorArchStr(), "i386"))
+			else if (lstring::equals(get_processor_arch_str(), "i386"))
 				return SysArchitecture::I386;
-			else if (lstring::equalsIgnoreCase(getProcessorArchStr().substr(0, 3), "ARM"))
+			else if (lstring::equals_ignore_case(get_processor_arch_str().substr(0, 3), "ARM"))
 				return SysArchitecture::ARM;
 			else
 				return SysArchitecture::UNKNOWN;
 		}
 
-		std::string LAMBDACOMMON_API getProcessorArchStr()
+		std::string LAMBDACOMMON_API get_processor_arch_str()
 		{
-			utsname uName{};
-			if (uname(&uName) != 0)
+			utsname u_name{};
+			if (uname(&u_name) != 0)
 				return "Unknown";
-			return uName.machine;
+			return u_name.machine;
 		}
 
-		uint32_t LAMBDACOMMON_API getProcessorCores()
+		uint32_t LAMBDACOMMON_API get_cpu_cores()
 		{
 			std::ifstream cpuinfo;
 			cpuinfo.open("/proc/cpuinfo", std::ios::in);
@@ -311,7 +310,7 @@ namespace lambdacommon
 			return cpucount;
 		}
 
-		uint64_t LAMBDACOMMON_API getMemoryTotal()
+		uint64_t LAMBDACOMMON_API get_memory_total()
 		{
 #  ifdef _SC_PHYS_PAGES
 			long pages = sysconf(_SC_PHYS_PAGES);
@@ -325,12 +324,12 @@ namespace lambdacommon
 #  endif
 		}
 
-		uint64_t LAMBDACOMMON_API getMemoryAvailable()
+		uint64_t LAMBDACOMMON_API get_memory_available()
 		{
 			std::ifstream meminfo;
 			meminfo.open("/proc/meminfo", std::ios::in);
 
-			uint64_t memFree = 0;
+			uint64_t mem_free = 0;
 
 			if (meminfo.is_open())
 			{
@@ -338,11 +337,11 @@ namespace lambdacommon
 
 				while (meminfo >> last)
 				{
-					if (lstring::equalsIgnoreCase(last, "MemAvailable:"))
+					if (lstring::equals_ignore_case(last, "MemAvailable:"))
 					{
-						meminfo >> memFree;
+						meminfo >> mem_free;
 						// kB to B
-						memFree = memFree * 1024;
+						mem_free = mem_free * 1024;
 						break;
 					}
 				}
@@ -350,15 +349,15 @@ namespace lambdacommon
 				meminfo.close();
 			}
 
-			return memFree;
+			return mem_free;
 		}
 
-		uint64_t LAMBDACOMMON_API getMemoryUsed()
+		uint64_t LAMBDACOMMON_API get_memory_used()
 		{
 			std::ifstream meminfo;
 			meminfo.open("/proc/meminfo", std::ios::in);
 
-			uint64_t memUsed = 0;
+			uint64_t mem_used = 0;
 
 			if (meminfo.is_open())
 			{
@@ -366,11 +365,11 @@ namespace lambdacommon
 
 				while (meminfo >> last)
 				{
-					if (lstring::equalsIgnoreCase(last, "Active:"))
+					if (lstring::equals_ignore_case(last, "Active:"))
 					{
-						meminfo >> memUsed;
+						meminfo >> mem_used;
 						// kB to B
-						memUsed = memUsed * 1024;
+						mem_used = mem_used * 1024;
 						break;
 					}
 				}
@@ -378,31 +377,31 @@ namespace lambdacommon
 				meminfo.close();
 			}
 
-			return memUsed;
+			return mem_used;
 		}
 
-		std::string LAMBDACOMMON_API getHostName()
+		std::string LAMBDACOMMON_API get_host_name()
 		{
 			char hostname[HOST_NAME_MAX];
 			gethostname(hostname, HOST_NAME_MAX);
-			return std::string(hostname);
+			return {hostname};
 		}
 
-		std::string LAMBDACOMMON_API getOSName()
+		std::string LAMBDACOMMON_API get_os_name()
 		{
-			if (!osName.empty())
-				return osName;
+			if (!os_name.empty())
+				return os_name;
 			fs::FilePath etc_os_release{"/etc/os-release"};
 			fs::FilePath lsb_release{"/etc/lsb-release"};
 			struct utsname uts{};
 			uname(&uts);
 			if (!lsb_release.exists() && !etc_os_release.exists())
-				osName = uts.sysname;
+				os_name = uts.sysname;
 
 			if (lsb_release.exists())
 			{
 				std::ifstream lsb_release_in;
-				lsb_release_in.open(lsb_release.toString(), std::ios::in);
+				lsb_release_in.open(lsb_release.to_string(), std::ios::in);
 				std::string word;
 				bool record = false;
 				if (lsb_release_in.is_open())
@@ -412,11 +411,11 @@ namespace lambdacommon
 						if (word.find("DISTRIB_DESCRIPTION") != std::string::npos)
 						{
 							size_t a = word.find_last_of("N=") + 1;
-							osName = word.substr(a + 1, word.length() - a);
+							os_name = word.substr(a + 1, word.length() - a);
 							record = true;
 						}
 						else if (record)
-							osName += " " + lstring::replaceAll(word, "\"", "");
+							os_name += " " + lstring::replace_all(word, "\"", "");
 					}
 					lsb_release_in.close();
 				}
@@ -424,7 +423,7 @@ namespace lambdacommon
 			else
 			{
 				std::ifstream in;
-				in.open(etc_os_release.toString(), std::ios::in);
+				in.open(etc_os_release.to_string(), std::ios::in);
 				char line[256];
 				if (in.is_open())
 				{
@@ -433,8 +432,8 @@ namespace lambdacommon
 						std::string line_{line};
 						if (line_.find("PRETTY_NAME=") != std::string::npos)
 						{
-							size_t equalSign = line_.find_first_of('"');
-							osName = line_.substr(equalSign + 1, line_.length() - equalSign - 2);
+							size_t equal_sign = line_.find_first_of('"');
+							os_name = line_.substr(equal_sign + 1, line_.length() - equal_sign - 2);
 							break;
 						}
 					}
@@ -443,34 +442,34 @@ namespace lambdacommon
 			}
 
 			if (std::string(uts.release).find("Microsoft") != std::string::npos)
-				osName += " on Windows";
-			return osName;
+				os_name += " on Windows";
+			return os_name;
 		}
 
-		std::string LAMBDACOMMON_API getKernelVersion()
+		std::string LAMBDACOMMON_API get_kernel_version()
 		{
 			struct utsname uts{};
 			uname(&uts);
 			return uts.release;
 		}
 
-		std::string LAMBDACOMMON_API getUserName()
+		std::string LAMBDACOMMON_API get_user_name()
 		{
-			struct passwd *userInfo;
-			userInfo = getpwuid(getuid());
-			return userInfo->pw_name;
+			struct passwd *user_info;
+			user_info = getpwuid(getuid());
+			return user_info->pw_name;
 		}
 
-		std::string LAMBDACOMMON_API getUserDirectoryStr()
+		std::string LAMBDACOMMON_API get_user_directory_str()
 		{
-			struct passwd *userInfo;
-			userInfo = getpwuid(getuid());
-			return userInfo->pw_dir;
+			struct passwd *user_info;
+			user_info = getpwuid(getuid());
+			return user_info->pw_dir;
 		}
 
 #endif
 
-		std::string LAMBDACOMMON_API getProcessorArchEnumStr(SysArchitecture arch)
+		std::string LAMBDACOMMON_API get_processor_arch_enum_str(SysArchitecture arch)
 		{
 			switch (arch)
 			{
@@ -489,48 +488,48 @@ namespace lambdacommon
 			}
 		}
 
-		fs::FilePath LAMBDACOMMON_API getUserDirectory()
+		fs::FilePath LAMBDACOMMON_API get_user_directory()
 		{
-			return {getUserDirectoryStr()};
+			return {get_user_directory_str()};
 		}
 
-		bool LAMBDACOMMON_API isProcessRunningAsRoot()
+		bool LAMBDACOMMON_API is_root()
 		{
 #ifdef LAMBDA_WINDOWS
-			BOOL fIsRunAsAdmin = FALSE;
-			PSID pAdministratorsGroup = nullptr;
+			BOOL f_is_run_as_admin = FALSE;
+			PSID p_administrators_group = nullptr;
 
 			// Allocate and initialize a SID of the administrators group.
-			SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
+			SID_IDENTIFIER_AUTHORITY nt_authority = SECURITY_NT_AUTHORITY;
 			if (!AllocateAndInitializeSid(
-					&NtAuthority,
+					&nt_authority,
 					2,
 					SECURITY_BUILTIN_DOMAIN_RID,
 					DOMAIN_ALIAS_RID_ADMINS,
 					0, 0, 0, 0, 0, 0,
-					&pAdministratorsGroup))
+					&p_administrators_group))
 				goto cleanup;
 
 			// Determine whether the SID of administrators group is enabled in
 			// the primary access token of the process.
-			if (!CheckTokenMembership(nullptr, pAdministratorsGroup, &fIsRunAsAdmin))
+			if (!CheckTokenMembership(nullptr, p_administrators_group, &f_is_run_as_admin))
 				goto cleanup;
 
 			cleanup:
 			// Centralized cleanup for all allocated resources.
-			if (pAdministratorsGroup)
+			if (p_administrators_group)
 			{
-				FreeSid(pAdministratorsGroup);
-				pAdministratorsGroup = nullptr;
+				FreeSid(p_administrators_group);
+				p_administrators_group = nullptr;
 			}
 
-			return fIsRunAsAdmin == TRUE;
+			return f_is_run_as_admin == TRUE;
 #else
 			return getuid() == 0;
 #endif
 		}
 
-		void LAMBDACOMMON_API openURI(const std::string &uri)
+		void LAMBDACOMMON_API open_uri(const std::string &uri)
 		{
 #ifdef LAMBDA_WINDOWS
 			// Use the Windows API.

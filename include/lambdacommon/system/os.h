@@ -41,9 +41,9 @@ namespace lambdacommon
 			 *
 			 * @return The OS used.
 			 */
-			extern OS LAMBDACOMMON_API getOS();
+			extern OS LAMBDACOMMON_API get_os();
 
-			extern std::string LAMBDACOMMON_API getOSName(OS os = getOS());
+			extern std::string LAMBDACOMMON_API get_os_name(OS os = get_os());
 		}
 	}
 }

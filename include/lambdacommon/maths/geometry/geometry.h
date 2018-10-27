@@ -7,10 +7,9 @@
  * see the LICENSE file.
  */
 
-#include "../include/clambdacommon/system/time.h"
-#include <lambdacommon/system/time.h>
+#ifndef LAMBDACOMMON_GEOMETRY_H
+#define LAMBDACOMMON_GEOMETRY_H
 
-time_t lc_time_get_time_millis()
-{
-	return lambdacommon::time::get_time_millis();
-}
+#include "dimensions.h"
+
+#endif //LAMBDACOMMON_GEOMETRY_H

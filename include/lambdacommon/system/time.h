@@ -21,7 +21,7 @@ namespace lambdacommon
 		 * Gets the current time in milliseconds.
 		 * @return The difference, measured in milliseconds, between the current time and midnight, January 1, 1970 UTC.
 		 */
-		extern time_t LAMBDACOMMON_API getTimeMillis();
+		extern time_t LAMBDACOMMON_API get_time_millis();
 	}
 }
 

@@ -42,37 +42,37 @@ namespace lambdacommon
 		 * Returns the name of the processor (CPU) as a string.
 		 * @return The CPU's name.
 		 */
-		extern std::string LAMBDACOMMON_API getProcessorName();
+		extern std::string LAMBDACOMMON_API get_cpu_name();
 
-		extern SysArchitecture LAMBDACOMMON_API getProcessorArch();
+		extern SysArchitecture LAMBDACOMMON_API get_processor_arch();
 
-		extern std::string LAMBDACOMMON_API getProcessorArchEnumStr(SysArchitecture arch = getProcessorArch());
+		extern std::string LAMBDACOMMON_API get_processor_arch_enum_str(SysArchitecture arch = get_processor_arch());
 
-		extern std::string LAMBDACOMMON_API getProcessorArchStr();
+		extern std::string LAMBDACOMMON_API get_processor_arch_str();
 
 		/*!
 		 * Returns the count of the processor (CPU) cores as an int.
 		 * @return The CPU cores' count
 		 */
-		extern uint32_t LAMBDACOMMON_API getProcessorCores();
+		extern uint32_t LAMBDACOMMON_API get_cpu_cores();
 
 		/*!
 		 * Returns the size of the physical memory (RAM) in bytes.
 		 * @return The physical memory in bytes.
 		 */
-		extern uint64_t LAMBDACOMMON_API getMemoryTotal();
+		extern uint64_t LAMBDACOMMON_API get_memory_total();
 
 		/*!
 		 * Returns the size of the available physical memory (RAM) in bytes.
 		 * @return The available physical memory in bytes.
 		 */
-		extern uint64_t LAMBDACOMMON_API getMemoryAvailable();
+		extern uint64_t LAMBDACOMMON_API get_memory_available();
 
 		/*!
 		 * Returns the size of the used physical memory (RAM) in bytes.
 		 * @return The used physical memory in bytes.
 		 */
-		extern uint64_t LAMBDACOMMON_API getMemoryUsed();
+		extern uint64_t LAMBDACOMMON_API get_memory_used();
 
 		/*
 		 * Computer
@@ -82,19 +82,19 @@ namespace lambdacommon
 		 * Returns the computer's name as a string.
 		 * @return The computer's name.
 		 */
-		extern std::string LAMBDACOMMON_API getHostName();
+		extern std::string LAMBDACOMMON_API get_host_name();
 
 		/*!
 		 * Returns the OS' name at runtime.
 		 * @return The OS' name at runtime.
 		 */
-		extern std::string LAMBDACOMMON_API getOSName();
+		extern std::string LAMBDACOMMON_API get_os_name();
 
 		/*!
 		 * Returns the Kernel' version at runtime.
 		 * @return The Kernel' version at runtime.
 		 */
-		extern std::string LAMBDACOMMON_API getKernelVersion();
+		extern std::string LAMBDACOMMON_API get_kernel_version();
 
 		/*
 		 * User
@@ -104,23 +104,23 @@ namespace lambdacommon
 		 * Gets the user name of the user running the program.
 		 * @return The user name.
 		 */
-		extern std::string LAMBDACOMMON_API getUserName();
+		extern std::string LAMBDACOMMON_API get_user_name();
 
-		extern std::string LAMBDACOMMON_API getUserDirectoryStr();
+		extern std::string LAMBDACOMMON_API get_user_directory_str();
 
-		extern fs::FilePath LAMBDACOMMON_API getUserDirectory();
+		extern fs::FilePath LAMBDACOMMON_API get_user_directory();
 
 		/*
 		 * Others
 		 */
 
-		extern bool LAMBDACOMMON_API isProcessRunningAsRoot();
+		extern bool LAMBDACOMMON_API is_root();
 
 		/*!
 		 * Opens the specified URI with the default application assigned to.
 		 * @param uri The URI to open.
 		 */
-		extern void LAMBDACOMMON_API openURI(const std::string &uri);
+		extern void LAMBDACOMMON_API open_uri(const std::string &uri);
 
 		/*!
 		 * Sleeps the current thread for the specified time in milliseconds.

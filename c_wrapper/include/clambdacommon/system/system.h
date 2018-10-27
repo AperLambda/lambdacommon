@@ -42,37 +42,37 @@ typedef enum lc_SysArchitecture lc_SysArchitecture;
  * Returns the name of the processor (CPU) as a string.
  * @return The CPU's name.
  */
-const char *lc_sys_getProcessorName();
+const char *lc_sys_get_cpu_name();
 
-lc_SysArchitecture lc_sys_getProcessorArch();
+lc_SysArchitecture lc_sys_get_processor_arch();
 
-const char *lc_sys_getProcessorArchEnumStr(lc_SysArchitecture arch);
+const char *lc_sys_get_processor_arch_enum_str(lc_SysArchitecture arch);
 
-const char *lc_sys_getProcessorArchStr();
+const char *lc_sys_get_processor_arch_str();
 
 /*!
  * Returns the count of the processor (CPU) cores as an int.
  * @return The CPU cores' count
  */
-uint32_t lc_sys_getProcessorCores();
+uint32_t lc_sys_get_cpu_cores();
 
 /*!
  * Returns the size of the physical memory (RAM) in bytes.
  * @return The physical memory in bytes.
  */
-uint64_t lc_sys_getMemoryTotal();
+uint64_t lc_sys_get_memory_total();
 
 /*!
  * Returns the size of the available physical memory (RAM) in bytes.
  * @return The available physical memory in bytes.
  */
-uint64_t lc_sys_getMemoryAvailable();
+uint64_t lc_sys_get_memory_available();
 
 /*!
  * Returns the size of the used physical memory (RAM) in bytes.
  * @return The used physical memory in bytes.
  */
-uint64_t lc_sys_getMemoryUsed();
+uint64_t lc_sys_get_memory_used();
 
 /*
  * Computer
@@ -82,19 +82,19 @@ uint64_t lc_sys_getMemoryUsed();
  * Returns the computer's name as a string.
  * @return The computer's name.
  */
-const char *lc_sys_getHostName();
+const char *lc_sys_get_host_name();
 
 /*!
  * Returns the OS' name at runtime.
  * @return The OS' name at runtime.
  */
-const char *lc_sys_getOSName();
+const char *lc_sys_get_os_name();
 
 /*!
  * Returns the Kernel' version at runtime.
  * @return The Kernel' version at runtime.
  */
-const char *lc_sys_getKernelVersion();
+const char *lc_sys_get_kernel_version();
 
 /*
  * User
@@ -104,21 +104,21 @@ const char *lc_sys_getKernelVersion();
  * Gets the user name of the user running the program.
  * @return The user name.
  */
-const char *lc_sys_getUserName();
+const char *lc_sys_get_user_name();
 
-const char *lc_sys_getUserDirectoryStr();
+const char *lc_sys_get_user_directory_str();
 
 /*
  * Others
  */
 
-bool lc_sys_isProcessRunningAsRoot();
+bool lc_sys_is_root();
 
 /*!
  * Opens the specified URI with the default application assigned to.
  * @param uri The URI to open.
  */
-void lc_sys_openURI(const char *uri);
+void lc_sys_open_uri(const char *uri);
 
 /*!
  * Sleeps the current thread for the specified time in milliseconds.

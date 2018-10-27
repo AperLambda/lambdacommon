@@ -23,12 +23,12 @@
 
 #endif
 
-void lc_term_setFormat(lc_TermFormatting formatting)
+void lc_term_set_format(lc_TermFormatting formatting)
 {
 	std::cout << static_cast<lambdacommon::terminal::TermFormatting>(formatting);
 }
 
-void lc_term_setFormats(int count, ...)
+void lc_term_set_formats(int count, ...)
 {
 	std::vector<lambdacommon::terminal::TermFormatting> formats;
 	va_list vaList;
@@ -50,9 +50,9 @@ void lc_term_clear()
 	lambdacommon::terminal::clear();
 }
 
-void lc_term_setCursorPosition(unsigned short x, unsigned short y)
+void lc_term_set_cursor_position(unsigned short x, unsigned short y)
 {
-	lambdacommon::terminal::setCursorPosition(x, y);
+	lambdacommon::terminal::set_cursor_position(x, y);
 }
 
 void lc_term_bell()
@@ -65,28 +65,28 @@ bool lc_term_setup()
 	return lambdacommon::terminal::setup();
 }
 
-void lc_term_useUTF8()
+void lc_term_use_ut8()
 {
-	lambdacommon::terminal::useUTF8();
+	lambdacommon::terminal::use_utf8();
 }
 
-const char *lc_term_getTerminalTitle()
+const char *lc_term_get_terminal_title()
 {
 	static char title[TERM_TITLE_MAX_SIZE];
-	lambdacommon::terminal::getTerminalTitle().copy(title, TERM_TITLE_MAX_SIZE);
+	lambdacommon::terminal::get_title().copy(title, TERM_TITLE_MAX_SIZE);
 	return title;
 }
 
-bool lc_term_setTerminalTitle(const char *title)
+bool lc_term_set_terminal_title(const char *title)
 {
-	return lambdacommon::terminal::setTerminalTitle(title);
+	return lambdacommon::terminal::set_title(title);
 }
 
-lc_TermSize lc_term_getTerminalSize()
+lc_TermSize lc_term_get_terminal_size()
 {
-	lc_TermSize termSize{};
-	auto cppTermSize = lambdacommon::terminal::getTerminalSize();
-	termSize.columns = cppTermSize.columns;
-	termSize.rows = cppTermSize.rows;
-	return termSize;
+	lc_TermSize term_size{};
+	auto cpp_term_size = lambdacommon::terminal::get_size();
+	term_size.columns = cpp_term_size.columns;
+	term_size.rows = cpp_term_size.rows;
+	return term_size;
 }

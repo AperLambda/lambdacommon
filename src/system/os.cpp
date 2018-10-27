@@ -19,7 +19,7 @@ namespace lambdacommon
 {
 	namespace system
 	{
-		OS LAMBDACOMMON_API os::getOS()
+		OS LAMBDACOMMON_API os::get_os()
 		{
 #ifdef LAMBDA_WINDOWS
 #ifdef LAMBDA_WIN64
@@ -40,40 +40,40 @@ namespace lambdacommon
 #endif
 		}
 
-		std::string LAMBDACOMMON_API os::getOSName(OS os)
+		std::string LAMBDACOMMON_API os::get_os_name(OS os)
 		{
-			std::string osName = std::string();
+			std::string os_name = std::string();
 			switch (os)
 			{
 				case WINDOWS_32:
-					osName = "Windows 32-bits";
+					os_name = "Windows 32-bits";
 					break;
 				case WINDOWS_64:
-					osName = "Windows 64-bits";
+					os_name = "Windows 64-bits";
 					break;
 				case MAC_OSX:
-					osName = "Mac OSX";
+					os_name = "Mac OSX";
 					break;
 				case LINUX:
-					osName = "Linux";
+					os_name = "Linux";
 					break;
 				case FREEBSD:
-					osName = "FreeBSD";
+					os_name = "FreeBSD";
 					break;
 				case NETBSD:
-					osName = "NetBSD";
+					os_name = "NetBSD";
 					break;
 				case OPENBSD:
-					osName = "OpenBSD";
+					os_name = "OpenBSD";
 					break;
 				case CYGWIN:
-					osName = "Cygwin";
+					os_name = "Cygwin";
 					break;
 				case OS_UNKNOWN:
-					osName = "Unknown";
+					os_name = "Unknown";
 					break;
 			}
-			return osName;
+			return os_name;
 		}
 	}
 }

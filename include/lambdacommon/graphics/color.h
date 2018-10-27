@@ -66,7 +66,7 @@ namespace lambdacommon
 		 *
 		 * @return The red value (between 0 and 255).
 		 */
-		uint8_t redAsInt() const;
+		uint8_t red_as_int() const;
 
 		/*! @brief Gets the green value of the color.
 		 *
@@ -74,7 +74,7 @@ namespace lambdacommon
 		 *
 		 * @return The green value (between 0 and 255).
 		 */
-		uint8_t greenAsInt() const;
+		uint8_t green_as_int() const;
 
 		/*! @brief Gets the blue value of the color.
 		 *
@@ -82,7 +82,7 @@ namespace lambdacommon
 		 *
 		 * @return The blue value (between 0 and 255).
 		 */
-		uint8_t blueAsInt() const;
+		uint8_t blue_as_int() const;
 
 		/*! @brief Gets the alpha value of the color.
 		 *
@@ -90,14 +90,14 @@ namespace lambdacommon
 		 *
 		 * @return The alpha value (between 0 and 255).
 		 */
-		uint8_t alphaAsInt() const;
+		uint8_t alpha_as_int() const;
 
 		/*!
 		 * Blends this color with a background color.
-		 * @param bgColor The background color.
+		 * @param bg_color The background color.
 		 * @return The blended color.
 		 */
-		const Color blend(const Color &bgColor) const;
+		const Color blend(const Color &bg_color) const;
 
 		/*!
 		 * Mixes this color with another color.
@@ -111,51 +111,54 @@ namespace lambdacommon
 		 * Gets the color as an hexadecimal color.
 		 * @return The hexadecimal color.
 		 */
-		uint64_t toHex() const;
+		uint64_t to_hex() const;
 
 		/*!
 		 * Gets the color as a string.
 		 * @return The color as a string.
 		 */
-		std::string toString(bool hex = true) const;
+		std::string to_string(bool hex = true) const;
 
 		bool operator==(const Color &other) const;
 
 		bool operator<(const Color &other) const;
-
-		/*!
-		 * Adds the specified color to the current color.
-		 * @param other The color to add.
-		 * @return The added color.
-		 */
-		const Color operator+(const Color &other) const;
-
-		/*!
-		 * Subtracts the specified color to the current color. Alpha is not subtracted.
-		 * @param other The color to subtract.
-		 * @return The subtracted color.
-		 */
-		const Color operator-(const Color &other) const;
-
-		/*!
-		 * Multiplies the specified color to the current color.
-		 * @param other The color to multiply.
-		 * @return The multiplied color.
-		 */
-		const Color operator*(const Color &other) const;
-
-		/*!
-		 * Multiplies the current color with a specified coefficient.
-		 * @param coefficient The multiplication coefficient.
-		 * @return The multiplied color.
-		 */
-		const Color operator*(float coefficient) const;
 
 		Color &operator+=(const Color &other);
 
 		Color &operator-=(const Color &other);
 
 		Color &operator*=(const Color &other);
+
+		Color &operator*=(float coefficient);
+
+		/*!
+		 * Adds the specified color to the current color.
+		 * @param self The current color.
+		 * @param other The color to add.
+		 * @return The added color.
+		 */
+		friend const Color operator+(Color self, const Color &other);
+
+		/*!
+		 * Subtracts the specified color to the current color. Alpha is not subtracted.
+		 * @param other The color to subtract.
+		 * @return The subtracted color.
+		 */
+		friend const Color operator-(Color self, const Color &other);
+
+		/*!
+		 * Multiplies the specified color to the current color.
+		 * @param other The color to multiply.
+		 * @return The multiplied color.
+		 */
+		friend const Color operator*(Color self, const Color &other);
+
+		/*!
+		 * Multiplies the current color with a specified coefficient.
+		 * @param coefficient The multiplication coefficient.
+		 * @return The multiplied color.
+		 */
+		friend const Color operator*(Color self, float coefficient);
 
 		/**
 		 * Represents the black color.
@@ -202,11 +205,11 @@ namespace lambdacommon
 		 */
 		extern Color LAMBDACOMMON_API mix(const Color &a, const Color &b, float ratio);
 
-		extern Color LAMBDACOMMON_API fromHex(uint64_t hexColor, bool hasAlpha = true);
+		extern Color LAMBDACOMMON_API from_hex(uint64_t hex_color, bool has_alpha = true);
 
-		extern Color LAMBDACOMMON_API fromHex(const std::string &hexColor);
+		extern Color LAMBDACOMMON_API from_hex(const std::string &hex_color);
 
-		extern Color LAMBDACOMMON_API fromIntRGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+		extern Color LAMBDACOMMON_API from_int_rgba(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 	}
 }
 

@@ -10,12 +10,12 @@
 #include "../../include/clambdacommon/system/os.h"
 #include <lambdacommon/system/os.h>
 
-lc_sys_OS lc_os_getOS()
+lc_sys_OS lc_os_get_os()
 {
-	return static_cast<lc_sys_OS>(lambdacommon::system::os::getOS());
+	return static_cast<lc_sys_OS>(lambdacommon::system::os::get_os());
 }
 
-const char *lc_os_getOSName(lc_sys_OS os)
+const char *lc_os_get_os_name(lc_sys_OS os)
 {
-	return lambdacommon::system::os::getOSName(static_cast<lambdacommon::system::OS>(os)).c_str();
+	return lambdacommon::system::os::get_os_name(static_cast<lambdacommon::system::OS>(os)).c_str();
 }

@@ -36,7 +36,7 @@ namespace lambdacommon
 {
 	namespace terminal
 	{
-		bool useANSIEscapeCodes = false;
+		bool use_ansi_escape_codes = false;
 
 		/*
 		 * INTERNAL
@@ -57,20 +57,20 @@ namespace lambdacommon
 		HANDLE getTermHandle(std::ostream &stream)
 		{
 			// Get terminal handle
-			HANDLE hTerminal = INVALID_HANDLE_VALUE;
+			HANDLE h_terminal = INVALID_HANDLE_VALUE;
 			if (&stream == &std::cout)
-				hTerminal = GetStdHandle(STD_OUTPUT_HANDLE);
+				h_terminal = GetStdHandle(STD_OUTPUT_HANDLE);
 			else if (&stream == &std::cerr)
-				hTerminal = GetStdHandle(STD_ERROR_HANDLE);
-			return hTerminal;
+				h_terminal = GetStdHandle(STD_ERROR_HANDLE);
+			return h_terminal;
 		}
 
 		void cls(HANDLE hConsole)
 		{
-			COORD coordScreen{0, 0};    // home for the cursor
-			DWORD cCharsWritten;
+			COORD coord_screen{0, 0};    // home for the cursor
+			DWORD c_chars_written;
 			CONSOLE_SCREEN_BUFFER_INFO csbi;
-			DWORD dwConSize;
+			DWORD dw_con_size;
 
 			// Get the number of character cells in the current buffer.
 			if (!GetConsoleScreenBufferInfo(hConsole, &csbi))
@@ -78,14 +78,14 @@ namespace lambdacommon
 				return;
 			}
 
-			dwConSize = static_cast<DWORD>(csbi.dwSize.X * csbi.dwSize.Y);
+			dw_con_size = static_cast<DWORD>(csbi.dwSize.X * csbi.dwSize.Y);
 
 			// Fill the entire screen with blanks.
 			if (!FillConsoleOutputCharacter(hConsole,        // Handle to console screen buffer
 											(TCHAR) ' ',     // Character to write to the buffer
-											dwConSize,       // Number of cells to write
-											coordScreen,     // Coordinates of first cell
-											&cCharsWritten))// Receive number of characters written
+											dw_con_size,       // Number of cells to write
+											coord_screen,     // Coordinates of first cell
+											&c_chars_written))// Receive number of characters written
 				return;
 
 			// Get the current text attribute.
@@ -95,36 +95,36 @@ namespace lambdacommon
 			// Set the buffer's attributes accordingly.
 			if (!FillConsoleOutputAttribute(hConsole,         // Handle to console screen buffer
 											csbi.wAttributes, // Character attributes to use
-											dwConSize,        // Number of cells to set attribute
-											coordScreen,      // Coordinates of first cell
-											&cCharsWritten)) // Receive number of characters written
+											dw_con_size,        // Number of cells to set attribute
+											coord_screen,      // Coordinates of first cell
+											&c_chars_written)) // Receive number of characters written
 				return;
 
 			// Put the cursor at its home coordinates.
 
-			SetConsoleCursorPosition(hConsole, coordScreen);
+			SetConsoleCursorPosition(hConsole, coord_screen);
 		}
 
 		inline void win_change_attributes(std::ostream &stream, int foreground, int background)
 		{
-			static WORD defaultAttributes = 0;
+			static WORD default_attributes = 0;
 
 			// Get terminal handle
 			auto hTerminal = getTermHandle(stream);
 
 			// Save default terminal attributes if it unsaved
-			if (!defaultAttributes)
+			if (!default_attributes)
 			{
 				CONSOLE_SCREEN_BUFFER_INFO info;
 				if (!GetConsoleScreenBufferInfo(hTerminal, &info))
 					return;
-				defaultAttributes = info.wAttributes;
+				default_attributes = info.wAttributes;
 			}
 
 			// Restore all default settings
 			if (foreground == -1 && background == -1)
 			{
-				SetConsoleTextAttribute(hTerminal, defaultAttributes);
+				SetConsoleTextAttribute(hTerminal, default_attributes);
 				return;
 			}
 
@@ -154,20 +154,20 @@ namespace lambdacommon
 		 * IMPLEMENTATION
 		 */
 
-		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting termFormatting)
+		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting term_formatting)
 		{
-			std::vector<TermFormatting> formats{termFormatting};
+			std::vector<TermFormatting> formats{term_formatting};
 			return stream << formats;
 		}
 
-		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<TermFormatting> termFormatting)
+		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<TermFormatting> term_formatting)
 		{
-			if (isTTY(stream))
+			if (is_tty(stream))
 			{
 #ifdef WIN_FRIENDLY
-				if (!useANSIEscapeCodes)
+				if (!use_ansi_escape_codes)
 				{
-					for (auto format : termFormatting)
+					for (auto format : term_formatting)
 					{
 						switch (format)
 						{
@@ -278,42 +278,42 @@ namespace lambdacommon
 					return stream;
 				}
 				else
-					goto writeANSI;
+					goto write_ansi;
 #else
-				goto writeANSI;
+				goto write_ansi;
 #endif
 			} else
-				goto writeANSI;
-			writeANSI:
-			std::string ansiSequence{((char) 0x1B)};
-			ansiSequence += "[";
-			auto formattings = termFormatting.size();
+				goto write_ansi;
+			write_ansi:
+			std::string ansi_sequence{((char) 0x1B)};
+			ansi_sequence += "[";
+			auto formattings = term_formatting.size();
 			for (size_t i = 0; i < formattings; i++)
 			{
-				std::string str = std::to_string(static_cast<int>(termFormatting[i]));
+				std::string str = std::to_string(static_cast<int>(term_formatting[i]));
 				if (i != formattings - 1)
-					ansiSequence += (str + ";");
+					ansi_sequence += (str + ";");
 				else
-					ansiSequence += str;
+					ansi_sequence += str;
 			}
-			ansiSequence += "m";
-			stream << ansiSequence;
+			ansi_sequence += "m";
+			stream << ansi_sequence;
 			return stream;
 		}
 
-		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<std::string> stringVector)
+		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<std::string> string_vector)
 		{
-			stream << lstring::to_string(stringVector);
+			stream << lstring::to_string(string_vector);
 			return stream;
 		}
 
 		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const Color &color)
 		{
-			stream << color.toString();
+			stream << color.to_string();
 			return stream;
 		}
 
-		std::ostream LAMBDACOMMON_API &eraseCurrentLine(std::ostream &stream)
+		std::ostream LAMBDACOMMON_API &erase_current_line(std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
 #else
@@ -325,7 +325,7 @@ namespace lambdacommon
 		std::ostream LAMBDACOMMON_API &clear(std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
-			if (isTTY(stream))
+			if (is_tty(stream))
 			{
 				cls(getTermHandle(stream));
 				return stream;
@@ -335,10 +335,10 @@ namespace lambdacommon
 			return stream;
 		}
 
-		void LAMBDACOMMON_API setCursorPosition(unsigned short x, unsigned short y, std::ostream &stream)
+		void LAMBDACOMMON_API set_cursor_position(unsigned short x, unsigned short y, std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
-			if (isTTY(stream))
+			if (is_tty(stream))
 			{
 				COORD coord;
 				coord.X = x;
@@ -367,24 +367,24 @@ namespace lambdacommon
 		bool LAMBDACOMMON_API setup()
 		{
 #ifdef  WIN_FRIENDLY
-			HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-			if (hOut != INVALID_HANDLE_VALUE)
+			HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE);
+			if (h_out != INVALID_HANDLE_VALUE)
 			{
 				DWORD dwMode = 0;
-				if (GetConsoleMode(hOut, &dwMode))
+				if (GetConsoleMode(h_out, &dwMode))
 				{
 					dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-					if (SetConsoleMode(hOut, dwMode))
-						useANSIEscapeCodes = true;
+					if (SetConsoleMode(h_out, dwMode))
+						use_ansi_escape_codes = true;
 				}
 			}
 #else
 #endif
-			useUTF8();
-			return useANSIEscapeCodes;
+			use_utf8();
+			return use_ansi_escape_codes;
 		}
 
-		void LAMBDACOMMON_API useUTF8()
+		void LAMBDACOMMON_API use_utf8()
 		{
 #ifdef WIN_FRIENDLY
 			SetConsoleCP(CP_UTF8);
@@ -394,7 +394,7 @@ namespace lambdacommon
 #endif
 		}
 
-		bool LAMBDACOMMON_API isTTY(const std::ostream &stream)
+		bool LAMBDACOMMON_API is_tty(const std::ostream &stream)
 		{
 		FILE *std_stream = get_standard_stream(stream);
 
@@ -405,12 +405,12 @@ namespace lambdacommon
 #endif
 		}
 
-		std::string LAMBDACOMMON_API getTerminalTitle()
+		std::string LAMBDACOMMON_API get_title()
 		{
 #ifdef WIN_FRIENDLY
-			TCHAR currentTitle[MAX_PATH];
-			if (GetConsoleTitle(currentTitle, MAX_PATH))
-				return {currentTitle};
+			TCHAR current_title[MAX_PATH];
+			if (GetConsoleTitle(current_title, MAX_PATH))
+				return {current_title};
 			else
 				return "";
 #else
@@ -418,17 +418,17 @@ namespace lambdacommon
 #endif
 		}
 
-		bool LAMBDACOMMON_API setTerminalTitle(const std::string &title, std::ostream &stream)
+		bool LAMBDACOMMON_API set_title(const std::string &title, std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
-			if (isTTY(stream))
+			if (is_tty(stream))
 				return (bool) SetConsoleTitle(TEXT(title.c_str()));
 #endif
 			stream << ("\033]0;" + title + "\007");
 			return true;
 		}
 
-		TermSize LAMBDACOMMON_API getTerminalSize()
+		TermSize LAMBDACOMMON_API get_size()
 		{
 			TermSize size{};
 #ifdef WIN_FRIENDLY

@@ -20,94 +20,94 @@
 
 #endif
 
-const char *lc_sys_getProcessorName()
+const char *lc_sys_get_cpu_name()
 {
-	static char cpuBrandStr[0x40];
-	lambdacommon::system::getProcessorName().copy(cpuBrandStr, 0x40);
-	return cpuBrandStr;
+	static char cpu_brand_str[0x40];
+	lambdacommon::system::get_cpu_name().copy(cpu_brand_str, 0x40);
+	return cpu_brand_str;
 }
 
-lc_SysArchitecture lc_sys_getProcessorArch()
+lc_SysArchitecture lc_sys_get_processor_arch()
 {
-	return static_cast<lc_SysArchitecture>(lambdacommon::system::getProcessorArch());
+	return static_cast<lc_SysArchitecture>(lambdacommon::system::get_processor_arch());
 }
 
-const char *lc_sys_getProcessorArchEnumStr(lc_SysArchitecture arch)
+const char *lc_sys_get_processor_arch_enum_str(lc_SysArchitecture arch)
 {
-	static char archStr[8];
-	lambdacommon::system::getProcessorArchEnumStr(static_cast<lambdacommon::system::SysArchitecture>(arch)).copy(
-			archStr, 8);
-	return archStr;
+	static char arch_str[8];
+	lambdacommon::system::get_processor_arch_enum_str(static_cast<lambdacommon::system::SysArchitecture>(arch)).copy(
+			arch_str, 8);
+	return arch_str;
 }
 
-const char *lc_sys_getProcessorArchStr()
+const char *lc_sys_get_processor_arch_str()
 {
-	return lc_sys_getProcessorArchEnumStr(lc_sys_getProcessorArch());
+	return lc_sys_get_processor_arch_enum_str(lc_sys_get_processor_arch());
 }
 
-uint32_t lc_sys_getProcessorCores()
+uint32_t lc_sys_get_cpu_cores()
 {
-	return lambdacommon::system::getProcessorCores();
+	return lambdacommon::system::get_cpu_cores();
 }
 
-uint64_t lc_sys_getMemoryTotal()
+uint64_t lc_sys_get_memory_total()
 {
-	return lambdacommon::system::getMemoryTotal();
+	return lambdacommon::system::get_memory_total();
 }
 
-uint64_t lc_sys_getMemoryAvailable()
+uint64_t lc_sys_get_memory_available()
 {
-	return lambdacommon::system::getMemoryAvailable();
+	return lambdacommon::system::get_memory_available();
 }
 
-uint64_t lc_sys_getMemoryUsed()
+uint64_t lc_sys_get_memory_used()
 {
-	return lambdacommon::system::getMemoryUsed();
+	return lambdacommon::system::get_memory_used();
 }
 
-const char *lc_sys_getHostName()
+const char *lc_sys_get_host_name()
 {
-	static char hostName[HOST_NAME_MAX];
-	lambdacommon::system::getHostName().copy(hostName, HOST_NAME_MAX);
-	return hostName;
+	static char hostname[HOST_NAME_MAX];
+	lambdacommon::system::get_host_name().copy(hostname, HOST_NAME_MAX);
+	return hostname;
 }
 
-const char *lc_sys_getOSName()
+const char *lc_sys_get_os_name()
 {
-	static char osName[256];
-	lambdacommon::system::getOSName().copy(osName, 256);
-	return osName;
+	static char os_name[256];
+	lambdacommon::system::get_os_name().copy(os_name, 256);
+	return os_name;
 }
 
-const char *lc_sys_getKernelVersion()
+const char *lc_sys_get_kernel_version()
 {
-	static char kernelVersion[64];
-	lambdacommon::system::getKernelVersion().copy(kernelVersion, 64);
-	return kernelVersion;
+	static char kernel_version[64];
+	lambdacommon::system::get_kernel_version().copy(kernel_version, 64);
+	return kernel_version;
 }
 
-const char *lc_sys_getUserName()
+const char *lc_sys_get_user_name()
 {
 	static char username[32];
-	lambdacommon::system::getUserName().copy(username, 32);
+	lambdacommon::system::get_user_name().copy(username, 32);
 	return username;
 }
 
-const char *lc_sys_getUserDirectoryStr()
+const char *lc_sys_get_user_directory_str()
 {
 	static char path[256];
-	lambdacommon::system::getUserDirectoryStr().copy(path, 256);
+	lambdacommon::system::get_user_directory_str().copy(path, 256);
 	return path;
 }
 
-bool lc_sys_isProcessRunningAsRoot()
+bool lc_sys_is_root()
 {
-	return lambdacommon::system::isProcessRunningAsRoot();
+	return lambdacommon::system::is_root();
 }
 
-void lc_sys_openURI(const char *uri)
+void lc_sys_open_uri(const char *uri)
 {
-	lambdacommon::system::openURI({uri});
+	lambdacommon::system::open_uri({uri});
 }
 
 void lc_sys_sleep(uint32_t time)
