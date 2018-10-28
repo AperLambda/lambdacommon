@@ -127,6 +127,26 @@ namespace lambdacommon
 			return maths::min(maths::max(number, min), max);
 		}
 
+		/*!
+		 * Clamps a number between a minimum and maximum value.
+		 * If the number is bigger than the maximum, then it returns the minimum, etc...
+		 * @tparam N The number type.
+		 * @param number The number to clamp.
+		 * @param min The minimum value, this function will never return a number less than this.
+		 * @param max The maximum value, this function will never return a number greater than this.
+		 * @return The clamped value.
+		 */
+		template<typename N>
+		N clamp_reset(N number, N min, N max)
+		{
+			if (number > max)
+				return min;
+			else if (number < min)
+				return max;
+			else
+				return number;
+		}
+
 		/*
 		 * Trigonometric functions.
 		 */
