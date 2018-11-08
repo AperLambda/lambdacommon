@@ -11,6 +11,7 @@
 #define LAMBDACOMMON_DIMENSIONS_H
 
 #include "../../serializable.h"
+#include <utility>
 
 namespace lambdacommon
 {
