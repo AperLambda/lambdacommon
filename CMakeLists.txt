@@ -29,7 +29,7 @@ endif()
 # There is the C++ headers files.
 set(HEADERS_CONNECTION include/lambdacommon/connection/address.h)
 set(HEADERS_DOCUMENT include/lambdacommon/documents/document.h)
-set(HEADERS_GRAPHICS include/lambdacommon/graphics/color.h)
+set(HEADERS_GRAPHICS include/lambdacommon/graphics/color.h include/lambdacommon/graphics/scene.h)
 set(HEADERS_MATHS include/lambdacommon/maths.h include/lambdacommon/maths/geometry/geometry.h include/lambdacommon/maths/geometry/dimensions.h)
 set(HEADERS_FILESYSTEM include/lambdacommon/system/fs/filesystem.h)
 set(HEADERS_EXCEPTIONS include/lambdacommon/exceptions/exceptions.h)
@@ -39,7 +39,7 @@ set(HEADERS_FILES ${HEADERS_CONNECTION} ${HEADERS_DOCUMENT} ${HEADERS_GRAPHICS} 
 # There is the C++ sources files.
 set(SOURCES_CONNECTION src/connection/address.cpp)
 set(SOURCES_DOCUMENT)
-set(SOURCES_GRAPHICS src/graphics/color.cpp)
+set(SOURCES_GRAPHICS src/graphics/color.cpp src/graphics/scene.cpp)
 set(SOURCES_MATHS src/maths.cpp)
 set(SOURCES_FILESYSTEM src/system/fs/filesystem.cpp)
 set(SOURCES_SERIALIZERS)
