@@ -29,14 +29,14 @@ namespace lambdacommon
 		_path = name.substr(separator + 1);
 	}
 
-	ResourceName::ResourceName(std::string domain, std::string path) noexcept : _domain(std::move(domain)),
-	                                                                            _path(std::move(path))
+	ResourceName::ResourceName(const std::string &domain, const std::string &path) noexcept : _domain(domain),
+																							  _path(path)
 	{}
 
 	ResourceName::ResourceName(const ResourceName &other) = default;
 
 	ResourceName::ResourceName(ResourceName &&other) noexcept : _domain(std::move(other._domain)),
-	                                                                   _path(std::move(other._path))
+																_path(std::move(other._path))
 	{}
 
 	const std::string &ResourceName::get_domain() const

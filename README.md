@@ -6,6 +6,7 @@
 [![Version](https://img.shields.io/github/release/AperLambda/lambdacommon.svg)](https://github.com/AperLambda/lambdacommon/releases)
 [![Build Status](https://travis-ci.org/AperLambda/lambdacommon.svg?branch=master)](https://travis-ci.org/AperLambda/lambdacommon/)
 [![Build status](https://ci.appveyor.com/api/projects/status/aufclhjsvecva6mk?svg=true)](https://ci.appveyor.com/project/LambdAurora/lambdacommon)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/981c6234700d413297724d7d759e2dec)](https://www.codacy.com/app/LambdAurora/lambdacommon?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AperLambda/lambdacommon&amp;utm_campaign=Badge_Grade)
 ![Downloads](https://img.shields.io/github/downloads/AperLambda/lambdacommon/latest/total.svg?style=flat-square)
 [![GitHub issues](https://img.shields.io/github/issues/AperLambda/lambdacommon.svg?style=flat-square)](https://github.com/AperLambda/lambdacommon/issues/)
 

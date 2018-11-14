@@ -402,10 +402,10 @@ namespace lambdacommon
 			{
 				std::ifstream lsb_release_in;
 				lsb_release_in.open(lsb_release.to_string(), std::ios::in);
-				std::string word;
-				bool record = false;
 				if (lsb_release_in.is_open())
 				{
+					std::string word;
+					bool record = false;
 					while (lsb_release_in >> word)
 					{
 						if (word.find("DISTRIB_DESCRIPTION") != std::string::npos)
@@ -424,9 +424,9 @@ namespace lambdacommon
 			{
 				std::ifstream in;
 				in.open(etc_os_release.to_string(), std::ios::in);
-				char line[256];
 				if (in.is_open())
 				{
+					char line[256];
 					while (in.getline(line, 256))
 					{
 						std::string line_{line};

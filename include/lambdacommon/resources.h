@@ -32,7 +32,7 @@ namespace lambdacommon
 	public:
 		ResourceName(const std::string &name);
 
-		ResourceName(std::string domain, std::string path) noexcept;
+		ResourceName(const std::string &domain, const std::string &path) noexcept;
 
 		ResourceName(const ResourceName &other);
 

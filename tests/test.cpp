@@ -85,11 +85,6 @@ int main()
 
 	string expected;
 
-	char a_char = 'w';
-	char b_char = 'W';
-	string a_string = "LambdAurora";
-	string b_string = "lAmbdaUrOrA";
-
 	uint32_t tests_count = 0;
 	uint32_t tests_passed = 0;
 

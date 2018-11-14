@@ -61,22 +61,22 @@ namespace lambdacommon
 			set(lstring::convert_wstring_to_string(path));
 		}
 
-		FilePath::FilePath(const FilePath &path) : Path(*path._path), _absolute(path._absolute)
+		FilePath::FilePath(const FilePath &path) : Path(path._path), _absolute(path._absolute)
 		{}
 
-		FilePath::FilePath(FilePath &&path) noexcept : Path(std::vector<std::string>(move(*path._path))),
-		                                               _absolute(path._absolute)
+		FilePath::FilePath(FilePath &&path) noexcept : Path(path._path), _absolute(path._absolute)
 		{}
 
 		void FilePath::set(const std::string &str, PathType type)
 		{
 			if (type == WINDOWS)
 			{
-				*_path = serializable::tokenize(str, "/\\");
+				_path = serializable::tokenize(str, "/\\");
 				_absolute = str.size() > 2 && isalpha(str[0]) && str[1] == ':';
-			} else
+			}
+			else
 			{
-				*_path = serializable::tokenize(str, "/");
+				_path = serializable::tokenize(str, "/");
 				_absolute = !str.empty() && str[0] == '/';
 			}
 		}
@@ -107,7 +107,7 @@ namespace lambdacommon
 
 		bool FilePath::empty() const
 		{
-			return _path->empty();
+			return _path.empty();
 		}
 
 		bool FilePath::is_absolute() const
@@ -155,7 +155,7 @@ namespace lambdacommon
 		{
 			if (empty())
 				return "";
-			const std::string &last = (*_path)[_path->size() - 1];
+			const std::string &last = _path[_path.size() - 1];
 			return last;
 		}
 
@@ -188,7 +188,8 @@ namespace lambdacommon
 			auto length = GetFullPathNameA(to_string().c_str(), MAX_PATH, temp, nullptr);
 			if (length == 0)
 				throw std::runtime_error(
-						"Internal error in lambdacommon::path::FilePath.to_absolute(): " + std::to_string(GetLastError()));
+						"Internal error in lambdacommon::path::FilePath.to_absolute(): " +
+						std::to_string(GetLastError()));
 			return FilePath(temp);
 #else
 			char temp[PATH_MAX];
@@ -207,10 +208,11 @@ namespace lambdacommon
 			if (empty())
 			{
 				if (!_absolute)
-					result._path->push_back("..");
-			} else
-				for (size_t i = 0; i < _path->size() - 1; ++i)
-					result._path->push_back((*_path)[i]);
+					result._path.emplace_back("..");
+			}
+			else
+				for (size_t i = 0; i < _path.size() - 1; ++i)
+					result._path.push_back(_path[i]);
 			return result;
 		}
 
@@ -221,10 +223,10 @@ namespace lambdacommon
 			if (type == COMMON && _absolute)
 				oss << "/";
 
-			for (size_t i = 0; i < _path->size(); i++)
+			for (size_t i = 0; i < _path.size(); i++)
 			{
-				oss << (*_path)[i];
-				if (i + 1 < _path->size())
+				oss << _path[i];
+				if (i + 1 < _path.size())
 				{
 					if (type == COMMON)
 						oss << '/';
@@ -239,12 +241,13 @@ namespace lambdacommon
 		FilePath FilePath::sub(const FilePath &other) const
 		{
 			if (other._absolute)
-				throw std::runtime_error("lambdacommon->system/fs/filesystem.cpp@FilePath.sub(const FilePath&)(Line " + std::to_string(__LINE__ - 1) + "): Expected a relative path as argument!");
+				throw std::runtime_error("lambdacommon->system/fs/filesystem.cpp@FilePath.sub(const FilePath&)(Line " +
+										 std::to_string(__LINE__ - 1) + "): Expected a relative path as argument!");
 
 			FilePath result(*this);
 
-			for (const auto &part : *other._path)
-				(*result._path).push_back(part);
+			for (const auto &part : other._path)
+				result._path.push_back(part);
 
 			return result;
 		}
@@ -260,8 +263,11 @@ namespace lambdacommon
 
 		FilePath &FilePath::operator=(const FilePath &path)
 		{
-			*_path = *path._path;
-			_absolute = path._absolute;
+			if (this != &path)
+			{
+				_path = path._path;
+				_absolute = path._absolute;
+			}
 			return *this;
 		}
 
@@ -269,8 +275,7 @@ namespace lambdacommon
 		{
 			if (this != &path)
 			{
-				delete _path;
-				_path = new std::vector<std::string>(move(*path._path));
+				_path = std::move(path._path);
 				_absolute = path._absolute;
 			}
 			return *this;
@@ -308,7 +313,7 @@ namespace lambdacommon
 			char temp[PATH_MAX];
 			if (getcwd(temp, PATH_MAX) == nullptr)
 				throw std::runtime_error("Internal error in lambdacommon::path::getCurrentWorkingDirectoryStr(): " +
-				                    std::string(strerror(errno)));
+									std::string(strerror(errno)));
 			return std::string(temp);
 #endif
 		}

@@ -74,10 +74,10 @@ namespace lambdacommon
 		std::vector<std::pair<std::string, std::string>>
 		fix_queries(const std::vector<std::pair<std::string, std::string>> &queries)
 		{
-			std::vector<std::pair<std::string, std::string>> new_queries;
-			for (auto query : queries)
-				new_queries.emplace_back(lstring::replace_all(query.first, " ", "%20"),
-										lstring::replace_all(query.second, " ", "%20"));
+			std::vector<std::pair<std::string, std::string>> new_queries{queries.size()};
+			for (size_t i = 0; i < queries.size(); i++)
+				new_queries[i] = {lstring::replace_all(queries[i].first, " ", "%20"),
+								  lstring::replace_all(queries[i].second, " ", "%20")};
 			return new_queries;
 		};
 
@@ -94,17 +94,20 @@ namespace lambdacommon
 				  _fragment(new std::string(fragment))
 		{}
 
-		URI::URI(const URI &url) : Path(*url._path), _scheme(new std::string(*url._scheme)),
-								   _username(new std::string(*url._username)), _password(new std::string(*url._password)),
-								   _address(url._address), _queries(new std::vector<std::pair<std::string, std::string>>(*url._queries)),
+		URI::URI(const URI &url) : Path(url._path), _scheme(new std::string(*url._scheme)),
+								   _username(new std::string(*url._username)),
+								   _password(new std::string(*url._password)),
+								   _address(url._address),
+								   _queries(new std::vector<std::pair<std::string, std::string>>(*url._queries)),
 								   _fragment(new std::string(*url._fragment))
 		{}
 
-		URI::URI(URI &&url) noexcept : Path(*url._path), _scheme(new std::string(move(*url._scheme))),
+		URI::URI(URI &&url) noexcept : Path(std::move(url)), _scheme(new std::string(move(*url._scheme))),
 									   _username(new std::string(move(*url._username))),
 									   _password(new std::string(move(*url._password))),
-									   _address(url._address),
-									   _queries(new std::vector<std::pair<std::string, std::string>>(move(*url._queries))),
+									   _address(std::move(url._address)),
+									   _queries(new std::vector<std::pair<std::string, std::string>>(
+											   move(*url._queries))),
 									   _fragment(new std::string(move(*url._fragment)))
 		{}
 
@@ -182,7 +185,7 @@ namespace lambdacommon
 
 		std::string URI::get_query(std::string query) const
 		{
-			std::string result = "";
+			std::string result;
 			for (auto q : *_queries)
 				if (lstring::equals(q.first, query))
 				{
@@ -224,7 +227,7 @@ namespace lambdacommon
 				oss << "//";
 
 			// Write the path.
-			if (!_path->empty())
+			if (!_path.empty())
 				oss << '/' << Path::to_string(delimiter);
 
 			// Write the queries.
@@ -257,19 +260,21 @@ namespace lambdacommon
 
 		URI &URI::operator=(const URI &url)
 		{
-			delete _path;
-			_path = new std::vector<std::string>(*url._path);
-			delete _scheme;
-			_scheme = new std::string(*url._scheme);
-			delete _username;
-			_username = new std::string(*url._username);
-			delete _password;
-			_password = new std::string(*url._password);
-			_address = url._address;
-			delete _queries;
-			_queries = new std::vector<std::pair<std::string, std::string>>(*url._queries);
-			delete _fragment;
-			_fragment = new std::string(*url._fragment);
+			if (this != &url)
+			{
+				_path = url._path;
+				delete _scheme;
+				_scheme = new std::string(*url._scheme);
+				delete _username;
+				_username = new std::string(*url._username);
+				delete _password;
+				_password = new std::string(*url._password);
+				_address = url._address;
+				delete _queries;
+				_queries = new std::vector<std::pair<std::string, std::string>>(*url._queries);
+				delete _fragment;
+				_fragment = new std::string(*url._fragment);
+			}
 			return *this;
 		}
 
@@ -277,8 +282,7 @@ namespace lambdacommon
 		{
 			if (this != &url)
 			{
-				delete _path;
-				_path = new std::vector<std::string>(move(*url._path));
+				_path = std::move(url._path);
 				delete _scheme;
 				_scheme = new std::string(move(*url._scheme));
 				delete _username;
@@ -297,14 +301,14 @@ namespace lambdacommon
 		bool URI::operator==(const URI &url)
 		{
 			return *_scheme == (*url._scheme) && *_username == (*url._username) && *_password == (*url._password) &&
-				   _address == url._address && *_path == (*url._path) && *_queries == (*url._queries) &&
+				   _address == url._address && _path == (url._path) && *_queries == (*url._queries) &&
 				   *_fragment == (*url._fragment);
 		}
 
 		bool URI::operator!=(const URI &url)
 		{
 			return *_scheme != (*url._scheme) || *_username != (*url._username) || *_password != (*url._password) ||
-				   _address != url._address || *_path != (*url._path) || *_queries != (*url._queries) ||
+				   _address != url._address || _path != url._path || *_queries != (*url._queries) ||
 				   *_fragment != (*url._fragment);
 		}
 
@@ -312,7 +316,7 @@ namespace lambdacommon
 		{
 			URI new_uri = URI(*this);
 			for (auto s : uri.get_path())
-				new_uri._path->emplace_back(s);
+				new_uri._path.emplace_back(s);
 			return new_uri;
 		}
 
@@ -320,7 +324,7 @@ namespace lambdacommon
 		{
 			URI new_uri = URI(*this);
 			for (auto s : path.get_path())
-				new_uri._path->emplace_back(s);
+				new_uri._path.emplace_back(s);
 			return new_uri;
 		}
 

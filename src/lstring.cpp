@@ -134,7 +134,7 @@ namespace lambdacommon
 			return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
 		}
 
-		const std::string LAMBDACOMMON_API merge_path(std::string parent, const std::string &child)
+		const std::string LAMBDACOMMON_API merge_path(const std::string &parent, const std::string &child)
 		{
 			auto merged = parent;
 			if (ends_with(parent, "/") || starts_with(child, "/"))

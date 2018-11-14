@@ -10,22 +10,30 @@
 #include "../include/lambdacommon/path.h"
 #include <sstream>
 
+#ifdef LAMBDA_WINDOWS
+#  pragma warning(push)
+#  pragma warning(disable:4101)
+#endif
+
 namespace lambdacommon
 {
-	Path::Path() : _path(new std::vector<std::string>())
+	Path::Path() : _path()
 	{}
 
-	Path::Path(const std::vector<std::string> &path) : _path(new std::vector<std::string>(path))
+	Path::Path(const std::vector<std::string> &path) : _path(path)
+	{}
+
+	Path::Path(const Path &other) = default;
+
+	Path::Path(Path &&other) noexcept : _path(std::move(other._path))
 	{}
 
 	Path::~Path()
-	{
-		delete _path;
-	}
+	{}
 
 	std::vector<std::string> Path::get_path() const
 	{
-		return *_path;
+		return _path;
 	}
 
 	std::string Path::to_string() const
@@ -36,10 +44,10 @@ namespace lambdacommon
 	std::string Path::to_string(char delimiter) const
 	{
 		std::ostringstream oss;
-		for (size_t i = 0; i < _path->size(); i++)
+		for (size_t i = 0; i < _path.size(); i++)
 		{
-			oss << (*_path)[i];
-			if (i + 1 < _path->size())
+			oss << _path[i];
+			if (i + 1 < _path.size())
 				oss << delimiter;
 		}
 		return oss.str();

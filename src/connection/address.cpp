@@ -172,9 +172,12 @@ namespace lambdacommon
 
 	Address &Address::operator=(const Address &other)
 	{
-		delete _host;
-		_host = new host(*other._host);
-		_port = other._port;
+		if (this != &other)
+		{
+			delete _host;
+			_host = new host(*other._host);
+			_port = other._port;
+		}
 		return *this;
 	}
 

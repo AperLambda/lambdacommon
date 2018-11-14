@@ -108,7 +108,7 @@ namespace lambdacommon
 		 */
 		extern bool LAMBDACOMMON_API starts_with(const std::string &str, const std::string &prefix);
 
-		extern const std::string LAMBDACOMMON_API merge_path(std::string parent, const std::string &child);
+		extern const std::string LAMBDACOMMON_API merge_path(const std::string &parent, const std::string &child);
 
 		/*!
 		 * Parses int from a string.

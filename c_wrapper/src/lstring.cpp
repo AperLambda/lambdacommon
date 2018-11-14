@@ -10,20 +10,6 @@
 #include "../include/clambdacommon/lstring.h"
 #include <lambdacommon/lstring.h>
 
-size_t lc_str_split(const char *s, char delim, char **output)
-{
-	std::vector<std::string> result = lambdacommon::lstring::split(s, delim);
-	output = new char*[result.size()];
-	for (size_t i = 0; i < result.size(); i++)
-	{
-		auto length = result[i].length();
-		char *a = new char[length];
-		result[i].copy(a, length);
-		output[i] = a;
-	}
-	return result.size();
-}
-
 bool lc_char_equals_ignore_case(char a, char b)
 {
 	return lambdacommon::lstring::equals_ignore_case(a, b);
