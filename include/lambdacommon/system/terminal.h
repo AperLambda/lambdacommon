@@ -77,12 +77,6 @@ namespace lambdacommon
 			B_WHITE = 107
 		};
 
-		struct TermSize
-		{
-			unsigned short columns;
-			unsigned short rows;
-		};
-
 		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting term_formatting);
 
 		extern std::ostream LAMBDACOMMON_API &
