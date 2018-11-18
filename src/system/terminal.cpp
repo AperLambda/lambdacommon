@@ -307,12 +307,6 @@ namespace lambdacommon
 			return stream;
 		}
 
-		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const Color &color)
-		{
-			stream << color.to_string();
-			return stream;
-		}
-
 		std::ostream LAMBDACOMMON_API &erase_current_line(std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY

@@ -10,6 +10,7 @@
 #ifndef LAMBDACOMMON_PATH_H
 #define LAMBDACOMMON_PATH_H
 
+#include "object.h"
 #include "serializable.h"
 
 #ifdef LAMBDA_WINDOWS
@@ -19,7 +20,7 @@
 
 namespace lambdacommon
 {
-	class LAMBDACOMMON_API Path : public Serializable
+	class LAMBDACOMMON_API Path : public Object
 	{
 	protected:
 		std::vector<std::string> _path;

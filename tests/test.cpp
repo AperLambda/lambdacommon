@@ -9,6 +9,7 @@
 
 using namespace lambdacommon;
 using namespace uri;
+using namespace lstring::stream;
 using namespace terminal;
 using namespace std;
 
@@ -53,12 +54,15 @@ int main()
 	setup();
 	set_title("λcommon - tests");
 
-	cout << "Starting lambdacommon-tests with" << CYAN << " lambdacommon" << RESET << " v" << lambdacommon::get_version()
+	cout << "Starting lambdacommon-tests with" << CYAN << " lambdacommon" << RESET << " v"
+		 << lambdacommon::get_version()
 		 << " (Compiled with " << LAMBDACOMMON_VERSION_MAJOR << '.' << LAMBDACOMMON_VERSION_MINOR << '.'
 		 << LAMBDACOMMON_VERSION_PATCH << ")" << endl;
 	cout << endl;
-	cout << "OS running: " << LIGHT_YELLOW << system::get_os_name() << RESET << " (kernel: " << system::get_kernel_version()
-		 << ", arch: " << system::get_processor_arch_str() << " [" + system::get_processor_arch_enum_str() << "])" << endl;
+	cout << "OS running: " << LIGHT_YELLOW << system::get_os_name() << RESET << " (kernel: "
+		 << system::get_kernel_version()
+		 << ", arch: " << system::get_processor_arch_str() << " [" + system::get_processor_arch_enum_str() << "])"
+		 << endl;
 	cout << endl;
 
 	cout << "Computer DATA:" << endl;
@@ -143,7 +147,7 @@ int main()
 
 	tests_count++;
 	if (test("FilePath::operator/(const std::string&) with FilePath object \"" + here_path.to_string() +
-			 "\" and string \"notFoundDir\"", [here_path]()
+			 R"(" and string "notFoundDir")", [here_path]()
 			 {
 				 auto h404re_path = here_path / "notFoundDir";
 				 return lstring::equals(h404re_path.get_filename(), "notFoundDir");
@@ -158,8 +162,6 @@ int main()
 	tests_count = 0;
 	tests_passed = 0;
 
-	cout << "TESTING URI (WRITER) ...\nRESULT: ";
-
 	auto uri = URI("https", "user", "pwd", {"something.com"}, {"test", "file_or_folder"}, {{"foo",               "bar"},
 																						   {"queryWithoutValue", ""},
 																						   {"invalid query",     "but fixed"}},
@@ -167,10 +169,11 @@ int main()
 	string uri_to_string = uri.to_string();
 	expected = "https://user:pwd@something.com/test/file_or_folder?foo=bar&queryWithoutValue&invalid%20query=but%20fixed#bar";
 	tests_count++;
-	if (test("URI.to_string(): expected: \"" + expected + "\" got: \"" + uri_to_string + "\"", [uri_to_string, expected]()
-	{
-		return lstring::equals(uri_to_string, expected);
-	}))
+	if (test("URI.to_string(): expected: \"" + expected + "\" got: \"" + uri_to_string + "\"",
+			 [uri_to_string, expected]()
+			 {
+				 return lstring::equals(uri_to_string, expected);
+			 }))
 		tests_passed++;
 
 	cout << "TESTING URI::from_file_path(FILESYSTEM::FILEPATH) WITH \"" << here_path.to_string(fs::COMMON)
@@ -179,7 +182,8 @@ int main()
 	expected = ("file://" + here_path.to_string(fs::COMMON));
 	uri_to_string = file_uri.to_string();
 	tests_count++;
-	if (test("URI.from_file_path(const fs::FilePath&) (with \"" + here_path.to_string() + "\"): expected: \"" + expected +
+	if (test("URI.from_file_path(const fs::FilePath&) (with \"" + here_path.to_string() + "\"): expected: \"" +
+			 expected +
 			 "\" got: \"" + uri_to_string + "\"", [uri_to_string, expected]()
 			 {
 				 return lstring::equals(uri_to_string, expected);

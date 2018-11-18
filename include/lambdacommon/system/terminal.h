@@ -90,22 +90,6 @@ namespace lambdacommon
 
 		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<std::string> string_vector);
 
-		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const Color &color);
-
-		template<typename T>
-		extern std::ostream &operator<<(std::ostream &stream, const Size2D<T> &dimension)
-		{
-			stream << dimension.to_string();
-			return stream;
-		}
-
-		template<typename T>
-		extern std::ostream &operator<<(std::ostream &stream, const Size3D<T> &dimension)
-		{
-			stream << dimension.to_string();
-			return stream;
-		}
-
 		/*!
 		 * This function will erase the current line in the stream.
 		 *

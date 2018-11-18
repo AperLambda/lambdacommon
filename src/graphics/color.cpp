@@ -97,6 +97,11 @@ namespace lambdacommon
 			   std::to_string(blue_as_int()) + ", " + std::to_string(alpha_as_int()) + ")";
 	}
 
+	std::string Color::to_string() const
+	{
+		return to_string(true);
+	}
+
 	bool Color::operator==(const Color &other) const
 	{
 		return red_as_int() == other.red_as_int() && green_as_int() == other.green_as_int() &&

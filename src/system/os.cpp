@@ -29,6 +29,8 @@ namespace lambdacommon
 #endif
 #elif defined(LAMBDA_MAC_OSX)
 			return OS::MAC_OSX;
+#elif defined(LAMBDA_ANDROID)
+			return OS::OS_ANDROID;
 #elif defined(__linux__)
 			return OS::LINUX;
 #elif defined(LAMBDA_FREEBSD)
@@ -68,6 +70,9 @@ namespace lambdacommon
 					break;
 				case CYGWIN:
 					os_name = "Cygwin";
+					break;
+				case OS_ANDROID:
+					os_name = "Android";
 					break;
 				case OS_UNKNOWN:
 					os_name = "Unknown";

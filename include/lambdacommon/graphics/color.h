@@ -10,14 +10,14 @@
 #ifndef LAMBDACOMMON_COLOR_H
 #define LAMBDACOMMON_COLOR_H
 
-#include "../lambdacommon.h"
+#include "../object.h"
 #include <utility>
 
 namespace lambdacommon
 {
 	using namespace std::rel_ops;
 
-	class LAMBDACOMMON_API Color
+	class LAMBDACOMMON_API Color : public Object
 	{
 	private:
 		float _red;
@@ -117,7 +117,9 @@ namespace lambdacommon
 		 * Gets the color as a string.
 		 * @return The color as a string.
 		 */
-		std::string to_string(bool hex = true) const;
+		std::string to_string(bool hex) const;
+
+		std::string to_string() const override;
 
 		bool operator==(const Color &other) const;
 

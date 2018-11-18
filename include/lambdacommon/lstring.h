@@ -11,7 +11,7 @@
 #define LAMBDACOMMON_STRING_H
 
 #include <vector>
-#include "lambdacommon.h"
+#include "object.h"
 
 namespace lambdacommon
 {
@@ -176,6 +176,11 @@ namespace lambdacommon
 		 * @return The converted wstring.
 		 */
 		extern std::wstring LAMBDACOMMON_API convert_string_to_wstring(std::string string);
+
+		namespace stream
+		{
+			extern std::ostream &operator<<(std::ostream &stream, const Object &object);
+		}
 	}
 }
 

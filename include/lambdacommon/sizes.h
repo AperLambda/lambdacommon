@@ -10,7 +10,7 @@
 #ifndef LAMBDACOMMON_DIMENSIONS_H
 #define LAMBDACOMMON_DIMENSIONS_H
 
-#include "serializable.h"
+#include "object.h"
 #include <utility>
 
 namespace lambdacommon
@@ -18,7 +18,7 @@ namespace lambdacommon
 	using namespace std::rel_ops;
 
 	template<typename T>
-	class Size2D : public Nullable, Serializable
+	class Size2D : public Object, public Nullable
 	{
 	protected:
 		/*!

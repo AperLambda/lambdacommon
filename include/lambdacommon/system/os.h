@@ -29,6 +29,7 @@ namespace lambdacommon
 			FREEBSD = 6,
 			NETBSD = 7,
 			OPENBSD = 8,
+			OS_ANDROID = 100,
 			CYGWIN = 11,
 			OS_UNKNOWN = 0
 		};

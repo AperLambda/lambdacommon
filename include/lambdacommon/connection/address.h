@@ -27,7 +27,7 @@ namespace lambdacommon
 		INVALID
 	};
 
-	class LAMBDACOMMON_API Address : public Serializable
+	class LAMBDACOMMON_API Address : public Object
 	{
 	protected:
 		host *_host;

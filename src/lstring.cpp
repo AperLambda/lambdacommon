@@ -270,5 +270,13 @@ namespace lambdacommon
 
 #endif
 
+		namespace stream
+		{
+			std::ostream &operator<<(std::ostream &stream, const Object &object)
+			{
+				stream << object.to_string();
+				return stream;
+			}
+		}
 	}
 }
