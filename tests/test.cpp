@@ -309,7 +309,7 @@ int main()
 		tests_passed++;
 
 	tests_count++;
-	if (test("Dimension::is_null() with {0;0;0}", []()
+	if (test("Size3D::is_null() with {0;0;0}", []()
 	{
 		Size3D_u32 dim{0, 0, 0};
 		return dim.is_null();
