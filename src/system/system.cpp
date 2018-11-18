@@ -289,7 +289,7 @@ namespace lambdacommon
 			else if (lstring::equals_ignore_case(get_processor_arch_str().substr(0, 3), "ARM"))
 				return SysArchitecture::ARM;
 			else if (lstring::equals_ignore_case(get_processor_arch_str(), "aarch64"))
-				return SysArchitecture::ARM64;
+				return SysArchitecture::ARMv8_64;
 			else
 				return SysArchitecture::UNKNOWN;
 		}
@@ -490,15 +490,17 @@ namespace lambdacommon
 		{
 			switch (arch)
 			{
-				case SysArchitecture::ARM:
+				case ARM:
 					return "ARM";
-				case SysArchitecture::ARM64:
+				case ARM64:
 					return "ARM64";
-				case SysArchitecture::I386:
+				case ARMv8_64:
+					return "ARMv8 64bit";
+				case I386:
 					return "i386";
-				case SysArchitecture::X86_64:
+				case X86_64:
 					return "x86_64";
-				case SysArchitecture::UNKNOWN:
+				case UNKNOWN:
 					return "Unknown";
 				default:
 					return "Unknown";

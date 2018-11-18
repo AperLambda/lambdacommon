@@ -29,6 +29,7 @@ namespace lambdacommon
 		{
 			ARM,
 			ARM64,
+			ARMv8_64,
 			I386,
 			X86_64,
 			UNKNOWN
