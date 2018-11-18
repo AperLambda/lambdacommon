@@ -54,7 +54,7 @@ namespace lambdacommon
 
 #ifdef WIN_FRIENDLY
 
-		HANDLE getTermHandle(std::ostream &stream)
+		HANDLE get_term_handle(std::ostream &stream)
 		{
 			// Get terminal handle
 			HANDLE h_terminal = INVALID_HANDLE_VALUE;
@@ -65,7 +65,7 @@ namespace lambdacommon
 			return h_terminal;
 		}
 
-		void cls(HANDLE hConsole)
+		void cls(HANDLE h_console)
 		{
 			COORD coord_screen{0, 0};    // home for the cursor
 			DWORD c_chars_written;
@@ -73,7 +73,7 @@ namespace lambdacommon
 			DWORD dw_con_size;
 
 			// Get the number of character cells in the current buffer.
-			if (!GetConsoleScreenBufferInfo(hConsole, &csbi))
+			if (!GetConsoleScreenBufferInfo(h_console, &csbi))
 			{
 				return;
 			}
@@ -81,7 +81,7 @@ namespace lambdacommon
 			dw_con_size = static_cast<DWORD>(csbi.dwSize.X * csbi.dwSize.Y);
 
 			// Fill the entire screen with blanks.
-			if (!FillConsoleOutputCharacter(hConsole,        // Handle to console screen buffer
+			if (!FillConsoleOutputCharacter(h_console,        // Handle to console screen buffer
 											(TCHAR) ' ',     // Character to write to the buffer
 											dw_con_size,       // Number of cells to write
 											coord_screen,     // Coordinates of first cell
@@ -89,11 +89,11 @@ namespace lambdacommon
 				return;
 
 			// Get the current text attribute.
-			if (!GetConsoleScreenBufferInfo(hConsole, &csbi))
+			if (!GetConsoleScreenBufferInfo(h_console, &csbi))
 				return;
 
 			// Set the buffer's attributes accordingly.
-			if (!FillConsoleOutputAttribute(hConsole,         // Handle to console screen buffer
+			if (!FillConsoleOutputAttribute(h_console,         // Handle to console screen buffer
 											csbi.wAttributes, // Character attributes to use
 											dw_con_size,        // Number of cells to set attribute
 											coord_screen,      // Coordinates of first cell
@@ -102,7 +102,7 @@ namespace lambdacommon
 
 			// Put the cursor at its home coordinates.
 
-			SetConsoleCursorPosition(hConsole, coord_screen);
+			SetConsoleCursorPosition(h_console, coord_screen);
 		}
 
 		inline void win_change_attributes(std::ostream &stream, int foreground, int background)
@@ -110,13 +110,13 @@ namespace lambdacommon
 			static WORD default_attributes = 0;
 
 			// Get terminal handle
-			auto hTerminal = getTermHandle(stream);
+			auto h_terminal = get_term_handle(stream);
 
 			// Save default terminal attributes if it unsaved
 			if (!default_attributes)
 			{
 				CONSOLE_SCREEN_BUFFER_INFO info;
-				if (!GetConsoleScreenBufferInfo(hTerminal, &info))
+				if (!GetConsoleScreenBufferInfo(h_terminal, &info))
 					return;
 				default_attributes = info.wAttributes;
 			}
@@ -124,13 +124,13 @@ namespace lambdacommon
 			// Restore all default settings
 			if (foreground == -1 && background == -1)
 			{
-				SetConsoleTextAttribute(hTerminal, default_attributes);
+				SetConsoleTextAttribute(h_terminal, default_attributes);
 				return;
 			}
 
 			// Get current settings
 			CONSOLE_SCREEN_BUFFER_INFO info;
-			if (!GetConsoleScreenBufferInfo(hTerminal, &info))
+			if (!GetConsoleScreenBufferInfo(h_terminal, &info))
 				return;
 
 			if (foreground != -1)
@@ -145,7 +145,7 @@ namespace lambdacommon
 				info.wAttributes |= static_cast<WORD>(background);
 			}
 
-			SetConsoleTextAttribute(hTerminal, info.wAttributes);
+			SetConsoleTextAttribute(h_terminal, info.wAttributes);
 		}
 
 #endif // LAMBDA_WINDOWS
@@ -327,7 +327,7 @@ namespace lambdacommon
 #ifdef WIN_FRIENDLY
 			if (is_tty(stream))
 			{
-				cls(getTermHandle(stream));
+				cls(get_term_handle(stream));
 				return stream;
 			}
 #endif
@@ -343,7 +343,7 @@ namespace lambdacommon
 				COORD coord;
 				coord.X = x;
 				coord.Y = y;
-				SetConsoleCursorPosition(getTermHandle(stream), coord);
+				SetConsoleCursorPosition(get_term_handle(stream), coord);
 				return;
 			}
 #endif
@@ -370,11 +370,11 @@ namespace lambdacommon
 			HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE);
 			if (h_out != INVALID_HANDLE_VALUE)
 			{
-				DWORD dwMode = 0;
-				if (GetConsoleMode(h_out, &dwMode))
+				DWORD dw_mode = 0;
+				if (GetConsoleMode(h_out, &dw_mode))
 				{
-					dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-					if (SetConsoleMode(h_out, dwMode))
+					dw_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+					if (SetConsoleMode(h_out, dw_mode))
 						use_ansi_escape_codes = true;
 				}
 			}
@@ -428,20 +428,20 @@ namespace lambdacommon
 			return true;
 		}
 
-		TermSize LAMBDACOMMON_API get_size()
+		const Size2D_u16 get_size()
 		{
-			TermSize size{};
+			Size2D_u16 size{};
 #ifdef WIN_FRIENDLY
 			CONSOLE_SCREEN_BUFFER_INFO csbi;
 
 			GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-			size.columns = static_cast<unsigned short>(csbi.srWindow.Right - csbi.srWindow.Left + 1);
-			size.rows = static_cast<unsigned short>(csbi.srWindow.Bottom - csbi.srWindow.Top + 1);
+			size.set_width(static_cast<uint16_t>(csbi.srWindow.Right - csbi.srWindow.Left + 1));
+			size.set_height(static_cast<uint16_t>(csbi.srWindow.Bottom - csbi.srWindow.Top + 1));
 #else
 			struct winsize w{};
 			ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-			size.columns = w.ws_col;
-			size.rows = w.ws_row;
+			size.set_width(w.ws_col);
+			size.set_height(w.ws_row);
 #endif
 			return size;
 		}

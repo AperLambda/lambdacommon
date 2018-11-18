@@ -11,12 +11,12 @@
 #define LAMBDACOMMON_ADDRESS_H
 
 #include "../serializable.h"
+#include "../types.h"
 #include <array>
 
 namespace lambdacommon
 {
 	typedef std::string host;
-	typedef uint16_t port;
 
 	enum AddressType
 	{
@@ -31,10 +31,10 @@ namespace lambdacommon
 	{
 	protected:
 		host *_host;
-		port _port;
+		port_t _port;
 
 	public:
-		Address(const host &host, port port = 0);
+		Address(const host &host, port_t port = 0);
 
 		Address(const Address &address);
 
@@ -44,7 +44,7 @@ namespace lambdacommon
 
 		const host &get_host() const;
 
-		port get_port() const;
+		port_t get_port() const;
 
 		bool is_ipv4() const;
 

@@ -24,7 +24,7 @@
 
 namespace lambdacommon
 {
-	Address::Address(const host &host, port port) : _host(new std::string (host)), _port(port)
+	Address::Address(const host &host, port_t port) : _host(new std::string (host)), _port(port)
 	{}
 
 	Address::Address(const Address &address) : _host(new host(*address._host)), _port(address._port)
@@ -43,7 +43,7 @@ namespace lambdacommon
 		return *_host;
 	}
 
-	port Address::get_port() const
+	port_t Address::get_port() const
 	{
 		return _port;
 	}

@@ -37,7 +37,7 @@ namespace lambdacommon
 				return OTHER;
 		}
 
-		port LAMBDACOMMON_API get_scheme_default_port(SchemeType scheme)
+		port_t LAMBDACOMMON_API get_scheme_default_port(SchemeType scheme)
 		{
 			switch (scheme)
 			{
@@ -462,10 +462,10 @@ namespace lambdacommon
 				else
 					host = tmp_address.substr(0, address_separator);
 				host = lstring::replace_all(lstring::replace_all(host, "[", ""), "]", "");
-				port port = 0;
+				port_t port = 0;
 				if (address_separator != std::string::npos && address_separator > end_ipv6)
 				{
-					if ((port = static_cast<lambdacommon::port>(str2int(
+					if ((port = static_cast<lambdacommon::port_t>(str2int(
 							tmp_address.substr(address_separator + 1, tmp_address.size())))) == 0)
 						throw ParseException("Cannot parse uri '" + url + "': invalid port!");
 				}

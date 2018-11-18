@@ -93,6 +93,22 @@ namespace lambdacommon
 		extern std::string LAMBDACOMMON_API to_string(const std::vector<std::string> &vec);
 
 		/*!
+		 * Checks whether the specified string does start with the specified prefix.
+		 * @param str The string to check.
+		 * @param prefix The prefix.
+		 * @return True if the string started with the specified prefix, else false.
+		 */
+		extern bool LAMBDACOMMON_API starts_with(const std::string &str, const std::string &prefix);
+
+		/*!
+		 * Checks whether the specified string does start with the specified prefix (case insensitive).
+		 * @param str The string to check.
+		 * @param prefix The prefix.
+		 * @return True if the string started with the specified prefix, else false.
+		 */
+		extern bool LAMBDACOMMON_API starts_with_ignore_case(const std::string &str, const std::string &prefix);
+
+		/*!
 		 * Checks whether the specified string does end with the specified suffix.
 		 * @param str The string to check.
 		 * @param suffix The suffix.
@@ -101,12 +117,12 @@ namespace lambdacommon
 		extern bool LAMBDACOMMON_API ends_with(const std::string &str, const std::string &suffix);
 
 		/*!
-		 * Checks whether the specified string does start with the specified prefix.
+		 * Checks whether the specified string does end with the specified suffix (case insensitive).
 		 * @param str The string to check.
-		 * @param prefix The prefix.
-		 * @return True if the string started with the specified prefix, else false.
+		 * @param suffix The suffix.
+		 * @return True if the string ended with the specified suffix, else false.
 		 */
-		extern bool LAMBDACOMMON_API starts_with(const std::string &str, const std::string &prefix);
+		extern bool LAMBDACOMMON_API ends_with_ignore_case(const std::string &str, const std::string &suffix);
 
 		extern const std::string LAMBDACOMMON_API merge_path(const std::string &parent, const std::string &child);
 

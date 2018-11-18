@@ -10,6 +10,7 @@
 #ifndef LAMBDACOMMON_GEOMETRY_H
 #define LAMBDACOMMON_GEOMETRY_H
 
-#include "dimensions.h"
+namespace lambdacommon
+{}
 
 #endif //LAMBDACOMMON_GEOMETRY_H

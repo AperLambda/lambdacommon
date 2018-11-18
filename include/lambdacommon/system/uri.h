@@ -36,7 +36,7 @@ namespace lambdacommon
 
 		extern SchemeType LAMBDACOMMON_API get_scheme_type_by_string(const std::string &scheme);
 
-		extern port LAMBDACOMMON_API get_scheme_default_port(SchemeType scheme);
+		extern port_t LAMBDACOMMON_API get_scheme_default_port(SchemeType scheme);
 
 		extern bool LAMBDACOMMON_API is_scheme_type_non_file_special(SchemeType scheme);
 

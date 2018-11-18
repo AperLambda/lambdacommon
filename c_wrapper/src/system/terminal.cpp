@@ -86,7 +86,7 @@ lc_TermSize lc_term_get_terminal_size()
 {
 	lc_TermSize term_size{};
 	auto cpp_term_size = lambdacommon::terminal::get_size();
-	term_size.columns = cpp_term_size.columns;
-	term_size.rows = cpp_term_size.rows;
+	term_size.columns = cpp_term_size.get_width();
+	term_size.rows = cpp_term_size.get_height();
 	return term_size;
 }

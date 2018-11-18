@@ -126,7 +126,7 @@ namespace lambdacommon
 		 * Sleeps the current thread for the specified time in milliseconds.
 		 * @param time Time to wait in milliseconds.
 		 */
-		extern void LAMBDACOMMON_API sleep(uint32_t time);
+		extern void LAMBDACOMMON_API sleep(utime_t time);
 	}
 }
 

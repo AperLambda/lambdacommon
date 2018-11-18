@@ -29,6 +29,10 @@
 #    include <CoreFoundation/CFBundle.h>
 #    include <ApplicationServices/ApplicationServices.h>
 
+#  elif defined(LAMBDA_ANDROID)
+
+#    include <sys/system_properties.h>
+
 #  elif defined(LAMBDA_CYGWIN)
 
 #    include <windows.h>
@@ -260,10 +264,14 @@ namespace lambdacommon
 			{
 				for (std::string line; std::getline(cpuinfo, line);)
 				{
-					if (lstring::equals_ignore_case(line.substr(0, 10), "model name"))
+#ifdef LAMBDA_ANDROID
+					if (lstring::starts_with_ignore_case(line, "Hardware"))
+#else
+					if (lstring::starts_with_ignore_case(line, "model name"))
+#endif
 					{
-						size_t sperator_index = line.find_first_of(':');
-						cpu = line.substr(sperator_index + 2);
+						size_t separator_index = line.find_first_of(':');
+						cpu = line.substr(separator_index + 2);
 						break;
 					}
 				}
@@ -280,6 +288,8 @@ namespace lambdacommon
 				return SysArchitecture::I386;
 			else if (lstring::equals_ignore_case(get_processor_arch_str().substr(0, 3), "ARM"))
 				return SysArchitecture::ARM;
+			else if (lstring::equals_ignore_case(get_processor_arch_str(), "aarch64"))
+				return SysArchitecture::ARM64;
 			else
 				return SysArchitecture::UNKNOWN;
 		}
@@ -348,7 +358,8 @@ namespace lambdacommon
 
 				meminfo.close();
 			}
-
+			if (mem_free == 0)
+				mem_free = get_memory_total() - get_memory_used();
 			return mem_free;
 		}
 
@@ -389,6 +400,11 @@ namespace lambdacommon
 
 		std::string LAMBDACOMMON_API get_os_name()
 		{
+#ifdef LAMBDA_ANDROID
+			char os_version[PROP_VALUE_MAX + 1];
+			size_t os_version_length = static_cast<size_t>(__system_property_get("ro.build.version.release", os_version));
+			return "Android " + std::string(os_version, os_version_length);
+#else
 			if (!os_name.empty())
 				return os_name;
 			fs::FilePath etc_os_release{"/etc/os-release"};
@@ -444,6 +460,7 @@ namespace lambdacommon
 			if (std::string(uts.release).find("Microsoft") != std::string::npos)
 				os_name += " on Windows";
 			return os_name;
+#endif
 		}
 
 		std::string LAMBDACOMMON_API get_kernel_version()
@@ -534,6 +551,10 @@ namespace lambdacommon
 #ifdef LAMBDA_WINDOWS
 			// Use the Windows API.
 			ShellExecuteA(nullptr, "open", uri.c_str(), nullptr, nullptr, SW_SHOW);
+#elif defined(LAMBDA_CYGWIN)
+			// Use of system is not recommended but none alternatives exist.
+			if (::system(nullptr))
+				::system((std::string("cygstart ") + uri).c_str());
 #elif defined(LAMBDA_MAC_OSX)
 			// Use the Apple's framework.
 			CFURLRef url = CFURLCreateWithBytes (
@@ -545,10 +566,8 @@ namespace lambdacommon
 			);
 			LSOpenCFURLRef(url, nullptr);
 			CFRelease(url);
-#elif defined(LAMBDA_CYGWIN)
-			// Use of system is not recommended but none alternatives exist.
-			if (::system(nullptr))
-				::system((std::string("cygstart ") + uri).c_str());
+#elif defined(LAMBDA_ANDROID)
+			// Do nothing because it requires JNI calls.
 #else
 			// Use of system is not recommended but none alternatives exist.
 			if (::system(nullptr))
@@ -556,7 +575,7 @@ namespace lambdacommon
 #endif
 		}
 
-		void LAMBDACOMMON_API sleep(uint32_t time)
+		void LAMBDACOMMON_API sleep(utime_t time)
 		{
 #ifdef LAMBDA_WINDOWS
 			Sleep(time);

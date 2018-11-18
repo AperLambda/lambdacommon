@@ -33,15 +33,15 @@ namespace lambdacommon
 
 		uint32_t last_scene2d_id = 1;
 
-		Scene2D::Scene2D(const Dimension2D_u32 &size) : Scene(last_scene2d_id++), size(size)
+		Scene2D::Scene2D(const Size2D_u32 &size) : Scene(last_scene2d_id++), size(size)
 		{}
 
-		const Dimension2D_u32 &Scene2D::get_size() const
+		const Size2D_u32 &Scene2D::get_size() const
 		{
 			return size;
 		}
 
-		void Scene2D::set_size(const Dimension2D_u32 &size)
+		void Scene2D::set_size(const Size2D_u32 &size)
 		{
 			Scene2D::size = size;
 		}

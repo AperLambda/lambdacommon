@@ -41,15 +41,23 @@
 #endif
 
 #define LAMBDACOMMON_VERSION_MAJOR 1
-#define LAMBDACOMMON_VERSION_MINOR 8
-#define LAMBDACOMMON_VERSION_PATCH 4
+#define LAMBDACOMMON_VERSION_MINOR 9
+#define LAMBDACOMMON_VERSION_PATCH 0
 
 // Deletes the pointer and sets the variable to null. It's just simpler to write like this.
 #define LCOMMON_DELETE_POINTER(pointer) delete pointer; pointer = nullptr;
 
 namespace lambdacommon
 {
-	typedef std::string *pstring;
+	class Nullable
+	{
+	public:
+		/*!
+		 * Checks whether the object is null.
+		 * @return True if the object is null, else false.
+		 */
+		virtual bool is_null() const = 0;
+	};
 
 	/*!
 	 * Gets the runtime version of lambdacommon as a string.

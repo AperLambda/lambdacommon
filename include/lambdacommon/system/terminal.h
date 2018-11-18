@@ -12,7 +12,7 @@
 
 #include "os.h"
 #include "../graphics/color.h"
-#include "../maths/geometry/geometry.h"
+#include "../types.h"
 #include <vector>
 #include <iostream>
 
@@ -93,14 +93,14 @@ namespace lambdacommon
 		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const Color &color);
 
 		template<typename T>
-		extern std::ostream &operator<<(std::ostream &stream, const maths::geometry::Dimension2D<T> &dimension)
+		extern std::ostream &operator<<(std::ostream &stream, const Size2D<T> &dimension)
 		{
 			stream << dimension.to_string();
 			return stream;
 		}
 
 		template<typename T>
-		extern std::ostream &operator<<(std::ostream &stream, const maths::geometry::Dimension3D<T> &dimension)
+		extern std::ostream &operator<<(std::ostream &stream, const Size3D<T> &dimension)
 		{
 			stream << dimension.to_string();
 			return stream;
@@ -191,7 +191,7 @@ namespace lambdacommon
 		 * Gets the terminal's size.
 		 * @return The {@code TermSize} struct describing the terminal's size.
 		 */
-		extern TermSize LAMBDACOMMON_API get_size();
+		extern const Size2D_u16 LAMBDACOMMON_API get_size();
 	}
 }
 

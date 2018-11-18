@@ -124,14 +124,24 @@ namespace lambdacommon
 			return result;
 		}
 
+		bool LAMBDACOMMON_API starts_with(const std::string &str, const std::string &prefix)
+		{
+			return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
+		}
+
+		bool LAMBDACOMMON_API starts_with_ignore_case(const std::string &str, const std::string &prefix)
+		{
+			return starts_with(to_lower_case(str), to_lower_case(prefix));
+		}
+
 		bool LAMBDACOMMON_API ends_with(const std::string &str, const std::string &suffix)
 		{
 			return str.size() >= suffix.size() && 0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix);
 		}
 
-		bool LAMBDACOMMON_API starts_with(const std::string &str, const std::string &prefix)
+		bool LAMBDACOMMON_API ends_with_ignore_case(const std::string &str, const std::string &suffix)
 		{
-			return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
+			return ends_with(to_lower_case(str), to_lower_case(suffix));
 		}
 
 		const std::string LAMBDACOMMON_API merge_path(const std::string &parent, const std::string &child)

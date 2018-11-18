@@ -282,27 +282,27 @@ int main()
 	tests_passed = 0;
 
 	tests_count++;
-	if (test("Dimension3D::to_string() with {256, 128, 64}", []()
+	if (test("Size3D::to_string() with {256, 128, 64}", []()
 	{
-		Dimension3D_u32 dimension{256, 128, 64};
+		Size3D_u32 dimension{256, 128, 64};
 		return lstring::equals(dimension.to_string(), R"({"width":256,"height":128,"depth":64})");
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("Dimension2D::operator*(T n) with {16, 32} ; 2", []()
+	if (test("Size2D::operator*(T n) with {16, 32} ; 2", []()
 	{
-		Dimension2D_u32 dimension{16, 32};
+		Size2D_u32 dimension{16, 32};
 		auto dim = dimension * 2;
 		return dim.get_width() == 32 && dim.get_height() == 64;
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("Dimension3D::operator-(Dimension2D<T> dimension2D) with {2048;1024;16} ; {2032;1008}", []()
+	if (test("Size3D::operator-(Size2D<T> dimension2D) with {2048;1024;16} ; {2032;1008}", []()
 	{
-		Dimension3D_u32 dimension{2048, 1024, 16};
-		Dimension2D_u32 dimension2d{2032, 1008};
+		Size3D_u32 dimension{2048, 1024, 16};
+		Size2D_u32 dimension2d{2032, 1008};
 		auto dim = dimension - dimension2d;
 		return dim.get_width() == 16 && dim.get_height() == 16 && dim.get_depth() == 16;
 	}))
@@ -311,7 +311,7 @@ int main()
 	tests_count++;
 	if (test("Dimension::is_null() with {0;0;0}", []()
 	{
-		Dimension3D_u32 dim{0, 0, 0};
+		Size3D_u32 dim{0, 0, 0};
 		return dim.is_null();
 	}))
 		tests_passed++;

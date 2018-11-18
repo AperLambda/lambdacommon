@@ -10,7 +10,7 @@
 #ifndef LAMBDACOMMON_SCENE_H
 #define LAMBDACOMMON_SCENE_H
 
-#include "../maths/geometry/geometry.h"
+#include "../types.h"
 #include <utility>
 
 namespace lambdacommon
@@ -46,14 +46,14 @@ namespace lambdacommon
 		class Scene2D : public Scene
 		{
 		protected:
-			Dimension2D_u32 size;
+			Size2D_u32 size;
 
 		public:
-			Scene2D(const Dimension2D_u32 &size);
+			Scene2D(const Size2D_u32 &size);
 
-			const Dimension2D_u32 &get_size() const;
+			const Size2D_u32 &get_size() const;
 
-			void set_size(const Dimension2D_u32 &size);
+			void set_size(const Size2D_u32 &size);
 		};
 	}
 }
