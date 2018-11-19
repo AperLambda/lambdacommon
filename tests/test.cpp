@@ -281,7 +281,7 @@ int main()
 	if (tests_passed != tests_count)
 		return 1;
 
-	cout << "===== GEOMETRY SECTION =====" << endl;
+	cout << "===== SIZE SECTION =====" << endl;
 	tests_count = 0;
 	tests_passed = 0;
 
