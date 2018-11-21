@@ -3,6 +3,7 @@ project(lambdacommon)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(GenerateExportHeader)
+include(utils/CompileUtility)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -11,7 +12,6 @@ option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)
 option(LAMBDACOMMON_INSTALL "Generate installation target" ON)
 option(LAMBDACOMMON_BUILD_TESTS "Build the λcommon test programs" ON)
 
-include(utils/CompileUtility)
 generate_flags(LAMBDACOMMON_COMPILE_FLAGS "native" 2 true)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}${LAMBDACOMMON_COMPILE_FLAGS}")
 
@@ -20,7 +20,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 # All files
-# There is the C++ headers files.
+# There is the C++ header files.
 set(HEADERS_CONNECTION include/lambdacommon/connection/address.h)
 set(HEADERS_DOCUMENT include/lambdacommon/documents/document.h)
 set(HEADERS_GRAPHICS include/lambdacommon/graphics/color.h include/lambdacommon/graphics/scene.h)
@@ -30,7 +30,7 @@ set(HEADERS_EXCEPTIONS include/lambdacommon/exceptions/exceptions.h)
 set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/lambdacommon/system/os.h include/lambdacommon/system/devices.h include/lambdacommon/system/terminal.h include/lambdacommon/system/system.h include/lambdacommon/system/uri.h include/lambdacommon/system/time.h)
 set(HEADERS_BASE include/lambdacommon/lambdacommon.h include/lambdacommon/serializable.h include/lambdacommon/lstring.h include/lambdacommon/path.h include/lambdacommon/resources.h include/lambdacommon/sizes.h include/lambdacommon/types.h include/lambdacommon/object.h)
 set(HEADERS_FILES ${HEADERS_CONNECTION} ${HEADERS_DOCUMENT} ${HEADERS_GRAPHICS} ${HEADERS_MATHS} ${HEADERS_EXCEPTIONS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
-# There is the C++ sources files.
+# There is the C++ source files.
 set(SOURCES_CONNECTION src/connection/address.cpp)
 set(SOURCES_DOCUMENT)
 set(SOURCES_GRAPHICS src/graphics/color.cpp src/graphics/scene.cpp)
@@ -59,9 +59,6 @@ if (LAMBDACOMMON_BUILD_STATIC)
     target_compile_definitions(lambdacommon_static PUBLIC -DLAMBDACOMMON_SHARED_EXPORTS_BUILT_AS_STATIC)
     target_include_directories(lambdacommon_static PUBLIC ${CMAKE_BINARY_DIR}/exports)
 endif ()
-
-# Set the variables
-set(LAMBDACOMMON_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Install if the option is on.
 if (LAMBDACOMMON_INSTALL)
