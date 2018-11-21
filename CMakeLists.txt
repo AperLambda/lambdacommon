@@ -29,7 +29,7 @@ set(HEADERS_FILESYSTEM include/lambdacommon/system/fs/filesystem.h)
 set(HEADERS_EXCEPTIONS include/lambdacommon/exceptions/exceptions.h)
 set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/lambdacommon/system/os.h include/lambdacommon/system/devices.h include/lambdacommon/system/terminal.h include/lambdacommon/system/system.h include/lambdacommon/system/uri.h include/lambdacommon/system/time.h)
 set(HEADERS_BASE include/lambdacommon/lambdacommon.h include/lambdacommon/serializable.h include/lambdacommon/lstring.h include/lambdacommon/path.h include/lambdacommon/resources.h include/lambdacommon/sizes.h include/lambdacommon/types.h include/lambdacommon/object.h)
-set(HEADERS_FILES ${HEADERS_CONNECTION} ${HEADERS_DOCUMENT} ${HEADERS_GRAPHICS} ${HEADERS_MATHS} ${HEADERS_EXCEPTIONS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
+set(HEADER_FILES ${HEADERS_CONNECTION} ${HEADERS_DOCUMENT} ${HEADERS_GRAPHICS} ${HEADERS_MATHS} ${HEADERS_EXCEPTIONS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
 # There is the C++ source files.
 set(SOURCES_CONNECTION src/connection/address.cpp)
 set(SOURCES_DOCUMENT)
@@ -39,15 +39,15 @@ set(SOURCES_FILESYSTEM src/system/fs/filesystem.cpp)
 set(SOURCES_SERIALIZERS)
 set(SOURCES_SYSTEM ${SOURCES_FILESYSTEM} src/system/os.cpp src/system/terminal.cpp src/system/system.cpp src/system/uri.cpp src/system/time.cpp)
 set(SOURCES_BASE src/lambdacommon.cpp src/serializable.cpp src/lstring.cpp src/path.cpp src/resources.cpp)
-set(SOURCES_FILES ${SOURCES_CONNECTION} ${SOURCES_DOCUMENT} ${SOURCES_GRAPHICS} ${SOURCES_MATHS} ${SOURCES_SERIALIZERS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
+set(SOURCE_FILES ${SOURCES_CONNECTION} ${SOURCES_DOCUMENT} ${SOURCES_GRAPHICS} ${SOURCES_MATHS} ${SOURCES_SERIALIZERS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
 
 # Now build the library
 # Build static if the option is on.
 if (LAMBDACOMMON_BUILD_STATIC)
-    add_library(lambdacommon_static STATIC ${HEADERS_FILES} ${SOURCES_FILES})
+    add_library(lambdacommon_static STATIC ${HEADER_FILES} ${SOURCE_FILES})
 endif ()
 # Build the shared library
-add_library(lambdacommon SHARED ${HEADERS_FILES} ${SOURCES_FILES})
+add_library(lambdacommon SHARED ${HEADER_FILES} ${SOURCE_FILES})
 # Generate the export header and include it.
 GENERATE_EXPORT_HEADER(lambdacommon
         BASE_NAME lambdacommon
@@ -62,7 +62,7 @@ endif ()
 
 # Install if the option is on.
 if (LAMBDACOMMON_INSTALL)
-    foreach (LOOP_HEADER ${HEADERS_FILES})
+    foreach (LOOP_HEADER ${HEADER_FILES})
         get_filename_component(HEADER_PARENT_DIR ${LOOP_HEADER} DIRECTORY)
         install(FILES ${LOOP_HEADER} DESTINATION ${HEADER_PARENT_DIR})
     endforeach ()
