@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.6)
 project(lambdacommon)
 
-option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)
-option(LAMBDACOMMON_INSTALL "Generate installation target" ON)
-option(LAMBDACOMMON_BUILD_TESTS "Build the λcommon test programs" ON)
-
 include(GenerateExportHeader)
 
 set(CMAKE_CXX_STANDARD 14)
+
+# Options
+option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)
+option(LAMBDACOMMON_INSTALL "Generate installation target" ON)
+option(LAMBDACOMMON_BUILD_TESTS "Build the λcommon test programs" ON)
 
 if (CMAKE_SYSTEM_NAME MATCHES "Android")
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
