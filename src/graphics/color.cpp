@@ -12,6 +12,7 @@
 #include "../../include/lambdacommon/maths.h"
 #include <sstream>
 #include <iomanip>
+#include <tuple>
 
 namespace lambdacommon
 {

@@ -4,6 +4,7 @@ project(lambdacommon)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(GenerateExportHeader)
 include(utils/CompileUtility)
+include(utils/InstallUtility)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -19,7 +20,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework CoreFoundation -framework ApplicationServices")
 endif()
 
-# All files
+# All files:
 # There is the C++ header files.
 set(HEADERS_CONNECTION include/lambdacommon/connection/address.h)
 set(HEADERS_DOCUMENT include/lambdacommon/documents/document.h)
@@ -67,6 +68,7 @@ if (LAMBDACOMMON_INSTALL)
         install(FILES ${LOOP_HEADER} DESTINATION ${HEADER_PARENT_DIR})
     endforeach ()
     install(FILES ${CMAKE_BINARY_DIR}/exports/lambdacommon_exports.h DESTINATION include/lambdacommon)
+    install(FILES ${CMAKE_SOURCE_DIR}/LICENSE DESTINATION share/licenses/lambdacommon)
     install(TARGETS lambdacommon
             RUNTIME DESTINATION bin COMPONENT libraries
             LIBRARY DESTINATION lib COMPONENT libraries
@@ -78,15 +80,8 @@ if (LAMBDACOMMON_INSTALL)
                 ARCHIVE DESTINATION lib COMPONENT libraries)
     endif ()
 
-    # Uninstall target
-    if(NOT TARGET uninstall)
-        configure_file(
-                "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
-                "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-                IMMEDIATE @ONLY)
-
-        add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-    endif()
+    # Uninstall target.
+    setup_uninstall_target()
 endif ()
 
 # Build the tests if the option is on.

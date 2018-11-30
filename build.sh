@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Some color variables
+# Some color variables.
 RED='\033[0;91m'
 NC='\033[0m'
 
-sh ./cleaningWorkspace.sh
+sh ./clean_workspace.sh
 
 echo "cd to build directory"
 
@@ -15,13 +15,13 @@ cmake ..
 if [ $? -ne 0 ]; then
 echo "${RED}Error: CMake doesn't exit with success! Cleaning...${NC}"
 cd ..
-sh ./cleaningWorkspace.sh
+sh ./clean_workspace.sh
 else
 make
 if [ $? -ne 0 ]; then
-echo "${RED}Error: Make doesn't compile with success! Cleaning...${NC}"
+echo "${RED}Error: Make doesn't exit with success! Cleaning...${NC}"
 cd ..
-sh ./cleaningWorkspace.sh
+sh ./clean_workspace.sh
 fi
 fi
 

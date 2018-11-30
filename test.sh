@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-# Some color variables
+# Some color variables.
 RED='\033[0;91m'
 NC='\033[0m'
 

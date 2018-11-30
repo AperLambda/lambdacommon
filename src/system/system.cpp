@@ -580,7 +580,7 @@ namespace lambdacommon
 		void LAMBDACOMMON_API sleep(utime_t time)
 		{
 #ifdef LAMBDA_WINDOWS
-			Sleep(time);
+			Sleep(static_cast<DWORD>(time));
 #else
 			auto goal = time / 1000 * CLOCKS_PER_SEC + clock();
 			while (goal > clock());
