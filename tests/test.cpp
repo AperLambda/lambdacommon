@@ -15,7 +15,7 @@ using namespace std;
 
 const ResourceName BASE_RESOURCENAME{"tests", "value/path"};
 
-bool test(const string &test_name, std::function<bool()> func)
+bool test(const string &test_name, const std::function<bool()> &func)
 {
 	if (test_name.find('"') != string::npos)
 	{
@@ -53,7 +53,6 @@ int main()
 	time_t start = time::get_time_millis();
 	setup();
 	set_title("λcommon - tests");
-
 	cout << "Starting lambdacommon-tests with" << CYAN << " lambdacommon" << RESET << " v"
 		 << lambdacommon::get_version()
 		 << " (Compiled with " << LAMBDACOMMON_VERSION_MAJOR << '.' << LAMBDACOMMON_VERSION_MINOR << '.'

@@ -45,48 +45,48 @@ set(SOURCE_FILES ${SOURCES_CONNECTION} ${SOURCES_DOCUMENT} ${SOURCES_GRAPHICS} $
 # Now build the library
 # Build static if the option is on.
 if (LAMBDACOMMON_BUILD_STATIC)
-    add_library(lambdacommon_static STATIC ${HEADER_FILES} ${SOURCE_FILES})
+	add_library(lambdacommon_static STATIC ${HEADER_FILES} ${SOURCE_FILES})
 endif ()
 # Build the shared library
 add_library(lambdacommon SHARED ${HEADER_FILES} ${SOURCE_FILES})
 # Generate the export header and include it.
 GENERATE_EXPORT_HEADER(lambdacommon
-        BASE_NAME lambdacommon
-        EXPORT_MACRO_NAME LAMBDACOMMON_API
-        EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/lambdacommon_exports.h
-        STATIC_DEFINE LAMBDACOMMON_SHARED_EXPORTS_BUILT_AS_STATIC)
+		BASE_NAME lambdacommon
+		EXPORT_MACRO_NAME LAMBDACOMMON_API
+		EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/lambdacommon_exports.h
+		STATIC_DEFINE LAMBDACOMMON_SHARED_EXPORTS_BUILT_AS_STATIC)
 target_include_directories(lambdacommon PUBLIC ${CMAKE_BINARY_DIR}/exports)
 if (LAMBDACOMMON_BUILD_STATIC)
-    target_compile_definitions(lambdacommon_static PUBLIC -DLAMBDACOMMON_SHARED_EXPORTS_BUILT_AS_STATIC)
-    target_include_directories(lambdacommon_static PUBLIC ${CMAKE_BINARY_DIR}/exports)
+	target_compile_definitions(lambdacommon_static PUBLIC -DLAMBDACOMMON_SHARED_EXPORTS_BUILT_AS_STATIC)
+	target_include_directories(lambdacommon_static PUBLIC ${CMAKE_BINARY_DIR}/exports)
 endif ()
 
 # Install if the option is on.
 if (LAMBDACOMMON_INSTALL)
-    foreach (LOOP_HEADER ${HEADER_FILES})
-        get_filename_component(HEADER_PARENT_DIR ${LOOP_HEADER} DIRECTORY)
-        install(FILES ${LOOP_HEADER} DESTINATION ${HEADER_PARENT_DIR})
-    endforeach ()
-    install(FILES ${CMAKE_BINARY_DIR}/exports/lambdacommon_exports.h DESTINATION include/lambdacommon)
-    install(FILES ${CMAKE_SOURCE_DIR}/LICENSE DESTINATION share/licenses/lambdacommon)
-    install(TARGETS lambdacommon
-            RUNTIME DESTINATION bin COMPONENT libraries
-            LIBRARY DESTINATION lib COMPONENT libraries
-            ARCHIVE DESTINATION lib COMPONENT libraries)
-    if (LAMBDACOMMON_BUILD_STATIC)
-        install(TARGETS lambdacommon_static
-                RUNTIME DESTINATION bin COMPONENT libraries
-                LIBRARY DESTINATION lib COMPONENT libraries
-                ARCHIVE DESTINATION lib COMPONENT libraries)
-    endif ()
+	foreach (LOOP_HEADER ${HEADER_FILES})
+		get_filename_component(HEADER_PARENT_DIR ${LOOP_HEADER} DIRECTORY)
+		install(FILES ${LOOP_HEADER} DESTINATION ${HEADER_PARENT_DIR})
+	endforeach ()
+	install(FILES ${CMAKE_BINARY_DIR}/exports/lambdacommon_exports.h DESTINATION include/lambdacommon)
+	install(FILES ${CMAKE_SOURCE_DIR}/LICENSE DESTINATION share/licenses/lambdacommon)
+	install(TARGETS lambdacommon
+			RUNTIME DESTINATION bin COMPONENT libraries
+			LIBRARY DESTINATION lib COMPONENT libraries
+			ARCHIVE DESTINATION lib COMPONENT libraries)
+	if (LAMBDACOMMON_BUILD_STATIC)
+		install(TARGETS lambdacommon_static
+				RUNTIME DESTINATION bin COMPONENT libraries
+				LIBRARY DESTINATION lib COMPONENT libraries
+				ARCHIVE DESTINATION lib COMPONENT libraries)
+	endif ()
 
-    # Uninstall target.
-    setup_uninstall_target()
+	# Uninstall target.
+	setup_uninstall_target()
 endif ()
 
 # Build the tests if the option is on.
 if (LAMBDACOMMON_BUILD_TESTS)
-    add_subdirectory(tests)
+	add_subdirectory(tests)
 endif ()
 
 add_subdirectory(c_wrapper)

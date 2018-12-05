@@ -30,7 +30,7 @@ namespace lambdacommon
 	Address::Address(const Address &address) : _host(new host(*address._host)), _port(address._port)
 	{}
 
-	Address::Address(Address &&address) : _host(new host(move(*address._host))), _port(address._port)
+	Address::Address(Address &&address) noexcept : _host(new host(move(*address._host))), _port(address._port)
 	{}
 
 	Address::~Address()

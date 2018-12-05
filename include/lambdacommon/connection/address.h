@@ -38,7 +38,7 @@ namespace lambdacommon
 
 		Address(const Address &address);
 
-		Address(Address &&address);
+		Address(Address &&address) noexcept;
 
 		~Address();
 

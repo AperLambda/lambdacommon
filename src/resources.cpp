@@ -91,37 +91,78 @@ namespace lambdacommon
 		return std::tie(_domain, _path) < std::tie(other._domain, other._path);
 	}
 
+	/*
+	 * ResourcesManager
+	 */
+	uint32_t last_id = 0;
 
-	ResourcesManager::ResourcesManager(const fs::FilePath &working_directory) : _working_directory(
-			working_directory / "resources")
+	ResourcesManager::ResourcesManager() : _id(++last_id)
 	{}
 
 	ResourcesManager::ResourcesManager(const ResourcesManager &other) = default;
 
-	ResourcesManager::ResourcesManager(ResourcesManager &&other) noexcept : _working_directory(
-			std::move(other._working_directory))
+	ResourcesManager::ResourcesManager(ResourcesManager &&other) noexcept : _id(other._id)
 	{}
 
-	const lambdacommon::fs::FilePath &ResourcesManager::get_working_directory() const
+	uint32_t ResourcesManager::get_id() const
+	{
+		return _id;
+	}
+
+	bool ResourcesManager::operator==(const ResourcesManager &other) const
+	{
+		return _id == other._id;
+	}
+
+	/*
+	 * FileResourcesManager
+	 */
+
+	FileResourcesManager::FileResourcesManager(const fs::FilePath &working_directory)
+			: ResourcesManager(), _working_directory(working_directory)
+	{}
+
+	FileResourcesManager::FileResourcesManager(const FileResourcesManager &other) = default;
+
+	FileResourcesManager::FileResourcesManager(FileResourcesManager &&other) noexcept : _working_directory(
+			std::move(other._working_directory))
+	{
+		_id = other._id;
+	}
+
+	const lambdacommon::fs::FilePath &FileResourcesManager::get_working_directory() const
 	{
 		return _working_directory;
 	}
 
-	bool ResourcesManager::does_resource_exist(const ResourceName &resource_name, const std::string &extension) const
+	bool FileResourcesManager::has_resource(const ResourceName &resource) const
 	{
-		return get_resource_path(resource_name, extension).exists();
+		return this->has_resource(resource, "");
+	}
+
+	bool FileResourcesManager::has_resource(const ResourceName &resource, const std::string &extension) const
+	{
+		return get_resource_path(resource, extension).exists();
 	}
 
 	lambdacommon::fs::FilePath
-	ResourcesManager::get_resource_path(const ResourceName &resource_name, const std::string &extension) const
+	FileResourcesManager::get_resource_path(const ResourceName &resource, const std::string &extension) const
 	{
-		return (_working_directory / resource_name.get_domain()) / (resource_name.get_name() + "." + extension);
+		auto file = resource.get_name();
+		if (!extension.empty())
+			file += "." + extension;
+		return (_working_directory / resource.get_domain()) / file;
+	}
+
+	std::string FileResourcesManager::load_resource(const ResourceName &resource) const
+	{
+		return this->load_resource(resource, "");
 	}
 
 	std::string
-	ResourcesManager::load_resource(const ResourceName &resource_name, const std::string &extension) const
+	FileResourcesManager::load_resource(const ResourceName &resource, const std::string &extension) const
 	{
-		auto resource_path = get_resource_path(resource_name, extension);
+		auto resource_path = get_resource_path(resource, extension);
 		if (!resource_path.exists())
 			return "";
 		try
@@ -138,25 +179,30 @@ namespace lambdacommon
 		}
 	}
 
-	ResourcesManager &ResourcesManager::operator=(const ResourcesManager &other)
+	FileResourcesManager &FileResourcesManager::operator=(const FileResourcesManager &other)
 	{
 		if (this != &other)
 		{
-			if (other._working_directory != _working_directory)
+			if (_id != other._id)
+				_id = other._id;
+			if (_working_directory != other._working_directory)
 				_working_directory = other._working_directory;
 		}
 		return *this;
 	}
 
-	ResourcesManager &ResourcesManager::operator=(ResourcesManager &&other) noexcept
+	FileResourcesManager &FileResourcesManager::operator=(FileResourcesManager &&other) noexcept
 	{
 		if (this != &other)
+		{
+			_id = other._id;
 			_working_directory = std::move(other._working_directory);
+		}
 		return *this;
 	}
 
-	bool ResourcesManager::operator==(const ResourcesManager &other) const
+	bool FileResourcesManager::operator==(const FileResourcesManager &other) const
 	{
-		return other._working_directory == _working_directory;
+		return _id == other._id && _working_directory == other._working_directory;
 	}
 }
