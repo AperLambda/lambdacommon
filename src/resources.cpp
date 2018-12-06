@@ -61,8 +61,7 @@ namespace lambdacommon
 
 	ResourceName &ResourceName::operator=(const ResourceName &other)
 	{
-		if (this != &other)
-		{
+		if (this != &other) {
 			if (other._domain != _domain)
 				_domain = other._domain;
 			if (other._path != _path)
@@ -73,8 +72,7 @@ namespace lambdacommon
 
 	ResourceName &ResourceName::operator=(ResourceName &&other) noexcept
 	{
-		if (this != &other)
-		{
+		if (this != &other) {
 			_domain = std::move(other._domain);
 			_path = std::move(other._path);
 		}
@@ -165,24 +163,21 @@ namespace lambdacommon
 		auto resource_path = get_resource_path(resource, extension);
 		if (!resource_path.exists())
 			return "";
-		try
-		{
+		try {
 			std::ifstream file_stream{resource_path.to_string()};
 			std::stringstream output_stream;
 			output_stream << file_stream.rdbuf();
 			file_stream.close();
 			return output_stream.str();
 		}
-		catch (std::exception &e)
-		{
+		catch (std::exception &e) {
 			return "";
 		}
 	}
 
 	FileResourcesManager &FileResourcesManager::operator=(const FileResourcesManager &other)
 	{
-		if (this != &other)
-		{
+		if (this != &other) {
 			if (_id != other._id)
 				_id = other._id;
 			if (_working_directory != other._working_directory)
@@ -193,8 +188,7 @@ namespace lambdacommon
 
 	FileResourcesManager &FileResourcesManager::operator=(FileResourcesManager &&other) noexcept
 	{
-		if (this != &other)
-		{
+		if (this != &other) {
 			_id = other._id;
 			_working_directory = std::move(other._working_directory);
 		}

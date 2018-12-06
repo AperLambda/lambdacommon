@@ -260,10 +260,8 @@ namespace lambdacommon
 			std::string word;
 			//bool record = false;
 			std::string cpu;
-			if (cpuinfo.is_open())
-			{
-				for (std::string line; std::getline(cpuinfo, line);)
-				{
+			if (cpuinfo.is_open()) {
+				for (std::string line; std::getline(cpuinfo, line);) {
 #ifdef LAMBDA_ANDROID
 					if (lstring::starts_with_ignore_case(line, "Hardware"))
 #else
@@ -308,10 +306,8 @@ namespace lambdacommon
 			cpuinfo.open("/proc/cpuinfo", std::ios::in);
 			std::string word;
 			uint32_t cpucount = 0;
-			if (cpuinfo.is_open())
-			{
-				while (cpuinfo >> word)
-				{
+			if (cpuinfo.is_open()) {
+				while (cpuinfo >> word) {
 					if (word == "processor")
 						cpucount++;
 				}
@@ -341,14 +337,11 @@ namespace lambdacommon
 
 			uint64_t mem_free = 0;
 
-			if (meminfo.is_open())
-			{
+			if (meminfo.is_open()) {
 				std::string last;
 
-				while (meminfo >> last)
-				{
-					if (lstring::equals_ignore_case(last, "MemAvailable:"))
-					{
+				while (meminfo >> last) {
+					if (lstring::equals_ignore_case(last, "MemAvailable:")) {
 						meminfo >> mem_free;
 						// kB to B
 						mem_free = mem_free * 1024;
@@ -370,14 +363,11 @@ namespace lambdacommon
 
 			uint64_t mem_used = 0;
 
-			if (meminfo.is_open())
-			{
+			if (meminfo.is_open()) {
 				std::string last;
 
-				while (meminfo >> last)
-				{
-					if (lstring::equals_ignore_case(last, "Active:"))
-					{
+				while (meminfo >> last) {
+					if (lstring::equals_ignore_case(last, "Active:")) {
 						meminfo >> mem_used;
 						// kB to B
 						mem_used = mem_used * 1024;
@@ -414,40 +404,30 @@ namespace lambdacommon
 			if (!lsb_release.exists() && !etc_os_release.exists())
 				os_name = uts.sysname;
 
-			if (lsb_release.exists())
-			{
+			if (lsb_release.exists()) {
 				std::ifstream lsb_release_in;
 				lsb_release_in.open(lsb_release.to_string(), std::ios::in);
-				if (lsb_release_in.is_open())
-				{
+				if (lsb_release_in.is_open()) {
 					std::string word;
 					bool record = false;
-					while (lsb_release_in >> word)
-					{
-						if (word.find("DISTRIB_DESCRIPTION") != std::string::npos)
-						{
+					while (lsb_release_in >> word) {
+						if (word.find("DISTRIB_DESCRIPTION") != std::string::npos) {
 							size_t a = word.find_last_of("N=") + 1;
 							os_name = word.substr(a + 1, word.length() - a);
 							record = true;
-						}
-						else if (record)
+						} else if (record)
 							os_name += " " + lstring::replace_all(word, "\"", "");
 					}
 					lsb_release_in.close();
 				}
-			}
-			else
-			{
+			} else {
 				std::ifstream in;
 				in.open(etc_os_release.to_string(), std::ios::in);
-				if (in.is_open())
-				{
+				if (in.is_open()) {
 					char line[256];
-					while (in.getline(line, 256))
-					{
+					while (in.getline(line, 256)) {
 						std::string line_{line};
-						if (line_.find("PRETTY_NAME=") != std::string::npos)
-						{
+						if (line_.find("PRETTY_NAME=") != std::string::npos) {
 							size_t equal_sign = line_.find_first_of('"');
 							os_name = line_.substr(equal_sign + 1, line_.length() - equal_sign - 2);
 							break;
@@ -488,8 +468,7 @@ namespace lambdacommon
 
 		std::string LAMBDACOMMON_API get_processor_arch_enum_str(SysArchitecture arch)
 		{
-			switch (arch)
-			{
+			switch (arch) {
 				case ARM:
 					return "ARM";
 				case ARM64:

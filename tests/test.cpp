@@ -17,26 +17,21 @@ const ResourceName BASE_RESOURCENAME{"tests", "value/path"};
 
 bool test(const string &test_name, const std::function<bool()> &func)
 {
-	if (test_name.find('"') != string::npos)
-	{
+	if (test_name.find('"') != string::npos) {
 		cout << "TESTING ";
 		bool state = false;
-		for (char c : test_name)
-		{
-			if (c == '"')
-			{
+		for (char c : test_name) {
+			if (c == '"') {
 				if (state)
 					cout << c << RESET;
 				else
 					cout << MAGENTA << c;
 				state = !state;
-			}
-			else
+			} else
 				cout << c;
 		}
 		cout << RESET << "...\n  RESULT: ";
-	}
-	else
+	} else
 		cout << "TESTING " << test_name << "...\n  RESULT: ";
 	time_t start = time::get_time_millis();
 	bool result = func();
@@ -93,22 +88,19 @@ int main()
 
 	cout << "===== STRING SECTION =====" << endl;
 	tests_count++;
-	if (test("lstring::equals_ignore_case((const char) 'w', (const char) 'W')", []()
-	{
+	if (test("lstring::equals_ignore_case((const char) 'w', (const char) 'W')", []() {
 		return lstring::equals_ignore_case('w', 'W');
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("lstring::equals(const std::string &, const std::string &)", []()
-	{
+	if (test("lstring::equals(const std::string &, const std::string &)", []() {
 		return !lstring::equals("LambdAurora", "lAmbdaUrOrA");
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("lstring::equals_ignore_case(const std::string &, const std::string &)", []()
-	{
+	if (test("lstring::equals_ignore_case(const std::string &, const std::string &)", []() {
 		return lstring::equals_ignore_case("LambdAurora", "lAmbdaUrOrA");
 	}))
 		tests_passed++;
@@ -122,8 +114,7 @@ int main()
 	tests_passed = 0;
 
 	tests_count++;
-	if (test("FilePath::exists() with relative path \"404_non_existent\"", []()
-	{
+	if (test("FilePath::exists() with relative path \"404_non_existent\"", []() {
 		fs::FilePath path{"404_non_existent"};
 		return !path.exists();
 	}))
@@ -131,26 +122,23 @@ int main()
 
 	fs::FilePath here_path = fs::get_current_working_directory();
 	tests_count++;
-	if (test("FilePath::exists() with absolute path \"" + here_path.to_string() + "\"", [here_path]()
-	{
+	if (test("FilePath::exists() with absolute path \"" + here_path.to_string() + "\"", [here_path]() {
 		return here_path.exists();
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("FilePath::is_directory() with absolute path \"" + here_path.to_string() + "\"", [here_path]()
-	{
+	if (test("FilePath::is_directory() with absolute path \"" + here_path.to_string() + "\"", [here_path]() {
 		return here_path.is_directory();
 	}))
 		tests_passed++;
 
 	tests_count++;
 	if (test("FilePath::operator/(const std::string&) with FilePath object \"" + here_path.to_string() +
-			 R"(" and string "notFoundDir")", [here_path]()
-			 {
-				 auto h404re_path = here_path / "notFoundDir";
-				 return lstring::equals(h404re_path.get_filename(), "notFoundDir");
-			 }))
+			 R"(" and string "notFoundDir")", [here_path]() {
+		auto h404re_path = here_path / "notFoundDir";
+		return lstring::equals(h404re_path.get_filename(), "notFoundDir");
+	}))
 		tests_passed++;
 
 	cout << "Tests results: " + to_string(tests_passed) << '/' << to_string(tests_count) << endl;
@@ -169,8 +157,7 @@ int main()
 	expected = "https://user:pwd@something.com/test/file_or_folder?foo=bar&queryWithoutValue&invalid%20query=but%20fixed#bar";
 	tests_count++;
 	if (test("URI.to_string(): expected: \"" + expected + "\" got: \"" + uri_to_string + "\"",
-			 [uri_to_string, expected]()
-			 {
+			 [uri_to_string, expected]() {
 				 return lstring::equals(uri_to_string, expected);
 			 }))
 		tests_passed++;
@@ -183,29 +170,25 @@ int main()
 	tests_count++;
 	if (test("URI.from_file_path(const fs::FilePath&) (with \"" + here_path.to_string() + "\"): expected: \"" +
 			 expected +
-			 "\" got: \"" + uri_to_string + "\"", [uri_to_string, expected]()
-			 {
-				 return lstring::equals(uri_to_string, expected);
-			 }))
+			 "\" got: \"" + uri_to_string + "\"", [uri_to_string, expected]() {
+		return lstring::equals(uri_to_string, expected);
+	}))
 		tests_passed++;
 
 	expected = "https://www.youtube.com/channel/UC2i7nj6wnh1Z2GQwvFeeKoA";
 	cout << "TESTING URI::from_string(STD::STRING) WITH \"" << expected << "\"...\nRESULT: ";
-	try
-	{
+	try {
 		uri = uri::from_string("https://www.youtube.com/channel/UC2i7nj6wnh1Z2GQwvFeeKoA");
 		uri_to_string = uri.to_string();
 		if (lstring::equals(uri_to_string, expected))
 			cout << LIGHT_GREEN << "OK. (" << uri_to_string << ")" << RESET << endl;
-		else
-		{
+		else {
 			cout << LIGHT_RED << "FAILED. (" << uri_to_string << ", expected: " + expected + ")"
 				 << RESET << endl;
 			return 1;
 		}
 	}
-	catch (ParseException &e)
-	{
+	catch (ParseException &e) {
 		cout << LIGHT_RED << "FAILED. (ParseException{\"" << e.what()
 			 << "\"}, expected: " + expected + ")"
 			 << RESET << endl;
@@ -221,57 +204,49 @@ int main()
 	tests_passed = 0;
 
 	tests_count++;
-	if (test("maths::abs((int) 42)", []()
-	{
+	if (test("maths::abs((int) 42)", []() {
 		return maths::abs((int) 42) == 42;
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("maths::abs((float) -64.0f)", []()
-	{
+	if (test("maths::abs((float) -64.0f)", []() {
 		return maths::abs(-64.f) == 64.f;
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("maths::min(42, 64)", []()
-	{
+	if (test("maths::min(42, 64)", []() {
 		return maths::min(42, 64) == 42;
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("maths::max(42.0f, 64.0f)", []()
-	{
+	if (test("maths::max(42.0f, 64.0f)", []() {
 		return maths::max(42.f, 64.f) == 64.f;
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("maths::min({-5.0, 2.0, 42.0, -56.0, 64.0})", []()
-	{
+	if (test("maths::min({-5.0, 2.0, 42.0, -56.0, 64.0})", []() {
 		return maths::min({-5.0, 2.0, 42.0, -56.0, 64.0}) == -56.0;
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("maths::max({-5, 2, 42, -56, 64})", []()
-	{
+	if (test("maths::max({-5, 2, 42, -56, 64})", []() {
 		return maths::max({-5, 2, 42, -56, 64}) == 64;
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("maths::clamp(128, 0, 255)", []()
-	{
+	if (test("maths::clamp(128, 0, 255)", []() {
 		return maths::clamp(128, 0, 255) == 128;
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("maths::clamp(32.f, 0.f, 1.f)", []()
-	{
+	if (test("maths::clamp(32.f, 0.f, 1.f)", []() {
 		return maths::clamp(32.f, 0.f, 1.f) == 1.f;
 	}))
 		tests_passed++;
@@ -285,16 +260,14 @@ int main()
 	tests_passed = 0;
 
 	tests_count++;
-	if (test("Size3D::to_string() with {256, 128, 64}", []()
-	{
+	if (test("Size3D::to_string() with {256, 128, 64}", []() {
 		Size3D_u32 dimension{256, 128, 64};
 		return lstring::equals(dimension.to_string(), R"({"width":256,"height":128,"depth":64})");
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test("Size2D::operator*(T n) with {16, 32} ; 2", []()
-	{
+	if (test("Size2D::operator*(T n) with {16, 32} ; 2", []() {
 		Size2D_u32 dimension{16, 32};
 		auto dim = dimension * 2;
 		return dim.get_width() == 32 && dim.get_height() == 64;
@@ -302,8 +275,7 @@ int main()
 		tests_passed++;
 
 	tests_count++;
-	if (test("Size3D::operator-(Size2D<T> dimension2D) with {2048;1024;16} ; {2032;1008}", []()
-	{
+	if (test("Size3D::operator-(Size2D<T> dimension2D) with {2048;1024;16} ; {2032;1008}", []() {
 		Size3D_u32 dimension{2048, 1024, 16};
 		Size2D_u32 dimension2d{2032, 1008};
 		auto dim = dimension - dimension2d;
@@ -312,8 +284,7 @@ int main()
 		tests_passed++;
 
 	tests_count++;
-	if (test("Size3D::is_null() with {0;0;0}", []()
-	{
+	if (test("Size3D::is_null() with {0;0;0}", []() {
 		Size3D_u32 dim{0, 0, 0};
 		return dim.is_null();
 	}))
@@ -328,16 +299,14 @@ int main()
 	tests_passed = 0;
 
 	tests_count++;
-	if (test("RESOURCENAME(\"tests:value/path\")", []()
-	{
+	if (test("RESOURCENAME(\"tests:value/path\")", []() {
 		ResourceName base{"tests:value/path"};
 		return base.get_domain() == "tests" && base.get_name() == "value/path";
 	}))
 		tests_passed++;
 
 	tests_count++;
-	if (test(R"(ResourceName::operator!=({"tests:value/OwO"}) with object {"tests:value/path"}, expect: true)", []()
-	{
+	if (test(R"(ResourceName::operator!=({"tests:value/OwO"}) with object {"tests:value/path"}, expect: true)", []() {
 		auto base = BASE_RESOURCENAME;
 		ResourceName owo{"tests:value/OwO"};
 		return base != owo;
@@ -345,8 +314,7 @@ int main()
 		tests_passed++;
 
 	tests_count++;
-	if (test(R"(ResourceName::operator=({"tests:value/OwO"}) with object {"tests:value/path"})", []()
-	{
+	if (test(R"(ResourceName::operator=({"tests:value/OwO"}) with object {"tests:value/path"})", []() {
 		auto newRes = BASE_RESOURCENAME;
 		ResourceName owo{"tests", "value/OwO"};
 		newRes = owo;
@@ -355,8 +323,7 @@ int main()
 		tests_passed++;
 
 	tests_count++;
-	if (test(R"(ResourceName::operator/ with base object {"tests:value/path"} and argument "owo")", []()
-	{
+	if (test(R"(ResourceName::operator/ with base object {"tests:value/path"} and argument "owo")", []() {
 		auto base = BASE_RESOURCENAME;
 		auto newRes = base / "owo";
 		return newRes.get_name() == "value/path/owo";
@@ -372,8 +339,7 @@ int main()
 	tests_passed = 0;
 
 	tests_count++;
-	if (test("color::from_hex(0xCE0031AA) => rgba(206, 0, 49, 170)", []()
-	{
+	if (test("color::from_hex(0xCE0031AA) => rgba(206, 0, 49, 170)", []() {
 		return color::from_hex(0xCE0031AA).to_string(false) == "rgba(206, 0, 49, 170)";
 	}))
 		tests_passed++;

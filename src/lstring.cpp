@@ -30,8 +30,7 @@ namespace lambdacommon
 			std::stringstream ss;
 			ss.str(s);
 			std::string item;
-			while (getline(ss, item, delim))
-			{
+			while (getline(ss, item, delim)) {
 				*(result++) = item;
 			}
 		}
@@ -58,12 +57,10 @@ namespace lambdacommon
 
 		bool LAMBDACOMMON_API equals_ignore_case(std::string const &a, std::string const &b)
 		{
-			if (a.length() == b.length())
-			{
+			if (a.length() == b.length()) {
 				return equal(begin(a), end(a), begin(b),
 							 [](const char charA, const char charB) { return equals_ignore_case(charA, charB); });
-			}
-			else
+			} else
 				return false;
 		}
 
@@ -89,8 +86,7 @@ namespace lambdacommon
 		std::string LAMBDACOMMON_API replace_all(std::string subject, const std::string &from, const std::string &to)
 		{
 			size_t start_pos = 0;
-			while ((start_pos = subject.find(from, start_pos)) != std::string::npos)
-			{
+			while ((start_pos = subject.find(from, start_pos)) != std::string::npos) {
 				subject.replace(start_pos, from.length(), to);
 				start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
 			}
@@ -156,32 +152,26 @@ namespace lambdacommon
 
 		int LAMBDACOMMON_API parse_int(const std::string &integer, int base)
 		{
-			try
-			{
+			try {
 				return std::stoi(integer, nullptr, base);
 			}
-			catch (const std::invalid_argument &error)
-			{
+			catch (const std::invalid_argument &error) {
 				return 0;
 			}
-			catch (const std::out_of_range &error)
-			{
+			catch (const std::out_of_range &error) {
 				return 0;
 			}
 		}
 
 		long LAMBDACOMMON_API parse_long(const std::string &long_number, int base)
 		{
-			try
-			{
+			try {
 				return std::stol(long_number, nullptr, base);
 			}
-			catch (const std::invalid_argument &error)
-			{
+			catch (const std::invalid_argument &error) {
 				return 0;
 			}
-			catch (const std::out_of_range &error)
-			{
+			catch (const std::out_of_range &error) {
 				return 0;
 			}
 		}
@@ -207,15 +197,19 @@ namespace lambdacommon
 					result = static_cast<char32_t>(((character[0] & 0x3F) << 6) | (character[1] & 0x3F));
 
 				if ((character[0] & 0xE0) == 0xE0)
-					result = static_cast<char32_t>(((character[0] & 0x1F) << (6 + 6)) | ((character[1] & 0x3F) << 6) | (character[2] & 0x3F));
+					result = static_cast<char32_t>(((character[0] & 0x1F) << (6 + 6)) | ((character[1] & 0x3F) << 6) |
+												   (character[2] & 0x3F));
 
 				if ((character[0] & 0xF0) == 0xF0)
-					result = static_cast<char32_t>(((character[0] & 0x0F) << (6 + 6 + 6)) | ((character[1] & 0x3F) << (6 + 6)) |
+					result = static_cast<char32_t>(((character[0] & 0x0F) << (6 + 6 + 6)) |
+												   ((character[1] & 0x3F) << (6 + 6)) |
 												   ((character[2] & 0x3F) << 6) | (character[3] & 0x3F));
 
 				if ((character[0] & 0xF8) == 0xF8)
-					result = static_cast<char32_t>(((character[0] & 0x07) << (6 + 6 + 6 + 6)) | ((character[1] & 0x3F) << (6 + 6 + 6)) |
-												   ((character[2] & 0x3F) << (6 + 6)) | ((character[3] & 0x3F) << 6) | (character[4] & 0x3F));
+					result = static_cast<char32_t>(((character[0] & 0x07) << (6 + 6 + 6 + 6)) |
+												   ((character[1] & 0x3F) << (6 + 6 + 6)) |
+												   ((character[2] & 0x3F) << (6 + 6)) | ((character[3] & 0x3F) << 6) |
+												   (character[4] & 0x3F));
 
 				return result;
 			}

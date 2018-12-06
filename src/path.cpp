@@ -44,8 +44,7 @@ namespace lambdacommon
 	std::string Path::to_string(char delimiter) const
 	{
 		std::ostringstream oss;
-		for (size_t i = 0; i < _path.size(); i++)
-		{
+		for (size_t i = 0; i < _path.size(); i++) {
 			oss << _path[i];
 			if (i + 1 < _path.size())
 				oss << delimiter;

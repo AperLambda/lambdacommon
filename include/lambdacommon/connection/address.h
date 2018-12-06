@@ -56,7 +56,7 @@ namespace lambdacommon
 
 		AddressType get_type() const;
 
-		std::string to_string() const;
+		std::string to_string() const override;
 
 		Address &operator=(const Address &other);
 

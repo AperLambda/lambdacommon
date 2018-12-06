@@ -39,8 +39,7 @@ namespace lambdacommon
 
 		port_t LAMBDACOMMON_API get_scheme_default_port(SchemeType scheme)
 		{
-			switch (scheme)
-			{
+			switch (scheme) {
 				case FILE:
 					return 0;
 				case FTP:
@@ -136,13 +135,10 @@ namespace lambdacommon
 
 		void URI::set_username_and_password(const std::string &username, const std::string &password)
 		{
-			if (username.empty() || password.empty())
-			{
+			if (username.empty() || password.empty()) {
 				*_username = "";
 				*_password = "";
-			}
-			else
-			{
+			} else {
 				*_username = username;
 				*_password = password;
 			}
@@ -175,8 +171,7 @@ namespace lambdacommon
 		{
 			bool has_query = false;
 			for (auto q : *_queries)
-				if (lstring::equals(q.first, query))
-				{
+				if (lstring::equals(q.first, query)) {
 					has_query = true;
 					break;
 				}
@@ -187,8 +182,7 @@ namespace lambdacommon
 		{
 			std::string result;
 			for (auto q : *_queries)
-				if (lstring::equals(q.first, query))
-				{
+				if (lstring::equals(q.first, query)) {
 					result = q.second;
 					break;
 				}
@@ -213,8 +207,7 @@ namespace lambdacommon
 			if (!_scheme->empty())
 				oss << get_scheme() << ':';
 
-			if (!_address.is_empty())
-			{
+			if (!_address.is_empty()) {
 				oss << "//";
 				// Write the username and the password.
 				if (!_username->empty() && !_password->empty())
@@ -222,8 +215,7 @@ namespace lambdacommon
 
 				// Write the address.
 				oss << _address.to_string();
-			}
-			else if (*_scheme == "file")
+			} else if (*_scheme == "file")
 				oss << "//";
 
 			// Write the path.
@@ -231,11 +223,9 @@ namespace lambdacommon
 				oss << '/' << Path::to_string(delimiter);
 
 			// Write the queries.
-			if (!_queries->empty())
-			{
+			if (!_queries->empty()) {
 				oss << '?';
-				for (size_t i = 0; i < _queries->size(); i++)
-				{
+				for (size_t i = 0; i < _queries->size(); i++) {
 					std::pair<std::string, std::string> query = (*_queries)[i];
 					oss << query.first;
 					if (!query.second.empty())
@@ -260,8 +250,7 @@ namespace lambdacommon
 
 		URI &URI::operator=(const URI &url)
 		{
-			if (this != &url)
-			{
+			if (this != &url) {
 				_path = url._path;
 				delete _scheme;
 				_scheme = new std::string(*url._scheme);
@@ -280,8 +269,7 @@ namespace lambdacommon
 
 		URI &URI::operator=(URI &&url) noexcept
 		{
-			if (this != &url)
-			{
+			if (this != &url) {
 				_path = std::move(url._path);
 				delete _scheme;
 				_scheme = new std::string(move(*url._scheme));
@@ -339,16 +327,13 @@ namespace lambdacommon
 		int str2int(const std::string &str)
 		{
 			int i;
-			try
-			{
+			try {
 				i = stoi(str);
 			}
-			catch (const std::invalid_argument &e)
-			{
+			catch (const std::invalid_argument &e) {
 				i = 0;
 			}
-			catch (const std::out_of_range &e)
-			{
+			catch (const std::out_of_range &e) {
 				i = 0;
 			}
 			return i;
@@ -360,8 +345,7 @@ namespace lambdacommon
 				throw IllegalArgumentException("URI cannot be empty.");
 
 			auto scheme_separator = url.find_first_of("://");
-			if (scheme_separator == std::string::npos)
-			{
+			if (scheme_separator == std::string::npos) {
 				scheme_separator = url.find_first_of(':');
 				if (scheme_separator == std::string::npos)
 					throw ParseException(
@@ -373,8 +357,7 @@ namespace lambdacommon
 			auto auth_separator = tmp_uri.find_first_of('@');
 			std::string username;
 			std::string password;
-			if (auth_separator != std::string::npos)
-			{
+			if (auth_separator != std::string::npos) {
 				auto user_and_pwd = tmp_uri.substr(0, auth_separator);
 				auto split = lstring::split(user_and_pwd, ':');
 				if (split.size() == 1)
@@ -397,38 +380,30 @@ namespace lambdacommon
 			std::string tmp_address;
 
 			std::string path;
-			if (path_separator != std::string::npos)
-			{
+			if (path_separator != std::string::npos) {
 				tmp_address = tmp_uri.substr(0, path_separator);
-				if (query_separator != std::string::npos || fragment_separator != std::string::npos)
-				{
+				if (query_separator != std::string::npos || fragment_separator != std::string::npos) {
 					if (query_separator < fragment_separator || fragment_separator == std::string::npos)
 						path = tmp_uri.substr(path_separator + 1, (query_separator - path_separator - 1));
 					else
 						path = tmp_uri.substr(path_separator + 1, (fragment_separator - path_separator - 1));
-				}
-				else
+				} else
 					path = tmp_uri.substr(path_separator);
 			}
 
 			std::vector<std::pair<std::string, std::string>> queries;
-			if (query_separator != std::string::npos)
-			{
+			if (query_separator != std::string::npos) {
 				std::string str_queries;
-				if (fragment_separator > query_separator)
-				{
+				if (fragment_separator > query_separator) {
 					str_queries = tmp_uri.substr(query_separator + 1, (fragment_separator - query_separator - 1));
 					if (tmp_address.empty())
 						tmp_address = tmp_uri.substr(0, query_separator);
-				}
-				else
+				} else
 					str_queries = tmp_uri.substr(query_separator + 1, tmp_uri.size());
 
-				if (!str_queries.empty())
-				{
+				if (!str_queries.empty()) {
 					auto splitted_queries = lstring::split(str_queries, '&');
-					for (auto query : splitted_queries)
-					{
+					for (auto query : splitted_queries) {
 						size_t j;
 						if ((j = query.find_first_of('=')) != std::string::npos)
 							queries.emplace_back(query.substr(0, j), query.substr(j + 1, query.size()));
@@ -439,21 +414,17 @@ namespace lambdacommon
 			}
 
 			std::string fragment;
-			if (fragment_separator != std::string::npos)
-			{
-				if (query_separator > fragment_separator)
-				{
+			if (fragment_separator != std::string::npos) {
+				if (query_separator > fragment_separator) {
 					fragment = tmp_uri.substr(fragment_separator + 1, (query_separator - fragment_separator - 1));
 					if (tmp_address.empty())
 						tmp_address = tmp_uri.substr(0, fragment_separator);
-				}
-				else
+				} else
 					fragment = tmp_uri.substr(fragment_separator + 1, tmp_uri.size());
 			}
 
 			Address address = Address::EMPTY;
-			if (!tmp_address.empty())
-			{
+			if (!tmp_address.empty()) {
 				auto address_separator = tmp_address.find_last_of(':');
 				auto end_ipv6 = tmp_address.find_last_of(']');
 				std::string host;
@@ -463,8 +434,7 @@ namespace lambdacommon
 					host = tmp_address.substr(0, address_separator);
 				host = lstring::replace_all(lstring::replace_all(host, "[", ""), "]", "");
 				port_t port = 0;
-				if (address_separator != std::string::npos && address_separator > end_ipv6)
-				{
+				if (address_separator != std::string::npos && address_separator > end_ipv6) {
 					if ((port = static_cast<lambdacommon::port_t>(str2int(
 							tmp_address.substr(address_separator + 1, tmp_address.size())))) == 0)
 						throw ParseException("Cannot parse uri '" + url + "': invalid port!");

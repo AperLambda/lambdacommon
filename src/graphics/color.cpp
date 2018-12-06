@@ -88,8 +88,7 @@ namespace lambdacommon
 
 	std::string Color::to_string(bool hex) const
 	{
-		if (hex)
-		{
+		if (hex) {
 			std::stringstream string;
 			string << std::hex << std::right << std::setfill('0') << std::setw(8) << to_hex();
 			return "#" + lstring::to_upper_case(string.str());

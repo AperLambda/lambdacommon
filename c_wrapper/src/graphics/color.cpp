@@ -70,14 +70,11 @@ uint64_t lc_Color_to_hex(const lcColor *color)
 
 const char *lc_Color_to_string(const lcColor *color, bool hex)
 {
-	if (hex)
-	{
+	if (hex) {
 		static char to_string[9];
 		CONST_COLOR_CPP(color)->to_string(hex).copy(to_string, 9);
 		return to_string;
-	}
-	else
-	{
+	} else {
 		static char to_string[24];
 		CONST_COLOR_CPP(color)->to_string(hex).copy(to_string, 24);
 		return to_string;

@@ -37,9 +37,7 @@ namespace lambdacommon
 	namespace fs
 	{
 		FilePath::FilePath() : Path(), _absolute(false)
-		{
-
-		}
+		{}
 
 		FilePath::FilePath(const char *path) : Path()
 		{
@@ -69,13 +67,10 @@ namespace lambdacommon
 
 		void FilePath::set(const std::string &str, PathType type)
 		{
-			if (type == WINDOWS)
-			{
+			if (type == WINDOWS) {
 				_path = serializable::tokenize(str, "/\\");
 				_absolute = str.size() > 2 && isalpha(str[0]) && str[1] == ':';
-			}
-			else
-			{
+			} else {
 				_path = serializable::tokenize(str, "/");
 				_absolute = !str.empty() && str[0] == '/';
 			}
@@ -92,8 +87,7 @@ namespace lambdacommon
 
 		bool FilePath::mkdir(bool recursive) const
 		{
-			if (recursive)
-			{
+			if (recursive) {
 				auto parent = get_parent();
 				if (!parent.exists())
 					parent.mkdir(true);
@@ -195,7 +189,8 @@ namespace lambdacommon
 			char temp[PATH_MAX];
 			if (realpath(to_string().c_str(), temp) == nullptr)
 				throw std::runtime_error(
-						"Internal error in lambdacommon::path::FilePath::to_absolute(): " + std::string(strerror(errno)));
+						"Internal error in lambdacommon::path::FilePath::to_absolute(): " +
+						std::string(strerror(errno)));
 			return FilePath(temp);
 #endif
 		}
@@ -205,12 +200,10 @@ namespace lambdacommon
 			FilePath result;
 			result._absolute = _absolute;
 
-			if (empty())
-			{
+			if (empty()) {
 				if (!_absolute)
 					result._path.emplace_back("..");
-			}
-			else
+			} else
 				for (size_t i = 0; i < _path.size() - 1; ++i)
 					result._path.push_back(_path[i]);
 			return result;
@@ -223,11 +216,9 @@ namespace lambdacommon
 			if (type == COMMON && _absolute)
 				oss << "/";
 
-			for (size_t i = 0; i < _path.size(); i++)
-			{
+			for (size_t i = 0; i < _path.size(); i++) {
 				oss << _path[i];
-				if (i + 1 < _path.size())
-				{
+				if (i + 1 < _path.size()) {
 					if (type == COMMON)
 						oss << '/';
 					else
@@ -263,8 +254,7 @@ namespace lambdacommon
 
 		FilePath &FilePath::operator=(const FilePath &path)
 		{
-			if (this != &path)
-			{
+			if (this != &path) {
 				_path = path._path;
 				_absolute = path._absolute;
 			}
@@ -273,8 +263,7 @@ namespace lambdacommon
 
 		FilePath &FilePath::operator=(FilePath &&path) noexcept
 		{
-			if (this != &path)
-			{
+			if (this != &path) {
 				_path = std::move(path._path);
 				_absolute = path._absolute;
 			}
@@ -313,7 +302,7 @@ namespace lambdacommon
 			char temp[PATH_MAX];
 			if (getcwd(temp, PATH_MAX) == nullptr)
 				throw std::runtime_error("Internal error in lambdacommon::path::getCurrentWorkingDirectoryStr(): " +
-									std::string(strerror(errno)));
+										 std::string(strerror(errno)));
 			return std::string(temp);
 #endif
 		}

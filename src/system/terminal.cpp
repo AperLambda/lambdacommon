@@ -74,9 +74,7 @@ namespace lambdacommon
 
 			// Get the number of character cells in the current buffer.
 			if (!GetConsoleScreenBufferInfo(h_console, &csbi))
-			{
 				return;
-			}
 
 			dw_con_size = static_cast<DWORD>(csbi.dwSize.X * csbi.dwSize.Y);
 
@@ -162,15 +160,11 @@ namespace lambdacommon
 
 		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<TermFormatting> term_formatting)
 		{
-			if (is_tty(stream))
-			{
+			if (is_tty(stream)) {
 #ifdef WIN_FRIENDLY
-				if (!use_ansi_escape_codes)
-				{
-					for (auto format : term_formatting)
-					{
-						switch (format)
-						{
+				if (!use_ansi_escape_codes) {
+					for (auto format : term_formatting) {
+						switch (format) {
 							case RESET:
 								win_change_attributes(stream, -1, -1);
 								break;
@@ -276,8 +270,7 @@ namespace lambdacommon
 						}
 					}
 					return stream;
-				}
-				else
+				} else
 					goto write_ansi;
 #else
 				goto write_ansi;
@@ -288,8 +281,7 @@ namespace lambdacommon
 			std::string ansi_sequence{((char) 0x1B)};
 			ansi_sequence += "[";
 			auto formattings = term_formatting.size();
-			for (size_t i = 0; i < formattings; i++)
-			{
+			for (size_t i = 0; i < formattings; i++) {
 				std::string str = std::to_string(static_cast<int>(term_formatting[i]));
 				if (i != formattings - 1)
 					ansi_sequence += (str + ";");
@@ -319,8 +311,7 @@ namespace lambdacommon
 		std::ostream LAMBDACOMMON_API &clear(std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
-			if (is_tty(stream))
-			{
+			if (is_tty(stream)) {
 				cls(get_term_handle(stream));
 				return stream;
 			}
@@ -332,8 +323,7 @@ namespace lambdacommon
 		void LAMBDACOMMON_API set_cursor_position(unsigned short x, unsigned short y, std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
-			if (is_tty(stream))
-			{
+			if (is_tty(stream)) {
 				COORD coord;
 				coord.X = x;
 				coord.Y = y;
@@ -362,11 +352,9 @@ namespace lambdacommon
 		{
 #ifdef  WIN_FRIENDLY
 			HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE);
-			if (h_out != INVALID_HANDLE_VALUE)
-			{
+			if (h_out != INVALID_HANDLE_VALUE) {
 				DWORD dw_mode = 0;
-				if (GetConsoleMode(h_out, &dw_mode))
-				{
+				if (GetConsoleMode(h_out, &dw_mode)) {
 					dw_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 					if (SetConsoleMode(h_out, dw_mode))
 						use_ansi_escape_codes = true;
@@ -390,12 +378,12 @@ namespace lambdacommon
 
 		bool LAMBDACOMMON_API is_tty(const std::ostream &stream)
 		{
-		FILE *std_stream = get_standard_stream(stream);
+			FILE *std_stream = get_standard_stream(stream);
 
 #ifdef LAMBDA_WINDOWS
-		return ::_isatty(_fileno(std_stream)) != 0;
+			return ::_isatty(_fileno(std_stream)) != 0;
 #else
-		return static_cast<bool>(::isatty(fileno(std_stream)));
+			return static_cast<bool>(::isatty(fileno(std_stream)));
 #endif
 		}
 

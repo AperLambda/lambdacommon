@@ -21,11 +21,11 @@ enum lc_TermFormatting
 	/*
 	 * RESET
 	 */
-			LC_TERM_RESET = 0,
+	LC_TERM_RESET = 0,
 	/*
 	 * SET
 	 */
-			LC_TERM_BOLD = 1,
+	LC_TERM_BOLD = 1,
 	LC_TERM_DIM = 2,
 	LC_TERM_UNDERLINED = 4,
 	LC_TERM_BLINK = 5,
@@ -34,7 +34,7 @@ enum lc_TermFormatting
 	/*
 	 * Foreground
 	 */
-			LC_TERM_DEFAULT_FCOLOR = 39,
+	LC_TERM_DEFAULT_FCOLOR = 39,
 	LC_TERM_BLACK = 30,
 	LC_TERM_RED = 31,
 	LC_TERM_GREEN = 32,
@@ -54,7 +54,7 @@ enum lc_TermFormatting
 	/*
 	 * Background
 	 */
-			LC_TERM_DEFAULT_BCOLOR = 49,
+	LC_TERM_DEFAULT_BCOLOR = 49,
 	LC_TERM_B_BLACK = 40,
 	LC_TERM_B_RED = 41,
 	LC_TERM_B_GREEN = 42,

@@ -10,13 +10,12 @@ void print_with_color(const char *print, lc_TermFormatting formatting);
 
 #define TEST(NAME, COUNT, INDEX, FUNC) printf("TESTING %s...\n  RESULT: ", NAME); \
 COUNT++; \
-if (FUNC) \
-{ \
-	INDEX++; \
+if (FUNC) { \
+    INDEX++; \
     print_with_color("OK.\n", LC_TERM_LIGHT_GREEN); \
-} \
-else \
-	print_with_color("FAILED.\n", LC_TERM_LIGHT_RED); \
+} else \
+    print_with_color("FAILED.\n", LC_TERM_LIGHT_RED); \
+
 
 int main()
 {

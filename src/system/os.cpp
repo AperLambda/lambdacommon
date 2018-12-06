@@ -45,8 +45,7 @@ namespace lambdacommon
 		std::string LAMBDACOMMON_API os::get_os_name(OS os)
 		{
 			std::string os_name = std::string();
-			switch (os)
-			{
+			switch (os) {
 				case WINDOWS_32:
 					os_name = "Windows 32-bits";
 					break;

@@ -24,7 +24,7 @@
 
 namespace lambdacommon
 {
-	Address::Address(const host &host, port_t port) : _host(new std::string (host)), _port(port)
+	Address::Address(const host &host, port_t port) : _host(new std::string(host)), _port(port)
 	{}
 
 	Address::Address(const Address &address) : _host(new host(*address._host)), _port(address._port)
@@ -100,23 +100,18 @@ namespace lambdacommon
 		size_t segsize = 0, i, ix = _host->length();
 		if (s[0] == '.' || s[ix - 1] == '.' || ix > 253)
 			return false;
-		for (i = 0, segsize = 0; i < ix; i++)
-		{
-			if (s[i] == '.')
-			{
+		for (i = 0, segsize = 0; i < ix; i++) {
+			if (s[i] == '.') {
 				if (segsize == 0) // Fail for abc..com
 					return false;
 				segsize = 0;
-			}
-			else if (('0' <= s[i] && s[i] <= '9')
-			         || ('a' <= s[i] && s[i] <= 'z')
-			         || ('A' <= s[i] && s[i] <= 'Z')
-			         || (s[i] == '-' && segsize != 0 && i + 1 < ix && s[i + 1] != '.')
-					)
-			{
+			} else if (('0' <= s[i] && s[i] <= '9')
+					   || ('a' <= s[i] && s[i] <= 'z')
+					   || ('A' <= s[i] && s[i] <= 'Z')
+					   || (s[i] == '-' && segsize != 0 && i + 1 < ix && s[i + 1] != '.')
+					) {
 				segsize++;
-			}
-			else
+			} else
 				return false; // Invalid char...
 
 			if (segsize > 63)
@@ -126,7 +121,7 @@ namespace lambdacommon
 		std::stringstream ss;
 		ss << "|" << _host->substr(ix - segsize) << "|"; // Get last domain segment.
 
-		return tlds.find(ss.str()) != std::string ::npos;
+		return tlds.find(ss.str()) != std::string::npos;
 
 	}
 
@@ -156,8 +151,7 @@ namespace lambdacommon
 
 		std::string l_port = (_port != 0 ? ":" + std::to_string(_port) : "");
 		std::string l_host = *_host;
-		switch (get_type())
-		{
+		switch (get_type()) {
 			case IPv6:
 				l_host = ("[" + l_host + "]");
 				break;
@@ -172,8 +166,7 @@ namespace lambdacommon
 
 	Address &Address::operator=(const Address &other)
 	{
-		if (this != &other)
-		{
+		if (this != &other) {
 			delete _host;
 			_host = new host(*other._host);
 			_port = other._port;
@@ -183,8 +176,7 @@ namespace lambdacommon
 
 	Address &Address::operator=(Address &&other) noexcept
 	{
-		if (this != &other)
-		{
+		if (this != &other) {
 			delete _host;
 			_host = new host(move(*other._host));
 			_port = other._port;

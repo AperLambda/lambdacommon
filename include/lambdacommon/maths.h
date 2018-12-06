@@ -65,12 +65,10 @@ namespace lambdacommon
 			bool first = true;
 			N min_n;
 			for (auto i : numbers)
-				if (first)
-				{
+				if (first) {
 					min_n = i;
 					first = false;
-				}
-				else
+				} else
 					min_n = min(min_n, i);
 			return min_n;
 		}
@@ -103,12 +101,10 @@ namespace lambdacommon
 			bool first = true;
 			N max_n;
 			for (auto i : numbers)
-				if (first)
-				{
+				if (first) {
 					max_n = i;
 					first = false;
-				}
-				else
+				} else
 					max_n = max(max_n, i);
 			return max_n;
 		}

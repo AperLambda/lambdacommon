@@ -55,9 +55,9 @@ namespace lambdacommon
 
 		public:
 			URI(const std::string &scheme, const std::string &username, const std::string &password,
-			    const Address &address, const std::vector<std::string> &path = std::vector<std::string>(),
-			    const std::vector<std::pair<std::string, std::string>> &queries = std::vector<std::pair<std::string, std::string>>(),
-			    const std::string &fragment = "");
+				const Address &address, const std::vector<std::string> &path = std::vector<std::string>(),
+				const std::vector<std::pair<std::string, std::string>> &queries = std::vector<std::pair<std::string, std::string>>(),
+				const std::string &fragment = "");
 
 			URI(const URI &uri);
 

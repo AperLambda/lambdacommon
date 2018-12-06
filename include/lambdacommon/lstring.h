@@ -34,7 +34,7 @@ namespace lambdacommon
 		 * @param b One of two chars.
 		 * @return True if they are equal with case insensitive else false.
 		 */
-		extern bool LAMBDACOMMON_API equals_ignore_case(const char a, const char b);
+		extern bool LAMBDACOMMON_API equals_ignore_case(char a, char b);
 
 		/*!
 		 * Checks if two strings are equal.

@@ -25,11 +25,11 @@ namespace lambdacommon
 			/*
 			 * RESET
 			 */
-					RESET = 0,
+			RESET = 0,
 			/*
 			 * SET
 			 */
-					BOLD = 1,
+			BOLD = 1,
 			DIM = 2,
 			UNDERLINED = 4,
 			BLINK = 5,
@@ -38,7 +38,7 @@ namespace lambdacommon
 			/*
 			 * Foreground
 			 */
-					DEFAULT_FCOLOR = 39,
+			DEFAULT_FCOLOR = 39,
 			BLACK = 30,
 			RED = 31,
 			GREEN = 32,
@@ -58,7 +58,7 @@ namespace lambdacommon
 			/*
 			 * Background
 			 */
-					DEFAULT_BCOLOR = 49,
+			DEFAULT_BCOLOR = 49,
 			B_BLACK = 40,
 			B_RED = 41,
 			B_GREEN = 42,
@@ -144,11 +144,11 @@ namespace lambdacommon
 
 		extern void LAMBDACOMMON_API use_utf8();
 
-		 /*!
-		  * Gets whether the specified stream is a TTY.
-		  * @param stream THe specified stream to check, default is {@code std::cout}.
-		  * @return True if the stream is a TTY, else false.
-		  */
+		/*!
+		 * Gets whether the specified stream is a TTY.
+		 * @param stream THe specified stream to check, default is {@code std::cout}.
+		 * @return True if the stream is a TTY, else false.
+		 */
 		extern bool LAMBDACOMMON_API is_tty(const std::ostream &stream = std::cout);
 
 		/*!

@@ -33,7 +33,7 @@ namespace lambdacommon
 	public:
 		Size2D() : Size2D<T>(0, 0)
 		{}
-		
+
 		Size2D(const T width, const T height) : _width(width), _height(height)
 		{}
 
@@ -271,7 +271,7 @@ namespace lambdacommon
 	public:
 		Size3D() : Size3D<T>(0, 0)
 		{}
-		
+
 		Size3D(const T width, const T height, const T depth = 0) : Size2D<T>(width, height), _depth(depth)
 		{}
 
