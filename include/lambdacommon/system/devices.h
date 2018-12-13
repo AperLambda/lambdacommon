@@ -14,10 +14,14 @@
 
 namespace lambdacommon
 {
+	/*!
+	 * Represents the current status of a device.
+	 */
 	enum DeviceStatus
 	{
-		CONNECTED = 1,
-		DISCONNECTED = 0
+		CONNECTED = true,
+		DISCONNECTED = false,
+		WAITING = 2
 	};
 }
 

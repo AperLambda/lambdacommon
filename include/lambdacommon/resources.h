@@ -28,7 +28,7 @@ namespace lambdacommon
 	 *
 	 * Represents a resource identifier.
 	 */
-	class LAMBDACOMMON_API ResourceName
+	class LAMBDACOMMON_API ResourceName : public Object
 	{
 	private:
 		std::string _domain;
@@ -66,7 +66,7 @@ namespace lambdacommon
 		 * Gets the resource name as a string.
 		 * @return The resource name as a string.
 		 */
-		std::string to_string() const;
+		std::string to_string() const override;
 
 		/*!
 		 * Creates a new {@code ResourceName} from this resource name.
@@ -149,7 +149,7 @@ namespace lambdacommon
 		lambdacommon::fs::FilePath _working_directory;
 
 	public:
-		FileResourcesManager(const lambdacommon::fs::FilePath &working_directory = fs::get_current_working_directory());
+		explicit FileResourcesManager(const lambdacommon::fs::FilePath &working_directory = fs::get_current_working_directory());
 
 		FileResourcesManager(const FileResourcesManager &other);
 

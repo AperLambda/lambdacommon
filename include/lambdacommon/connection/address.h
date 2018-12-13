@@ -14,6 +14,11 @@
 #include "../types.h"
 #include <array>
 
+#ifdef LAMBDA_WINDOWS
+#  pragma warning(push)
+#  pragma warning(disable:4251)
+#endif
+
 namespace lambdacommon
 {
 	typedef std::string host;
@@ -27,10 +32,13 @@ namespace lambdacommon
 		INVALID
 	};
 
-	class LAMBDACOMMON_API Address : public Object
+	/*!
+	 * Represents a network address.
+	 */
+	class LAMBDACOMMON_API Address : public Object, public Nullable
 	{
 	protected:
-		host *_host;
+		host _host;
 		port_t _port;
 
 	public:
@@ -42,19 +50,45 @@ namespace lambdacommon
 
 		~Address();
 
+		/*!
+		 * Gets the host of the address.
+		 * @return The host of the address.
+		 */
 		const host &get_host() const;
 
+		/*!
+		 * Gets the port of the address.
+		 * @return The port of the address.
+		 */
 		port_t get_port() const;
 
+		/*!
+		 * Checks whether the address is an IPv4 address.
+		 * @return True if the address is an IPv4 address, else false.
+		 */
 		bool is_ipv4() const;
 
+		/*!
+		 * Checks whether the address is an IPv6 address.
+		 * @return True if the address is an IPv6 address, else false.
+		 */
 		bool is_ipv6() const;
 
 		bool is_domain_valid() const;
 
+		/*!
+		 * Checks whether the address is empty.
+		 * @return True if the address is empty, else false.
+		 */
 		bool is_empty() const;
 
+		/*!
+		 * Gets the type of address.
+		 * @return The type of address.
+		 */
 		AddressType get_type() const;
+
+		bool is_null() const override;
 
 		std::string to_string() const override;
 
@@ -62,12 +96,16 @@ namespace lambdacommon
 
 		Address &operator=(Address &&other) noexcept;
 
-		bool operator==(const Address &other);
+		bool operator==(const Address &other) const;
 
-		bool operator!=(const Address &other);
+		bool operator<(const Address &other) const;
 
 		static Address EMPTY;
 	};
 }
+
+#ifdef LAMBDA_WINDOWS
+#  pragma warning(pop)
+#endif
 
 #endif //LAMBDACOMMON_ADDRESS_H

@@ -34,7 +34,7 @@ namespace lambdacommon
 		Size2D() : Size2D<T>(0, 0)
 		{}
 
-		Size2D(const T width, const T height) : _width(width), _height(height)
+		Size2D(T width, T height) : _width(width), _height(height)
 		{}
 
 		/*!
@@ -87,7 +87,7 @@ namespace lambdacommon
 			return _width == 0 && _height == 0;
 		}
 
-		std::string to_string() const override
+		virtual std::string to_string() const override
 		{
 			return R"({"width":)" + std::to_string(_width) + R"(,"height":)" + std::to_string(_height) + "}";
 		}
@@ -272,7 +272,7 @@ namespace lambdacommon
 		Size3D() : Size3D<T>(0, 0)
 		{}
 
-		Size3D(const T width, const T height, const T depth = 0) : Size2D<T>(width, height), _depth(depth)
+		Size3D(T width, T height, T depth = 0) : Size2D<T>(width, height), _depth(depth)
 		{}
 
 		/*!

@@ -10,8 +10,8 @@
 #ifndef LAMBDACOMMON_STRING_H
 #define LAMBDACOMMON_STRING_H
 
-#include <vector>
 #include "object.h"
+#include <vector>
 
 namespace lambdacommon
 {

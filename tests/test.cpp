@@ -315,18 +315,18 @@ int main()
 
 	tests_count++;
 	if (test(R"(ResourceName::operator=({"tests:value/OwO"}) with object {"tests:value/path"})", []() {
-		auto newRes = BASE_RESOURCENAME;
+		auto new_res = BASE_RESOURCENAME;
 		ResourceName owo{"tests", "value/OwO"};
-		newRes = owo;
-		return newRes.get_name() == "value/OwO";
+		new_res = owo;
+		return new_res.get_name() == "value/OwO";
 	}))
 		tests_passed++;
 
 	tests_count++;
 	if (test(R"(ResourceName::operator/ with base object {"tests:value/path"} and argument "owo")", []() {
 		auto base = BASE_RESOURCENAME;
-		auto newRes = base / "owo";
-		return newRes.get_name() == "value/path/owo";
+		auto new_res = base / "owo";
+		return new_res.get_name() == "value/path/owo";
 	}))
 		tests_passed++;
 

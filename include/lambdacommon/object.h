@@ -14,6 +14,9 @@
 
 namespace lambdacommon
 {
+	/*!
+	 * Represents an object.
+	 */
 	class LAMBDACOMMON_API Object
 	{
 	public:

@@ -122,6 +122,8 @@ namespace lambdacommon
 					return SysArchitecture::I386;
 				case PROCESSOR_ARCHITECTURE_ARM:
 					return SysArchitecture::ARM;
+				case PROCESSOR_ARCHITECTURE_ARM64:
+					return SysArchitecture::ARM64;
 				case PROCESSOR_ARCHITECTURE_UNKNOWN:
 					return SysArchitecture::UNKNOWN;
 				default:
@@ -288,6 +290,10 @@ namespace lambdacommon
 				return SysArchitecture::ARM;
 			else if (lstring::equals_ignore_case(get_processor_arch_str(), "aarch64"))
 				return SysArchitecture::ARMv8_64;
+			else if (lstring::equals_ignore_case(get_processor_arch_str(), "riscv32"))
+				return SysArchitecture::RISCV32;
+			else if (lstring::equals_ignore_case(get_processor_arch_str(), "riscv64"))
+				return SysArchitecture::RISCV64;
 			else
 				return SysArchitecture::UNKNOWN;
 		}
@@ -477,10 +483,12 @@ namespace lambdacommon
 					return "ARMv8 64bit";
 				case I386:
 					return "i386";
+				case RISCV32:
+					return "riscv32";
+				case RISCV64:
+					return "riscv64";
 				case X86_64:
 					return "x86_64";
-				case UNKNOWN:
-					return "Unknown";
 				default:
 					return "Unknown";
 			}

@@ -207,10 +207,29 @@ namespace lambdacommon
 		 */
 		extern Color LAMBDACOMMON_API mix(const Color &a, const Color &b, float ratio);
 
+		/*!
+		 * Makes a new Color instance from the given hexadecimal color value.
+		 * @param hex_color The hexadecimal color value.
+		 * @param has_alpha True if the hexadecimal color value includes the alpha channel, else false.
+		 * @return A new Color instance.
+		 */
 		extern Color LAMBDACOMMON_API from_hex(uint64_t hex_color, bool has_alpha = true);
 
+		/*!
+		 * Makes a new Color instance from the given hexadecimal color value string.
+		 * @param hex_color The hexadecimal color value as a string.
+		 * @return A new Color instance.
+		 */
 		extern Color LAMBDACOMMON_API from_hex(const std::string &hex_color);
 
+		/*!
+		 * Makes a new Color instance from a RGB value.
+		 * @param red Red channel.
+		 * @param green Green channel.
+		 * @param blue Blue channel.
+		 * @param alpha Alpha channel.
+		 * @return A new Color instance.
+		 */
 		extern Color LAMBDACOMMON_API from_int_rgba(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 	}
 }
