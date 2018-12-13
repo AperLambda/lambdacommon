@@ -9,6 +9,7 @@
 
 #include "../../include/lambdacommon/connection/address.h"
 #include <sstream>
+#include <tuple>
 
 #ifdef LAMBDA_WINDOWS
 
