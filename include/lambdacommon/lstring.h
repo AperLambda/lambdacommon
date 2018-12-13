@@ -179,7 +179,7 @@ namespace lambdacommon
 
 		namespace stream
 		{
-			extern std::ostream &operator<<(std::ostream &stream, const Object &object);
+			extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const Object &object);
 		}
 	}
 }

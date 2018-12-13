@@ -266,7 +266,7 @@ namespace lambdacommon
 
 		namespace stream
 		{
-			std::ostream &operator<<(std::ostream &stream, const Object &object)
+			std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const Object &object)
 			{
 				stream << object.to_string();
 				return stream;
