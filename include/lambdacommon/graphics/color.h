@@ -111,7 +111,7 @@ namespace lambdacommon
 		 * Gets the color as an hexadecimal color.
 		 * @return The hexadecimal color.
 		 */
-		uint64_t to_hex() const;
+		//uint64_t to_hex() const;
 
 		/*!
 		 * Gets the color as a string.

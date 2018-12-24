@@ -76,21 +76,20 @@ namespace lambdacommon
 		return color::mix(*this, b, ratio);
 	}
 
-	uint64_t Color::to_hex() const
+	/*uint64_t Color::to_hex() const
 	{
-		std::stringstream hex_str;
-		hex_str << std::hex << std::setfill('0') << std::setw(2) << (int) red_as_int(); // Red
-		hex_str << std::hex << std::setfill('0') << std::setw(2) << (int) green_as_int(); // Green
-		hex_str << std::hex << std::setfill('0') << std::setw(2) << (int) blue_as_int(); // Blue
-		hex_str << std::hex << std::setfill('0') << std::setw(2) << (int) alpha_as_int(); // Alpha
-		return static_cast<uint64_t>(lstring::parse_long(hex_str.str(), 16));
-	}
+		auto hex_str = lstring::replace_all(to_string(true), "#", "");
+		return static_cast<uint64_t>(lstring::parse_long(hex_str, 16));
+	}*/
 
 	std::string Color::to_string(bool hex) const
 	{
 		if (hex) {
 			std::stringstream string;
-			string << std::hex << std::right << std::setfill('0') << std::setw(8) << to_hex();
+			string << std::hex << std::setfill('0') << std::setw(2) << (int) red_as_int(); // Red
+			string << std::hex << std::setfill('0') << std::setw(2) << (int) green_as_int(); // Green
+			string << std::hex << std::setfill('0') << std::setw(2) << (int) blue_as_int(); // Blue
+			string << std::hex << std::setfill('0') << std::setw(2) << (int) alpha_as_int(); // Alpha
 			return "#" + lstring::to_upper_case(string.str());
 		}
 		return "rgba(" + std::to_string(red_as_int()) + ", " + std::to_string(green_as_int()) + ", " +

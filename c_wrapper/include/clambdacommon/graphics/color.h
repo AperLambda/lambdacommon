@@ -39,8 +39,6 @@ uint8_t lc_Color_get_blue_as_int(const lcColor *color);
 
 uint8_t lc_Color_get_alpha_as_int(const lcColor *color);
 
-uint64_t lc_Color_to_hex(const lcColor *color);
-
 const char *lc_Color_to_string(const lcColor *color, bool hex);
 
 bool lc_Color_equals(const lcColor *color, const lcColor *other);

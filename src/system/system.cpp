@@ -55,6 +55,11 @@ namespace lambdacommon
 	{
 		std::string os_name;
 
+		bool is_arch_from_arm_family(SysArchitecture arch)
+		{
+			return arch == ARM || arch == ARM64 || arch == ARMv7 || arch == ARMv8_64;
+		}
+
 #ifdef LAMBDA_WINDOWS
 
 		std::string LAMBDACOMMON_API get_cpu_name()
@@ -288,6 +293,10 @@ namespace lambdacommon
 				return SysArchitecture::I386;
 			else if (lstring::equals_ignore_case(get_processor_arch_str().substr(0, 3), "ARM"))
 				return SysArchitecture::ARM;
+			else if (lstring::equals_ignore_case(get_processor_arch_str(), "armv7l"))
+				return SysArchitecture::ARMv7;
+			else if (lstring::equals_ignore_case(get_processor_arch_str(), "aarch32"))
+				return SysArchitecture::ARMv8_32;
 			else if (lstring::equals_ignore_case(get_processor_arch_str(), "aarch64"))
 				return SysArchitecture::ARMv8_64;
 			else if (lstring::equals_ignore_case(get_processor_arch_str(), "riscv32"))
@@ -569,8 +578,8 @@ namespace lambdacommon
 #ifdef LAMBDA_WINDOWS
 			Sleep(static_cast<DWORD>(time));
 #else
-			auto goal = time / 1000 * CLOCKS_PER_SEC + clock();
-			while (goal > clock());
+			auto goal = get_time_millis() + time;
+			while (goal > get_time_millis());
 #endif
 		}
 	}

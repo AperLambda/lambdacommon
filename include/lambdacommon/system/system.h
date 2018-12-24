@@ -29,6 +29,8 @@ namespace lambdacommon
 		{
 			ARM,
 			ARM64,
+			ARMv7,
+			ARMv8_32,
 			ARMv8_64,
 			I386,
 			RISCV32,
@@ -36,6 +38,8 @@ namespace lambdacommon
 			X86_64,
 			UNKNOWN
 		};
+
+		bool is_arch_from_arm_family(SysArchitecture arch);
 
 		/*
 		 * Hardware
@@ -117,6 +121,10 @@ namespace lambdacommon
 		 * Others
 		 */
 
+		/*!
+		 * Checks whether the current process is running as root.
+		 * @return True if the the current process is running as root, else false.
+		 */
 		extern bool LAMBDACOMMON_API is_root();
 
 		/*!

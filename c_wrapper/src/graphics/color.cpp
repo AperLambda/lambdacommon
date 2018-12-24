@@ -63,11 +63,6 @@ uint8_t lc_Color_get_alpha_as_int(const lcColor *color)
 	return CONST_COLOR_CPP(color)->alpha_as_int();
 }
 
-uint64_t lc_Color_to_hex(const lcColor *color)
-{
-	return CONST_COLOR_CPP(color)->to_hex();
-}
-
 const char *lc_Color_to_string(const lcColor *color, bool hex)
 {
 	if (hex) {
