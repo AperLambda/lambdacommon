@@ -578,8 +578,8 @@ namespace lambdacommon
 #ifdef LAMBDA_WINDOWS
 			Sleep(static_cast<DWORD>(time));
 #else
-			auto goal = get_time_millis() + time;
-			while (goal > get_time_millis());
+			auto goal = time::get_time_millis() + time;
+			while (goal > time::get_time_millis());
 #endif
 		}
 	}
