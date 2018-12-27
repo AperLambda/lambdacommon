@@ -18,6 +18,16 @@
 #  include <climits>
 #  include <cstring>
 
+#  ifndef HOST_NAME_MAX
+#    if defined(_POSIX_HOST_NAME_MAX)
+#      define HOST_NAME_MAX _POSIX_HOST_NAME_MAX
+#    elif defined(MAXHOSTNAMELEN)
+#      define HOST_NAME_MAX MAXHOSTNAMELEN
+#    elif defined(LAMBDA_MAC_OSX)
+#      define HOST_NAME_MAX 255
+#    endif
+#  endif /* HOST_NAME_MAX */
+
 #endif
 
 const char *lc_sys_get_cpu_name()
