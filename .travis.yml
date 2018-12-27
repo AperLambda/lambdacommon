@@ -2,6 +2,7 @@ language: cpp
 
 os:
   - linux
+  - osx
 
 compiler:
   - gcc
@@ -19,8 +20,8 @@ addons:
       - cmake
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; sh ./tests/travis_setup_linux.sh; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; sh ./tests/travis_setup_osx.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sh ./tests/travis_setup_linux.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sh ./tests/travis_setup_osx.sh; fi
 
 jobs:
   include:
