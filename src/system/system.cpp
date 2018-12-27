@@ -42,6 +42,7 @@
 #  include <unistd.h>
 #  include <climits>
 #  include <sys/types.h>
+#  include <sys/sysctl.h>
 #  include <sys/utsname.h>
 #  include <pwd.h>
 #  include <fstream>
