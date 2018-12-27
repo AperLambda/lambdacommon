@@ -697,11 +697,11 @@ namespace lambdacommon
 #elif defined(LAMBDA_MAC_OSX)
 			// Use the Apple's framework.
 			CFURLRef url = CFURLCreateWithBytes (
-				  nullptr,                // allocator
-				  (UInt8*) uri.c_str(),   // URLBytes
-				  url_str.length(),       // length
-				  kCFStringEncodingASCII, // encoding
-				  nullptr                 // baseURL
+				  nullptr,					// allocator
+				  (UInt8*) uri.c_str(),		// URLBytes
+				  uri.length(),				// length
+				  kCFStringEncodingASCII,	// encoding
+				  nullptr					// baseURL
 			);
 			LSOpenCFURLRef(url, nullptr);
 			CFRelease(url);
