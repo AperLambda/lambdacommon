@@ -20,7 +20,7 @@
 
 #elif defined(LAMBDA_MAC_OSX)
 
-#include <mach/error.h>
+#include <errno.h>
 
 #else
 
