@@ -142,7 +142,13 @@ namespace lambdacommon
 		 */
 		extern bool LAMBDACOMMON_API setup();
 
-		extern void LAMBDACOMMON_API use_utf8();
+		extern bool LAMBDACOMMON_API use_utf8();
+		
+		/*!
+		 * Checks whether the terminal output and input has UTF-8 enabled.
+		 * @return True if the terminal has UTF-8 support, else false.
+		 */
+		extern bool LAMBDACOMMON_API has_utf8();
 
 		/*!
 		 * Gets whether the specified stream is a TTY.

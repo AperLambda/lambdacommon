@@ -16,6 +16,8 @@
 
 #  include <io.h>
 #  include <Windows.h>
+#include <lambdacommon/system/terminal.h>
+
 
 #  ifdef __CYGWIN__
 #    include <unistd.h>
@@ -37,6 +39,7 @@ namespace lambdacommon
 	namespace terminal
 	{
 		bool use_ansi_escape_codes = false;
+		bool _has_utf8 = false;
 
 		/*
 		 * INTERNAL
@@ -111,8 +114,7 @@ namespace lambdacommon
 			auto h_terminal = get_term_handle(stream);
 
 			// Save default terminal attributes if it unsaved
-			if (!default_attributes)
-			{
+			if (!default_attributes) {
 				CONSOLE_SCREEN_BUFFER_INFO info;
 				if (!GetConsoleScreenBufferInfo(h_terminal, &info))
 					return;
@@ -120,8 +122,7 @@ namespace lambdacommon
 			}
 
 			// Restore all default settings
-			if (foreground == -1 && background == -1)
-			{
+			if (foreground == -1 && background == -1) {
 				SetConsoleTextAttribute(h_terminal, default_attributes);
 				return;
 			}
@@ -131,14 +132,12 @@ namespace lambdacommon
 			if (!GetConsoleScreenBufferInfo(h_terminal, &info))
 				return;
 
-			if (foreground != -1)
-			{
+			if (foreground != -1) {
 				info.wAttributes &= ~(info.wAttributes & 0x0F);
 				info.wAttributes |= static_cast<WORD>(foreground);
 			}
 
-			if (background != -1)
-			{
+			if (background != -1) {
 				info.wAttributes &= ~(info.wAttributes & 0xF0);
 				info.wAttributes |= static_cast<WORD>(background);
 			}
@@ -350,6 +349,7 @@ namespace lambdacommon
 
 		bool LAMBDACOMMON_API setup()
 		{
+			bool ok = true;
 #ifdef  WIN_FRIENDLY
 			HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE);
 			if (h_out != INVALID_HANDLE_VALUE) {
@@ -360,20 +360,30 @@ namespace lambdacommon
 						use_ansi_escape_codes = true;
 				}
 			}
+			if (!use_ansi_escape_codes)
+				ok = false;
 #else
 #endif
-			use_utf8();
-			return use_ansi_escape_codes;
+			if (!use_utf8())
+				ok = false;
+			return ok;
 		}
 
-		void LAMBDACOMMON_API use_utf8()
+		bool LAMBDACOMMON_API use_utf8()
 		{
 #ifdef WIN_FRIENDLY
-			SetConsoleCP(CP_UTF8);
-			SetConsoleOutputCP(CP_UTF8);
+			if (SetConsoleCP(CP_UTF8) && SetConsoleOutputCP(CP_UTF8))
+				_has_utf8 = true;
 #else
-			setlocale(LC_ALL, "en_US.UTF-8");
+			if(setlocale(LC_ALL, "en_US.UTF-8") != nullptr)
+				_has_utf8 = true;
 #endif
+			return _has_utf8;
+		}
+
+		bool LAMBDACOMMON_API has_utf8()
+		{
+			return _has_utf8;
 		}
 
 		bool LAMBDACOMMON_API is_tty(const std::ostream &stream)
@@ -393,8 +403,7 @@ namespace lambdacommon
 			TCHAR current_title[MAX_PATH];
 			if (GetConsoleTitle(current_title, MAX_PATH))
 				return {current_title};
-			else
-				return "";
+			else return "";
 #else
 			return "";
 #endif

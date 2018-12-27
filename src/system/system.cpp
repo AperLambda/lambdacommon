@@ -62,8 +62,173 @@ namespace lambdacommon
 
 #ifdef LAMBDA_WINDOWS
 
+		typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
+
+		typedef NTSTATUS (WINAPI *LPFN_RtlGetVersion)(OSVERSIONINFOEXW *);
+
+		typedef LONG (WINAPI *LPFN_RtlVerifyVersionInfo)(OSVERSIONINFOEXW *, ULONG, ULONGLONG);
+
+#define NT_INFORMATION(status) (status >= 0x40000000 && status <= 0x7FFFFFFF)
+#define NT_SUCCESS(status) (status <= 0x3FFFFFFF || NT_INFORMATION(status))
+#define NT_WARNING(status) (status >= 0x80000000 && status <= 0xBFFFFFFF)
+#define NT_ERROR(status) (status >= 0xC0000000 && status <= 0xFFFFFFFF)
+
+		class SysContext_Win
+		{
+		private:
+			HMODULE ntdll;
+			LPFN_ISWOW64PROCESS fn_IsWow64Process;
+			LPFN_RtlGetVersion fn_RtlGetVersion;
+			LPFN_RtlVerifyVersionInfo fn_RtlVerifyVersionInfo;
+
+		public:
+			~SysContext_Win()
+			{
+				if (ntdll)
+					FreeLibrary(ntdll);
+			}
+
+			void init()
+			{
+				if (fn_IsWow64Process == nullptr)
+					fn_IsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
+				// Load ntdll and its functions to hack some limitations.
+				ntdll = LoadLibraryA("ntdll.dll");
+				if (ntdll) {
+					fn_RtlGetVersion = (LPFN_RtlGetVersion) GetProcAddress(ntdll, "RtlGetVersion");
+					fn_RtlVerifyVersionInfo = (LPFN_RtlVerifyVersionInfo) GetProcAddress(ntdll, "RtlVerifyVersionInfo");
+				}
+			}
+
+			bool is_wow64()
+			{
+				BOOL b_is_wow64 = FALSE;
+
+				//IsWow64Process is not available on all supported versions of Windows.
+				//Use GetModuleHandle to get a handle to the DLL that contains the function
+				//and GetProcAddress to get a pointer to the function if available.
+
+				if (fn_IsWow64Process != nullptr) {
+					if (!fn_IsWow64Process(GetCurrentProcess(), &b_is_wow64)) {
+						//handle error
+					}
+				}
+				return static_cast<bool>(b_is_wow64);
+			}
+
+			bool is_windows_version_or_greater(WORD major, WORD minor, WORD sp)
+			{
+				if (!fn_RtlVerifyVersionInfo)
+					return false;
+				OSVERSIONINFOEXW osvi = {sizeof(osvi), major, minor, 0, 0, {0}, sp};
+				DWORD mask = VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR;
+				ULONGLONG cond = VerSetConditionMask(0, VER_MAJORVERSION, VER_GREATER_EQUAL);
+				cond = VerSetConditionMask(cond, VER_MINORVERSION, VER_GREATER_EQUAL);
+				cond = VerSetConditionMask(cond, VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
+				/* HACK: Use RtlVerifyVersionInfo instead of VerifyVersionInfoW as the
+				 *       latter lies unless the user knew to embed a non-default manifest
+				 *       announcing support for Windows 10 via supportedOS GUID.
+				 */
+				if (fn_RtlVerifyVersionInfo)
+					return fn_RtlVerifyVersionInfo(&osvi, mask, cond) == 0;
+				else {
+#ifndef __MINGW32__
+					return VerifyVersionInfoW(&osvi, mask, cond) == 0;
+#else
+					return false;
+#endif
+				}
+			}
+
+			NTSTATUS get_version(OSVERSIONINFOEXW *osvi)
+			{
+				if (fn_RtlGetVersion)
+					return fn_RtlGetVersion(osvi);
+				else {
+#ifdef __MINGW32__
+					if (!GetVersionInfoExW(&osvi))
+						// Return a dummy error value.
+						return 0xC0000000;
+#else
+					// Return a dummy error value.
+					return 0xC0000000;
+#endif
+				}
+			}
+
+			/*!
+			 * Checks whether the running Windows is a Windows Server.
+			 * @return True if the running Windows is a Windows Server, else false.
+			 */
+			bool is_windows_server()
+			{
+				OSVERSIONINFOEXW osvi = {sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0, 0, VER_NT_WORKSTATION};
+				DWORDLONG const dwlConditionMask = VerSetConditionMask(0, VER_PRODUCT_TYPE, VER_EQUAL);
+
+				if (fn_RtlVerifyVersionInfo)
+					return static_cast<bool>(fn_RtlVerifyVersionInfo(&osvi, VER_PRODUCT_TYPE, dwlConditionMask));
+				else {
+#ifndef __MINGW32__
+					return !VerifyVersionInfoW(&osvi, VER_PRODUCT_TYPE, dwlConditionMask);
+#else
+					return false;
+#endif
+				}
+			}
+		};
+
+		/*!
+		 * The Context of the System on Windows.
+		 */
+		std::unique_ptr<SysContext_Win> win_context;
+
+		void syscontext_load()
+		{
+			if (win_context == nullptr) {
+				win_context = std::make_unique<SysContext_Win>();
+				win_context->init();
+			}
+		}
+
+		bool is_wow64()
+		{
+			syscontext_load();
+			return win_context->is_wow64();
+		}
+
+		bool is_windows_version_or_greater(WORD major, WORD minor, WORD sp)
+		{
+			syscontext_load();
+			return win_context->is_windows_version_or_greater(major, minor, sp);
+		}
+
+		NTSTATUS get_version(OSVERSIONINFOEXW *osvi)
+		{
+			syscontext_load();
+			return win_context->get_version(osvi);
+		}
+
+		bool is_windows_server()
+		{
+			syscontext_load();
+			return win_context->is_windows_server();
+		}
+
+#define IsWindowsXPOrGreater() is_windows_version_or_greater(HIBYTE(_WIN32_WINNT_WINXP), LOBYTE(_WIN32_WINNT_WINXP), 0)
+#define IsWindowsVistaOrGreater() is_windows_version_or_greater(HIBYTE(_WIN32_WINNT_VISTA), LOBYTE(_WIN32_WINNT_VISTA), 0)
+#define IsWindowsVistaSP1OrGreater() is_windows_version_or_greater(HIBYTE(_WIN32_WINNT_VISTA), LOBYTE(_WIN32_WINNT_VISTA), 1)
+#define IsWindowsVistaSP2OrGreater() is_windows_version_or_greater(HIBYTE(_WIN32_WINNT_VISTA), LOBYTE(_WIN32_WINNT_VISTA), 2)
+#define IsWindows7OrGreater() is_windows_version_or_greater(HIBYTE(_WIN32_WINNT_WIN7), LOBYTE(_WIN32_WINNT_WIN7), 0)
+#define IsWindows7SP1OrGreater() is_windows_version_or_greater(HIBYTE(_WIN32_WINNT_WIN7), LOBYTE(_WIN32_WINNT_WIN7), 1)
+#define IsWindows8OrGreater() is_windows_version_or_greater(HIBYTE(_WIN32_WINNT_WIN8), LOBYTE(_WIN32_WINNT_WIN8), 0)
+#define IsWindows8Point1OrGreater() is_windows_version_or_greater(HIBYTE(_WIN32_WINNT_WINBLUE), LOBYTE(_WIN32_WINNT_WINBLUE), 0)
+#define IsWindows10OrGreater() is_windows_version_or_greater(HIBYTE(0x0A00), LOBYTE(0x0A00), 0)
+
 		std::string LAMBDACOMMON_API get_cpu_name()
 		{
+#if defined(LAMBDA_ARM) || defined(LAMBDA_ARM64)
+			return "";
+#else
 			int cpu_info[4] = {-1};
 			char cpu_brand_str[0x40];
 			__cpuid(cpu_info, 0x80000000);
@@ -72,8 +237,7 @@ namespace lambdacommon
 			memset(cpu_brand_str, 0, sizeof(cpu_brand_str));
 
 			// Get the information associated with each extended ID.
-			for (unsigned int i = 0x80000000; i <= n_ex_ids; ++i)
-			{
+			for (unsigned int i = 0x80000000; i <= n_ex_ids; ++i) {
 				__cpuid(cpu_info, i);
 				// Interpret CPU brand string.
 				if (i == 0x80000002)
@@ -84,31 +248,7 @@ namespace lambdacommon
 					memcpy(cpu_brand_str + 32, cpu_info, sizeof(cpu_info));
 			}
 			return {cpu_brand_str};
-		}
-
-		typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
-
-		LPFN_ISWOW64PROCESS fn_IsWow64Process;
-
-		BOOL is_wow64()
-		{
-			BOOL b_is_wow64 = FALSE;
-
-			//IsWow64Process is not available on all supported versions of Windows.
-			//Use GetModuleHandle to get a handle to the DLL that contains the function
-			//and GetProcAddress to get a pointer to the function if available.
-
-			fn_IsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
-					GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
-
-			if (nullptr != fn_IsWow64Process)
-			{
-				if (!fn_IsWow64Process(GetCurrentProcess(), &b_is_wow64))
-				{
-					//handle error
-				}
-			}
-			return b_is_wow64;
+#endif
 		}
 
 		SysArchitecture LAMBDACOMMON_API get_processor_arch()
@@ -119,8 +259,7 @@ namespace lambdacommon
 			else
 				GetSystemInfo(&sys_info);
 
-			switch (sys_info.wProcessorArchitecture)
-			{
+			switch (sys_info.wProcessorArchitecture) {
 				case PROCESSOR_ARCHITECTURE_AMD64:
 					return SysArchitecture::X86_64;
 				case PROCESSOR_ARCHITECTURE_INTEL:
@@ -182,15 +321,13 @@ namespace lambdacommon
 
 		std::string LAMBDACOMMON_API get_os_name()
 		{
-#  ifdef __MINGW32__
-			return "Windows with MinGW";
-#  elif defined(LAMBDA_CYGWIN)
+#  ifdef LAMBDA_CYGWIN
 			return "Windows with CYGWIN";
 #  else
 			// Holy shit, what the fuck is this shitty code?
 			std::string win_name = "Windows ";
 
-			if (IsWindowsServer())
+			if (is_windows_server())
 				win_name += "Server ";
 
 			if (IsWindows10OrGreater())
@@ -227,8 +364,14 @@ namespace lambdacommon
 			str << ")";
 			return str.str();
 #else
-			// I don't know how to get it using Visual Studio compiler :/
-			return "UNKNOWN";
+			OSVERSIONINFOEXW osvi;
+			osvi.dwOSVersionInfoSize = sizeof(osvi);
+			if (!NT_SUCCESS(get_version(&osvi))) return "UNKNOWN";
+			std::ostringstream string;
+			string << std::to_string(osvi.dwMajorVersion) << '.' << std::to_string(osvi.dwMinorVersion) << " (Build " << std::to_string(osvi.dwBuildNumber & 0xFFFF);
+			if (osvi.szCSDVersion[0]) string << ": " << osvi.szCSDVersion;
+			string << ")";
+			return string.str();
 #endif
 		}
 
@@ -532,8 +675,7 @@ namespace lambdacommon
 
 			cleanup:
 			// Centralized cleanup for all allocated resources.
-			if (p_administrators_group)
-			{
+			if (p_administrators_group) {
 				FreeSid(p_administrators_group);
 				p_administrators_group = nullptr;
 			}
@@ -556,11 +698,11 @@ namespace lambdacommon
 #elif defined(LAMBDA_MAC_OSX)
 			// Use the Apple's framework.
 			CFURLRef url = CFURLCreateWithBytes (
-				  nullptr,                        // allocator
-				  (UInt8*) uri.c_str(),     		// URLBytes
-				  url_str.length(),            	// length
-				  kCFStringEncodingASCII,      	// encoding
-				  nullptr                         // baseURL
+				  nullptr,                // allocator
+				  (UInt8*) uri.c_str(),   // URLBytes
+				  url_str.length(),       // length
+				  kCFStringEncodingASCII, // encoding
+				  nullptr                 // baseURL
 			);
 			LSOpenCFURLRef(url, nullptr);
 			CFRelease(url);

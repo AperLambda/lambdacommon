@@ -280,36 +280,9 @@ namespace lambdacommon
 			return _p._path != _path;
 		}
 
-#ifdef LAMBDA_WINDOWS
-
-		std::wstring LAMBDACOMMON_API get_current_working_directory_wstr()
-		{
-			wchar_t temp[MAX_PATH];
-			if (!_wgetcwd(temp, MAX_PATH))
-				throw std::runtime_error(
-						"Internal error in lambdacommon::path::get_current_working_directory_wstr(): " +
-						std::to_string(GetLastError()));
-			return std::wstring(temp);
-		}
-
-#endif
-
-		std::string LAMBDACOMMON_API get_current_working_directory_str()
-		{
-#ifdef LAMBDA_WINDOWS
-			return lstring::convert_wstring_to_string(get_current_working_directory_wstr());
-#else
-			char temp[PATH_MAX];
-			if (getcwd(temp, PATH_MAX) == nullptr)
-				throw std::runtime_error("Internal error in lambdacommon::path::getCurrentWorkingDirectoryStr(): " +
-										 std::string(strerror(errno)));
-			return std::string(temp);
-#endif
-		}
-
 		FilePath LAMBDACOMMON_API get_current_working_directory()
 		{
-			return FilePath(get_current_working_directory_str());
+			return FilePath(get_cwd_str());
 		}
 
 		FilePath LAMBDACOMMON_API mkdir(const char *path, bool recursive)

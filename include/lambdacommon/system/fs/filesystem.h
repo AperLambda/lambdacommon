@@ -11,7 +11,7 @@
 #define LAMBDACOMMON_FILESYSTEM_H
 
 #include "../../path.h"
-#include <vector>
+#include "../fs.h"
 
 namespace lambdacommon
 {
@@ -31,7 +31,6 @@ namespace lambdacommon
 		class LAMBDACOMMON_API FilePath : public Path
 		{
 		protected:
-			//std::vector<std::string> *_path;
 			bool _absolute;
 
 		public:
@@ -105,14 +104,6 @@ namespace lambdacommon
 
 			bool operator!=(const FilePath &_path) const;
 		};
-
-#ifdef LAMBDA_WINDOWS
-
-		extern std::wstring LAMBDACOMMON_API get_current_working_directory_wstr();
-
-#endif
-
-		extern std::string LAMBDACOMMON_API get_current_working_directory_str();
 
 		extern FilePath LAMBDACOMMON_API get_current_working_directory();
 

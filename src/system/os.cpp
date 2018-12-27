@@ -9,12 +9,6 @@
 
 #include "../../include/lambdacommon/system/os.h"
 
-#ifdef __arm__
-#  define LAMBDA_ARM
-#elif _ARM || _M_ARM || __arm
-#  define LAMBDA_ARM
-#endif
-
 namespace lambdacommon
 {
 	namespace system

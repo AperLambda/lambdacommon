@@ -14,15 +14,19 @@ addons:
     packages:
       - cmake
       - cmake-data
+  homebrew:
+    packages:
+      - cmake
 
 before_install:
-  - echo "Installing compile dependencies..."
-  - sudo apt-get update -y -qq
-  - sudo apt-get install -y -qq libyajl-dev libxml2-dev libxqilla-dev
-  - if [ "$CXX" = "clang++" ]; then sudo apt-get install -y  -qq libstdc++-6-dev; fi
-  - if [ "$CXX" = "g++" ]; then sudo apt-get install -y -qq g++-7; fi
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-7" CC="gcc-7"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; sh ./tests/travis_setup_linux.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; sh ./tests/travis_setup_osx.sh; fi
 
-script:
-  - sh build.sh
-  - sh test.sh
+jobs:
+  include:
+    - stage: compile
+      name: "Compile"
+      script: sh build.sh
+    - stage: tests
+      name: "Tests"
+      script: sh test.sh

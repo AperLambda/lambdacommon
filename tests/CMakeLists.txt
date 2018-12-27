@@ -3,8 +3,6 @@ project(λcommon_test)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(../include)
-
 if (WIN32)
 	set(LCOMMON_ICON lambdacommon.rc)
 endif ()

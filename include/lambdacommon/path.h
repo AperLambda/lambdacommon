@@ -20,6 +20,11 @@
 
 namespace lambdacommon
 {
+	/*!
+	 * Path
+	 *
+	 * Represents a path.
+	 */
 	class LAMBDACOMMON_API Path : public Object
 	{
 	protected:
@@ -36,7 +41,11 @@ namespace lambdacommon
 
 		virtual ~Path();
 
-		std::vector<std::string> get_path() const;
+		/*!
+		 * Gets the path value.
+		 * @return The path value.
+		 */
+		const std::vector<std::string> &get_path() const;
 
 		virtual std::string to_string() const;
 

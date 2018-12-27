@@ -13,6 +13,7 @@ option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)
 option(LAMBDACOMMON_INSTALL "Generate installation target" ON)
 option(LAMBDACOMMON_BUILD_TESTS "Build the λcommon test programs" ON)
 
+# Generate compile flags.
 generate_flags(LAMBDACOMMON_COMPILE_FLAGS "native" 2 true)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}${LAMBDACOMMON_COMPILE_FLAGS}")
 
@@ -28,7 +29,7 @@ set(HEADERS_GRAPHICS include/lambdacommon/graphics/color.h include/lambdacommon/
 set(HEADERS_MATHS include/lambdacommon/maths.h include/lambdacommon/maths/geometry/geometry.h)
 set(HEADERS_FILESYSTEM include/lambdacommon/system/fs/filesystem.h)
 set(HEADERS_EXCEPTIONS include/lambdacommon/exceptions/exceptions.h)
-set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/lambdacommon/system/os.h include/lambdacommon/system/devices.h include/lambdacommon/system/terminal.h include/lambdacommon/system/system.h include/lambdacommon/system/uri.h include/lambdacommon/system/time.h)
+set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/lambdacommon/system/system.h include/lambdacommon/system/terminal.h include/lambdacommon/system/fs.h include/lambdacommon/system/os.h include/lambdacommon/system/devices.h include/lambdacommon/system/uri.h include/lambdacommon/system/time.h)
 set(HEADERS_BASE include/lambdacommon/lambdacommon.h include/lambdacommon/serializable.h include/lambdacommon/lstring.h include/lambdacommon/path.h include/lambdacommon/resources.h include/lambdacommon/sizes.h include/lambdacommon/types.h include/lambdacommon/object.h)
 set(HEADER_FILES ${HEADERS_CONNECTION} ${HEADERS_DOCUMENT} ${HEADERS_GRAPHICS} ${HEADERS_MATHS} ${HEADERS_EXCEPTIONS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
 # There is the C++ source files.
@@ -38,16 +39,16 @@ set(SOURCES_GRAPHICS src/graphics/color.cpp src/graphics/scene.cpp)
 set(SOURCES_MATHS src/maths.cpp)
 set(SOURCES_FILESYSTEM src/system/fs/filesystem.cpp)
 set(SOURCES_SERIALIZERS)
-set(SOURCES_SYSTEM ${SOURCES_FILESYSTEM} src/system/os.cpp src/system/terminal.cpp src/system/system.cpp src/system/uri.cpp src/system/time.cpp)
+set(SOURCES_SYSTEM ${SOURCES_FILESYSTEM} src/system/system.cpp src/system/terminal.cpp src/system/fs.cpp src/system/os.cpp src/system/uri.cpp src/system/time.cpp)
 set(SOURCES_BASE src/lambdacommon.cpp src/serializable.cpp src/lstring.cpp src/path.cpp src/resources.cpp)
 set(SOURCE_FILES ${SOURCES_CONNECTION} ${SOURCES_DOCUMENT} ${SOURCES_GRAPHICS} ${SOURCES_MATHS} ${SOURCES_SERIALIZERS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
 
-# Now build the library
+# Now build the library.
 # Build static if the option is on.
 if (LAMBDACOMMON_BUILD_STATIC)
 	add_library(lambdacommon_static STATIC ${HEADER_FILES} ${SOURCE_FILES})
 endif ()
-# Build the shared library
+# Build the shared library.
 add_library(lambdacommon SHARED ${HEADER_FILES} ${SOURCE_FILES})
 # Generate the export header and include it.
 GENERATE_EXPORT_HEADER(lambdacommon
@@ -60,6 +61,16 @@ if (LAMBDACOMMON_BUILD_STATIC)
 	target_compile_definitions(lambdacommon_static PUBLIC -DLAMBDACOMMON_SHARED_EXPORTS_BUILT_AS_STATIC)
 	target_include_directories(lambdacommon_static PUBLIC ${CMAKE_BINARY_DIR}/exports)
 endif ()
+
+include_directories(include)
+
+if (WIN32)
+	set(LCOMMON_ICON resources/lambdacommon.rc)
+endif ()
+
+# Build the information executable.
+add_executable(lambdacommon_info src/lc_info.cpp ${LCOMMON_ICON})
+target_link_libraries(lambdacommon_info lambdacommon)
 
 # Install if the option is on.
 if (LAMBDACOMMON_INSTALL)
@@ -79,6 +90,11 @@ if (LAMBDACOMMON_INSTALL)
 				LIBRARY DESTINATION lib COMPONENT libraries
 				ARCHIVE DESTINATION lib COMPONENT libraries)
 	endif ()
+
+	install(TARGETS lambdacommon_info
+			RUNTIME DESTINATION bin COMPONENT libraries
+			LIBRARY DESTINATION lib COMPONENT libraries
+			ARCHIVE DESTINATION lib COMPONENT libraries)
 
 	# Uninstall target.
 	setup_uninstall_target()

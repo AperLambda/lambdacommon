@@ -31,7 +31,7 @@ namespace lambdacommon
 	Path::~Path()
 	{}
 
-	std::vector<std::string> Path::get_path() const
+	const std::vector<std::string> &Path::get_path() const
 	{
 		return _path;
 	}
