@@ -18,12 +18,9 @@
 #define STAT_STRUCT _stati64
 #define STAT_METHOD _stati64
 
-#elif defined(LAMBDA_MAC_OSX)
-
-#include <errno.h>
-
 #else
 
+#include <errno.h>
 #include <unistd.h>
 #include <cstring>
 #include <climits>
