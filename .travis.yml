@@ -23,10 +23,6 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sh ./tests/travis_setup_linux.sh; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sh ./tests/travis_setup_osx.sh; fi
 
-jobs:
-  include:
-    - script: sh build.sh
-      name: "Compile"
-    - stage: test
-      name: "Test"
-      script: sh test.sh
+script:
+  - sh build.sh
+  - sh test.sh
