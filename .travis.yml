@@ -25,9 +25,8 @@ before_install:
 
 jobs:
   include:
-    - stage: compile
+    - script: sh build.sh
       name: "Compile"
-      script: sh build.sh
-    - stage: tests
-      name: "Tests"
+    - stage: test
+      name: "Test"
       script: sh test.sh
