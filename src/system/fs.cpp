@@ -18,6 +18,10 @@
 #define STAT_STRUCT _stati64
 #define STAT_METHOD _stati64
 
+#elif defined(LAMBDA_MAC_OSX)
+
+#include <mach/error.h>
+
 #else
 
 #include <unistd.h>
