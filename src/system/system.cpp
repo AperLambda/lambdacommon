@@ -18,31 +18,30 @@
 #  include <intrin.h>
 #  include <ShlObj.h>
 
-#  ifndef __MINGW32__
-
-#    include <VersionHelpers.h>
-
-#  endif
 #else
 #  ifdef LAMBDA_MAC_OSX
 
 #    include <CoreFoundation/CFBundle.h>
 #    include <ApplicationServices/ApplicationServices.h>
 
-#  elif defined(LAMBDA_ANDROID)
+#  else
+
+#  include <sys/sysinfo.h>
+
+#    ifdef LAMBDA_ANDROID
 
 #    include <sys/system_properties.h>
 
-#  elif defined(LAMBDA_CYGWIN)
+#    elif defined(LAMBDA_CYGWIN)
 
 #    include <windows.h>
 
+#    endif
 #  endif
 
 #  include <unistd.h>
 #  include <climits>
 #  include <sys/types.h>
-#  include <sys/sysinfo.h>
 #  include <sys/utsname.h>
 #  include <pwd.h>
 #  include <fstream>
