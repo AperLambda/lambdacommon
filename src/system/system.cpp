@@ -58,6 +58,8 @@
 
 #endif
 
+#include <thread>
+
 namespace lambdacommon
 {
 	namespace system
@@ -67,6 +69,11 @@ namespace lambdacommon
 		bool is_arch_from_arm_family(SysArchitecture arch)
 		{
 			return arch == ARM || arch == ARM64 || arch == ARMv7 || arch == ARMv8_64;
+		}
+
+		uint32_t LAMBDACOMMON_API get_cpu_cores()
+		{
+			return std::thread::hardware_concurrency();
 		}
 
 #ifdef LAMBDA_WINDOWS
@@ -289,13 +296,6 @@ namespace lambdacommon
 			return get_processor_arch_enum_str();
 		}
 
-		uint32_t LAMBDACOMMON_API get_cpu_cores()
-		{
-			SYSTEM_INFO system_info;
-			GetSystemInfo(&system_info);
-			return system_info.dwNumberOfProcessors;
-		}
-
 		uint64_t LAMBDACOMMON_API get_memory_total()
 		{
 			MEMORYSTATUSEX statex;
@@ -414,6 +414,12 @@ namespace lambdacommon
 
 		std::string LAMBDACOMMON_API get_cpu_name()
 		{
+#ifdef LAMBDA_MAC_OSX
+			char buffer[128];
+			size_t buffer_len = 128;
+			sysctlbyname("machdep.cpu.brand_string", &buffer, &buffer_len, nullptr, 0);
+			return {buffer};
+#else
 			std::ifstream cpuinfo;
 			cpuinfo.open("/proc/cpuinfo", std::ios::in);
 			std::string word;
@@ -435,6 +441,7 @@ namespace lambdacommon
 				cpuinfo.close();
 			}
 			return cpu;
+#endif
 		}
 
 		SysArchitecture LAMBDACOMMON_API get_processor_arch()
@@ -467,22 +474,6 @@ namespace lambdacommon
 			return u_name.machine;
 		}
 
-		uint32_t LAMBDACOMMON_API get_cpu_cores()
-		{
-			std::ifstream cpuinfo;
-			cpuinfo.open("/proc/cpuinfo", std::ios::in);
-			std::string word;
-			uint32_t cpucount = 0;
-			if (cpuinfo.is_open()) {
-				while (cpuinfo >> word) {
-					if (word == "processor")
-						cpucount++;
-				}
-				cpuinfo.close();
-			}
-			return cpucount;
-		}
-
 		uint64_t LAMBDACOMMON_API get_memory_total()
 		{
 #  ifdef _SC_PHYS_PAGES
@@ -492,7 +483,7 @@ namespace lambdacommon
 #  else
 			uint64_t mem;
 			size_t len = sizeof(mem);
-			sysctlbyname("hw.memsize", &mem, &len, NULL, 0);
+			sysctlbyname("hw.memsize", &mem, &len, nullptr, 0);
 			return mem / sysconf(_SC_PAGE_SIZE);
 #  endif
 		}
