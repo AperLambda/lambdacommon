@@ -73,4 +73,4 @@ namespace lambdacommon
 	extern std::string LAMBDACOMMON_API get_version();
 }
 
-#endif // LAMBDACOMMON_LIBRARY_H
+#endif //LAMBDACOMMON_LIBRARY_H

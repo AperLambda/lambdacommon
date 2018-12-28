@@ -29,14 +29,12 @@ namespace lambdacommon
 		_path = name.substr(separator + 1);
 	}
 
-	ResourceName::ResourceName(const std::string &domain, const std::string &path) noexcept : _domain(domain),
-																							  _path(path)
+	ResourceName::ResourceName(const std::string &domain, const std::string &path) noexcept : _domain(domain), _path(path)
 	{}
 
 	ResourceName::ResourceName(const ResourceName &other) = default;
 
-	ResourceName::ResourceName(ResourceName &&other) noexcept : _domain(std::move(other._domain)),
-																_path(std::move(other._path))
+	ResourceName::ResourceName(ResourceName &&other) noexcept : _domain(std::move(other._domain)), _path(std::move(other._path))
 	{}
 
 	const std::string &ResourceName::get_domain() const
@@ -122,8 +120,7 @@ namespace lambdacommon
 
 	FileResourcesManager::FileResourcesManager(const FileResourcesManager &other) = default;
 
-	FileResourcesManager::FileResourcesManager(FileResourcesManager &&other) noexcept : _working_directory(
-			std::move(other._working_directory))
+	FileResourcesManager::FileResourcesManager(FileResourcesManager &&other) noexcept : _working_directory(std::move(other._working_directory))
 	{
 		_id = other._id;
 	}

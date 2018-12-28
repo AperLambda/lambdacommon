@@ -59,7 +59,7 @@ namespace lambdacommon
 
 		HANDLE get_term_handle(std::ostream &stream)
 		{
-			// Get terminal handle
+			// Get terminal handle.
 			HANDLE h_terminal = INVALID_HANDLE_VALUE;
 			if (&stream == &std::cout)
 				h_terminal = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -70,7 +70,7 @@ namespace lambdacommon
 
 		void cls(HANDLE h_console)
 		{
-			COORD coord_screen{0, 0};    // home for the cursor
+			COORD coord_screen{0, 0};    // Home for the cursor.
 			DWORD c_chars_written;
 			CONSOLE_SCREEN_BUFFER_INFO csbi;
 			DWORD dw_con_size;
@@ -82,11 +82,11 @@ namespace lambdacommon
 			dw_con_size = static_cast<DWORD>(csbi.dwSize.X * csbi.dwSize.Y);
 
 			// Fill the entire screen with blanks.
-			if (!FillConsoleOutputCharacter(h_console,        // Handle to console screen buffer
-											(TCHAR) ' ',     // Character to write to the buffer
-											dw_con_size,       // Number of cells to write
-											coord_screen,     // Coordinates of first cell
-											&c_chars_written))// Receive number of characters written
+			if (!FillConsoleOutputCharacter(h_console,			// Handle to console screen buffer.
+											(TCHAR) ' ',		// Character to write to the buffer.
+											dw_con_size,		// Number of cells to write.
+											coord_screen,		// Coordinates of first cell.
+											&c_chars_written))	// Receive number of characters written.
 				return;
 
 			// Get the current text attribute.
@@ -94,15 +94,14 @@ namespace lambdacommon
 				return;
 
 			// Set the buffer's attributes accordingly.
-			if (!FillConsoleOutputAttribute(h_console,         // Handle to console screen buffer
-											csbi.wAttributes, // Character attributes to use
-											dw_con_size,        // Number of cells to set attribute
-											coord_screen,      // Coordinates of first cell
-											&c_chars_written)) // Receive number of characters written
+			if (!FillConsoleOutputAttribute(h_console,			// Handle to console screen buffer
+											csbi.wAttributes,	// Character attributes to use
+											dw_con_size,		// Number of cells to set attribute
+											coord_screen,		// Coordinates of first cell
+											&c_chars_written))	// Receive number of characters written
 				return;
 
 			// Put the cursor at its home coordinates.
-
 			SetConsoleCursorPosition(h_console, coord_screen);
 		}
 
@@ -145,7 +144,7 @@ namespace lambdacommon
 			SetConsoleTextAttribute(h_terminal, info.wAttributes);
 		}
 
-#endif // LAMBDA_WINDOWS
+#endif // WIN_FRIENDLY
 
 		/*
 		 * IMPLEMENTATION
@@ -201,8 +200,7 @@ namespace lambdacommon
 								win_change_attributes(stream, FOREGROUND_GREEN | FOREGROUND_INTENSITY, -1);
 								break;
 							case LIGHT_CYAN:
-								win_change_attributes(stream, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY,
-													  -1);
+								win_change_attributes(stream, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY, -1);
 								break;
 							case LIGHT_RED:
 								win_change_attributes(stream, FOREGROUND_RED | FOREGROUND_INTENSITY, -1);
@@ -281,7 +279,7 @@ namespace lambdacommon
 			ansi_sequence += "[";
 			auto formattings = term_formatting.size();
 			for (size_t i = 0; i < formattings; i++) {
-				std::string str = std::to_string(static_cast<int>(term_formatting[i]));
+				auto str = std::to_string(static_cast<int>(term_formatting[i]));
 				if (i != formattings - 1)
 					ansi_sequence += (str + ";");
 				else
@@ -298,11 +296,18 @@ namespace lambdacommon
 			return stream;
 		}
 
+		void erase_current_line_ansi(std::ostream &stream)
+		{
+			stream << "\033[2K";
+		}
+
 		std::ostream LAMBDACOMMON_API &erase_current_line(std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
+			if (use_ansi_escape_codes)
+				erase_current_line_ansi(stream);
 #else
-			stream << "\033[2K";
+			erase_current_line_ansi(stream);
 #endif
 			return stream;
 		}

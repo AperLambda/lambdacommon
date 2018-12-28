@@ -12,15 +12,74 @@
 
 A library written in C++ with common features.
 
-Features: OS Detection, Terminal colors, string manipulations, filesystem manipulations, URI manipulations, and more!
+Features: 
+ - OS detection.
+ - System information (username, user directory, CPU name, memory usage, etc...).
+ - Terminal manipulation.
+ - Resources management.
+ - Basic string manipulation.
+ - Basic maths utilities.
+ - Graphics:
+    * Color manipulation.
+    * Very basic scene system.
+ - Files manipulation.
+ - URI manipulation.
+ - and more!
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/lambdacommon.svg)](https://repology.org/metapackage/lambdacommon)
+
+Works on:
+ - Architectures:
+   * i686
+   * amd64
+   * ARMv7
+   * ARMv8
+   * riscv32
+   * riscv64
+ - OS:
+   * Windows
+   * Mac OSX
+   * Linux
+   * Android (via Termux and as a library for applications)  
+
+## Quick example
+
+```cpp
+#include <lambdacommon/system/system.h>
+
+using namespace std;
+namespace sys = lambdacommon::system;
+namespace term = lambdacommon::terminal;
+
+int main()
+{
+  term::setup();
+  term::set_title("λcommon - example");
+
+  cout << "Starting lambdacommon example with " << term::CYAN << "lambdacommon" << term::RESET << " v" << lambdacommon::get_version() << endl;
+  cout << endl;
+  cout << "Hello " << term::LIGHT_YELLOW << sys::get_user_name() << term::RESET << endl;
+  // Sleep for 250ms
+  sys::sleep(250);
+  cout << endl << "I like your CPU, it is " << term::LIGHT_GREEN << sys::get_cpu_name() << term::RESET << " right?" << endl;
+  sys::sleep(1000);
+  // Clear all the content of the terminal.
+  term::clear();
+  cout << "Because I like my creators I want you to see their website!" << endl;
+  sys::open_uri("https://aperlambda.github.io/");
+  return 0;
+}
+```
 
 ## Installation
 
 ### Windows
 
-Please install from the source.
+Please install from source.
+
+### Mac OSX
+
+Please install from source.
 
 ### Linux
 
@@ -30,7 +89,7 @@ Just install [lambdacommon](https://aur.archlinux.org/packages/lambdacommon/) fr
 
 #### Others
 
-Please install from the source. 
+Please install from source. 
 
 ### From source
 

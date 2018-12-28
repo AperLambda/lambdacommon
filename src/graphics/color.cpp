@@ -68,7 +68,8 @@ namespace lambdacommon
 		auto alpha = _alpha + beta;
 		return Color((_red * _alpha + bg_color.red() * beta) / alpha,
 					 (_green * _alpha + bg_color.green() * beta) / alpha,
-					 (_blue * _alpha + bg_color.blue() * beta) / alpha, alpha);
+					 (_blue * _alpha + bg_color.blue() * beta) / alpha,
+					 alpha);
 	}
 
 	const Color Color::mix(const Color &b, float ratio) const
@@ -92,8 +93,7 @@ namespace lambdacommon
 			string << std::hex << std::setfill('0') << std::setw(2) << (int) alpha_as_int(); // Alpha
 			return "#" + lstring::to_upper_case(string.str());
 		}
-		return "rgba(" + std::to_string(red_as_int()) + ", " + std::to_string(green_as_int()) + ", " +
-			   std::to_string(blue_as_int()) + ", " + std::to_string(alpha_as_int()) + ")";
+		return "rgba(" + std::to_string(red_as_int()) + ", " + std::to_string(green_as_int()) + ", " + std::to_string(blue_as_int()) + ", " + std::to_string(alpha_as_int()) + ")";
 	}
 
 	std::string Color::to_string() const
@@ -103,8 +103,7 @@ namespace lambdacommon
 
 	bool Color::operator==(const Color &other) const
 	{
-		return red_as_int() == other.red_as_int() && green_as_int() == other.green_as_int() &&
-			   blue_as_int() == other.blue_as_int() && alpha_as_int() == other.alpha_as_int();
+		return red_as_int() == other.red_as_int() && green_as_int() == other.green_as_int() && blue_as_int() == other.blue_as_int() && alpha_as_int() == other.alpha_as_int();
 	}
 
 	bool Color::operator<(const Color &other) const

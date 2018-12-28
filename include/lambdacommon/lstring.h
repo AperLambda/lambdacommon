@@ -68,8 +68,7 @@ namespace lambdacommon
 
 		extern std::string LAMBDACOMMON_API replace_all(std::string subject, const char &from, const char &to);
 
-		extern std::string LAMBDACOMMON_API
-		replace_all(std::string subject, const std::string &from, const std::string &to);
+		extern std::string LAMBDACOMMON_API replace_all(std::string subject, const std::string &from, const std::string &to);
 
 		/*!
 		 * Transforms a boolean value into a string value.

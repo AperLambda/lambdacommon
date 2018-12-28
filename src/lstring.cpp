@@ -154,11 +154,9 @@ namespace lambdacommon
 		{
 			try {
 				return std::stoi(integer, nullptr, base);
-			}
-			catch (const std::invalid_argument &error) {
+			} catch (const std::invalid_argument &error) {
 				return 0;
-			}
-			catch (const std::out_of_range &error) {
+			} catch (const std::out_of_range &error) {
 				return 0;
 			}
 		}
@@ -167,11 +165,9 @@ namespace lambdacommon
 		{
 			try {
 				return std::stol(long_number, nullptr, base);
-			}
-			catch (const std::invalid_argument &error) {
+			} catch (const std::invalid_argument &error) {
 				return 0;
-			}
-			catch (const std::out_of_range &error) {
+			} catch (const std::out_of_range &error) {
 				return 0;
 			}
 		}
@@ -228,10 +224,8 @@ namespace lambdacommon
 		std::string LAMBDACOMMON_API convert_wstring_to_string(std::wstring wstring)
 		{
 			std::string string;
-			if (!wstring.empty())
-			{
-				int size = WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int) wstring.size(), nullptr, 0, nullptr,
-											   nullptr);
+			if (!wstring.empty()) {
+				int size = WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int) wstring.size(), nullptr, 0, nullptr, nullptr);
 				string.resize(size, 0);
 				WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int) wstring.size(), &string[0], size, nullptr, nullptr);
 			}
