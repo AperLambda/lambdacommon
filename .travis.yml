@@ -19,6 +19,8 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
+    packages:
+      - g++-7
   homebrew:
     packages:
       - cmake
