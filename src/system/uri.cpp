@@ -409,7 +409,7 @@ namespace lambdacommon
 					auto opt_port = lstring::parse_int(tmp_address.substr(address_separator + 1, tmp_address.size()));
 					if (!opt_port)
 						throw ParseException("Cannot parse uri '" + url + "': invalid port!");
-					else port = static_cast<port_t>(opt_port.value());
+					else port = static_cast<port_t>(*opt_port);
 				}
 				address = {host, port};
 			}
