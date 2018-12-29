@@ -26,8 +26,8 @@ addons:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sh ./tests/travis_setup_linux.sh; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sh ./tests/travis_setup_osx.sh; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; if [ "$CXX" = "g++" ]; then export CXX="g++-7" CC="gcc-7"; fi; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; if [ "$CXX" = "g++" ]; then export CXX="g++-8" CC="gcc-8"; fi; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [ "$CXX" = "g++" ]; then export CXX="g++-7" CC="gcc-7"; fi; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then if [ "$CXX" = "g++" ]; then export CXX="g++-8" CC="gcc-8"; fi; fi
 
 script:
   - sh build.sh
