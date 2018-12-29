@@ -4,25 +4,22 @@ os:
   - linux
   - osx
 
+dist: xenial
+osx_image: xcode10.1
+
 compiler:
   - gcc
   - clang
 
 addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - cmake
-      - cmake-data
   homebrew:
     packages:
       - cmake
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sh ./tests/travis_setup_linux.sh; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [ "$CXX" = "g++" ]; then export CXX="g++-7" CC="gcc-7"; fi; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sh ./tests/travis_setup_osx.sh; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-7" CC="gcc-7"; fi
 
 script:
   - sh build.sh
