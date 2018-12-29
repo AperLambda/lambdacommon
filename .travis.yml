@@ -1,17 +1,24 @@
 language: cpp
 
-os:
-  - linux
-  - osx
-
-dist: xenial
-osx_image: xcode10.1
-
-compiler:
-  - gcc
-  - clang
+matrix:
+  include:
+    - os: linux
+      dist: xenial
+      compiler: gcc
+    - os: linux
+      dist: xenial
+      compiler: clang
+    - os: osx
+      osx_image: xcode10.1
+      compiler: gcc
+    - os: osx
+      osx_image: xcode10.1
+      compiler: clang
 
 addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
   homebrew:
     packages:
       - cmake
