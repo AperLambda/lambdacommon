@@ -6,7 +6,7 @@ include(GenerateExportHeader)
 include(utils/CompileUtility)
 include(utils/InstallUtility)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 # Options
 option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)

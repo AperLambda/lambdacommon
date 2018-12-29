@@ -216,10 +216,10 @@ namespace lambdacommon
 			auto blue_str = color_str.substr(4, 2);
 			uint8_t alpha = 255;
 			if (color_str.length() > 6)
-				alpha = static_cast<uint8_t>(lstring::parse_int(color_str.substr(6, 2), 16));
-			return color::from_int_rgba(static_cast<uint8_t>(lstring::parse_int(red_str, 16)),
-										static_cast<uint8_t>(lstring::parse_int(green_str, 16)),
-										static_cast<uint8_t>(lstring::parse_int(blue_str, 16)),
+				alpha = static_cast<uint8_t>(lstring::parse_int(color_str.substr(6, 2), 16).value_or(0));
+			return color::from_int_rgba(static_cast<uint8_t>(lstring::parse_int(red_str, 16).value_or(0)),
+										static_cast<uint8_t>(lstring::parse_int(green_str, 16).value_or(0)),
+										static_cast<uint8_t>(lstring::parse_int(blue_str, 16).value_or(0)),
 										alpha);
 		}
 

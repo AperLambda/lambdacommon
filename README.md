@@ -1,7 +1,7 @@
 # λcommon
 
 [![Website](https://img.shields.io/badge/website-%CE%BBcommon-9B599A.svg?style=flat-square)](https://aperlambda.github.io/libraries/lambdacommon/)
-![C++](https://img.shields.io/badge/language-C++-9B599A.svg?style=flat-square)
+![C++](https://img.shields.io/badge/language-C++17-9B599A.svg?style=flat-square)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/AperLambda/lambdacommon/master/LICENSE)
 [![Version](https://img.shields.io/github/release/AperLambda/lambdacommon.svg?style=flat-square)](https://github.com/AperLambda/lambdacommon/releases)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/981c6234700d413297724d7d759e2dec)](https://www.codacy.com/app/LambdAurora/lambdacommon?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AperLambda/lambdacommon&amp;utm_campaign=Badge_Grade)

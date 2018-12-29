@@ -356,10 +356,8 @@ namespace lambdacommon
 		{
 			bool ok = true;
 #ifdef  WIN_FRIENDLY
-			HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE);
-			if (h_out != INVALID_HANDLE_VALUE) {
-				DWORD dw_mode = 0;
-				if (GetConsoleMode(h_out, &dw_mode)) {
+			if (HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE); h_out != INVALID_HANDLE_VALUE) {
+				if (DWORD dw_mode = 0; GetConsoleMode(h_out, &dw_mode)) {
 					dw_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 					if (SetConsoleMode(h_out, dw_mode))
 						use_ansi_escape_codes = true;
@@ -405,8 +403,7 @@ namespace lambdacommon
 		std::string LAMBDACOMMON_API get_title()
 		{
 #ifdef WIN_FRIENDLY
-			TCHAR current_title[MAX_PATH];
-			if (GetConsoleTitle(current_title, MAX_PATH))
+			if (TCHAR current_title[MAX_PATH]; GetConsoleTitle(current_title, MAX_PATH))
 				return {current_title};
 			else return "";
 #else

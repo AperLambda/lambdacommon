@@ -12,6 +12,7 @@
 
 #include "object.h"
 #include <vector>
+#include <optional>
 
 namespace lambdacommon
 {
@@ -131,7 +132,7 @@ namespace lambdacommon
 		 * @param base The base of the integer.
 		 * @return The parsed integer, may be 0 if parse failed.
 		 */
-		extern int LAMBDACOMMON_API parse_int(const std::string &integer, int base = 10);
+		extern std::optional<int> LAMBDACOMMON_API parse_int(const std::string &integer, int base = 10);
 
 		/*!
 		 * Parses long from a string.
@@ -139,7 +140,7 @@ namespace lambdacommon
 		 * @param base The base of the long.
 		 * @return The parsed long, may be 0 if parse failed.
 		 */
-		extern long LAMBDACOMMON_API parse_long(const std::string &long_number, int base = 10);
+		extern std::optional<long> LAMBDACOMMON_API parse_long(const std::string &long_number, int base = 10);
 
 		/*
 		 * String conversions

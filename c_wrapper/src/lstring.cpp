@@ -55,7 +55,7 @@ int lc_str_parse_int(const char *integer)
 
 int lc_str_parse_int_base(const char *integer, int base)
 {
-	return lambdacommon::lstring::parse_int(integer, base);
+	return lambdacommon::lstring::parse_int(integer, base).value_or(0);
 }
 
 long lc_str_parse_long(const char *longNumber)
@@ -65,5 +65,5 @@ long lc_str_parse_long(const char *longNumber)
 
 long lc_str_parse_long_base(const char *longNumber, int base)
 {
-	return lambdacommon::lstring::parse_long(longNumber, base);
+	return lambdacommon::lstring::parse_long(longNumber, base).value_or(0);
 }

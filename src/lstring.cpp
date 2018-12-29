@@ -30,7 +30,7 @@ namespace lambdacommon
 			std::stringstream ss;
 			ss.str(s);
 			std::string item;
-			while (getline(ss, item, delim)) {
+			while (std::getline(ss, item, delim)) {
 				*(result++) = item;
 			}
 		}
@@ -38,7 +38,7 @@ namespace lambdacommon
 		std::vector<std::string> LAMBDACOMMON_API split(const std::string &s, char delimiter)
 		{
 			std::vector<std::string> elems;
-			split(s, delimiter, back_inserter(elems));
+			split(s, delimiter, std::back_inserter(elems));
 			return elems;
 		}
 
@@ -58,8 +58,8 @@ namespace lambdacommon
 		bool LAMBDACOMMON_API equals_ignore_case(std::string const &a, std::string const &b)
 		{
 			if (a.length() == b.length()) {
-				return equal(begin(a), end(a), begin(b),
-							 [](const char charA, const char charB) { return equals_ignore_case(charA, charB); });
+				return std::equal(std::begin(a), std::end(a), std::begin(b),
+								  [](const char charA, const char charB) { return equals_ignore_case(charA, charB); });
 			} else
 				return false;
 		}
@@ -150,25 +150,25 @@ namespace lambdacommon
 			return merged;
 		}
 
-		int LAMBDACOMMON_API parse_int(const std::string &integer, int base)
+		std::optional<int> LAMBDACOMMON_API parse_int(const std::string &integer, int base)
 		{
 			try {
 				return std::stoi(integer, nullptr, base);
 			} catch (const std::invalid_argument &error) {
-				return 0;
+				return std::nullopt;
 			} catch (const std::out_of_range &error) {
-				return 0;
+				return std::nullopt;
 			}
 		}
 
-		long LAMBDACOMMON_API parse_long(const std::string &long_number, int base)
+		std::optional<long> LAMBDACOMMON_API parse_long(const std::string &long_number, int base)
 		{
 			try {
 				return std::stol(long_number, nullptr, base);
 			} catch (const std::invalid_argument &error) {
-				return 0;
+				return std::nullopt;
 			} catch (const std::out_of_range &error) {
-				return 0;
+				return std::nullopt;
 			}
 		}
 

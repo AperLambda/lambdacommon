@@ -179,8 +179,7 @@ namespace lambdacommon
 			if (to_string().empty())
 				return get_current_working_directory();
 			char temp[MAX_PATH];
-			auto length = GetFullPathNameA(to_string().c_str(), MAX_PATH, temp, nullptr);
-			if (length == 0)
+			if (GetFullPathNameA(to_string().c_str(), MAX_PATH, temp, nullptr) == 0)
 				throw std::runtime_error(
 						"Internal error in lambdacommon::path::FilePath.to_absolute(): " +
 						std::to_string(GetLastError()));

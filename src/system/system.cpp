@@ -110,8 +110,7 @@ namespace lambdacommon
 				if (fn_IsWow64Process == nullptr)
 					fn_IsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
 				// Load ntdll and its functions to hack some limitations.
-				ntdll = LoadLibraryA("ntdll.dll");
-				if (ntdll) {
+				if (ntdll = LoadLibraryA("ntdll.dll"); ntdll) {
 					fn_RtlGetVersion = (LPFN_RtlGetVersion) GetProcAddress(ntdll, "RtlGetVersion");
 					fn_RtlVerifyVersionInfo = (LPFN_RtlVerifyVersionInfo) GetProcAddress(ntdll, "RtlVerifyVersionInfo");
 				}

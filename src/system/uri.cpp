@@ -406,8 +406,10 @@ namespace lambdacommon
 				host = lstring::replace_all(lstring::replace_all(host, "[", ""), "]", "");
 				port_t port = 0;
 				if (address_separator != std::string::npos && address_separator > end_ipv6) {
-					if ((port = static_cast<lambdacommon::port_t>(lstring::parse_int(tmp_address.substr(address_separator + 1, tmp_address.size())))) == 0)
+					auto opt_port = lstring::parse_int(tmp_address.substr(address_separator + 1, tmp_address.size()));
+					if (!opt_port)
 						throw ParseException("Cannot parse uri '" + url + "': invalid port!");
+					else port = static_cast<port_t>(opt_port.value());
 				}
 				address = {host, port};
 			}

@@ -13,9 +13,8 @@ namespace lambdacommon
 {
 	std::string LAMBDACOMMON_API get_version()
 	{
-		std::string type{LAMBDACOMMON_VERSION_TYPE};
 		auto result = std::to_string(LAMBDACOMMON_VERSION_MAJOR) + '.' + std::to_string(LAMBDACOMMON_VERSION_MINOR) + '.' + std::to_string(LAMBDACOMMON_VERSION_PATCH);
-		if (type != "Release")
+		if (std::string type{LAMBDACOMMON_VERSION_TYPE}; type != "Release")
 			result = type + result;
 		return result;
 	}

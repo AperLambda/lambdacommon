@@ -102,6 +102,13 @@ namespace lambdacommon
 			return this->get_surface() < other.get_surface();
 		}
 
+		template<std::size_t N>
+		decltype(auto) get() const
+		{
+			if constexpr (N == 0) return this->_width;
+			else if constexpr (N == 1) return this->_height;
+		}
+
 		virtual Size2D<T> &operator+=(T n)
 		{
 			this->_width += n;
@@ -318,8 +325,7 @@ namespace lambdacommon
 
 		std::string to_string() const override
 		{
-			return R"({"width":)" + std::to_string(this->get_width()) + R"(,"height":)" +
-				   std::to_string(this->get_height()) + R"(,"depth":)" + std::to_string(_depth) + "}";
+			return R"({"width":)" + std::to_string(this->get_width()) + R"(,"height":)" + std::to_string(this->get_height()) + R"(,"depth":)" + std::to_string(_depth) + "}";
 		}
 
 		bool operator==(const Size3D<T> &other) const
@@ -330,6 +336,14 @@ namespace lambdacommon
 		bool operator<(const Size3D<T> &other) const
 		{
 			return this->get_volume() < other.get_volume();
+		}
+
+		template<std::size_t N>
+		decltype(auto) get() const
+		{
+			if constexpr (N == 0) return this->_width;
+			else if constexpr (N == 1) return this->_height;
+			else if constexpr (N == 2) return this->_depth;
 		}
 
 		Size3D<T> &operator+=(T n) override
@@ -578,6 +592,26 @@ namespace lambdacommon
 			return self;
 		}
 	};
+}
+
+namespace std
+{
+	template<typename T>
+	struct tuple_size<lambdacommon::Size2D<T>> : std::integral_constant<std::size_t, 2>
+	{
+	};
+
+	template<typename T> struct tuple_element<0, lambdacommon::Size2D<T>> { using type = T; };
+	template<typename T> struct tuple_element<1, lambdacommon::Size2D<T>> { using type = T; };
+
+	template<typename T>
+	struct tuple_size<lambdacommon::Size3D<T>> : std::integral_constant<std::size_t, 3>
+	{
+	};
+
+	template<typename T> struct tuple_element<0, lambdacommon::Size3D<T>> { using type = T; };
+	template<typename T> struct tuple_element<1, lambdacommon::Size3D<T>> { using type = T; };
+	template<typename T> struct tuple_element<2, lambdacommon::Size3D<T>> { using type = T; };
 }
 
 #endif //LAMBDACOMMON_DIMENSIONS_H
