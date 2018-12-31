@@ -13,25 +13,17 @@
 #if defined(LAMBDA_WINDOWS) || defined(__CYGWIN__)
 
 #  define WIN_FRIENDLY
-
 #  include <io.h>
 #  include <Windows.h>
-#include <lambdacommon/system/terminal.h>
-
-
 #  ifdef __CYGWIN__
 #    include <unistd.h>
 #  endif
-
 #  ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 #    define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #  endif
-
 #else
-
 #  include <sys/ioctl.h>
 #  include <unistd.h>
-
 #endif
 
 namespace lambdacommon

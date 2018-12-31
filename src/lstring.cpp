@@ -212,14 +212,13 @@ namespace lambdacommon
 		}
 
 #ifdef LAMBDA_WINDOWS
-#ifndef __GNUC__
-#define CONVERT_WSTRING_WINDOWS_WAY
-#endif
+#  ifndef __GNUC__
+#    define CONVERT_WSTRING_WINDOWS_WAY
+#  endif
 #endif
 
 #ifdef CONVERT_WSTRING_WINDOWS_WAY
-
-#include <Windows.h>
+#  include <Windows.h>
 
 		std::string LAMBDACOMMON_API convert_wstring_to_string(std::wstring wstring)
 		{

@@ -12,22 +12,16 @@
 #include <stdexcept>
 
 #ifdef LAMBDA_WINDOWS
-
-#include <Windows.h>
-
-#define STAT_STRUCT _stati64
-#define STAT_METHOD _stati64
-
+#  include <Windows.h>
+#  define STAT_STRUCT _stati64
+#  define STAT_METHOD _stati64
 #else
-
-#include <errno.h>
-#include <unistd.h>
-#include <cstring>
-#include <climits>
-
-#define STAT_STRUCT stat
-#define STAT_METHOD stat
-
+#  include <errno.h>
+#  include <unistd.h>
+#  include <cstring>
+#  include <climits>
+#  define STAT_STRUCT stat
+#  define STAT_METHOD stat
 #endif
 
 #include <sys/stat.h>

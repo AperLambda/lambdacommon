@@ -12,46 +12,34 @@
 
 #ifdef LAMBDA_WINDOWS
 #  define INFO_BUFFER_SIZE 32767
-
 #  include <Windows.h>
 #  include <WinBase.h>
 #  include <intrin.h>
 #  include <ShlObj.h>
-
 #else
 #  ifdef LAMBDA_MAC_OSX
-
 #    include <CoreFoundation/CFBundle.h>
 #    include <ApplicationServices/ApplicationServices.h>
-
 #  else
-
-#  include <sys/sysinfo.h>
-
+#    include <sys/sysinfo.h>
 #    ifdef LAMBDA_ANDROID
-
-#    include <sys/system_properties.h>
-
+#      include <sys/system_properties.h>
 #    elif defined(LAMBDA_CYGWIN)
-
-#    include <windows.h>
-
+#      include <windows.h>
 #    endif
 #  endif
+
+#if __has_include(<sysctl.h>)
+#  include <sysctl.h>
+#elif __has_include(<sys/sysctl.h>)
+#  include <sys/sysctl.h>
+#elif !defined(LAMBDA_ANDROID)
+#  error "Cannot find any replacement for sys/sysctl.h"
+#endif
 
 #  include <unistd.h>
 #  include <climits>
 #  include <sys/types.h>
-#  if __has_include(<sysctl.h>)
-#    include <sysctl.h>
-#    define LC_HAS_SYSCTL_H 1
-#  elif __has_include(<sys/sysctl.h>)
-#    include <sys/sysctl.h>
-#    define LC_HAS_SYSCTL_H 1
-#  else
-#    error "Cannot find any replacement for sys/sysctl.h"
-#    define LC_HAS_SYSCTL_H 0
-#  endif
 #  include <sys/utsname.h>
 #  include <pwd.h>
 #  include <fstream>
