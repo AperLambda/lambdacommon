@@ -32,12 +32,12 @@ namespace lambdacommon
 	{
 	private:
 		std::string _domain;
-		std::string _path;
+		std::string _name;
 
 	public:
 		ResourceName(const std::string &name);
 
-		ResourceName(const std::string &domain, const std::string &path) noexcept;
+		ResourceName(const std::string &domain, const std::string &name) noexcept;
 
 		ResourceName(const ResourceName &other);
 
@@ -57,10 +57,10 @@ namespace lambdacommon
 
 		/*!
 		 * Creates a new {@code ResourceName} from this resource name.
-		 * @param path The path to append.
+		 * @param name The path to append.
 		 * @return The new {@code ResourceName} with the appended path.
 		 */
-		ResourceName sub(const std::string &path) const;
+		ResourceName sub(const std::string &name) const;
 
 		/*!
 		 * Gets the resource name as a string.
@@ -85,6 +85,13 @@ namespace lambdacommon
 		bool operator==(const ResourceName &other) const;
 
 		bool operator<(const ResourceName &other) const;
+
+		template<std::size_t N>
+		decltype(auto) get() const
+		{
+			if constexpr (N == 0) return this->_domain;
+			else if constexpr (N == 1) return this->_name;
+		}
 	};
 
 	/*!
@@ -177,6 +184,19 @@ namespace lambdacommon
 		FileResourcesManager &operator=(FileResourcesManager &&other) noexcept;
 
 		bool operator==(const FileResourcesManager &other) const;
+	};
+}
+
+// Structured bindings for lambdacommon::ResourceName.
+namespace std
+{
+	template<>
+	struct tuple_size<lambdacommon::ResourceName> : std::integral_constant<std::size_t, 2>
+	{};
+
+	template<std::size_t N>
+	struct tuple_element<N, lambdacommon::ResourceName> {
+		using type = decltype(std::declval<lambdacommon::ResourceName>().get<N>());
 	};
 }
 

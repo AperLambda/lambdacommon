@@ -75,7 +75,7 @@ int main()
 
 ### Windows
 
-Please install from source.
+Download the latest ZIP file of, the compiled binaries and the headers for Windows on [GitHub](https://github.com/AperLambda/lambdacommon/releases/latest). Or install from source.
 
 ### Mac OSX
 
@@ -90,6 +90,18 @@ Just install [lambdacommon](https://aur.archlinux.org/packages/lambdacommon/) fr
 #### Others
 
 Please install from source. 
+
+### Android
+
+#### As an app dependency
+
+Include the source files in your project.
+
+#### Termux
+
+Please install from source.
+
+The CMake command will change a bit, please use `cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE="Release" ..` instead.
 
 ### From source
 

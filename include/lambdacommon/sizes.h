@@ -594,6 +594,7 @@ namespace lambdacommon
 	};
 }
 
+// Structured bindings for lambdacommon::Size2D and lambdacommon::Size3D.
 namespace std
 {
 	template<typename T>

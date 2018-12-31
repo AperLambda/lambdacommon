@@ -269,8 +269,8 @@ int main()
 	tests_count++;
 	if (test("Size2D::operator*(T n) with {16, 32} ; 2", []() {
 		Size2D_u32 dimension{16, 32};
-		auto dim = dimension * 2;
-		return dim.get_width() == 32 && dim.get_height() == 64;
+		auto &[width, height] = (dimension * 2); // C++17 feature, it is nice!
+		return width == 32 && height == 64;
 	}))
 		tests_passed++;
 
@@ -278,8 +278,8 @@ int main()
 	if (test("Size3D::operator-(Size2D<T> dimension2D) with {2048;1024;16} ; {2032;1008}", []() {
 		Size3D_u32 dimension{2048, 1024, 16};
 		Size2D_u32 dimension2d{2032, 1008};
-		auto dim = dimension - dimension2d;
-		return dim.get_width() == 16 && dim.get_height() == 16 && dim.get_depth() == 16;
+		auto &[width, height, depth] = dimension - dimension2d; // C++17 feature, it is nice!
+		return width == 16 && height == 16 && depth == 16;
 	}))
 		tests_passed++;
 

@@ -26,15 +26,15 @@ namespace lambdacommon
 		if (separator <= 0)
 			throw std::invalid_argument("The resource name '" + name + "' is invalid.");
 		_domain = name.substr(0, separator);
-		_path = name.substr(separator + 1);
+		_name = name.substr(separator + 1);
 	}
 
-	ResourceName::ResourceName(const std::string &domain, const std::string &path) noexcept : _domain(domain), _path(path)
+	ResourceName::ResourceName(const std::string &domain, const std::string &name) noexcept : _domain(domain), _name(name)
 	{}
 
 	ResourceName::ResourceName(const ResourceName &other) = default;
 
-	ResourceName::ResourceName(ResourceName &&other) noexcept : _domain(std::move(other._domain)), _path(std::move(other._path))
+	ResourceName::ResourceName(ResourceName &&other) noexcept : _domain(std::move(other._domain)), _name(std::move(other._name))
 	{}
 
 	const std::string &ResourceName::get_domain() const
@@ -44,17 +44,17 @@ namespace lambdacommon
 
 	const std::string &ResourceName::get_name() const
 	{
-		return _path;
+		return _name;
 	}
 
-	ResourceName ResourceName::sub(const std::string &path) const
+	ResourceName ResourceName::sub(const std::string &name) const
 	{
-		return ResourceName(_domain, lstring::merge_path(_path, path));
+		return ResourceName(_domain, lstring::merge_path(_name, name));
 	}
 
 	std::string ResourceName::to_string() const
 	{
-		return _domain + ":" + _path;
+		return _domain + ":" + _name;
 	}
 
 	ResourceName &ResourceName::operator=(const ResourceName &other)
@@ -62,8 +62,8 @@ namespace lambdacommon
 		if (this != &other) {
 			if (other._domain != _domain)
 				_domain = other._domain;
-			if (other._path != _path)
-				_path = other._path;
+			if (other._name != _name)
+				_name = other._name;
 		}
 		return *this;
 	}
@@ -72,19 +72,19 @@ namespace lambdacommon
 	{
 		if (this != &other) {
 			_domain = std::move(other._domain);
-			_path = std::move(other._path);
+			_name = std::move(other._name);
 		}
 		return *this;
 	}
 
 	bool ResourceName::operator==(const ResourceName &other) const
 	{
-		return _domain == other._domain && _path == other._path;
+		return _domain == other._domain && _name == other._name;
 	}
 
 	bool ResourceName::operator<(const ResourceName &other) const
 	{
-		return std::tie(_domain, _path) < std::tie(other._domain, other._path);
+		return std::tie(_domain, _name) < std::tie(other._domain, other._name);
 	}
 
 	/*

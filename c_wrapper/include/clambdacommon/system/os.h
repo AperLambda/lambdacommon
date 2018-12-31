@@ -29,6 +29,7 @@ enum lc_sys_OS
 	LC_OS_FREEBSD = 6,
 	LC_OS_NETBSD = 7,
 	LC_OS_OPENBSD = 8,
+	LC_OS_ANDROID = 100,
 	LC_OS_CYGWIN = 11,
 	LC_OS_OS_UNKNOWN = 0
 };

@@ -121,6 +121,15 @@ namespace lambdacommon
 
 		std::string to_string() const override;
 
+		template<std::size_t N>
+		decltype(auto) get() const
+		{
+			if constexpr (N == 0) return this->_red;
+			else if constexpr (N == 1) return this->_green;
+			else if constexpr (N == 2) return this->_blue;
+			else if constexpr (N == 3) return this->_alpha;
+		}
+
 		bool operator==(const Color &other) const;
 
 		bool operator<(const Color &other) const;
@@ -232,6 +241,19 @@ namespace lambdacommon
 		 */
 		extern Color LAMBDACOMMON_API from_int_rgba(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 	}
+}
+
+// Structured bindings for lambdacommon::Color.
+namespace std
+{
+	template<>
+	struct tuple_size<lambdacommon::Color> : std::integral_constant<std::size_t, 4>
+	{};
+
+	template<std::size_t N>
+	struct tuple_element<N, lambdacommon::Color> {
+		using type = decltype(std::declval<lambdacommon::Color>().get<N>());
+	};
 }
 
 #endif //LAMBDACOMMON_COLOR_H

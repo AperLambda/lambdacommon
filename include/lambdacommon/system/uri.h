@@ -78,7 +78,7 @@ namespace lambdacommon
 
 			void set_username_and_password(const std::string &username, const std::string &password);
 
-			Address get_address() const;
+			const Address &get_address() const;
 
 			void set_address(const Address &address);
 

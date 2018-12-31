@@ -42,7 +42,16 @@
 #  include <unistd.h>
 #  include <climits>
 #  include <sys/types.h>
-#  include <sys/sysctl.h>
+#  if __has_include(<sysctl.h>)
+#    include <sysctl.h>
+#    define LC_HAS_SYSCTL_H 1
+#  elif __has_include(<sys/sysctl.h>)
+#    include <sys/sysctl.h>
+#    define LC_HAS_SYSCTL_H 1
+#  else
+#    error "Cannot find any replacement for sys/sysctl.h"
+#    define LC_HAS_SYSCTL_H 0
+#  endif
 #  include <sys/utsname.h>
 #  include <pwd.h>
 #  include <fstream>

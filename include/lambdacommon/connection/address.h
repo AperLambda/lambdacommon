@@ -100,7 +100,28 @@ namespace lambdacommon
 
 		bool operator<(const Address &other) const;
 
+		template<std::size_t N>
+		decltype(auto) get() const
+		{
+			if constexpr (N == 0) return this->_host;
+			else if constexpr (N == 1) return this->_port;
+		}
+
 		static Address EMPTY;
+	};
+}
+
+
+// Structured bindings for lambdacommon::Address.
+namespace std
+{
+	template<>
+	struct tuple_size<lambdacommon::Address> : std::integral_constant<std::size_t, 2>
+	{};
+
+	template<std::size_t N>
+	struct tuple_element<N, lambdacommon::Address> {
+		using type = decltype(std::declval<lambdacommon::Address>().get<N>());
 	};
 }
 

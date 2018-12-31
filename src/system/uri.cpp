@@ -135,7 +135,7 @@ namespace lambdacommon
 			}
 		}
 
-		Address URI::get_address() const
+		const Address &URI::get_address() const
 		{
 			return _address;
 		}
