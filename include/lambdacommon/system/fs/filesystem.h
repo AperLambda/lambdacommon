@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -20,7 +20,7 @@ namespace lambdacommon
 		enum PathType
 		{
 			WINDOWS = 1,
-			COMMON = 0,
+			COMMON  = 0,
 #ifdef LAMBDA_WINDOWS
 			NATIVE = WINDOWS
 #else

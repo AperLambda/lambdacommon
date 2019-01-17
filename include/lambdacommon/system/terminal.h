@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -22,59 +22,56 @@ namespace lambdacommon
 	{
 		enum TermFormatting
 		{
-			/*
-			 * RESET
-			 */
-			RESET = 0,
+			RESET           = 0,
 			/*
 			 * SET
 			 */
-			BOLD = 1,
-			DIM = 2,
-			UNDERLINED = 4,
-			BLINK = 5,
-			REVERSE = 7,
-			HIDDEN = 8,
+			BOLD            = 1,
+			DIM             = 2,
+			UNDERLINED      = 4,
+			BLINK           = 5,
+			REVERSE         = 7,
+			HIDDEN          = 8,
 			/*
 			 * Foreground
 			 */
-			DEFAULT_FCOLOR = 39,
-			BLACK = 30,
-			RED = 31,
-			GREEN = 32,
-			YELLOW = 33,
-			BLUE = 34,
-			MAGENTA = 35,
-			CYAN = 36,
-			LIGHT_GRAY = 37,
-			DARK_GRAY = 90,
-			LIGHT_RED = 91,
-			LIGHT_GREEN = 92,
-			LIGHT_YELLOW = 93,
-			LIGHT_BLUE = 94,
-			LIGHT_MAGENTA = 95,
-			LIGHT_CYAN = 96,
-			WHITE = 97,
+			DEFAULT_FCOLOR  = 39,
+			BLACK           = 30,
+			RED             = 31,
+			GREEN           = 32,
+			YELLOW          = 33,
+			BLUE            = 34,
+			MAGENTA         = 35,
+			CYAN            = 36,
+			LIGHT_GRAY      = 37,
+			DARK_GRAY       = 90,
+			LIGHT_RED       = 91,
+			LIGHT_GREEN     = 92,
+			LIGHT_YELLOW    = 93,
+			LIGHT_BLUE      = 94,
+			LIGHT_MAGENTA   = 95,
+			LIGHT_CYAN      = 96,
+			WHITE           = 97,
 			/*
 			 * Background
 			 */
-			DEFAULT_BCOLOR = 49,
-			B_BLACK = 40,
-			B_RED = 41,
-			B_GREEN = 42,
-			B_YELLOW = 43,
-			B_BLUE = 44,
-			B_MAGENTA = 45,
-			B_CYAN = 46,
-			B_LIGHT_GRAY = 47,
-			B_DARK_GRAY = 100,
-			B_LIGHT_RED = 101,
-			B_LIGHT_GREEN = 102,
-			B_LIGHT_YELLOW = 103,
-			B_LIGHT_BLUE = 104,
+			DEFAULT_BCOLOR  = 49,
+			B_BLACK         = 40,
+			B_RED           = 41,
+			B_GREEN         = 42,
+			B_YELLOW        = 43,
+			B_BLUE          = 44,
+			B_MAGENTA       = 45,
+			B_CYAN          = 46,
+			B_LIGHT_GRAY    = 47,
+			B_DARK_GRAY     = 100,
+			B_LIGHT_RED     = 101,
+			B_LIGHT_GREEN   = 102,
+			B_LIGHT_YELLOW  = 103,
+			B_LIGHT_BLUE    = 104,
 			B_LIGHT_MAGENTA = 105,
-			B_LIGHT_CYAN = 106,
-			B_WHITE = 107
+			B_LIGHT_CYAN    = 106,
+			B_WHITE         = 107
 		};
 
 		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting term_formatting);
@@ -143,7 +140,7 @@ namespace lambdacommon
 		extern bool LAMBDACOMMON_API setup();
 
 		extern bool LAMBDACOMMON_API use_utf8();
-		
+
 		/*!
 		 * Checks whether the terminal output and input has UTF-8 enabled.
 		 * @return True if the terminal has UTF-8 support, else false.

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -29,10 +29,16 @@
 #    endif
 #  endif
 
-#if __has_include(<sysctl.h>)
+#if __has_include(<sysconf.h>)
+#  include <sysconf.h>
+#elif __has_include(<sys/sysconf.h>)
+#  include <sys/sysconf.h>
+#eif __has_include(<sysctl.h>)
 #  include <sysctl.h>
 #elif __has_include(<sys/sysctl.h>)
 #  include <sys/sysctl.h>
+#elif __has_include(<linux/sysctl.h>)
+#  include <linux/sysctl.h>
 #elif !defined(LAMBDA_ANDROID)
 #  error "Cannot find any replacement for sys/sysctl.h"
 #endif
@@ -159,9 +165,16 @@ namespace lambdacommon
 					return fn_RtlGetVersion(osvi);
 				else {
 #ifdef __MINGW32__
-					if (!GetVersionInfoExW(&osvi))
+					OSVERSIONINFOW mingw_osvi;
+					mingw_osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOW);
+					if (!GetVersionExW(&mingw_osvi))
 						// Return a dummy error value.
 						return 0xC0000000;
+					osvi->dwPlatformId = mingw_osvi.dwPlatformId;
+					osvi->dwMajorVersion = mingw_osvi.dwMajorVersion;
+					osvi->dwMinorVersion = mingw_osvi.dwMinorVersion;
+					osvi->dwBuildNumber = mingw_osvi.dwBuildNumber;
+					wcscpy_s(osvi->szCSDVersion, 128, mingw_osvi.szCSDVersion);
 #else
 					// Return a dummy error value.
 					return 0xC0000000;
@@ -263,6 +276,10 @@ namespace lambdacommon
 			return {cpu_brand_str};
 #endif
 		}
+
+#ifdef __MINGW32__
+#define PROCESSOR_ARCHITECTURE_ARM64 12
+#endif
 
 		SysArchitecture LAMBDACOMMON_API get_processor_arch()
 		{

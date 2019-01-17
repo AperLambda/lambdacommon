@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *

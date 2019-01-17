@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -38,7 +38,7 @@ namespace lambdacommon
 	class LAMBDACOMMON_API Address : public Object, public Nullable
 	{
 	protected:
-		host _host;
+		host   _host;
 		port_t _port;
 
 	public:
@@ -120,7 +120,8 @@ namespace std
 	{};
 
 	template<std::size_t N>
-	struct tuple_element<N, lambdacommon::Address> {
+	struct tuple_element<N, lambdacommon::Address>
+	{
 		using type = decltype(std::declval<lambdacommon::Address>().get<N>());
 	};
 }

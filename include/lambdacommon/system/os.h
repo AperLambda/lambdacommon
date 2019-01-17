@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -24,13 +24,13 @@ namespace lambdacommon
 		{
 			WINDOWS_32 = 1,
 			WINDOWS_64 = 2,
-			MAC_OSX = 3,
-			LINUX = 5,
-			FREEBSD = 6,
-			NETBSD = 7,
-			OPENBSD = 8,
+			MAC_OSX    = 3,
+			LINUX      = 5,
+			FREEBSD    = 6,
+			NETBSD     = 7,
+			OPENBSD    = 8,
 			OS_ANDROID = 100,
-			CYGWIN = 11,
+			CYGWIN     = 11,
 			OS_UNKNOWN = 0
 		};
 

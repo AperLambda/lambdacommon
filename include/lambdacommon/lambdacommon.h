@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -10,6 +10,7 @@
 #ifndef LAMBDACOMMON_LIBRARY_H
 #define LAMBDACOMMON_LIBRARY_H
 
+#include "lambdacommon_version.h"
 #include "lambdacommon_exports.h"
 #include <string>
 
@@ -45,11 +46,6 @@
 #elif defined(__aarch64__)
 #  define LAMBDA_ARM64
 #endif
-
-#define LAMBDACOMMON_VERSION_MAJOR 1
-#define LAMBDACOMMON_VERSION_MINOR 9
-#define LAMBDACOMMON_VERSION_PATCH 10
-#define LAMBDACOMMON_VERSION_TYPE "Release"
 
 // Deletes the pointer and sets the variable to null. It's just simpler to write like this.
 #define LCOMMON_DELETE_POINTER(pointer) delete pointer; pointer = nullptr;

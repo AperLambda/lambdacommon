@@ -1,6 +1,8 @@
 #include <Windows.h>
 #include "lambdacommon_version.h"
 
+LAMBDACOMMON_ICON   ICON "lambdacommon.ico"
+
 #ifndef DEBUG
 #define VER_DEBUG                   0
 #else
@@ -20,12 +22,12 @@ BEGIN
         BLOCK "040904E4"
         BEGIN
             VALUE "CompanyName",      "AperLambda"
-            VALUE "FileDescription",  "lambdacommon library"
+            VALUE "FileDescription",  "Get information about the current version installed of lambdacommon"
             VALUE "FileVersion",      LAMBDACOMMON_VERSION_STR
-            VALUE "InternalName",     "lambdacommon"
+            VALUE "InternalName",     "lambdacommon_info"
             VALUE "LegalCopyright",   "MIT"
-            VALUE "OriginalFilename", "lambdacommon.dll"
-            VALUE "ProductName",      "lambdacommon"
+            VALUE "OriginalFilename", "lambdacommon_info.exe"
+            VALUE "ProductName",      "lambdacommon_info"
             VALUE "ProductVersion",   LAMBDACOMMON_VERSION_STR
         END
     END

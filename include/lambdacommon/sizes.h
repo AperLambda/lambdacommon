@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -602,17 +602,40 @@ namespace std
 	{
 	};
 
-	template<typename T> struct tuple_element<0, lambdacommon::Size2D<T>> { using type = T; };
-	template<typename T> struct tuple_element<1, lambdacommon::Size2D<T>> { using type = T; };
+	template<typename T>
+	struct tuple_element<0, lambdacommon::Size2D<T>>
+	{
+		using type = T;
+	};
+
+	template<typename T>
+	struct tuple_element<1, lambdacommon::Size2D<T>>
+	{
+		using type = T;
+	};
 
 	template<typename T>
 	struct tuple_size<lambdacommon::Size3D<T>> : std::integral_constant<std::size_t, 3>
 	{
 	};
 
-	template<typename T> struct tuple_element<0, lambdacommon::Size3D<T>> { using type = T; };
-	template<typename T> struct tuple_element<1, lambdacommon::Size3D<T>> { using type = T; };
-	template<typename T> struct tuple_element<2, lambdacommon::Size3D<T>> { using type = T; };
+	template<typename T>
+	struct tuple_element<0, lambdacommon::Size3D<T>>
+	{
+		using type = T;
+	};
+
+	template<typename T>
+	struct tuple_element<1, lambdacommon::Size3D<T>>
+	{
+		using type = T;
+	};
+
+	template<typename T>
+	struct tuple_element<2, lambdacommon::Size3D<T>>
+	{
+		using type = T;
+	};
 }
 
 #endif //LAMBDACOMMON_DIMENSIONS_H

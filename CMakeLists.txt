@@ -5,6 +5,7 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(GenerateExportHeader)
 include(utils/CompileUtility)
 include(utils/InstallUtility)
+include(utils/VersionUtility)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -12,6 +13,12 @@ set(CMAKE_CXX_STANDARD 17)
 option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)
 option(LAMBDACOMMON_INSTALL "Generate installation target" ON)
 option(LAMBDACOMMON_BUILD_TESTS "Build the λcommon test programs" ON)
+
+# Version
+set(LAMBDACOMMON_VERSION_MAJOR 1)
+set(LAMBDACOMMON_VERSION_MINOR 10)
+set(LAMBDACOMMON_VERSION_PATCH 0)
+set(LAMBDACOMMON_VERSION_TYPE "indev")
 
 # Generate compile flags.
 generate_flags(LAMBDACOMMON_COMPILE_FLAGS "native" 2 true)
@@ -29,7 +36,7 @@ set(HEADERS_GRAPHICS include/lambdacommon/graphics/color.h include/lambdacommon/
 set(HEADERS_MATHS include/lambdacommon/maths.h include/lambdacommon/maths/geometry/geometry.h)
 set(HEADERS_FILESYSTEM include/lambdacommon/system/fs/filesystem.h)
 set(HEADERS_EXCEPTIONS include/lambdacommon/exceptions/exceptions.h)
-set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/lambdacommon/system/system.h include/lambdacommon/system/terminal.h include/lambdacommon/system/fs.h include/lambdacommon/system/os.h include/lambdacommon/system/devices.h include/lambdacommon/system/uri.h include/lambdacommon/system/time.h)
+set(HEADERS_SYSTEM ${HEADERS_FILESYSTEM} include/lambdacommon/system/system.h include/lambdacommon/system/terminal.h include/lambdacommon/system/fs.h include/lambdacommon/system/os.h include/lambdacommon/system/devices.h include/lambdacommon/system/input.h include/lambdacommon/system/uri.h include/lambdacommon/system/time.h)
 set(HEADERS_BASE include/lambdacommon/lambdacommon.h include/lambdacommon/serializable.h include/lambdacommon/lstring.h include/lambdacommon/path.h include/lambdacommon/resources.h include/lambdacommon/sizes.h include/lambdacommon/types.h include/lambdacommon/object.h)
 set(HEADER_FILES ${HEADERS_CONNECTION} ${HEADERS_DOCUMENT} ${HEADERS_GRAPHICS} ${HEADERS_MATHS} ${HEADERS_EXCEPTIONS} ${HEADERS_SYSTEM} ${HEADERS_BASE})
 # There is the C++ source files.
@@ -42,6 +49,10 @@ set(SOURCES_SERIALIZERS)
 set(SOURCES_SYSTEM ${SOURCES_FILESYSTEM} src/system/system.cpp src/system/terminal.cpp src/system/fs.cpp src/system/os.cpp src/system/uri.cpp src/system/time.cpp)
 set(SOURCES_BASE src/lambdacommon.cpp src/serializable.cpp src/lstring.cpp src/path.cpp src/resources.cpp)
 set(SOURCE_FILES ${SOURCES_CONNECTION} ${SOURCES_DOCUMENT} ${SOURCES_GRAPHICS} ${SOURCES_MATHS} ${SOURCES_SERIALIZERS} ${SOURCES_SYSTEM} ${SOURCES_BASE})
+
+if (WIN32)
+	list(APPEND SOURCE_FILES resources/lambdacommon.rc)
+endif ()
 
 # Now build the library.
 # Build static if the option is on.
@@ -56,6 +67,8 @@ GENERATE_EXPORT_HEADER(lambdacommon
 		EXPORT_MACRO_NAME LAMBDACOMMON_API
 		EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/lambdacommon_exports.h
 		STATIC_DEFINE LAMBDACOMMON_SHARED_EXPORTS_BUILT_AS_STATIC)
+# Generate the version header and include it.
+generate_version_header("LAMBDACOMMON" "lambdacommon" ${LAMBDACOMMON_VERSION_MAJOR} ${LAMBDACOMMON_VERSION_MINOR} ${LAMBDACOMMON_VERSION_PATCH} "${LAMBDACOMMON_VERSION_TYPE}")
 target_include_directories(lambdacommon PUBLIC ${CMAKE_BINARY_DIR}/exports)
 if (LAMBDACOMMON_BUILD_STATIC)
 	target_compile_definitions(lambdacommon_static PUBLIC -DLAMBDACOMMON_SHARED_EXPORTS_BUILT_AS_STATIC)
@@ -65,7 +78,7 @@ endif ()
 include_directories(include)
 
 if (WIN32)
-	set(LCOMMON_ICON resources/lambdacommon.rc)
+	set(LCOMMON_ICON resources/lambdacommon_info.rc)
 endif ()
 
 # Build the information executable.

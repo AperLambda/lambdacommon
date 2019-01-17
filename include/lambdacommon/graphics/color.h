@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -251,7 +251,8 @@ namespace std
 	{};
 
 	template<std::size_t N>
-	struct tuple_element<N, lambdacommon::Color> {
+	struct tuple_element<N, lambdacommon::Color>
+	{
 		using type = decltype(std::declval<lambdacommon::Color>().get<N>());
 	};
 }

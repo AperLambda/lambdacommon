@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -13,7 +13,7 @@ namespace lambdacommon
 {
 	std::string LAMBDACOMMON_API get_version()
 	{
-		auto result = std::to_string(LAMBDACOMMON_VERSION_MAJOR) + '.' + std::to_string(LAMBDACOMMON_VERSION_MINOR) + '.' + std::to_string(LAMBDACOMMON_VERSION_PATCH);
+		std::string result(LAMBDACOMMON_VERSION_STR);
 		if (std::string type{LAMBDACOMMON_VERSION_TYPE}; type != "Release")
 			result = type + result;
 		return result;
