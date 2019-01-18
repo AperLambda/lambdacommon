@@ -33,7 +33,7 @@
 #  include <sysconf.h>
 #elif __has_include(<sys/sysconf.h>)
 #  include <sys/sysconf.h>
-#eif __has_include(<sysctl.h>)
+#elif __has_include(<sysctl.h>)
 #  include <sysctl.h>
 #elif __has_include(<sys/sysctl.h>)
 #  include <sys/sysctl.h>
@@ -175,6 +175,7 @@ namespace lambdacommon
 					osvi->dwMinorVersion = mingw_osvi.dwMinorVersion;
 					osvi->dwBuildNumber = mingw_osvi.dwBuildNumber;
 					wcscpy_s(osvi->szCSDVersion, 128, mingw_osvi.szCSDVersion);
+					return 0x40000000; // Dummy value.
 #else
 					// Return a dummy error value.
 					return 0xC0000000;
@@ -413,7 +414,7 @@ namespace lambdacommon
 		{
 #  ifdef __MINGW32__
 			TCHAR path[MAX_PATH];
-			if (FAILED(SHGetFolderPath(NULL, CSIDL_PROFILE, NULL, 0, path)))
+			if (FAILED(SHGetFolderPath(nullptr, CSIDL_PROFILE, nullptr, 0, path)))
 				return "";
 			return std::string(path);
 #  else // __MINGW32__
