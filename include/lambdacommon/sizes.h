@@ -17,6 +17,10 @@ namespace lambdacommon
 {
 	using namespace std::rel_ops;
 
+	/*!
+	 * Represents a size in 2 dimensions.
+	 * @tparam T Type of the values.
+	 */
 	template<typename T>
 	class Size2D : public Object, public Nullable
 	{
@@ -87,7 +91,7 @@ namespace lambdacommon
 			return _width == 0 && _height == 0;
 		}
 
-		virtual std::string to_string() const override
+		std::string to_string() const override
 		{
 			return R"({"width":)" + std::to_string(_width) + R"(,"height":)" + std::to_string(_height) + "}";
 		}
@@ -266,6 +270,10 @@ namespace lambdacommon
 		}
 	};
 
+	/*!
+	 * Represents a size in 3 dimensions.
+	 * @tparam T Type of the values.
+	 */
 	template<typename T>
 	class Size3D : public Size2D<T>
 	{
@@ -603,16 +611,10 @@ namespace std
 	};
 
 	template<typename T>
-	struct tuple_element<0, lambdacommon::Size2D<T>>
-	{
-		using type = T;
-	};
+	LCOMMON_DEFINE_TUPLE_ELEMENT(0, lambdacommon::Size2D<T>, T)
 
 	template<typename T>
-	struct tuple_element<1, lambdacommon::Size2D<T>>
-	{
-		using type = T;
-	};
+	LCOMMON_DEFINE_TUPLE_ELEMENT(1, lambdacommon::Size2D<T>, T)
 
 	template<typename T>
 	struct tuple_size<lambdacommon::Size3D<T>> : std::integral_constant<std::size_t, 3>
@@ -620,22 +622,13 @@ namespace std
 	};
 
 	template<typename T>
-	struct tuple_element<0, lambdacommon::Size3D<T>>
-	{
-		using type = T;
-	};
+	LCOMMON_DEFINE_TUPLE_ELEMENT(0, lambdacommon::Size3D<T>, T)
 
 	template<typename T>
-	struct tuple_element<1, lambdacommon::Size3D<T>>
-	{
-		using type = T;
-	};
+	LCOMMON_DEFINE_TUPLE_ELEMENT(1, lambdacommon::Size3D<T>, T)
 
 	template<typename T>
-	struct tuple_element<2, lambdacommon::Size3D<T>>
-	{
-		using type = T;
-	};
+	LCOMMON_DEFINE_TUPLE_ELEMENT(2, lambdacommon::Size3D<T>, T)
 }
 
 #endif //LAMBDACOMMON_DIMENSIONS_H

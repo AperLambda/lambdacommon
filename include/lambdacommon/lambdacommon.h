@@ -50,6 +50,8 @@
 // Deletes the pointer and sets the variable to null. It's just simpler to write like this.
 #define LCOMMON_DELETE_POINTER(pointer) delete pointer; pointer = nullptr;
 
+#define LCOMMON_DEFINE_TUPLE_ELEMENT(index, of, return_type) struct tuple_element<index, of> { using type = return_type; };
+
 namespace lambdacommon
 {
 	class Nullable

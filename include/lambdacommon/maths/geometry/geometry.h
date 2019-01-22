@@ -10,6 +10,8 @@
 #ifndef LAMBDACOMMON_GEOMETRY_H
 #define LAMBDACOMMON_GEOMETRY_H
 
+#include "point.h"
+
 namespace lambdacommon
 {}
 
