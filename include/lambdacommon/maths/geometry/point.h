@@ -197,6 +197,24 @@ namespace lambdacommon
 			else if constexpr (N == 2) return this->_z;
 		}
 	};
+
+	template<typename T, typename I>
+	Point1D<T> point1d_cast(const Point1D<I> &point_1d)
+	{
+		return Point1D<T>(static_cast<T>(point_1d.get_x()));
+	}
+
+	template<typename T, typename I>
+	Point2D<T> point2d_cast(const Point2D<I> &point_2d)
+	{
+		return {static_cast<T>(point_2d.get_x()), static_cast<T>(point_2d.get_y())};
+	}
+
+	template<typename T, typename I>
+	Point3D<T> point3d_cast(const Point3D<I> &point_3d)
+	{
+		return {static_cast<T>(point_3d.get_x()), static_cast<T>(point_3d.get_y()), static_cast<T>(point_3d.get_z())};
+	}
 }
 
 // Structured bindings for lambdacommon::Point1D, lambdacommon::Point2D and lambdacommon::Point3D.
