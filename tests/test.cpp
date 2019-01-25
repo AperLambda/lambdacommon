@@ -3,7 +3,7 @@
 #include <lambdacommon/resources.h>
 #include <lambdacommon/system/uri.h>
 #include <lambdacommon/exceptions/exceptions.h>
-#include <lambdacommon/maths.h>
+#include <lambdacommon/maths/complex.h>
 #include <lambdacommon/maths/geometry/geometry.h>
 #include <functional>
 
