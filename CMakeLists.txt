@@ -91,6 +91,7 @@ if (LAMBDACOMMON_INSTALL)
 		get_filename_component(HEADER_PARENT_DIR ${LOOP_HEADER} DIRECTORY)
 		install(FILES ${LOOP_HEADER} DESTINATION ${HEADER_PARENT_DIR})
 	endforeach ()
+	install(FILES ${CMAKE_BINARY_DIR}/exports/lambdacommon_version.h DESTINATION include/lambdacommon)
 	install(FILES ${CMAKE_BINARY_DIR}/exports/lambdacommon_exports.h DESTINATION include/lambdacommon)
 	install(FILES ${CMAKE_SOURCE_DIR}/LICENSE DESTINATION share/licenses/lambdacommon)
 	install(TARGETS lambdacommon
