@@ -21,7 +21,7 @@
 namespace lambdacommon
 {
 	using namespace std::rel_ops;
-	
+
 	template<typename T>
 	class ComplexNumber : public Object
 	{
@@ -73,19 +73,27 @@ namespace lambdacommon
 		 * Gets the modulus of the complex number.
 		 * @return The modulus.
 		 */
-		T get_modulus() const
+		T modulus() const
 		{
 			return static_cast<T>(sqrt(pow(this->real, 2) + pow(this->imaginary, 2)));
+		}
+
+		/*!
+		 * Gets the conjugate of the complex number.
+		 * @return The conjugate of the complex number.
+		 */
+		ComplexNumber<T> conjugate() const
+		{
+			return {this->real, 0 - this->imaginary};
 		}
 
 		std::string to_string() const override
 		{
 			std::stringstream result;
 			if (this->real != 0) result << std::to_string(this->real);
-			if (this->imaginary != 0)
-			{
+			if (this->imaginary != 0) {
 				if (this->imaginary > 0) result << '+' << std::to_string(this->imaginary) << 'i';
-				else result << "-" <<  std::to_string(maths::abs(this->imaginary)) << 'i';
+				else result << "-" << std::to_string(maths::abs(this->imaginary)) << 'i';
 			}
 			return result.str();
 		}
@@ -114,6 +122,37 @@ namespace lambdacommon
 			return *this;
 		}
 
+		ComplexNumber<T> &operator*=(T other)
+		{
+			this->real *= other;
+			this->imaginary *= other;
+			return *this;
+		}
+
+		ComplexNumber<T> &operator*=(ComplexNumber<T> other)
+		{
+			auto x = this->real;
+			this->real = x * other.real - this->imaginary * other.imaginary;
+			this->imaginary = x * other.imaginary + other.real * this->imaginary;
+			return *this;
+		}
+
+		ComplexNumber<T> &operator/=(T other)
+		{
+			this->real = this->real / other;
+			this->imaginary = this->imaginary / other;
+			return *this;
+		}
+
+		ComplexNumber<T> &operator/=(ComplexNumber<T> other)
+		{
+			auto dividend = *this * other.conjugate();
+			auto divisor = other.modulus();
+			this->real = dividend.real / divisor;
+			this->imaginary = dividend.imaginary / divisor;
+			return *this;
+		}
+
 		friend const ComplexNumber<T> operator+(ComplexNumber<T> self, ComplexNumber<T> other)
 		{
 			self += other;
@@ -126,6 +165,37 @@ namespace lambdacommon
 			return self;
 		}
 
+		friend const ComplexNumber<T> operator*(ComplexNumber<T> self, T other)
+		{
+			self *= other;
+			return self;
+		}
+
+		friend const ComplexNumber<T> operator*(ComplexNumber<T> self, ComplexNumber<T> other)
+		{
+			self *= other;
+			return self;
+		}
+
+		friend const ComplexNumber<T> operator/(ComplexNumber<T> self, T other)
+		{
+			self /= other;
+			return self;
+		}
+
+		friend const ComplexNumber<T> operator/(T other, ComplexNumber<T> self)
+		{
+			auto dividend = self.conjugate() * other;
+			auto divisor = self.modulus();
+			return {dividend.real / divisor, dividend.imaginary / divisor};
+		}
+
+		friend const ComplexNumber<T> operator/(ComplexNumber<T> self, ComplexNumber<T> other)
+		{
+			self /= other;
+			return self;
+		}
+
 		template<std::size_t N>
 		decltype(auto) get() const
 		{
@@ -133,6 +203,36 @@ namespace lambdacommon
 			else if constexpr (N == 1) return this->imaginary;
 		}
 	};
+
+	namespace maths
+	{
+		/*!
+ 		 * Calculates the absolute value of a complex number.
+ 		 * @tparam N The number type.
+ 		 * @param number The number to get the absolute value of.
+ 	 	 * @return The absolute value.
+ 		 */
+		template<typename N>
+		N abs(const ComplexNumber<N> &number)
+		{
+			return number.modulus();
+		}
+	}
+}
+
+// Structured bindings for lambdacommon::ComplexNumber.
+namespace std
+{
+	template<typename T>
+	struct tuple_size<lambdacommon::ComplexNumber<T>> : std::integral_constant<std::size_t, 2>
+	{
+	};
+
+	template<typename T>
+	LCOMMON_DEFINE_TUPLE_ELEMENT(0, lambdacommon::ComplexNumber<T>, T)
+
+	template<typename T>
+	LCOMMON_DEFINE_TUPLE_ELEMENT(1, lambdacommon::ComplexNumber<T>, T)
 }
 
 #endif //LAMBDACOMMON_COMPLEX_H
