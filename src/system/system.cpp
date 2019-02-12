@@ -519,7 +519,7 @@ namespace lambdacommon
 			mach_port = mach_host_self();
 			count = sizeof(vm_stats) / sizeof(natural_t);
 			if (KERN_SUCCESS == host_page_size(mach_port, &page_size) && KERN_SUCCESS == host_statistics64(mach_port, HOST_VM_INFO, (host_info64_t) &vm_stats, &count))
-				mem_free = static_cast<uint64_t>(vm_stats.free_count + page_size);
+				mem_free = static_cast<uint64_t>(vm_stats.free_count * page_size);
 #else
 			std::ifstream meminfo;
 			meminfo.open("/proc/meminfo", std::ios::in);
