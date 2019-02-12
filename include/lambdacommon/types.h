@@ -11,6 +11,7 @@
 #define LAMBDACOMMON_TYPES_H
 
 #include "sizes.h"
+#include "maths/geometry/point.h"
 
 namespace lambdacommon
 {
@@ -26,6 +27,14 @@ namespace lambdacommon
 	typedef Size3D<int16_t>  Size3D_i16;
 	typedef Size3D<uint32_t> Size3D_u32;
 	typedef Size3D<int32_t>  Size3D_i32;
+
+	/*
+	 * Points
+	 */
+	typedef Point2D<uint16_t> Point2D_u16;
+	typedef Point2D<int16_t>  Point2D_i16;
+	typedef Point2D<uint32_t> Point2D_u32;
+	typedef Point2D<int32_t>  Point2D_i32;
 
 	/*
 	 * Network

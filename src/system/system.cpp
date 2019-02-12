@@ -39,7 +39,7 @@
 #  include <sys/sysctl.h>
 #elif __has_include(<linux/sysctl.h>)
 #  include <linux/sysctl.h>
-#elif !defined(LAMBDA_ANDROID)
+#elif !defined(LAMBDA_ANDROID) and !defined(LAMBDA_CYGWIN)
 #  error "Cannot find any replacement for sys/sysctl.h"
 #endif
 
@@ -519,6 +519,11 @@ namespace lambdacommon
 						// kB to B
 						mem_free = mem_free * 1024;
 						break;
+					} else if (lstring::equals_ignore_case(last, "MemFree:")) {
+						meminfo >> mem_free;
+						// kB to B
+						mem_free = mem_free * 1024;
+						break;
 					}
 				}
 
@@ -550,6 +555,9 @@ namespace lambdacommon
 
 				meminfo.close();
 			}
+
+			if (mem_used == 0)
+				mem_used = get_memory_total() - get_memory_available();
 
 			return mem_used;
 		}

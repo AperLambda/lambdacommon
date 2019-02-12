@@ -97,13 +97,29 @@ namespace lambdacommon
 		extern std::ostream LAMBDACOMMON_API &clear(std::ostream &stream = std::cout);
 
 		/*!
+		 * Gets the cursor position in the tty.
+		 * @param stream The stream handle of the tty.
+		 * @return The position of the cursor.
+		 */
+		extern Point2D_u16 LAMBDACOMMON_API get_cursor_position(const std::ostream &stream = std::cout);
+
+		/*!
 		 * Sets the cursor at the specified position.
 		 * @param x The x position.
 		 * @param y The y position.
 		 * @param stream The stream to which it applies.
 		 */
-		extern void LAMBDACOMMON_API
-		set_cursor_position(unsigned short x, unsigned short y, std::ostream &stream = std::cout);
+		extern void LAMBDACOMMON_API set_cursor_position(unsigned short x, unsigned short y, std::ostream &stream = std::cout);
+
+		/*!
+		 * Sets the cursor at the specified position.
+		 * @param pos The position.
+		 * @param stream The stream to which it applies.
+		 */
+		inline void set_cursor_position(const Point2D_u16 &pos, std::ostream &stream = std::cout)
+		{
+			set_cursor_position(pos.get_x(), pos.get_y(), stream);
+		}
 
 		/*!
 		 * Sets the cursor at the specified position.
@@ -170,9 +186,10 @@ namespace lambdacommon
 
 		/*!
 		 * Gets the terminal's size.
+		 * @param stream The stream handle.
 		 * @return The {@code TermSize} struct describing the terminal's size.
 		 */
-		extern const Size2D_u16 LAMBDACOMMON_API get_size();
+		extern const Size2D_u16 LAMBDACOMMON_API get_size(const std::ostream &stream = std::cout);
 	}
 }
 

@@ -11,7 +11,6 @@
 #include "../../include/lambdacommon/lstring.h"
 
 #if defined(LAMBDA_WINDOWS) || defined(__CYGWIN__)
-
 #  define WIN_FRIENDLY
 #  include <io.h>
 #  include <Windows.h>
@@ -24,6 +23,8 @@
 #else
 #  include <sys/ioctl.h>
 #  include <unistd.h>
+#  include <errno.h>
+#  include <termios.h>
 #endif
 
 namespace lambdacommon
@@ -36,8 +37,7 @@ namespace lambdacommon
 		/*
 		 * INTERNAL
 		 */
-		inline
-		FILE *get_standard_stream(const std::ostream &stream)
+		inline FILE *get_standard_stream(const std::ostream &stream)
 		{
 			if (&stream == &std::cout)
 				return stdout;
@@ -49,7 +49,7 @@ namespace lambdacommon
 
 #ifdef WIN_FRIENDLY
 
-		HANDLE get_term_handle(std::ostream &stream)
+		HANDLE get_term_handle(const std::ostream &stream)
 		{
 			// Get terminal handle.
 			HANDLE h_terminal = INVALID_HANDLE_VALUE;
@@ -74,11 +74,11 @@ namespace lambdacommon
 			dw_con_size = static_cast<DWORD>(csbi.dwSize.X * csbi.dwSize.Y);
 
 			// Fill the entire screen with blanks.
-			if (!FillConsoleOutputCharacter(h_console,			// Handle to console screen buffer.
-											(TCHAR) ' ',		// Character to write to the buffer.
-											dw_con_size,		// Number of cells to write.
-											coord_screen,		// Coordinates of first cell.
-											&c_chars_written))	// Receive number of characters written.
+			if (!FillConsoleOutputCharacter(h_console,            // Handle to console screen buffer.
+											(TCHAR) ' ',        // Character to write to the buffer.
+											dw_con_size,        // Number of cells to write.
+											coord_screen,        // Coordinates of first cell.
+											&c_chars_written))    // Receive number of characters written.
 				return;
 
 			// Get the current text attribute.
@@ -86,11 +86,11 @@ namespace lambdacommon
 				return;
 
 			// Set the buffer's attributes accordingly.
-			if (!FillConsoleOutputAttribute(h_console,			// Handle to console screen buffer
-											csbi.wAttributes,	// Character attributes to use
-											dw_con_size,		// Number of cells to set attribute
-											coord_screen,		// Coordinates of first cell
-											&c_chars_written))	// Receive number of characters written
+			if (!FillConsoleOutputAttribute(h_console,            // Handle to console screen buffer
+											csbi.wAttributes,    // Character attributes to use
+											dw_con_size,        // Number of cells to set attribute
+											coord_screen,        // Coordinates of first cell
+											&c_chars_written))    // Receive number of characters written
 				return;
 
 			// Put the cursor at its home coordinates.
@@ -134,6 +134,53 @@ namespace lambdacommon
 			}
 
 			SetConsoleTextAttribute(h_terminal, info.wAttributes);
+		}
+
+#else
+#define RD_EOF -1
+#define RD_EIO -2
+
+		static inline int rd(const int fd)
+		{
+			unsigned char buffer[4];
+			ssize_t n;
+
+			while (1) {
+				n = read(fd, buffer, 1);
+				if (n > (ssize_t) 0)
+					return buffer[0];
+
+				else if (n == (ssize_t) 0)
+					return RD_EOF;
+
+				else if (n != (ssize_t) -1)
+					return RD_EIO;
+
+				else if (errno != EINTR && errno != EAGAIN && errno != EWOULDBLOCK)
+					return RD_EIO;
+			}
+		}
+
+		static inline int wr(const int fd, const char *const data, const size_t bytes)
+		{
+			const char *head = data;
+			const char *const tail = data + bytes;
+			ssize_t n;
+
+			while (head < tail) {
+
+				n = write(fd, head, (size_t) (tail - head));
+				if (n > (ssize_t) 0)
+					head += n;
+
+				else if (n != (ssize_t) -1)
+					return EIO;
+
+				else if (errno != EINTR && errno != EAGAIN && errno != EWOULDBLOCK)
+					return errno;
+			}
+
+			return 0;
 		}
 
 #endif // WIN_FRIENDLY
@@ -296,10 +343,22 @@ namespace lambdacommon
 		std::ostream LAMBDACOMMON_API &erase_current_line(std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
-			if (use_ansi_escape_codes)
+			if (use_ansi_escape_codes) {
 				erase_current_line_ansi(stream);
+				stream << '\r';
+			} else {
+				auto current_pos = get_cursor_position(stream);
+				set_cursor_position(0, current_pos.get_y(), stream);
+				if (is_tty(stream)) {
+					auto size = get_size(stream);
+					for (size_t i = 0; i < size.get_width(); i++)
+						stream << ' ';
+					set_cursor_position(0, current_pos.get_y(), stream);
+				}
+			}
 #else
 			erase_current_line_ansi(stream);
+			stream << '\r';
 #endif
 			return stream;
 		}
@@ -314,6 +373,95 @@ namespace lambdacommon
 #endif
 			stream << "\033[2J";
 			return stream;
+		}
+
+		Point2D_u16 LAMBDACOMMON_API get_cursor_position(const std::ostream &stream)
+		{
+			if (is_tty(stream)) {
+#ifdef WIN_FRIENDLY
+				CONSOLE_SCREEN_BUFFER_INFO csbi;
+				if (GetConsoleScreenBufferInfo(get_term_handle(stream), &csbi))
+					return {static_cast<uint16_t>(csbi.dwCursorPosition.X), static_cast<uint16_t>(csbi.dwCursorPosition.Y)};
+#else
+				// Based on https://www.linuxquestions.org/questions/programming-9/get-cursor-position-in-c-947833/#post4693254.
+				struct termios saved{}, temp{};
+				int result, retval;
+				auto tty = fileno(get_standard_stream(stream));
+				Point2D_u16 cursor_pos(0, 0);
+
+				// Save current terminal settings.
+				do {
+					result = tcgetattr(tty, &saved);
+				} while (result == -1 && errno == EINTR);
+				if (result == -1) return cursor_pos;
+
+				// Get current terminal settings.
+				do {
+					result = tcgetattr(tty, &temp);
+				} while (result == -1 && errno == EINTR);
+				if (result == -1) return cursor_pos;
+
+				// Disables ICANON, ECHO and CREAD.
+				temp.c_lflag &= ~ICANON;
+				temp.c_lflag &= ~ECHO;
+				temp.c_lflag &= ~CREAD;
+
+				do {
+					do {
+						result = tcsetattr(tty, TCSANOW, &temp);
+					} while (result == -1 && errno == EINTR);
+					if (result == -1) break;
+
+					// Request cursor coordinates from the terminal.
+					retval = wr(tty, "\033[6n", 4);
+					if (retval)
+						break;
+
+					// Expect an ESC
+					result = rd(tty);
+					if (result != 27)
+						break;
+
+					// Expect [
+					result = rd(tty);
+					if (result != '[')
+						break;
+
+					// Parse rows.
+					uint16_t rows = 0;
+					result = rd(tty);
+					while (result >= '0' && result <= '9') {
+						rows = static_cast<uint16_t>(10 * rows + result - '0');
+						result = rd(tty);
+					}
+
+					if (result != ';')
+						break;
+
+					// Parse columns.
+					uint16_t columns = 0;
+					result = rd(tty);
+					while (result >= '0' && result <= '9') {
+						columns = static_cast<uint16_t>(10 * columns + result - '0');
+						result = rd(tty);
+					}
+
+					if (result != 'R')
+						break;
+
+					cursor_pos.set_x(static_cast<uint16_t>(columns - 1));
+					cursor_pos.set_y(static_cast<uint16_t>(rows - 1));
+					break;
+				} while (true);
+
+				do {
+					result = tcsetattr(tty, TCSANOW, &saved);
+				} while (result == -1 && errno == EINTR);
+
+				return cursor_pos;
+#endif
+			}
+			return {0, 0};
 		}
 
 		void LAMBDACOMMON_API set_cursor_position(unsigned short x, unsigned short y, std::ostream &stream)
@@ -370,7 +518,7 @@ namespace lambdacommon
 			if (SetConsoleCP(CP_UTF8) && SetConsoleOutputCP(CP_UTF8))
 				_has_utf8 = true;
 #else
-			if(setlocale(LC_ALL, "en_US.UTF-8") != nullptr)
+			if (setlocale(LC_ALL, "en_US.UTF-8") != nullptr)
 				_has_utf8 = true;
 #endif
 			return _has_utf8;
@@ -413,18 +561,18 @@ namespace lambdacommon
 			return true;
 		}
 
-		const Size2D_u16 get_size()
+		const Size2D_u16 get_size(const std::ostream &stream)
 		{
 			Size2D_u16 size{};
 #ifdef WIN_FRIENDLY
 			CONSOLE_SCREEN_BUFFER_INFO csbi;
 
-			GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+			GetConsoleScreenBufferInfo(get_term_handle(stream), &csbi);
 			size.set_width(static_cast<uint16_t>(csbi.srWindow.Right - csbi.srWindow.Left + 1));
 			size.set_height(static_cast<uint16_t>(csbi.srWindow.Bottom - csbi.srWindow.Top + 1));
 #else
 			struct winsize w{};
-			ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+			ioctl(fileno(get_standard_stream(stream)), TIOCGWINSZ, &w);
 			size.set_width(w.ws_col);
 			size.set_height(w.ws_row);
 #endif
