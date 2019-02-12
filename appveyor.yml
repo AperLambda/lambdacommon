@@ -1,9 +1,12 @@
-version: 1.6.1
+version: '1.10.0-{build}'
 
-os:
+image:
   - Visual Studio 2017
 
 configuration: Release
+
+environment:
+  GEN: Visual Studio 15 2017 Win64
 
 branches:
   only:
@@ -17,7 +20,15 @@ init:
 install: []
 
 build_script:
-  - mkdir build
-  - cd build
-  - cmake . -G%GEN%
-  - cmake --build .
+  - cmd: >-
+      mkdir build
+      cd build
+      cmake .. -G"%GEN%"
+      cmake --build . --config Release
+
+test_script:
+  - cmd: >-
+      copy Release\lambdacommon.dll tests\Release
+      copy c_wrapper\tests\Release\clambdacommon_test.exe tests\Release
+      .\tests\Release\lambdacommon_test.exe
+      .\tests\Release\clambdacommon_test.exe

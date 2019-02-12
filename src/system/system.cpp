@@ -519,12 +519,15 @@ namespace lambdacommon
 						// kB to B
 						mem_free = mem_free * 1024;
 						break;
-					} else if (lstring::equals_ignore_case(last, "MemFree:")) {
+					}
+#ifndef LAMBDA_MAC_OSX
+					else if (lstring::equals_ignore_case(last, "MemFree:")) {
 						meminfo >> mem_free;
 						// kB to B
 						mem_free = mem_free * 1024;
 						break;
 					}
+#endif
 				}
 
 				meminfo.close();
