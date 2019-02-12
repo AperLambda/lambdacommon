@@ -143,19 +143,18 @@ namespace lambdacommon
 		static inline int rd(const int fd)
 		{
 			unsigned char buffer[4];
-			ssize_t n;
 
 			while (1) {
-				n = read(fd, buffer, 1);
+				ssize_t n = read(fd, buffer, 1);
+				if (n != (ssize_t) -1)
+					buffer[n] = '\0';
+
 				if (n > (ssize_t) 0)
 					return buffer[0];
-
 				else if (n == (ssize_t) 0)
 					return RD_EOF;
-
 				else if (n != (ssize_t) -1)
 					return RD_EIO;
-
 				else if (errno != EINTR && errno != EAGAIN && errno != EWOULDBLOCK)
 					return RD_EIO;
 			}
@@ -385,7 +384,7 @@ namespace lambdacommon
 #else
 				// Based on https://www.linuxquestions.org/questions/programming-9/get-cursor-position-in-c-947833/#post4693254.
 				struct termios saved{}, temp{};
-				int result, retval;
+				int result;
 				auto tty = fileno(get_standard_stream(stream));
 				Point2D_u16 cursor_pos(0, 0);
 
@@ -413,7 +412,7 @@ namespace lambdacommon
 					if (result == -1) break;
 
 					// Request cursor coordinates from the terminal.
-					retval = wr(tty, "\033[6n", 4);
+					int retval = wr(tty, "\033[6n", 4);
 					if (retval)
 						break;
 
