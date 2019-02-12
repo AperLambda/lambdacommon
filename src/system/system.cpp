@@ -18,6 +18,10 @@
 #  include <ShlObj.h>
 #else
 #  ifdef LAMBDA_MAC_OSX
+#    include <mach/vm_statistics.h>
+#    include <mach/mach_types.h>
+#    include <mach/mach_init.h>
+#    include <mach/mach_host.h>
 #    include <CoreFoundation/CFBundle.h>
 #    include <ApplicationServices/ApplicationServices.h>
 #  else
@@ -505,10 +509,20 @@ namespace lambdacommon
 
 		uint64_t LAMBDACOMMON_API get_memory_available()
 		{
+			uint64_t mem_free = 0;
+#ifdef LAMBDA_MAC_OSX
+			vm_size_t page_size;
+			mach_port_t mach_port;
+			mach_msg_type_number_t count;
+			vm_statistics64_data_t vm_stats;
+
+			mach_port = mach_host_self();
+			count = sizeof(vm_stats) / sizeof(natural_t);
+			if (KERN_SUCCESS == host_page_size(mach_port, &page_size) && KERN_SUCCESS == host_statistics64(mach_port, HOST_VM_INFO, (host_info64_t) &vm_stats, &count))
+				mem_free = static_cast<uint64_t>(vm_stats.free_count + page_size);
+#else
 			std::ifstream meminfo;
 			meminfo.open("/proc/meminfo", std::ios::in);
-
-			uint64_t mem_free = 0;
 
 			if (meminfo.is_open()) {
 				std::string last;
@@ -519,21 +533,19 @@ namespace lambdacommon
 						// kB to B
 						mem_free = mem_free * 1024;
 						break;
-					}
-#ifndef LAMBDA_MAC_OSX
-					else if (lstring::equals_ignore_case(last, "MemFree:")) {
+					} else if (lstring::equals_ignore_case(last, "MemFree:")) {
 						meminfo >> mem_free;
 						// kB to B
 						mem_free = mem_free * 1024;
 						break;
 					}
-#endif
 				}
 
 				meminfo.close();
 			}
 			if (mem_free == 0)
 				mem_free = get_memory_total() - get_memory_used();
+#endif
 			return mem_free;
 		}
 
