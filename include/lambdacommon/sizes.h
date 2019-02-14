@@ -338,7 +338,7 @@ namespace lambdacommon
 
 		bool operator==(const Size3D<T> &other) const
 		{
-			return this->_width == other._width && this->_height == other._height && this->_depth = other._depth;
+			return this->_width == other._width && this->_height == other._height && this->_depth == other._depth;
 		}
 
 		bool operator<(const Size3D<T> &other) const

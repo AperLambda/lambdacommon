@@ -80,6 +80,11 @@ namespace lambdacommon
 
 		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const std::vector<std::string> &string_vector);
 
+		inline std::vector<TermFormatting> formats(std::initializer_list<TermFormatting> format_list)
+		{
+			return format_list;
+		}
+
 		/*!
 		 * This function will erase the current line in the stream.
 		 *

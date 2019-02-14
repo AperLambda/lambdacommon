@@ -58,8 +58,7 @@ namespace lambdacommon
 		bool LAMBDACOMMON_API equals_ignore_case(std::string const &a, std::string const &b)
 		{
 			if (a.length() == b.length()) {
-				return std::equal(std::begin(a), std::end(a), std::begin(b),
-								  [](const char charA, const char charB) { return equals_ignore_case(charA, charB); });
+				return std::equal(std::begin(a), std::end(a), std::begin(b), [](const char charA, const char charB) { return equals_ignore_case(charA, charB); });
 			} else
 				return false;
 		}
