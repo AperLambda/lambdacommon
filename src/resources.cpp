@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
  * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
@@ -29,7 +31,7 @@ namespace lambdacommon
 		_name = name.substr(separator + 1);
 	}
 
-	ResourceName::ResourceName(const std::string &domain, const std::string &name) noexcept : _domain(domain), _name(name)
+	ResourceName::ResourceName(std::string domain, std::string name) noexcept : _domain(std::move(domain)), _name(std::move(name))
 	{}
 
 	ResourceName::ResourceName(const ResourceName &other) = default;
@@ -114,8 +116,7 @@ namespace lambdacommon
 	 * FileResourcesManager
 	 */
 
-	FileResourcesManager::FileResourcesManager(const fs::FilePath &working_directory)
-			: ResourcesManager(), _working_directory(working_directory)
+	FileResourcesManager::FileResourcesManager(fs::FilePath working_directory) : ResourcesManager(), _working_directory(std::move(working_directory))
 	{}
 
 	FileResourcesManager::FileResourcesManager(const FileResourcesManager &other) = default;
@@ -140,8 +141,7 @@ namespace lambdacommon
 		return get_resource_path(resource, extension).exists();
 	}
 
-	lambdacommon::fs::FilePath
-	FileResourcesManager::get_resource_path(const ResourceName &resource, const std::string &extension) const
+	lambdacommon::fs::FilePath FileResourcesManager::get_resource_path(const ResourceName &resource, const std::string &extension) const
 	{
 		auto file = resource.get_name();
 		if (!extension.empty())
@@ -154,8 +154,7 @@ namespace lambdacommon
 		return this->load_resource(resource, "");
 	}
 
-	std::string
-	FileResourcesManager::load_resource(const ResourceName &resource, const std::string &extension) const
+	std::string FileResourcesManager::load_resource(const ResourceName &resource, const std::string &extension) const
 	{
 		auto resource_path = get_resource_path(resource, extension);
 		if (!resource_path.exists())

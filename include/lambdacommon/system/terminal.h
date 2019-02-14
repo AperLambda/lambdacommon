@@ -76,10 +76,9 @@ namespace lambdacommon
 
 		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting term_formatting);
 
-		extern std::ostream LAMBDACOMMON_API &
-		operator<<(std::ostream &stream, std::vector<TermFormatting> term_formatting);
+		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const std::vector<TermFormatting> &term_formatting);
 
-		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<std::string> string_vector);
+		extern std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const std::vector<std::string> &string_vector);
 
 		/*!
 		 * This function will erase the current line in the stream.
@@ -101,7 +100,7 @@ namespace lambdacommon
 		 * @param stream The stream handle of the tty.
 		 * @return The position of the cursor.
 		 */
-		extern Point2D_u16 LAMBDACOMMON_API get_cursor_position(const std::ostream &stream = std::cout);
+		extern Point2D_u16 LAMBDACOMMON_API get_cursor_position(std::ostream &stream = std::cout);
 
 		/*!
 		 * Sets the cursor at the specified position.

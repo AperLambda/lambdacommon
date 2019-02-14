@@ -220,7 +220,7 @@ namespace lambdacommon
 #ifdef CONVERT_WSTRING_WINDOWS_WAY
 #  include <Windows.h>
 
-		std::string LAMBDACOMMON_API convert_wstring_to_string(std::wstring wstring)
+		std::string LAMBDACOMMON_API convert_wstring_to_string(const std::wstring &wstring)
 		{
 			std::string string;
 			if (!wstring.empty()) {
@@ -231,7 +231,7 @@ namespace lambdacommon
 			return string;
 		}
 
-		std::wstring LAMBDACOMMON_API convert_string_to_wstring(std::string string)
+		std::wstring LAMBDACOMMON_API convert_string_to_wstring(const std::string &string)
 		{
 			int size = MultiByteToWideChar(CP_UTF8, 0, &string[0], (int) string.size(), nullptr, 0);
 			std::wstring result(size, 0);
@@ -241,14 +241,14 @@ namespace lambdacommon
 
 #else
 
-		std::string LAMBDACOMMON_API convert_wstring_to_string(std::wstring wstring)
+		std::string LAMBDACOMMON_API convert_wstring_to_string(const std::wstring &wstring)
 		{
 			std::string out;
 			std::copy(wstring.begin(), wstring.end(), std::back_inserter(out));
 			return out;
 		}
 
-		std::wstring LAMBDACOMMON_API convert_string_to_wstring(std::string string)
+		std::wstring LAMBDACOMMON_API convert_string_to_wstring(const std::string &string)
 		{
 			std::wstring out;
 			std::copy(string.begin(), string.end(), std::back_inserter(out));

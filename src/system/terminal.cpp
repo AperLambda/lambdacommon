@@ -194,7 +194,7 @@ namespace lambdacommon
 			return stream << formats;
 		}
 
-		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<TermFormatting> term_formatting)
+		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const std::vector<TermFormatting> &term_formatting)
 		{
 			if (is_tty(stream)) {
 #ifdef WIN_FRIENDLY
@@ -328,7 +328,7 @@ namespace lambdacommon
 			return stream;
 		}
 
-		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, std::vector<std::string> string_vector)
+		std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const std::vector<std::string> &string_vector)
 		{
 			stream << lstring::to_string(string_vector);
 			return stream;
@@ -374,7 +374,7 @@ namespace lambdacommon
 			return stream;
 		}
 
-		Point2D_u16 LAMBDACOMMON_API get_cursor_position(const std::ostream &stream)
+		Point2D_u16 LAMBDACOMMON_API get_cursor_position(std::ostream &stream)
 		{
 			if (is_tty(stream)) {
 #ifdef WIN_FRIENDLY

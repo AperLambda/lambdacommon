@@ -43,6 +43,8 @@ bool test(const string &test_name, const std::function<bool()> &func)
 	return result;
 }
 
+#define test2(p) std::cout << #p << std::endl;
+
 int main()
 {
 	time_t start = time::get_time_millis();
@@ -85,6 +87,8 @@ int main()
 
 	uint32_t tests_count = 0;
 	uint32_t tests_passed = 0;
+
+	cout << serializable::tokenize("/run/media/usr/", "/") << endl;
 
 	cout << "===== STRING SECTION =====" << endl;
 	tests_count++;
@@ -150,11 +154,11 @@ int main()
 	tests_passed = 0;
 
 	auto uri = URI("https", "user", "pwd", {"something.com"}, {"test", "file_or_folder"}, {{"foo",               "bar"},
-																						   {"queryWithoutValue", ""},
-																						   {"invalid query",     "but fixed"}},
+																						   {"invalid query",     "but fixed"},
+																						   {"queryWithoutValue", ""}},
 				   "bar");
 	string uri_to_string = uri.to_string();
-	expected = "https://user:pwd@something.com/test/file_or_folder?foo=bar&queryWithoutValue&invalid%20query=but%20fixed#bar";
+	expected = "https://user:pwd@something.com/test/file_or_folder?foo=bar&invalid%20query=but%20fixed&queryWithoutValue#bar";
 	tests_count++;
 	if (test("URI.to_string(): expected: \"" + expected + "\" got: \"" + uri_to_string + "\"",
 			 [uri_to_string, expected]() {

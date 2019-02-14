@@ -68,10 +68,10 @@ namespace lambdacommon
 		void FilePath::set(const std::string &str, PathType type)
 		{
 			if (type == WINDOWS) {
-				_path = serializable::tokenize(str, "/\\");
+				_path = std::move(serializable::tokenize(str, "/\\"));
 				_absolute = str.size() > 2 && isalpha(str[0]) && str[1] == ':';
 			} else {
-				_path = serializable::tokenize(str, "/");
+				_path = std::move(serializable::tokenize(str, "/"));
 				_absolute = !str.empty() && str[0] == '/';
 			}
 		}

@@ -12,6 +12,7 @@
 
 #include "fs/filesystem.h"
 #include "../connection/address.h"
+#include <map>
 
 #ifdef LAMBDA_WINDOWS
 #  pragma warning(push)
@@ -46,18 +47,16 @@ namespace lambdacommon
 		class LAMBDACOMMON_API URI : public Path
 		{
 		protected:
-			pstring _scheme;
-			pstring _username;
-			pstring _password;
+			std::string _scheme;
+			std::string _username;
+			std::string _password;
 			Address _address;
-			std::vector<std::pair<std::string, std::string>> *_queries;
-			pstring _fragment;
+			std::map<std::string, std::string> _queries;
+			std::string _fragment;
 
 		public:
-			URI(const std::string &scheme, const std::string &username, const std::string &password,
-				const Address &address, const std::vector<std::string> &path = std::vector<std::string>(),
-				const std::vector<std::pair<std::string, std::string>> &queries = std::vector<std::pair<std::string, std::string>>(),
-				const std::string &fragment = "");
+			URI(std::string scheme, std::string username, std::string password, Address address, std::vector<std::string> path = {},
+				const std::map<std::string, std::string> &queries = {}, std::string fragment = "");
 
 			URI(const URI &uri);
 
@@ -65,34 +64,34 @@ namespace lambdacommon
 
 			~URI() override;
 
-			std::string get_scheme() const;
+			const std::string &get_scheme() const;
 
 			inline SchemeType get_scheme_type() const
 			{
 				return get_scheme_type_by_string(get_scheme());
 			}
 
-			std::string get_username() const;
+			const std::string &get_username() const;
 
-			std::string get_password() const;
+			const std::string &get_password() const;
 
-			void set_username_and_password(const std::string &username, const std::string &password);
+			void set_username_and_password(std::string username, std::string password);
 
 			const Address &get_address() const;
 
-			void set_address(const Address &address);
+			void set_address(Address address);
 
-			std::vector<std::pair<std::string, std::string>> get_queries() const;
+			std::map<std::string, std::string> get_queries() const;
 
-			void set_queries(const std::vector<std::pair<std::string, std::string>> &queries);
+			void set_queries(const std::map<std::string, std::string> &queries);
 
-			bool has_query(std::string query) const;
+			bool has_query(const std::string &query) const;
 
-			std::string get_query(std::string query) const;
+			std::string get_query(const std::string &query) const;
 
-			std::string get_fragment() const;
+			const std::string &get_fragment() const;
 
-			void set_fragment(const std::string &fragment);
+			void set_fragment(std::string fragment);
 
 			std::string to_string(char delimiter = '/') const override;
 

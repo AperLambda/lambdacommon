@@ -20,7 +20,7 @@ namespace lambdacommon
 	Path::Path() : _path()
 	{}
 
-	Path::Path(const std::vector<std::string> &path) : _path(path)
+	Path::Path(std::vector<std::string> path) : _path(std::move(path))
 	{}
 
 	Path::Path(const Path &other) = default;

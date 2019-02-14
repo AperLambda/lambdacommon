@@ -10,6 +10,7 @@
 #include "../../include/lambdacommon/connection/address.h"
 #include <sstream>
 #include <tuple>
+#include <utility>
 
 #ifdef LAMBDA_WINDOWS
 #  include <WS2tcpip.h>
@@ -20,13 +21,13 @@
 
 namespace lambdacommon
 {
-	Address::Address(const host &host, port_t port) : _host(host), _port(port)
+	Address::Address(host host, port_t port) : _host(std::move(host)), _port(port)
 	{}
 
 	Address::Address(const Address &address) : _host(address._host), _port(address._port)
 	{}
 
-	Address::Address(Address &&address) noexcept : _host(move(address._host)), _port(address._port)
+	Address::Address(Address &&address) noexcept : _host(std::move(address._host)), _port(address._port)
 	{}
 
 	Address::~Address() = default;
@@ -115,7 +116,6 @@ namespace lambdacommon
 		ss << "|" << _host.substr(ix - segsize) << "|"; // Get last domain segment.
 
 		return tlds.find(ss.str()) != std::string::npos;
-
 	}
 
 	bool Address::is_empty() const
@@ -174,7 +174,7 @@ namespace lambdacommon
 	Address &Address::operator=(Address &&other) noexcept
 	{
 		if (this != &other) {
-			_host = move(other._host);
+			_host = std::move(other._host);
 			_port = other._port;
 		}
 		return *this;

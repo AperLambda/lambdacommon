@@ -1,3 +1,7 @@
+#include <utility>
+
+#include <utility>
+
 /*
  * Copyright © 2019 AperLambda <aperlambda@gmail.com>
  *
@@ -70,68 +74,56 @@ namespace lambdacommon
 		 * URI
 		 */
 
-		std::vector<std::pair<std::string, std::string>>
-		fix_queries(const std::vector<std::pair<std::string, std::string>> &queries)
+		std::map<std::string, std::string> fix_queries(const std::map<std::string, std::string> &queries)
 		{
-			std::vector<std::pair<std::string, std::string>> new_queries{queries.size()};
-			for (size_t i = 0; i < queries.size(); i++)
-				new_queries[i] = {lstring::replace_all(queries[i].first, " ", "%20"),
-								  lstring::replace_all(queries[i].second, " ", "%20")};
+			std::map<std::string, std::string> new_queries;
+			for (const auto &query : queries)
+				new_queries[lstring::replace_all(query.first, " ", "%20")] = lstring::replace_all(query.second, " ", "%20");
 			return new_queries;
 		};
 
-		URI::URI(const std::string &scheme, const std::string &username, const std::string &password, const Address &address, const std::vector<std::string> &path,
-				 const std::vector<std::pair<std::string, std::string>> &queries, const std::string &fragment)
-				: Path(path),
-				  _scheme(new std::string(scheme)),
-				  _username(new std::string(username)),
-				  _password(new std::string(password)),
-				  _address(address),
-				  _queries(new std::vector<std::pair<std::string, std::string>>(fix_queries(queries))),
-				  _fragment(new std::string(fragment))
+		URI::URI(std::string scheme, std::string username, std::string password, Address address, std::vector<std::string> path, const std::map<std::string, std::string> &queries,
+				 std::string fragment)
+				: Path(std::move(path)),
+				  _scheme(std::move(scheme)),
+				  _username(std::move(username)),
+				  _password(std::move(password)),
+				  _address(std::move(address)),
+				  _queries(std::move(fix_queries(queries))),
+				  _fragment(std::move(fragment))
 		{}
 
-		URI::URI(const URI &url) : Path(url._path), _scheme(new std::string(*url._scheme)), _username(new std::string(*url._username)), _password(new std::string(*url._password)),
-								   _address(url._address), _queries(new std::vector<std::pair<std::string, std::string>>(*url._queries)), _fragment(new std::string(*url._fragment))
+		URI::URI(const URI &url) = default;
+
+		URI::URI(URI &&url) noexcept : Path(std::move(url)), _scheme(std::move(url._scheme)), _username(std::move(url._username)), _password(std::move(url._password)),
+									   _address(std::move(url._address)), _queries(std::move(url._queries)), _fragment(std::move(url._fragment))
 		{}
 
-		URI::URI(URI &&url) noexcept : Path(std::move(url)), _scheme(new std::string(move(*url._scheme))), _username(new std::string(move(*url._username))),
-									   _password(new std::string(move(*url._password))), _address(std::move(url._address)),
-									   _queries(new std::vector<std::pair<std::string, std::string>>(move(*url._queries))),
-									   _fragment(new std::string(move(*url._fragment)))
-		{}
+		URI::~URI() = default;
 
-		URI::~URI()
+		const std::string &URI::get_scheme() const
 		{
-			delete _scheme;
-			delete _username;
-			delete _password;
-			delete _fragment;
+			return _scheme;
 		}
 
-		std::string URI::get_scheme() const
+		const std::string &URI::get_username() const
 		{
-			return *_scheme;
+			return _username;
 		}
 
-		std::string URI::get_username() const
+		const std::string &URI::get_password() const
 		{
-			return *_username;
+			return _password;
 		}
 
-		std::string URI::get_password() const
-		{
-			return *_password;
-		}
-
-		void URI::set_username_and_password(const std::string &username, const std::string &password)
+		void URI::set_username_and_password(std::string username, std::string password)
 		{
 			if (username.empty() || password.empty()) {
-				*_username = "";
-				*_password = "";
+				_username = "";
+				_password = "";
 			} else {
-				*_username = username;
-				*_password = password;
+				_username = std::move(username);
+				_password = std::move(password);
 			}
 		}
 
@@ -140,54 +132,42 @@ namespace lambdacommon
 			return _address;
 		}
 
-		void URI::set_address(const Address &address)
+		void URI::set_address(Address address)
 		{
 			if (address.get_host().empty() && is_scheme_type_non_file_special(get_scheme_type()))
 				throw IllegalArgumentException("Hostname cannot be null for this scheme.");
 
-			_address = address;
+			_address = std::move(address);
 		}
 
-		std::vector<std::pair<std::string, std::string>> URI::get_queries() const
+		std::map<std::string, std::string> URI::get_queries() const
 		{
-			return *_queries;
+			return _queries;
 		}
 
-		void URI::set_queries(const std::vector<std::pair<std::string, std::string>> &queries)
+		void URI::set_queries(const std::map<std::string, std::string> &queries)
 		{
-			*_queries = fix_queries(queries);
+			_queries = std::move(fix_queries(queries));
 		}
 
-		bool URI::has_query(std::string query) const
+		bool URI::has_query(const std::string &query) const
 		{
-			bool has_query = false;
-			for (const auto &q : *_queries)
-				if (lstring::equals(q.first, query)) {
-					has_query = true;
-					break;
-				}
-			return has_query;
+			return _queries.count(query) > 0;
 		}
 
-		std::string URI::get_query(std::string query) const
+		std::string URI::get_query(const std::string &query) const
 		{
-			std::string result;
-			for (auto q : *_queries)
-				if (lstring::equals(q.first, query)) {
-					result = q.second;
-					break;
-				}
-			return result;
+			return _queries.at(query);
 		}
 
-		std::string URI::get_fragment() const
+		const std::string &URI::get_fragment() const
 		{
-			return *_fragment;
+			return _fragment;
 		}
 
-		void URI::set_fragment(const std::string &fragment)
+		void URI::set_fragment(std::string fragment)
 		{
-			*_fragment = fragment;
+			_fragment = std::move(fragment);
 		}
 
 		std::string URI::to_string(char delimiter) const
@@ -195,18 +175,18 @@ namespace lambdacommon
 			std::ostringstream oss;
 
 			// Write the scheme.
-			if (!_scheme->empty())
-				oss << get_scheme() << ':';
+			if (!_scheme.empty())
+				oss << _scheme << ':';
 
 			if (!_address.is_empty()) {
 				oss << "//";
 				// Write the username and the password.
-				if (!_username->empty() && !_password->empty())
-					oss << get_username() << ':' << get_password() << '@';
+				if (!_username.empty() && !_password.empty())
+					oss << _username << ':' << _password << '@';
 
 				// Write the address.
 				oss << _address.to_string();
-			} else if (*_scheme == "file")
+			} else if (_scheme == "file")
 				oss << "//";
 
 			// Write the path.
@@ -214,22 +194,21 @@ namespace lambdacommon
 				oss << '/' << Path::to_string(delimiter);
 
 			// Write the queries.
-			if (!_queries->empty()) {
+			if (!_queries.empty()) {
 				oss << '?';
-				for (size_t i = 0; i < _queries->size(); i++) {
-					std::pair<std::string, std::string> query = (*_queries)[i];
-					oss << query.first;
+				std::string tmp_separator;
+				for (const auto &query : _queries) {
+					oss << tmp_separator << query.first;
 					if (!query.second.empty())
 						oss << '=' << query.second;
 
-					if (i + 1 != _queries->size())
-						oss << '&';
+					tmp_separator = "&";
 				}
 			}
 
 			// Write the fragment.
-			if (!_fragment->empty())
-				oss << '#' << get_fragment();
+			if (!_fragment.empty())
+				oss << '#' << _fragment;
 
 			return oss.str();
 		}
@@ -239,21 +218,23 @@ namespace lambdacommon
 			system::open_uri(to_string('/'));
 		}
 
-		URI &URI::operator=(const URI &url)
+		URI &URI::operator=(const URI &other)
 		{
-			if (this != &url) {
-				_path = url._path;
-				delete _scheme;
-				_scheme = new std::string(*url._scheme);
-				delete _username;
-				_username = new std::string(*url._username);
-				delete _password;
-				_password = new std::string(*url._password);
-				_address = url._address;
-				delete _queries;
-				_queries = new std::vector<std::pair<std::string, std::string>>(*url._queries);
-				delete _fragment;
-				_fragment = new std::string(*url._fragment);
+			if (this != &other) {
+				if (other._path != _path)
+					_path = other._path;
+				if (other._scheme != _scheme)
+					_scheme = other._scheme;
+				if (other._username != _username)
+					_username = other._username;
+				if (other._password != _password)
+					_password = other._password;
+				if (other._address != _address)
+					_address = other._address;
+				if (other._queries != _queries)
+					_queries = other._queries;
+				if (other._fragment != _fragment)
+					_fragment = other._fragment;
 			}
 			return *this;
 		}
@@ -262,36 +243,31 @@ namespace lambdacommon
 		{
 			if (this != &url) {
 				_path = std::move(url._path);
-				delete _scheme;
-				_scheme = new std::string(move(*url._scheme));
-				delete _username;
-				_username = new std::string(move(*url._username));
-				delete _password;
-				_password = new std::string(move(*url._password));
-				_address = url._address;
-				delete _queries;
-				_queries = new std::vector<std::pair<std::string, std::string>>(move(*url._queries));
-				delete _fragment;
-				_fragment = new std::string(move(*url._fragment));
+				_scheme = std::move(url._scheme);
+				_username = std::move(url._username);
+				_password = std::move(url._password);
+				_address = std::move(url._address);
+				_queries = std::move(url._queries);
+				_fragment = std::move(url._fragment);
 			}
 			return *this;
 		}
 
 		bool URI::operator==(const URI &url)
 		{
-			return *_scheme == (*url._scheme) && *_username == (*url._username) && *_password == (*url._password) && _address == url._address && _path == (url._path) &&
-				   *_queries == (*url._queries) && *_fragment == (*url._fragment);
+			return _scheme == url._scheme && _username == url._username && _password == url._password && _address == url._address && _path == url._path &&
+				   _queries == url._queries && _fragment == url._fragment;
 		}
 
 		bool URI::operator!=(const URI &url)
 		{
-			return *_scheme != (*url._scheme) || *_username != (*url._username) || *_password != (*url._password) || _address != url._address || _path != url._path ||
-				   *_queries != (*url._queries) || *_fragment != (*url._fragment);
+			return _scheme != url._scheme || _username != url._username || _password != url._password || _address != url._address || _path != url._path ||
+				   _queries != url._queries || _fragment != url._fragment;
 		}
 
 		URI URI::operator/(const URI &uri)
 		{
-			URI new_uri = URI(*this);
+			URI new_uri(*this);
 			for (const auto &s : uri.get_path())
 				new_uri._path.emplace_back(s);
 			return new_uri;
@@ -299,7 +275,7 @@ namespace lambdacommon
 
 		URI URI::operator/(const Path &path)
 		{
-			URI new_uri = URI(*this);
+			URI new_uri(*this);
 			for (const auto &s : path.get_path())
 				new_uri._path.emplace_back(s);
 			return new_uri;
@@ -310,7 +286,7 @@ namespace lambdacommon
 			if (!path.is_absolute())
 				path = path.to_absolute();
 
-			return URI("file", "", "", Address::EMPTY, path.get_path());
+			return {"file", "", "", Address::EMPTY, path.get_path()};
 		}
 
 		URI LAMBDACOMMON_API from_string(const std::string &url)
@@ -362,7 +338,7 @@ namespace lambdacommon
 					path = tmp_uri.substr(path_separator);
 			}
 
-			std::vector<std::pair<std::string, std::string>> queries;
+			std::map<std::string, std::string> queries;
 			if (query_separator != std::string::npos) {
 				std::string str_queries;
 				if (fragment_separator > query_separator) {
@@ -374,12 +350,12 @@ namespace lambdacommon
 
 				if (!str_queries.empty()) {
 					auto splitted_queries = lstring::split(str_queries, '&');
-					for (auto query : splitted_queries) {
+					for (const auto &query : splitted_queries) {
 						size_t j;
 						if ((j = query.find_first_of('=')) != std::string::npos)
-							queries.emplace_back(query.substr(0, j), query.substr(j + 1, query.size()));
+							queries[query.substr(0, j)] = query.substr(j + 1, query.size());
 						else
-							queries.emplace_back(query, "");
+							queries[query] = "";
 					}
 				}
 			}
@@ -411,10 +387,11 @@ namespace lambdacommon
 						throw ParseException("Cannot parse uri '" + url + "': invalid port!");
 					else port = static_cast<port_t>(*opt_port);
 				}
-				address = {host, port};
+				address = {std::move(host), port};
 			}
 
-			URI result_uri{scheme, username, password, address, serializable::tokenize(path, "/"), queries, fragment};
+			URI result_uri{std::move(scheme), std::move(username), std::move(password), std::move(address), std::move(serializable::tokenize(path, "/")), queries,
+						   std::move(fragment)};
 
 			if (result_uri.get_address().is_empty() && is_scheme_type_non_file_special(result_uri.get_scheme_type()))
 				throw ParseException("Cannot parse uri '" + url + "': the scheme doesn't support empty address!");

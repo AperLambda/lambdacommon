@@ -168,14 +168,14 @@ namespace lambdacommon
 		 * @param wstring The std::wstring to convert.
 		 * @return The converted string.
 		 */
-		extern std::string LAMBDACOMMON_API convert_wstring_to_string(std::wstring wstring);
+		extern std::string LAMBDACOMMON_API convert_wstring_to_string(const std::wstring &wstring);
 
 		/**
 		 * Converts a std::string to a std::wstring.
 		 * @param wstring The std::string to convert.
 		 * @return The converted wstring.
 		 */
-		extern std::wstring LAMBDACOMMON_API convert_string_to_wstring(std::string string);
+		extern std::wstring LAMBDACOMMON_API convert_string_to_wstring(const std::string &string);
 
 		namespace stream
 		{

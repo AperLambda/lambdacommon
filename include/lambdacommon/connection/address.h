@@ -42,7 +42,7 @@ namespace lambdacommon
 		port_t _port;
 
 	public:
-		Address(const host &host, port_t port = 0);
+		Address(host host, port_t port = 0);
 
 		Address(const Address &address);
 

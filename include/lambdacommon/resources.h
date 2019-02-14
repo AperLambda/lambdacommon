@@ -37,7 +37,7 @@ namespace lambdacommon
 	public:
 		ResourceName(const std::string &name);
 
-		ResourceName(const std::string &domain, const std::string &name) noexcept;
+		ResourceName(std::string domain, std::string name) noexcept;
 
 		ResourceName(const ResourceName &other);
 
@@ -156,7 +156,7 @@ namespace lambdacommon
 		lambdacommon::fs::FilePath _working_directory;
 
 	public:
-		explicit FileResourcesManager(const lambdacommon::fs::FilePath &working_directory = fs::get_current_working_directory());
+		explicit FileResourcesManager(lambdacommon::fs::FilePath working_directory = std::move(fs::get_current_working_directory()));
 
 		FileResourcesManager(const FileResourcesManager &other);
 

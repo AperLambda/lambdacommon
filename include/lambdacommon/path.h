@@ -33,7 +33,7 @@ namespace lambdacommon
 	public:
 		Path();
 
-		Path(const std::vector<std::string> &path);
+		Path(std::vector<std::string> path);
 
 		Path(const Path &path);
 
