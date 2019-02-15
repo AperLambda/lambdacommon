@@ -446,15 +446,10 @@ namespace lambdacommon
 			std::string cpu;
 			if (cpuinfo.is_open()) {
 				for (std::string line; std::getline(cpuinfo, line);) {
-#ifdef LAMBDA_ANDROID
-					if (lstring::starts_with_ignore_case(line, "Hardware"))
-#else
-					if (lstring::starts_with_ignore_case(line, "model name"))
-#endif
-					{
+					if (lstring::starts_with_ignore_case(line, "model name") || lstring::starts_with_ignore_case(line, "Hardware") ||
+						lstring::starts_with_ignore_case(line, "Processor")) {
 						size_t separator_index = line.find_first_of(':');
 						cpu = line.substr(separator_index + 2);
-						break;
 					}
 				}
 				cpuinfo.close();
@@ -469,14 +464,14 @@ namespace lambdacommon
 				return SysArchitecture::X86_64;
 			else if (lstring::equals(get_processor_arch_str(), "i386"))
 				return SysArchitecture::I386;
-			else if (lstring::equals_ignore_case(get_processor_arch_str().substr(0, 3), "ARM"))
-				return SysArchitecture::ARM;
 			else if (lstring::equals_ignore_case(get_processor_arch_str(), "armv7l"))
 				return SysArchitecture::ARMv7;
 			else if (lstring::equals_ignore_case(get_processor_arch_str(), "aarch32"))
 				return SysArchitecture::ARMv8_32;
 			else if (lstring::equals_ignore_case(get_processor_arch_str(), "aarch64"))
 				return SysArchitecture::ARMv8_64;
+			else if (lstring::equals_ignore_case(get_processor_arch_str().substr(0, 3), "ARM"))
+				return SysArchitecture::ARM;
 			else if (lstring::equals_ignore_case(get_processor_arch_str(), "riscv32"))
 				return SysArchitecture::RISCV32;
 			else if (lstring::equals_ignore_case(get_processor_arch_str(), "riscv64"))
@@ -669,8 +664,12 @@ namespace lambdacommon
 					return "ARM";
 				case ARM64:
 					return "ARM64";
+				case ARMv7:
+					return "ARMv7";
+				case ARMv8_32:
+					return "ARMv8 32bits";
 				case ARMv8_64:
-					return "ARMv8 64bit";
+					return "ARMv8 64bits";
 				case I386:
 					return "i386";
 				case RISCV32:
