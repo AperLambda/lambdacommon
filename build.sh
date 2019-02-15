@@ -17,7 +17,7 @@ echo "${RED}Error: CMake doesn't exit with success! Cleaning...${NC}"
 cd ..
 sh ./clean_workspace.sh
 else
-make
+make -j
 if [ $? -ne 0 ]; then
 echo "${RED}Error: Make doesn't exit with success! Cleaning...${NC}"
 cd ..
