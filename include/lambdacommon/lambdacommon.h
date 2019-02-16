@@ -33,6 +33,8 @@
 #    define LAMBDA_NETBSD
 #  elif defined(__OpenBSD__)
 #    define LAMBDA_OPENBSD
+#  elif defined(__DragonFly__)
+#    define LAMBDA_DRAGONFLY
 #  endif
 #elif defined(sun) || defined(__sun)
 #  define LAMBDA_SOLARIS

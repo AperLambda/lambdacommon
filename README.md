@@ -37,11 +37,22 @@ Works on:
    * ARMv8
    * riscv32
    * riscv64
- - OS:
-   * Windows
-   * Mac OSX
-   * Linux
-   * Android (via Termux and as a library for applications)  
+
+## Compatibility table
+
+| OS        |  Compatibility |
+|-----------|:--------------:|
+| Windows   |        ✔       |
+| Mac OSX   |        ✔       |
+| Linux     |        ✔       |
+| Android   |   ⚠ Partial ⚠  |
+| iOS       |        ❌       |
+| FreeBSD   |    👷‍ WIP 👷‍   |
+| OpenBSD   | ⚠ Not tested ⚠ |
+| NetBSD    | ⚠ Not tested ⚠ |
+| DragonFly | ⚠ Not tested ⚠ |
+| Solaris   |  ❌ Not tested  |
+| Haiku     |        ❌       |
 
 ## Quick example
 

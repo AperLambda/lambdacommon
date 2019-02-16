@@ -16,6 +16,10 @@
 #  include <WS2tcpip.h>
 #  pragma comment(lib, "Ws2_32.lib")
 #else
+#  ifdef LAMBDA_BSD
+#    include <netinet/in.h>
+#    include <sys/socket.h>
+#  endif
 #  include <arpa/inet.h>
 #endif
 

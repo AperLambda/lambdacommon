@@ -24,6 +24,14 @@
 #    include <mach/mach_host.h>
 #    include <CoreFoundation/CFBundle.h>
 #    include <ApplicationServices/ApplicationServices.h>
+#    define LAMBDA_CPU_NAME_KEY "machdep.cpu.brand_string"
+#  elif defined(LAMBDA_BSD)
+#    define LAMBDA_CPU_NAME_KEY "hw.model"
+#    if defined(LAMBDA_OPENBSD) || defined(LAMBDA_NETBSD)
+#      define LAMBDA_MEM_TOTAL_KEY HW_PHYSMEM64
+#    else
+#      define LAMBDA_MEM_TOTAL_KEY HW_PHYSMEM
+#    endif
 #  else
 #    include <sys/sysinfo.h>
 #    ifdef LAMBDA_ANDROID
@@ -50,6 +58,7 @@
 #  include <unistd.h>
 #  include <climits>
 #  include <sys/types.h>
+#  include <sys/param.h>
 #  include <sys/utsname.h>
 #  include <pwd.h>
 #  include <fstream>
@@ -433,10 +442,10 @@ namespace lambdacommon
 
 		std::string LAMBDACOMMON_API get_cpu_name()
 		{
-#ifdef LAMBDA_MAC_OSX
+#if defined(LAMBDA_MAC_OSX) || defined(LAMBDA_BSD)
 			char buffer[128];
 			size_t buffer_len = 128;
-			sysctlbyname("machdep.cpu.brand_string", &buffer, &buffer_len, nullptr, 0);
+			sysctlbyname(LAMBDA_CPU_NAME_KEY, &buffer, &buffer_len, nullptr, 0);
 			return {buffer};
 #else
 			std::ifstream cpuinfo;
@@ -461,6 +470,8 @@ namespace lambdacommon
 		SysArchitecture LAMBDACOMMON_API get_processor_arch()
 		{
 			if (lstring::equals(get_processor_arch_str(), "x86_64"))
+				return SysArchitecture::X86_64;
+			else if (lstring::equals(get_processor_arch_str(), "amd64"))
 				return SysArchitecture::X86_64;
 			else if (lstring::equals(get_processor_arch_str(), "i386"))
 				return SysArchitecture::I386;
@@ -490,16 +501,23 @@ namespace lambdacommon
 
 		uint64_t LAMBDACOMMON_API get_memory_total()
 		{
-#  ifdef _SC_PHYS_PAGES
+#ifdef _SC_PHYS_PAGES
 			long pages = sysconf(_SC_PHYS_PAGES);
 			long page_size = sysconf(_SC_PAGESIZE);
 			return static_cast<uint64_t>(pages * page_size);
-#  else
+#elif defined(LAMBDA_MEM_TOTAL_KEY)
+			uint64_t mem;
+			size_t len = sizeof(mem);
+			int mib[2];
+			mib[0] = CTL_HW;
+			mib[1] = LAMBDA_MEM_TOTAL_KEY;
+			sysctl(mib, 2, &size, &len, nullptr, 0);
+#else
 			uint64_t mem;
 			size_t len = sizeof(mem);
 			sysctlbyname("hw.memsize", &mem, &len, nullptr, 0);
 			return mem / sysconf(_SC_PAGE_SIZE);
-#  endif
+#endif
 		}
 
 		uint64_t LAMBDACOMMON_API get_memory_available()
@@ -515,6 +533,17 @@ namespace lambdacommon
 			count = sizeof(vm_stats) / sizeof(natural_t);
 			if (KERN_SUCCESS == host_page_size(mach_port, &page_size) && KERN_SUCCESS == host_statistics64(mach_port, HOST_VM_INFO, (host_info64_t) &vm_stats, &count))
 				mem_free = static_cast<uint64_t>(vm_stats.free_count * page_size);
+#elif defined(LAMBDA_FREEBSD) || defined(LAMBDA_DRAGONFLY)
+			long page_size = sysconf(_SC_PAGESIZE);
+			uint64_t mem_inactive, mem_unused, mem_cache;
+			size_t mem_inactive_len = sizeof(mem_inactive), mem_unused_len = sizeof(mem_unused), mem_cache_len = sizeof(mem_cache);
+			sysctlbyname("vm.stats.vm.v_inactive_count", &mem_inactive, &mem_inactive_len, nullptr, 0);
+			sysctlbyname("vm.stats.vm.v_free_count", &mem_unused, &mem_unused_len, nullptr, 0);
+			sysctlbyname("vm.stats.vm.v_cache_count", &mem_cache, &mem_cache_len, nullptr, 0);
+			mem_inactive *= page_size;
+			mem_unused *= page_size;
+			mem_cache *= page_size;
+			mem_free = (mem_inactive + mem_unused + mem_cache);
 #else
 			std::ifstream meminfo;
 			meminfo.open("/proc/meminfo", std::ios::in);
@@ -523,12 +552,7 @@ namespace lambdacommon
 				std::string last;
 
 				while (meminfo >> last) {
-					if (lstring::equals_ignore_case(last, "MemAvailable:")) {
-						meminfo >> mem_free;
-						// kB to B
-						mem_free = mem_free * 1024;
-						break;
-					} else if (lstring::equals_ignore_case(last, "MemFree:")) {
+					if (lstring::equals_ignore_case(last, "MemAvailable:") || lstring::equals_ignore_case(last, "MemFree:")) {
 						meminfo >> mem_free;
 						// kB to B
 						mem_free = mem_free * 1024;
