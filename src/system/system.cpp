@@ -534,15 +534,13 @@ namespace lambdacommon
 			if (KERN_SUCCESS == host_page_size(mach_port, &page_size) && KERN_SUCCESS == host_statistics64(mach_port, HOST_VM_INFO, (host_info64_t) &vm_stats, &count))
 				mem_free = static_cast<uint64_t>(vm_stats.free_count * page_size);
 #elif defined(LAMBDA_FREEBSD) || defined(LAMBDA_DRAGONFLY)
-			long page_size;
-			size_t page_size_len = sizeof(page_size);
-			sysctlbyname("hw.pagesize", &page_size, &page_size_len, nullptr, 0);
-			uint64_t mem_inactive, mem_unused, mem_cache;
+			long page_size = sysconf(_SC_PAGESIZE);
+			uint32_t mem_inactive, mem_unused, mem_cache;
 			size_t mem_inactive_len = sizeof(mem_inactive), mem_unused_len = sizeof(mem_unused), mem_cache_len = sizeof(mem_cache);
 			sysctlbyname("vm.stats.vm.v_inactive_count", &mem_inactive, &mem_inactive_len, nullptr, 0);
 			sysctlbyname("vm.stats.vm.v_free_count", &mem_unused, &mem_unused_len, nullptr, 0);
 			sysctlbyname("vm.stats.vm.v_cache_count", &mem_cache, &mem_cache_len, nullptr, 0);
-			mem_free = page_size * (mem_inactive + mem_unused + mem_cache);
+			mem_free = static_cast<uint64_t>(page_size * (mem_inactive + mem_unused + mem_cache));
 #else
 			std::ifstream meminfo;
 			meminfo.open("/proc/meminfo", std::ios::in);

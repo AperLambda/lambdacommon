@@ -47,7 +47,7 @@ Works on:
 | Linux     |        ✔       |
 | Android   |   ⚠ Partial ⚠  |
 | iOS       |        ❌       |
-| FreeBSD   |    👷‍ WIP 👷‍   |
+| FreeBSD   |        ✔       |
 | OpenBSD   | ⚠ Not tested ⚠ |
 | NetBSD    | ⚠ Not tested ⚠ |
 | DragonFly | ⚠ Not tested ⚠ |
