@@ -541,7 +541,7 @@ namespace lambdacommon
 			sysctlbyname("vm.stats.vm.v_free_count", &mem_unused, &mem_unused_len, nullptr, 0);
 			sysctlbyname("vm.stats.vm.v_cache_count", &mem_cache, &mem_cache_len, nullptr, 0);
 			mem_free = static_cast<uint64_t>(page_size * (mem_inactive + mem_unused + mem_cache));
-#else
+#elif !defined(LAMBDA_WASM)
 			std::ifstream meminfo;
 			meminfo.open("/proc/meminfo", std::ios::in);
 

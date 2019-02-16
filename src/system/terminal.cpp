@@ -31,7 +31,7 @@ namespace lambdacommon
 {
 	namespace terminal
 	{
-		bool use_ansi_escape_codes = false;
+		bool _use_ansi_escape_codes = false;
 		bool _has_utf8 = false;
 
 		/*
@@ -198,7 +198,7 @@ namespace lambdacommon
 		{
 			if (is_tty(stream)) {
 #ifdef WIN_FRIENDLY
-				if (!use_ansi_escape_codes) {
+				if (!_use_ansi_escape_codes) {
 					for (auto format : term_formatting) {
 						switch (format) {
 							case RESET:
@@ -313,6 +313,8 @@ namespace lambdacommon
 			} else
 				goto write_ansi;
 			write_ansi:
+			if (!_use_ansi_escape_codes)
+				return stream;
 			std::string ansi_sequence{((char) 0x1B)};
 			ansi_sequence += "[";
 			auto formattings = term_formatting.size();
@@ -336,13 +338,14 @@ namespace lambdacommon
 
 		void erase_current_line_ansi(std::ostream &stream)
 		{
-			stream << "\033[2K";
+			if (_use_ansi_escape_codes)
+				stream << "\033[2K";
 		}
 
 		std::ostream LAMBDACOMMON_API &erase_current_line(std::ostream &stream)
 		{
 #ifdef WIN_FRIENDLY
-			if (use_ansi_escape_codes) {
+			if (_use_ansi_escape_codes) {
 				erase_current_line_ansi(stream);
 				stream << '\r';
 			} else {
@@ -370,7 +373,8 @@ namespace lambdacommon
 				return stream;
 			}
 #endif
-			stream << "\033[2J";
+			if (_use_ansi_escape_codes)
+				stream << "\033[2J";
 			return stream;
 		}
 
@@ -474,7 +478,8 @@ namespace lambdacommon
 				return;
 			}
 #endif
-			stream << ("\033[" + std::to_string(y) + ';' + std::to_string(x) + "H");
+			if (_use_ansi_escape_codes)
+				stream << ("\033[" + std::to_string(y) + ';' + std::to_string(x) + "H");
 		}
 
 		/*
@@ -499,12 +504,13 @@ namespace lambdacommon
 				if (DWORD dw_mode = 0; GetConsoleMode(h_out, &dw_mode)) {
 					dw_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 					if (SetConsoleMode(h_out, dw_mode))
-						use_ansi_escape_codes = true;
+						_use_ansi_escape_codes = true;
 				}
 			}
-			if (!use_ansi_escape_codes)
+			if (!_use_ansi_escape_codes)
 				ok = false;
-#else
+#elif !defined(LAMBDA_WASM)
+			_use_ansi_escape_codes = true;
 #endif
 			if (!use_utf8())
 				ok = false;
@@ -556,7 +562,8 @@ namespace lambdacommon
 			if (is_tty(stream))
 				return (bool) SetConsoleTitle(TEXT(title.c_str()));
 #endif
-			stream << ("\033]0;" + title + "\007");
+			if (_use_ansi_escape_codes)
+				stream << ("\033]0;" + title + "\007");
 			return true;
 		}
 

@@ -29,30 +29,33 @@ Features:
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/lambdacommon.svg)](https://repology.org/metapackage/lambdacommon)
 
-Works on:
- - Architectures:
-   * i686
-   * amd64
-   * ARMv7
-   * ARMv8
-   * riscv32
-   * riscv64
-
 ## Compatibility table
 
-| OS        |  Compatibility |
-|-----------|:--------------:|
-| Windows   |        ✔       |
-| Mac OSX   |        ✔       |
-| Linux     |        ✔       |
-| Android   |   ⚠ Partial ⚠  |
-| iOS       |        ❌       |
-| FreeBSD   |        ✔       |
-| OpenBSD   | ⚠ Not tested ⚠ |
-| NetBSD    | ⚠ Not tested ⚠ |
-| DragonFly | ⚠ Not tested ⚠ |
-| Solaris   |  ❌ Not tested  |
-| Haiku     |        ❌       |
+| OS          |  Compatibility |
+|-------------|:--------------:|
+| Windows     |        ✔       |
+| Mac OSX     |        ✔       |
+| Linux       |        ✔       |
+| Android     |        ⚠       |
+| iOS         |        ❌       |
+| WebAssembly |        ⚠       |
+| FreeBSD     |        ✔       |
+| OpenBSD     | ⚠ Not tested ⚠ |
+| NetBSD      | ⚠ Not tested ⚠ |
+| DragonFly   | ⚠ Not tested ⚠ |
+| Solaris     |  ❌ Not tested  |
+| Haiku       |        ❌       |
+✔: Supported
+⚠: Partial support / Not tested
+❌: Not working
+
+on: 
+ - i686
+ - amd64
+ - ARMv7
+ - ARMv8
+ - riscv32
+ - riscv64
 
 ## Quick example
 
@@ -114,6 +117,10 @@ Include the source files in your project.
 Please install from source.
 
 The CMake command will change a bit, please use `cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE="Release" ..` instead.
+
+### BSD systems
+
+Install from source. Other than FreeBSD may not work correctly.
 
 ### From source
 

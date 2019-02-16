@@ -25,6 +25,9 @@
 #  define LAMBDA_MAC_OSX
 #elif defined(__ANDROID__)
 #  define LAMBDA_ANDROID
+#elif defined(__EMSCRIPTEN__)
+#  define LAMBDA_WASM
+#  define LAMBDA_EMSCRIPTEN
 #elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__DragonFly__)
 #  define LAMBDA_BSD
 #  ifdef __FreeBSD__
