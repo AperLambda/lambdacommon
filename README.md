@@ -45,6 +45,7 @@ Features:
 | DragonFly   | ⚠ Not tested ⚠ |
 | Solaris     |  ❌ Not tested  |
 | Haiku       |        ❌       |
+
 ✔: Supported
 ⚠: Partial support / Not tested
 ❌: Not working
@@ -128,4 +129,4 @@ Build the sources with CMake and make and install with `make install`, and keep 
 
 ## Use in CMake
 
-Use `Findlambdacommon.cmake` in [LambdaCMakeModules](https://github.com/AperLambda/LambdaCMakeModules.git) to find λcommon on your computer.
+Use `Findlambdacommon.cmake` in [LambdaCMakeModules](https://github.com/LambdAurora/lcmm.git) to find λcommon on your computer.
