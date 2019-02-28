@@ -332,10 +332,10 @@ namespace lambdacommon
             /*! @brief Modifies file access permissions.
              *
              * Changes access permissions of the file to which the path resolves. Symlinks are followed unless {@code perm_options::nofollow} is set in opts.
-             * @param perms Permissions to set, add, or remove.
+             * @param prms Permissions to set, add, or remove.
              * @param opts Options controlling the action taken by this function.
              */
-            void permissions(perms perms, perm_options opts = perm_options::replace);
+            void permissions(perms prms, perm_options opts = perm_options::replace);
 
             /*! @brief Modifies file access permissions.
              *
@@ -351,11 +351,11 @@ namespace lambdacommon
             /*! @brief Modifies file access permissions.
              *
              * Changes access permissions of the file to which the path resolves. Symlinks are followed unless {@code perm_options::nofollow} is set in opts.
-             * @param perms Permissions to set, add, or remove.
+             * @param prms Permissions to set, add, or remove.
              * @param opts Options controlling the action taken by this function.
              * @param ec Error code.
              */
-            void permissions(perms perms, perm_options opts, std::error_code &ec);
+            void permissions(perms prms, perm_options opts, std::error_code &ec);
 
             /*! @brief Obtains the target of a symbolic link.
              *

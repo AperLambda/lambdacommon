@@ -482,15 +482,15 @@ namespace lambdacommon
             return this->status(ec).type;
         }
 
-        void FilePath::permissions(perms perms, perm_options opts)
+        void FilePath::permissions(perms prms, perm_options opts)
         {
             std::error_code ec;
-            this->permissions(perms, opts, ec);
+            this->permissions(prms, opts, ec);
             if (ec)
                 throw filesystem_error(get_sys_error_txt(ec.value()), *this, ec);
         }
 
-        void FilePath::permissions(perms perms, perm_options opts, std::error_code &ec)
+        void FilePath::permissions(perms prms, perm_options opts, std::error_code &ec)
         {
             if (static_cast<int>(opts & (perm_options::replace | perm_options::add | perm_options::remove)) == 0) {
                 ec = std::error_code(ERROR_INVALID_PARAMETER, std::system_category());
@@ -499,19 +499,19 @@ namespace lambdacommon
             auto fs = this->symlink_status(ec);
             if ((opts & perm_options::replace) != perm_options::replace) {
                 if ((opts & perm_options::add) == perm_options::add)
-                    perms = fs.perms | perms;
+                    prms = fs.perms | prms;
                 else
-                    perms = fs.perms & ~perms;
+                    prms = fs.perms & ~prms;
             }
 #ifdef LAMBDA_WINDOWS
             int mode = 0;
-            if ((perms & perms::owner_read) == perms::owner_read) mode |= _S_IREAD;
-            if ((perms & perms::owner_write) == perms::owner_write) mode |= _S_IWRITE;
+            if ((prms & perms::owner_read) == perms::owner_read) mode |= _S_IREAD;
+            if ((prms & perms::owner_write) == perms::owner_write) mode |= _S_IWRITE;
             if (::_wchmod(this->c_str(), mode) != 0)
                 ec = std::error_code(static_cast<int>(::GetLastError()), std::system_category());
 #else
             if ((opts & perm_options::nofollow) != perm_options::nofollow)
-                if (::chmod(this->c_str(), static_cast<mode_t>(perms)) != 0)
+                if (::chmod(this->c_str(), static_cast<mode_t>(prms)) != 0)
                     ec = std::error_code(errno, std::system_category());
 #endif
         }
