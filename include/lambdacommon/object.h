@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -14,18 +14,24 @@
 
 namespace lambdacommon
 {
-	/*!
-	 * Represents an object.
-	 */
-	class LAMBDACOMMON_API Object
-	{
-	public:
-		/*!
-		 * Gets the object as a string.
-		 * @return The object as a string.
-		 */
-		virtual std::string to_string() const = 0;
-	};
+    /*!
+     * Represents an object.
+     */
+    class LAMBDACOMMON_API Object
+    {
+    public:
+        /*!
+         * Gets the object as a string.
+         * @return The object as a string.
+         */
+        virtual std::string to_string() const = 0;
+
+        /*!
+         * Gets the object as a wide char string.
+         * @return The object as a wide char string.
+         */
+        virtual std::wstring to_wstring() const;
+    };
 }
 
 #endif //LAMBDACOMMON_OBJECT_H

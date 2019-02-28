@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -20,37 +20,70 @@
 
 namespace lambdacommon
 {
-	/*!
-	 * Path
-	 *
-	 * Represents a path.
-	 */
-	class LAMBDACOMMON_API Path : public Object
-	{
-	protected:
-		std::vector<std::string> _path;
+    using namespace std::rel_ops;
 
-	public:
-		Path();
+    /*!
+     * Represents a path.
+     */
+    class LAMBDACOMMON_API Path : public Object
+    {
+    public:
+        /*!
+         * Clears the current path.
+         */
+        virtual void clear() noexcept = 0;
 
-		Path(std::vector<std::string> path);
+        /*!
+         * Checks whether the path is empty or not.
+         * @return True if the path is empty, else false.
+         */
+        virtual bool empty() const = 0;
 
-		Path(const Path &path);
+        /*!
+         * Checks whether the path is absolute or relative.
+         * @return True if the path is absolute, else false.
+         */
+        virtual bool is_absolute() const = 0;
+    };
 
-		Path(Path &&path) noexcept;
+    class LAMBDACOMMON_API AbstractPath : public Path
+    {
+    protected:
+        std::string _path;
 
-		virtual ~Path();
+    public:
+        AbstractPath();
 
-		/*!
-		 * Gets the path value.
-		 * @return The path value.
-		 */
-		const std::vector<std::string> &get_path() const;
+        AbstractPath(std::string path);
 
-		virtual std::string to_string() const;
+        AbstractPath(const AbstractPath &other);
 
-		virtual std::string to_string(char delimiter = '/') const;
-	};
+        AbstractPath(AbstractPath &&other) noexcept;
+
+        void append(const std::string &path);
+
+        void append(const AbstractPath &path);
+
+        void clear() noexcept override;
+
+        /*!
+         * Gets the path value.
+         * @return The path value.
+         */
+        virtual const std::string &get_path() const;
+
+        bool empty() const override;
+
+        bool is_absolute() const override;
+
+        std::string to_string() const override;
+
+        virtual std::string to_string(char delimiter = '/') const;
+
+        bool operator==(const AbstractPath &other) const;
+
+        bool operator<(const AbstractPath &other) const;
+    };
 }
 
 #endif //LAMBDACOMMON_PATH_H
