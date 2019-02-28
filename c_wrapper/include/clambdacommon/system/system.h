@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -26,16 +26,16 @@ extern "C" {
  */
 enum lc_SysArchitecture
 {
-	LC_ARCH_ARM,
-	LC_ARCH_ARM64,
-	LC_ARCH_ARMv7,
-	LC_ARMv8_32,
-	LC_ARMv8_64,
-	LC_ARCH_I386,
-	LC_RISCV32,
-	LC_RISCV64,
-	LC_ARCH_X86_64,
-	LC_ARCH_UNKNOWN
+    LC_ARCH_ARM,
+    LC_ARCH_ARM64,
+    LC_ARCH_ARMv7,
+    LC_ARMv8_32,
+    LC_ARMv8_64,
+    LC_ARCH_I386,
+    LC_RISCV32,
+    LC_RISCV64,
+    LC_ARCH_X86_64,
+    LC_ARCH_UNKNOWN
 };
 typedef enum lc_SysArchitecture lc_SysArchitecture;
 

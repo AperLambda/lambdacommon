@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -11,6 +11,7 @@
 #define CLAMBDACOMMON_TERMINAL_H
 
 #include "../clambdacommon.h"
+#include <inttypes.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,72 +19,74 @@ extern "C" {
 
 enum lc_TermFormatting
 {
-	/*
-	 * RESET
-	 */
-	LC_TERM_RESET = 0,
-	/*
-	 * SET
-	 */
-	LC_TERM_BOLD = 1,
-	LC_TERM_DIM = 2,
-	LC_TERM_UNDERLINED = 4,
-	LC_TERM_BLINK = 5,
-	LC_TERM_REVERSE = 7,
-	LC_TERM_HIDDEN = 8,
-	/*
-	 * Foreground
-	 */
-	LC_TERM_DEFAULT_FCOLOR = 39,
-	LC_TERM_BLACK = 30,
-	LC_TERM_RED = 31,
-	LC_TERM_GREEN = 32,
-	LC_TERM_YELLOW = 33,
-	LC_TERM_BLUE = 34,
-	LC_TERM_MAGENTA = 35,
-	LC_TERM_CYAN = 36,
-	LC_TERM_LIGHT_GRAY = 37,
-	LC_TERM_DARK_GRAY = 90,
-	LC_TERM_LIGHT_RED = 91,
-	LC_TERM_LIGHT_GREEN = 92,
-	LC_TERM_LIGHT_YELLOW = 93,
-	LC_TERM_LIGHT_BLUE = 94,
-	LC_TERM_LIGHT_MAGENTA = 95,
-	LC_TERM_LIGHT_CYAN = 96,
-	LC_TERM_WHITE = 97,
-	/*
-	 * Background
-	 */
-	LC_TERM_DEFAULT_BCOLOR = 49,
-	LC_TERM_B_BLACK = 40,
-	LC_TERM_B_RED = 41,
-	LC_TERM_B_GREEN = 42,
-	LC_TERM_B_YELLOW = 43,
-	LC_TERM_B_BLUE = 44,
-	LC_TERM_B_MAGENTA = 45,
-	LC_TERM_B_CYAN = 46,
-	LC_TERM_B_LIGHT_GRAY = 47,
-	LC_TERM_B_DARK_GRAY = 100,
-	LC_TERM_B_LIGHT_RED = 101,
-	LC_TERM_B_LIGHT_GREEN = 102,
-	LC_TERM_B_LIGHT_YELLOW = 103,
-	LC_TERM_B_LIGHT_BLUE = 104,
-	LC_TERM_B_LIGHT_MAGENTA = 105,
-	LC_TERM_B_LIGHT_CYAN = 106,
-	LC_TERM_B_WHITE = 107
+    /*
+     * RESET
+     */
+    LC_TERM_RESET = 0,
+    /*
+     * SET
+     */
+    LC_TERM_BOLD = 1,
+    LC_TERM_DIM = 2,
+    LC_TERM_UNDERLINED = 4,
+    LC_TERM_BLINK = 5,
+    LC_TERM_REVERSE = 7,
+    LC_TERM_HIDDEN = 8,
+    /*
+     * Foreground
+     */
+    LC_TERM_DEFAULT_FCOLOR = 39,
+    LC_TERM_BLACK = 30,
+    LC_TERM_RED = 31,
+    LC_TERM_GREEN = 32,
+    LC_TERM_YELLOW = 33,
+    LC_TERM_BLUE = 34,
+    LC_TERM_MAGENTA = 35,
+    LC_TERM_CYAN = 36,
+    LC_TERM_LIGHT_GRAY = 37,
+    LC_TERM_DARK_GRAY = 90,
+    LC_TERM_LIGHT_RED = 91,
+    LC_TERM_LIGHT_GREEN = 92,
+    LC_TERM_LIGHT_YELLOW = 93,
+    LC_TERM_LIGHT_BLUE = 94,
+    LC_TERM_LIGHT_MAGENTA = 95,
+    LC_TERM_LIGHT_CYAN = 96,
+    LC_TERM_WHITE = 97,
+    /*
+     * Background
+     */
+    LC_TERM_DEFAULT_BCOLOR = 49,
+    LC_TERM_B_BLACK = 40,
+    LC_TERM_B_RED = 41,
+    LC_TERM_B_GREEN = 42,
+    LC_TERM_B_YELLOW = 43,
+    LC_TERM_B_BLUE = 44,
+    LC_TERM_B_MAGENTA = 45,
+    LC_TERM_B_CYAN = 46,
+    LC_TERM_B_LIGHT_GRAY = 47,
+    LC_TERM_B_DARK_GRAY = 100,
+    LC_TERM_B_LIGHT_RED = 101,
+    LC_TERM_B_LIGHT_GREEN = 102,
+    LC_TERM_B_LIGHT_YELLOW = 103,
+    LC_TERM_B_LIGHT_BLUE = 104,
+    LC_TERM_B_LIGHT_MAGENTA = 105,
+    LC_TERM_B_LIGHT_CYAN = 106,
+    LC_TERM_B_WHITE = 107
 };
 typedef enum lc_TermFormatting lc_TermFormatting;
 
 struct lc_TermSize
 {
-	unsigned short columns;
-	unsigned short rows;
+    uint16_t columns;
+    uint16_t rows;
 };
 typedef struct lc_TermSize lc_TermSize;
 
 void lc_term_set_format(lc_TermFormatting formatting);
 
 void lc_term_set_formats(int count, ...);
+
+void lc_term_erase_current_line();
 
 void lc_term_clear();
 
@@ -92,7 +95,7 @@ void lc_term_clear();
  * @param x The x position.
  * @param y The y position.
  */
-void lc_term_set_cursor_position(unsigned short x, unsigned short y);
+void lc_term_set_cursor_position(uint16_t x, uint16_t y);
 
 /*
  * Sound manipulations

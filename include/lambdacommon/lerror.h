@@ -7,22 +7,24 @@
  * see the LICENSE file.
  */
 
-#ifndef LAMBDACOMMON_EXCEPTIONS_H
-#define LAMBDACOMMON_EXCEPTIONS_H
+#ifndef LAMBDACOMMON_LEXCEPTION_H
+#define LAMBDACOMMON_LEXCEPTION_H
 
 #include <exception>
 #include <string>
-#include <utility>
 
 namespace lambdacommon
 {
-    class ParseException : public std::exception
+    class unsupported_operation_error : public std::exception
     {
     private:
         std::string _msg;
 
     public:
-        explicit ParseException(std::string msg) : _msg(std::move(msg))
+        unsupported_operation_error(std::string message) : _msg(std::move(message))
+        {}
+
+        unsupported_operation_error(const char *message) : _msg(message)
         {}
 
         const char *what() const noexcept override
@@ -32,4 +34,4 @@ namespace lambdacommon
     };
 }
 
-#endif //LAMBDACOMMON_EXCEPTIONS_H
+#endif //LAMBDACOMMON_LEXCEPTION_H

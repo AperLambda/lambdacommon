@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -12,20 +12,20 @@
 
 double lc_maths_radians(double degrees)
 {
-	return lambdacommon::maths::radians(degrees);
+    return lambdacommon::maths::radians(degrees);
 }
 
 float lc_maths_fradians(float degrees)
 {
-	return lambdacommon::maths::radians(degrees);
+    return lambdacommon::maths::radians(degrees);
 }
 
 double lc_maths_degrees(double radians)
 {
-	return lambdacommon::maths::degrees(radians);
+    return lambdacommon::maths::degrees(radians);
 }
 
 float lc_maths_fdegrees(float radians)
 {
-	return lambdacommon::maths::degrees(radians);
+    return lambdacommon::maths::degrees(radians);
 }

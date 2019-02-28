@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -59,21 +59,21 @@
 
 namespace lambdacommon
 {
-	class Nullable
-	{
-	public:
-		/*!
-		 * Checks whether the object is null.
-		 * @return True if the object is null, else false.
-		 */
-		virtual bool is_null() const = 0;
-	};
+    class Nullable
+    {
+    public:
+        /*!
+         * Checks whether the object is null.
+         * @return True if the object is null, else false.
+         */
+        virtual bool is_null() const = 0;
+    };
 
-	/*!
-	 * Gets the runtime version of lambdacommon as a string.
-	 * @return The runtime version of lambdacommon.
-	 */
-	extern std::string LAMBDACOMMON_API get_version();
+    /*!
+     * Gets the runtime version of lambdacommon as a string.
+     * @return The runtime version of lambdacommon.
+     */
+    extern std::string LAMBDACOMMON_API get_version();
 }
 
 #endif //LAMBDACOMMON_LIBRARY_H

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -14,15 +14,15 @@
 
 namespace lambdacommon
 {
-	/*!
-	 * Represents the current status of a device.
-	 */
-	enum DeviceStatus
-	{
-		CONNECTED    = true,
-		DISCONNECTED = false,
-		WAITING      = 2
-	};
+    /*!
+     * Represents the current status of a device.
+     */
+    enum DeviceStatus
+    {
+        CONNECTED    = true,
+        DISCONNECTED = false,
+        WAITING      = 2
+    };
 }
 
 #endif //LAMBDACOMMON_DEVICES_H

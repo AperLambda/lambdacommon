@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -13,9 +13,9 @@
 
 const char *lc_get_version()
 {
-	static char version[10];
-	lambdacommon::get_version().copy(version, 10);
-	return version;
+    static char version[10];
+    lambdacommon::get_version().copy(version, 10);
+    return version;
 }
 
 #ifdef __clang__
@@ -28,8 +28,8 @@ const char *lc_get_version()
 
 void lc_delete_pointer(void **pointer)
 {
-	delete *pointer;
-	*pointer = nullptr;
+    delete *pointer;
+    *pointer = nullptr;
 }
 
 #ifdef __clang__

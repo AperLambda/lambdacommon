@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -22,16 +22,16 @@ extern "C" {
  */
 enum lc_sys_OS
 {
-	LC_OS_WINDOWS_32 = 1,
-	LC_OS_WINDOWS_64 = 2,
-	LC_OS_MAC_OSX = 3,
-	LC_OS_LINUX = 5,
-	LC_OS_FREEBSD = 6,
-	LC_OS_NETBSD = 7,
-	LC_OS_OPENBSD = 8,
-	LC_OS_ANDROID = 100,
-	LC_OS_CYGWIN = 11,
-	LC_OS_OS_UNKNOWN = 0
+    LC_OS_WINDOWS_32 = 1,
+    LC_OS_WINDOWS_64 = 2,
+    LC_OS_MAC_OSX = 3,
+    LC_OS_LINUX = 5,
+    LC_OS_FREEBSD = 6,
+    LC_OS_NETBSD = 7,
+    LC_OS_OPENBSD = 8,
+    LC_OS_ANDROID = 100,
+    LC_OS_CYGWIN = 11,
+    LC_OS_OS_UNKNOWN = 0
 };
 typedef enum lc_sys_OS lc_sys_OS;
 

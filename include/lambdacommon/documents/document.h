@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -15,13 +15,13 @@
 
 namespace lambdacommon
 {
-	class LAMBDACOMMON_API Element
-	{
-	};
+    class LAMBDACOMMON_API Element
+    {
+    };
 
-	class LAMBDACOMMON_API Document
-	{
-	};
+    class LAMBDACOMMON_API Document
+    {
+    };
 }
 
 #endif //LAMBDACOMMON_DOCUMENT_H

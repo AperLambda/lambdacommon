@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -12,5 +12,5 @@
 
 time_t lc_time_get_time_millis()
 {
-	return lambdacommon::time::get_time_millis();
+    return lambdacommon::time::get_time_millis();
 }

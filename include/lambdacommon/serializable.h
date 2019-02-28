@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 AperLambda <aperlambda@gmail.com>
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
  *
  * This file is part of λcommon.
  *
@@ -15,10 +15,10 @@
 
 namespace lambdacommon
 {
-	namespace serializable
-	{
-		extern std::vector<std::string> LAMBDACOMMON_API tokenize(const std::string &_string, const std::string &delim);
-	}
+    namespace serializable
+    {
+        extern std::vector<std::string> LAMBDACOMMON_API tokenize(const std::string &_string, const std::string &delim);
+    }
 }
 
 #endif //LAMBDACOMMON_SERIALIZABLE_H
