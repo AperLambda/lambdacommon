@@ -133,7 +133,7 @@ namespace lambdacommon
         struct file_status
         {
             file_type type;
-            perms perms;
+            perms prms;
         };
 
         using namespace std::rel_ops;
@@ -343,9 +343,9 @@ namespace lambdacommon
              * @param perms Permissions to set, add, or remove.
              * @param ec Error code.
              */
-            inline void permissions(perms perms, std::error_code &ec) noexcept
+            inline void permissions(perms prms, std::error_code &ec) noexcept
             {
-                this->permissions(perms, perm_options::replace, ec);
+                this->permissions(prms, perm_options::replace, ec);
             }
 
             /*! @brief Modifies file access permissions.

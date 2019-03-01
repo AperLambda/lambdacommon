@@ -499,9 +499,9 @@ namespace lambdacommon
             auto fs = this->symlink_status(ec);
             if ((opts & perm_options::replace) != perm_options::replace) {
                 if ((opts & perm_options::add) == perm_options::add)
-                    prms = fs.perms | prms;
+                    prms = fs.prms | prms;
                 else
-                    prms = fs.perms & ~prms;
+                    prms = fs.prms & ~prms;
             }
 #ifdef LAMBDA_WINDOWS
             int mode = 0;
