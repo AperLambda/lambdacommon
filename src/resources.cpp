@@ -115,7 +115,7 @@ namespace lambdacommon
      * FileResourcesManager
      */
 
-    FileResourcesManager::FileResourcesManager(fs::FilePath working_directory) : ResourcesManager(), _working_directory(std::move(working_directory))
+    FileResourcesManager::FileResourcesManager(fs::path working_directory) : ResourcesManager(), _working_directory(std::move(working_directory))
     {}
 
     FileResourcesManager::FileResourcesManager(const FileResourcesManager &other) = default;
@@ -125,7 +125,7 @@ namespace lambdacommon
         _id = other._id;
     }
 
-    const lambdacommon::fs::FilePath &FileResourcesManager::get_working_directory() const
+    const lambdacommon::fs::path &FileResourcesManager::get_working_directory() const
     {
         return _working_directory;
     }
@@ -140,7 +140,7 @@ namespace lambdacommon
         return get_resource_path(resource, extension).exists();
     }
 
-    lambdacommon::fs::FilePath FileResourcesManager::get_resource_path(const ResourceName &resource, const std::string &extension) const
+    lambdacommon::fs::path FileResourcesManager::get_resource_path(const ResourceName &resource, const std::string &extension) const
     {
         auto file = resource.get_name();
         if (!extension.empty())

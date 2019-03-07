@@ -153,10 +153,10 @@ namespace lambdacommon
     class LAMBDACOMMON_API FileResourcesManager : public ResourcesManager
     {
     private:
-        lambdacommon::fs::FilePath _working_directory;
+        lambdacommon::fs::path _working_directory;
 
     public:
-        explicit FileResourcesManager(lambdacommon::fs::FilePath working_directory = std::move(fs::current_path()));
+        explicit FileResourcesManager(lambdacommon::fs::path working_directory = std::move(fs::current_path()));
 
         FileResourcesManager(const FileResourcesManager &other);
 
@@ -166,13 +166,13 @@ namespace lambdacommon
          *
          * @return The working directory.
          */
-        const lambdacommon::fs::FilePath &get_working_directory() const;
+        const lambdacommon::fs::path &get_working_directory() const;
 
         bool has_resource(const ResourceName &resource) const override;
 
         bool has_resource(const ResourceName &resource, const std::string &extension) const override;
 
-        lambdacommon::fs::FilePath
+        lambdacommon::fs::path
         get_resource_path(const ResourceName &resource, const std::string &extension) const;
 
         std::string load_resource(const ResourceName &resource) const override;

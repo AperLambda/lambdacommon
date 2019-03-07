@@ -11,12 +11,17 @@
 #define LAMBDACOMMON_FS_H
 
 #include "../path.h"
+#include <memory>
 #include <system_error>
 
 namespace lambdacommon
 {
     namespace fs
     {
+        /*! @brief The type of a file.
+         *
+         * file_type defines constants that indicate a type of a file or directory a path refers to. The value of the enumerators are distinct.
+         */
         enum class file_type : int8_t
         {
             none = 0,
@@ -31,9 +36,9 @@ namespace lambdacommon
             unknown = 8
         };
 
-        /*!
-         * Represents file access permissions.
-         * Is `BitmaskType` compliant.
+        /*! @brief Represents file access permissions.
+         *
+         * This type represents file access permissions. perms satisfies the requirements of `BitmaskType`.
          */
         enum class perms : uint16_t
         {
@@ -138,11 +143,15 @@ namespace lambdacommon
 
         using namespace std::rel_ops;
 
-        class LAMBDACOMMON_API FilePath : public Path
+        /*! @brief Represents a path.
+         *
+         * Objects of type FilePath represent paths on a filesystem. Only syntactic aspects of paths are handled: the pathname may represent a non-existing path or even one that is not allowed to exist on the current file system or OS.
+         */
+        class LAMBDACOMMON_API path : public Path
         {
         public:
 #ifdef LAMBDA_WINDOWS
-            typedef wchar_t	value_type;
+            typedef wchar_t value_type;
             static constexpr value_type preferred_separator = L'\\';
 #else
             typedef char value_type;
@@ -154,22 +163,22 @@ namespace lambdacommon
             string_type _path;
 
         public:
-            FilePath();
+            path() = default;
 
-            FilePath(std::string path);
+            path(std::string path);
 
-            FilePath(std::wstring path);
+            path(std::wstring path);
 
-            FilePath(const FilePath &other);
+            path(const path &other);
 
-            FilePath(FilePath &&other) noexcept;
+            path(path &&other) noexcept;
 
-            FilePath &assign(string_type source);
+            path &assign(string_type source);
 
-            FilePath &assign(const FilePath &source);
+            path &assign(const path &source);
 
             template<class InputIterator>
-            FilePath &assign(InputIterator first, InputIterator last)
+            path &assign(InputIterator first, InputIterator last)
             {
                 _path.assign(first, last);
                 return *this;
@@ -177,28 +186,28 @@ namespace lambdacommon
 
             void clear() noexcept override;
 
-            FilePath &append(const FilePath &path);
+            path &append(const path &path);
 
             /*!
              * Returns the root name of the generic-format path. If the path (in generic format) does not include root name, returns `FilePath()`.
              * @return The root name of the path.
              */
-            FilePath root_name() const;
+            path root_name() const;
 
             /*!
              * Returns the root directory of the generic-format path. If the path (in generic format) does not include root directory, returns `path()`.
              * @return The root directory of the path.
              */
-            FilePath root_directory() const;
+            path root_directory() const;
 
             /*!
              * Returns the root path of the path. If the path foes not include root path, returns `path()`.
              * Effectively, returns the following `root_name() / root_directory()`.
              * @return The root path of the path.
              */
-            FilePath root_path() const;
+            path root_path() const;
 
-            FilePath relative_path() const;
+            path relative_path() const;
 
             bool empty() const override;
 
@@ -246,14 +255,6 @@ namespace lambdacommon
              */
             iterator end() const;
 
-            /*!
-             * Makes a new instance of FilePath with the absolute path.
-             * @return The absolute path.
-             */
-            FilePath to_absolute() const;
-
-            FilePath to_absolute(std::error_code &ec) const;
-
             std::string to_string() const override;
 
             std::wstring to_wstring() const override;
@@ -273,6 +274,19 @@ namespace lambdacommon
             const value_type *c_str() const noexcept;
 
             /*!
+             * Makes a new instance of FilePath with the absolute path.
+             * @return The absolute path.
+             */
+            path to_absolute() const;
+
+            /*!
+             * Makes a new instance of FilePath with the absolute path.
+             * @param ec Error code.
+             * @return The absolute path.
+             */
+            path to_absolute(std::error_code &ec) const;
+
+            /*!
              * Checks whether the path exists or not.
              * @return True if the path exists else false.
              */
@@ -282,13 +296,13 @@ namespace lambdacommon
              * Gets the generic-format filename component of the path.
              * @return The filename identified by the path.
              */
-            FilePath get_filename() const;
+            path get_filename() const;
 
             /*!
              * Gets the file extension.
              * @return The file extension.
              */
-            FilePath get_extension() const;
+            path get_extension() const;
 
             /*!
              * Determines the type and attributes of the filesystem object.
@@ -335,7 +349,7 @@ namespace lambdacommon
              * @param prms Permissions to set, add, or remove.
              * @param opts Options controlling the action taken by this function.
              */
-            void permissions(perms prms, perm_options opts = perm_options::replace);
+            void permissions(perms prms, perm_options opts = perm_options::replace) const;
 
             /*! @brief Modifies file access permissions.
              *
@@ -343,7 +357,7 @@ namespace lambdacommon
              * @param perms Permissions to set, add, or remove.
              * @param ec Error code.
              */
-            inline void permissions(perms prms, std::error_code &ec) noexcept
+            inline void permissions(perms prms, std::error_code &ec) const noexcept
             {
                 this->permissions(prms, perm_options::replace, ec);
             }
@@ -355,7 +369,7 @@ namespace lambdacommon
              * @param opts Options controlling the action taken by this function.
              * @param ec Error code.
              */
-            void permissions(perms prms, perm_options opts, std::error_code &ec);
+            void permissions(perms prms, perm_options opts, std::error_code &ec) const;
 
             /*! @brief Obtains the target of a symbolic link.
              *
@@ -364,7 +378,7 @@ namespace lambdacommon
              * The non-throwing overload returns an empty path on errors.
              * @return The target of the symlink (which may not necessarily exist).
              */
-            FilePath read_symlink() const;
+            path read_symlink() const;
 
             /*! @brief Obtains the target of a symbolic link.
              *
@@ -373,7 +387,55 @@ namespace lambdacommon
              * @param ec Error code.
              * @return The target of the symlink (which may not necessarily exist) if success, else an empty path on errors.
              */
-            FilePath read_symlink(std::error_code &ec) const;
+            path read_symlink(std::error_code &ec) const;
+
+            bool mkdir(perms prms = perms::all) const;
+
+            bool mkdir(std::error_code &ec) const noexcept;
+
+            bool mkdir(perms prms, std::error_code &ec) const noexcept;
+
+            bool mkdirs() const;
+
+            bool mkdirs(std::error_code &ec) const noexcept;
+
+            /*! @brief Moves or renames a file or directory.
+             *
+             * Moves or renames this filesystem object to `new_path` as if the POSIX rename.
+             * Rename fails if
+             *   - `new_path` ends with dot or with dot-dot.
+             *   - `new_path` names a non-existing directory ending with a directory separator.
+             *   - this path is a directory which is an ancestor of `new_path`.
+             * @param new_path Target path for the move/rename operation.
+             */
+            void move(const path &new_path) const;
+
+            /*! @brief Moves or renames a file or directory.
+             *
+             * Moves or renames this filesystem object to `new_path` as if the POSIX rename.
+             * Rename fails if
+             *   - `new_path` ends with dot or with dot-dot.
+             *   - `new_path` names a non-existing directory ending with a directory separator.
+             *   - this path is a directory which is an ancestor of `new_path`.
+             * @param new_path Target path for the move/rename operation.
+             * @param ec Out-parameter for error reporting.
+             */
+            void move(const path &new_path, std::error_code &ec) const noexcept;
+
+            /*! @brief Changes the size of a regular file by truncation or zero-fill.
+             *
+             * Changes the size of the regular file as if by POSIX truncate.
+             * @param size Size that the file will now have.
+             */
+            void resize_file(uintmax_t size) const;
+
+            /*! @brief Changes the size of a regular file by truncation or zero-fill.
+             *
+             * Changes the size of the regular file as if by POSIX truncate.
+             * @param size Size that the file will now have.
+             * @param ec Out-parameter for error reporting.
+             */
+            void resize_file(uintmax_t size, std::error_code &ec) const noexcept;
 
             /*!
              * Checks whether the path points to a directory.
@@ -401,50 +463,52 @@ namespace lambdacommon
 
             /*!
              * Deletes the file or the directory.
-             * @param recursive True if delete recursively, else false.
              */
-            bool remove(bool recursive = false);
+            bool remove() const;
 
-            inline bool remove_all()
-            { return remove(true); }
+            bool remove(std::error_code &ec) const noexcept;
 
-            bool operator==(const FilePath &other) const;
+            uintmax_t remove_all() const;
 
-            bool operator<(const FilePath &other) const;
+            uintmax_t remove_all(std::error_code &ec) const noexcept;
 
-            FilePath &operator=(const FilePath &other);
+            bool operator==(const path &other) const;
 
-            FilePath &operator=(FilePath &&other) noexcept;
+            bool operator<(const path &other) const;
 
-            FilePath &operator=(string_type source);
+            path &operator=(const path &other);
+
+            path &operator=(path &&other) noexcept;
+
+            path &operator=(string_type source);
 
             operator string_type() const;
 
-            FilePath &operator/=(const FilePath &other);
+            path &operator/=(const path &other);
 
-            FilePath &operator/=(const std::string &other);
+            path &operator/=(const std::string &other);
 
-            friend const FilePath operator/(FilePath self, const FilePath &to_append)
+            friend const path operator/(path self, const path &to_append)
             {
                 self /= to_append;
                 return self;
             }
 
-            friend const FilePath operator/(FilePath self, const std::string &to_append)
+            friend const path operator/(path self, const std::string &to_append)
             {
                 self /= to_append;
                 return self;
             }
         };
 
-        class LAMBDACOMMON_API FilePath::iterator
+        class LAMBDACOMMON_API path::iterator
         {
         public:
-            using value_type = const FilePath;
-            using difference_type = std::ptrdiff_t;
-            using pointer = const FilePath *;
-            using reference = const FilePath &;
             using iterator_category = std::bidirectional_iterator_tag;
+            using value_type = const path;
+            using difference_type = std::ptrdiff_t;
+            using pointer = const path *;
+            using reference = const path &;
 
             iterator();
 
@@ -475,29 +539,164 @@ namespace lambdacommon
             string_type::const_iterator _last;
             string_type::const_iterator _root;
             string_type::const_iterator _pos;
-            FilePath _current;
+            path _current;
         };
 
         /*!
          * Represents an exception object that is thrown on failure by the throwing overloads of the functions in the filesystem library.
          */
-        class filesystem_error : public std::system_error
+        class LAMBDACOMMON_API filesystem_error : public std::system_error
         {
         private:
             std::string _msg;
-            FilePath _p1, _p2;
+            path _p1, _p2;
 
         public:
             filesystem_error(const std::string &msg, std::error_code ec);
 
-            filesystem_error(const std::string &msg, const FilePath& p1, std::error_code ec);
+            filesystem_error(const std::string &msg, const path &p1, std::error_code ec);
 
-            filesystem_error(const std::string &msg, const FilePath& p1, const FilePath& p2, std::error_code ec);
+            filesystem_error(const std::string &msg, const path &p1, const path &p2, std::error_code ec);
 
-            const FilePath& path1() const noexcept;
+            const path &path1() const noexcept;
 
-            const FilePath& path2() const noexcept;
+            const path &path2() const noexcept;
         };
+
+        class LAMBDACOMMON_API directory_entry
+        {
+        private:
+            friend class directory_iterator;
+
+            path _path = {};
+
+        public:
+            directory_entry() noexcept = default;
+
+            explicit directory_entry(path p);
+
+            directory_entry(const directory_entry &) = default;
+
+            directory_entry(directory_entry &&) noexcept = default;
+
+            // Modifiers
+            void assign(path p);
+
+            // Observers
+            const path &get_path() const noexcept;
+
+            operator const path &() const noexcept;
+
+            file_status status() const;
+
+            file_status status(std::error_code &ec) const noexcept;
+
+            file_status symlink_status() const;
+
+            file_status symlink_status(std::error_code &ec) const noexcept;
+
+            // Operators
+            bool operator==(const directory_entry &other) const;
+
+            bool operator<(const directory_entry &other) const;
+
+            const path *operator->() const;
+
+            // Assignments
+            directory_entry &operator=(const directory_entry &) = default;
+
+            directory_entry &operator=(directory_entry &&) = default;
+        };
+
+        class LAMBDACOMMON_API directory_iterator
+        {
+        private:
+            class impl;
+
+            std::shared_ptr<impl> _impl;
+
+        public:
+            class proxy
+            {
+            private:
+                directory_entry _dir_entry;
+
+                friend class directory_iterator;
+
+                explicit proxy(const directory_entry &dir_entry) : _dir_entry(dir_entry)
+                {}
+
+            public:
+                const directory_entry &operator*() const & noexcept
+                { return _dir_entry; }
+
+                directory_entry operator*() && noexcept
+                { return std::move(_dir_entry); }
+            };
+
+            using iterator_category = std::input_iterator_tag;
+            using value_type = directory_entry;
+            using difference_type = std::ptrdiff_t;
+            using pointer = const directory_entry *;
+            using reference = const directory_entry &;
+
+            directory_iterator() noexcept;
+
+            explicit directory_iterator(path p);
+
+            directory_iterator(path p, std::error_code &ec) noexcept;
+
+            directory_iterator(const directory_iterator &) = default;
+
+            directory_iterator(directory_iterator &&) noexcept = default;
+
+            directory_iterator &operator++();
+
+            directory_iterator &increment(std::error_code &ec) noexcept;
+
+            proxy operator++(int)
+            {
+                proxy proxy{**this};
+                ++*this;
+                return proxy;
+            }
+
+            // Operators
+            bool operator==(const directory_iterator &other) const;
+
+            bool operator!=(const directory_iterator &other) const;
+
+            reference operator*() const;
+
+            pointer operator->() const;
+
+            void swap(directory_iterator &other);
+
+            // Assignements
+            directory_iterator &operator=(const directory_iterator &other);
+
+            directory_iterator &operator=(directory_iterator &&other);
+        };
+
+        inline directory_iterator begin(directory_iterator iter) noexcept
+        {
+            return std::move(iter);
+        }
+
+        inline directory_iterator end(const directory_iterator &) noexcept
+        {
+            return directory_iterator();
+        }
+
+        inline void move(const path &old_path, const path &new_path)
+        {
+            old_path.move(new_path);
+        }
+
+        inline void move(const path &old_path, const path &new_path, std::error_code &ec) noexcept
+        {
+            old_path.move(new_path, ec);
+        }
 
         /*!
          * Gets the current working directory as a wide string.
@@ -515,7 +714,7 @@ namespace lambdacommon
          * Gets the current working directory.
          * @return The current working directory.
          */
-        extern FilePath LAMBDACOMMON_API current_path();
+        extern path LAMBDACOMMON_API current_path();
     }
 }
 

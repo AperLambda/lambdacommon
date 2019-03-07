@@ -115,7 +115,7 @@ namespace lambdacommon
 
         extern std::string LAMBDACOMMON_API get_user_directory_str();
 
-        extern fs::FilePath LAMBDACOMMON_API get_user_directory();
+        extern fs::path LAMBDACOMMON_API get_user_directory();
 
         /*
          * Others

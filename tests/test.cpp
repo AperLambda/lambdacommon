@@ -7,6 +7,7 @@
 #include <lambdacommon/maths.h>
 #include <lambdacommon/maths/geometry/geometry.h>
 #include <functional>
+#include <fstream>
 
 using namespace lambdacommon;
 using namespace uri;
@@ -79,18 +80,18 @@ LC_TEST_SECTION(String)
 
 LC_TEST_SECTION(FileSystem)
 {
-    LC_TEST(fs_fp_exists, "FilePath::exists()")
+    LC_TEST(fs_fp_exists, "path::exists()")
     {
         REQUIRE(fs::current_path().exists());
-        REQUIRE(!fs::FilePath("404_non_existent").exists());
+        REQUIRE(!fs::path("404_non_existent").exists());
     }
 
-    LC_TEST(fs_fp_is_dir, "FilePath::is_directory()")
+    LC_TEST(fs_fp_is_dir, "path::is_directory()")
     {
         REQUIRE(fs::current_path().is_directory());
     }
 
-    LC_TEST(fs_fp_op, "FilePath / operator")
+    LC_TEST(fs_fp_op, "path / operator")
     {
         REQUIRE((fs::current_path() / "not_found_dir").get_filename().to_string() == "not_found_dir");
     }
@@ -110,7 +111,7 @@ LC_TEST_SECTION(URI)
                     "bar").to_string() == u8"https://user:pwd@something.com/test/file_or_folder?foo=bar&invalid%20query=but%20fixed&queryWithoutValue#bar");
     }
 
-    LC_TEST(uri_from_file_path, "URI::from_file_path(const fs::FilePath &)")
+    LC_TEST(uri_from_file_path, "URI::from_file_path(const fs::path &)")
     {
         REQUIRE(uri::from_file_path(std::move(fs::current_path())).to_string() == u8"file://" + fs::current_path().to_generic_string());
     }
