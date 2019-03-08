@@ -2,6 +2,7 @@
 #include <clambdacommon/system/system.h>
 #include <clambdacommon/lstring.h>
 #include <clambdacommon/resources.h>
+#include <clambdacommon/maths/geometry/point.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
