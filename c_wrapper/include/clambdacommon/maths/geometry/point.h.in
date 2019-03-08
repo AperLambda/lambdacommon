@@ -7,8 +7,8 @@
  * see the LICENSE file.
  */
 
-#ifndef LAMBDACOMMON_POINT_@LC_C_POINT_TYPE@_H
-#define LAMBDACOMMON_POINT_@LC_C_POINT_TYPE@_H
+#ifndef CLAMBDACOMMON_POINT_@LC_C_TYPE@_H
+#define CLAMBDACOMMON_POINT_@LC_C_TYPE@_H
 
 #include <inttypes.h>
 
@@ -18,62 +18,62 @@ extern "C" {
 #include <stdbool.h>
 #endif
 
-typedef struct lc_point1d_@LC_C_POINT_TYPE@ lc_point1d_@LC_C_POINT_TYPE@_t;
+typedef struct lc_point1d_@LC_C_TYPE@ lc_point1d_@LC_C_TYPE@_t;
 
-lc_point1d_@LC_C_POINT_TYPE@_t *lc_new_point1d_@LC_C_POINT_TYPE@(@LC_C_POINT_TYPE@ x);
+lc_point1d_@LC_C_TYPE@_t *lc_new_point1d_@LC_C_TYPE@(@LC_C_TYPE@ x);
 
-void lc_delete_point1d_@LC_C_POINT_TYPE@(lc_point1d_@LC_C_POINT_TYPE@_t *point);
+void lc_delete_point1d_@LC_C_TYPE@(lc_point1d_@LC_C_TYPE@_t *point);
 
-@LC_C_POINT_TYPE@ lc_point1d_@LC_C_POINT_TYPE@_get_x(const lc_point1d_@LC_C_POINT_TYPE@_t *point);
+@LC_C_TYPE@ lc_point1d_@LC_C_TYPE@_get_x(const lc_point1d_@LC_C_TYPE@_t *point);
 
-void lc_point1d_@LC_C_POINT_TYPE@_set_x(lc_point1d_@LC_C_POINT_TYPE@_t *point, @LC_C_POINT_TYPE@ x);
+void lc_point1d_@LC_C_TYPE@_set_x(lc_point1d_@LC_C_TYPE@_t *point, @LC_C_TYPE@ x);
 
-bool lc_point1d_@LC_C_POINT_TYPE@_is_null(const lc_point1d_@LC_C_POINT_TYPE@_t *point);
+bool lc_point1d_@LC_C_TYPE@_is_null(const lc_point1d_@LC_C_TYPE@_t *point);
 
-const char *lc_point1d_@LC_C_POINT_TYPE@_to_string(const lc_point1d_@LC_C_POINT_TYPE@_t *point);
+const char *lc_point1d_@LC_C_TYPE@_to_string(const lc_point1d_@LC_C_TYPE@_t *point);
 
-typedef struct lc_point2d_@LC_C_POINT_TYPE@ lc_point2d_@LC_C_POINT_TYPE@_t;
+typedef struct lc_point2d_@LC_C_TYPE@ lc_point2d_@LC_C_TYPE@_t;
 
-lc_point2d_@LC_C_POINT_TYPE@_t *lc_new_point2d_@LC_C_POINT_TYPE@(@LC_C_POINT_TYPE@ x, @LC_C_POINT_TYPE@ y);
+lc_point2d_@LC_C_TYPE@_t *lc_new_point2d_@LC_C_TYPE@(@LC_C_TYPE@ x, @LC_C_TYPE@ y);
 
-void lc_delete_point2d_@LC_C_POINT_TYPE@(lc_point2d_@LC_C_POINT_TYPE@_t *point);
+void lc_delete_point2d_@LC_C_TYPE@(lc_point2d_@LC_C_TYPE@_t *point);
 
-@LC_C_POINT_TYPE@ lc_point2d_@LC_C_POINT_TYPE@_get_x(const lc_point2d_@LC_C_POINT_TYPE@_t *point);
+@LC_C_TYPE@ lc_point2d_@LC_C_TYPE@_get_x(const lc_point2d_@LC_C_TYPE@_t *point);
 
-void lc_point2d_@LC_C_POINT_TYPE@_set_x(lc_point2d_@LC_C_POINT_TYPE@_t *point, @LC_C_POINT_TYPE@ x);
+void lc_point2d_@LC_C_TYPE@_set_x(lc_point2d_@LC_C_TYPE@_t *point, @LC_C_TYPE@ x);
 
-@LC_C_POINT_TYPE@ lc_point2d_@LC_C_POINT_TYPE@_get_y(const lc_point2d_@LC_C_POINT_TYPE@_t *point);
+@LC_C_TYPE@ lc_point2d_@LC_C_TYPE@_get_y(const lc_point2d_@LC_C_TYPE@_t *point);
 
-void lc_point2d_@LC_C_POINT_TYPE@_set_y(lc_point2d_@LC_C_POINT_TYPE@_t *point, @LC_C_POINT_TYPE@ y);
+void lc_point2d_@LC_C_TYPE@_set_y(lc_point2d_@LC_C_TYPE@_t *point, @LC_C_TYPE@ y);
 
-bool lc_point2d_@LC_C_POINT_TYPE@_is_null(const lc_point2d_@LC_C_POINT_TYPE@_t *point);
+bool lc_point2d_@LC_C_TYPE@_is_null(const lc_point2d_@LC_C_TYPE@_t *point);
 
-const char *lc_point2d_@LC_C_POINT_TYPE@_to_string(const lc_point2d_@LC_C_POINT_TYPE@_t *point);
+const char *lc_point2d_@LC_C_TYPE@_to_string(const lc_point2d_@LC_C_TYPE@_t *point);
 
-typedef struct lc_point3d_@LC_C_POINT_TYPE@ lc_point3d_@LC_C_POINT_TYPE@_t;
+typedef struct lc_point3d_@LC_C_TYPE@ lc_point3d_@LC_C_TYPE@_t;
 
-lc_point3d_@LC_C_POINT_TYPE@_t *lc_new_point3d_@LC_C_POINT_TYPE@(@LC_C_POINT_TYPE@ x, @LC_C_POINT_TYPE@ y, @LC_C_POINT_TYPE@ z);
+lc_point3d_@LC_C_TYPE@_t *lc_new_point3d_@LC_C_TYPE@(@LC_C_TYPE@ x, @LC_C_TYPE@ y, @LC_C_TYPE@ z);
 
-void lc_delete_point3d_@LC_C_POINT_TYPE@(lc_point3d_@LC_C_POINT_TYPE@_t *point);
+void lc_delete_point3d_@LC_C_TYPE@(lc_point3d_@LC_C_TYPE@_t *point);
 
-@LC_C_POINT_TYPE@ lc_point3d_@LC_C_POINT_TYPE@_get_x(const lc_point3d_@LC_C_POINT_TYPE@_t *point);
+@LC_C_TYPE@ lc_point3d_@LC_C_TYPE@_get_x(const lc_point3d_@LC_C_TYPE@_t *point);
 
-void lc_point3d_@LC_C_POINT_TYPE@_set_x(lc_point3d_@LC_C_POINT_TYPE@_t *point, @LC_C_POINT_TYPE@ x);
+void lc_point3d_@LC_C_TYPE@_set_x(lc_point3d_@LC_C_TYPE@_t *point, @LC_C_TYPE@ x);
 
-@LC_C_POINT_TYPE@ lc_point3d_@LC_C_POINT_TYPE@_get_y(const lc_point3d_@LC_C_POINT_TYPE@_t *point);
+@LC_C_TYPE@ lc_point3d_@LC_C_TYPE@_get_y(const lc_point3d_@LC_C_TYPE@_t *point);
 
-void lc_point3d_@LC_C_POINT_TYPE@_set_y(lc_point3d_@LC_C_POINT_TYPE@_t *point, @LC_C_POINT_TYPE@ y);
+void lc_point3d_@LC_C_TYPE@_set_y(lc_point3d_@LC_C_TYPE@_t *point, @LC_C_TYPE@ y);
 
-@LC_C_POINT_TYPE@ lc_point3d_@LC_C_POINT_TYPE@_get_z(const lc_point3d_@LC_C_POINT_TYPE@_t *point);
+@LC_C_TYPE@ lc_point3d_@LC_C_TYPE@_get_z(const lc_point3d_@LC_C_TYPE@_t *point);
 
-void lc_point3d_@LC_C_POINT_TYPE@_set_z(lc_point3d_@LC_C_POINT_TYPE@_t *point, @LC_C_POINT_TYPE@ z);
+void lc_point3d_@LC_C_TYPE@_set_z(lc_point3d_@LC_C_TYPE@_t *point, @LC_C_TYPE@ z);
 
-bool lc_point3d_@LC_C_POINT_TYPE@_is_null(const lc_point3d_@LC_C_POINT_TYPE@_t *point);
+bool lc_point3d_@LC_C_TYPE@_is_null(const lc_point3d_@LC_C_TYPE@_t *point);
 
-const char *lc_point3d_@LC_C_POINT_TYPE@_to_string(const lc_point3d_@LC_C_POINT_TYPE@_t *point);
+const char *lc_point3d_@LC_C_TYPE@_to_string(const lc_point3d_@LC_C_TYPE@_t *point);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif //LAMBDACOMMON_POINT_@LC_C_POINT_TYPE@_H
+#endif //CLAMBDACOMMON_POINT_@LC_C_TYPE@_H

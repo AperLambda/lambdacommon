@@ -11,6 +11,7 @@
 #define LAMBDACOMMON_VECTOR_H
 
 #include "point.h"
+#include "../../maths.h"
 #include <cmath>
 
 namespace lambdacommon

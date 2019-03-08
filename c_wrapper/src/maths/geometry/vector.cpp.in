@@ -1,0 +1,195 @@
+/*
+ * Copyright © 2019 LambdAurora <aurora42lambda@gmail.com>
+ *
+ * This file is part of λcommon.
+ *
+ * Licensed under the MIT license. For more information,
+ * see the LICENSE file.
+ */
+
+#include <clambdacommon/maths/geometry/vector_@LC_C_TYPE@.h>
+#include <lambdacommon/maths/geometry/vector.h>
+
+#define VECTOR1D_CPP(VECTOR) reinterpret_cast<lambdacommon::Vector1D<@LC_C_TYPE@> *>(VECTOR)
+#define CONST_VECTOR1D_CPP(VECTOR) reinterpret_cast<const lambdacommon::Vector1D<@LC_C_TYPE@> *>(VECTOR)
+#define VECTOR2D_CPP(VECTOR) reinterpret_cast<lambdacommon::Vector2D<@LC_C_TYPE@> *>(VECTOR)
+#define CONST_VECTOR2D_CPP(VECTOR) reinterpret_cast<const lambdacommon::Vector2D<@LC_C_TYPE@> *>(VECTOR)
+#define VECTOR3D_CPP(VECTOR) reinterpret_cast<lambdacommon::Vector3D<@LC_C_TYPE@> *>(VECTOR)
+#define CONST_VECTOR3D_CPP(VECTOR) reinterpret_cast<const lambdacommon::Vector3D<@LC_C_TYPE@> *>(VECTOR)
+
+// =================================================================================================================================================================================
+// Vector1D
+
+lc_vector1d_@LC_C_TYPE@_t *lc_new_vector1d_@LC_C_TYPE@(@LC_C_TYPE@ x) {
+    return reinterpret_cast<lc_vector1d_@LC_C_TYPE@_t *>(new lambdacommon::Vector1D<@LC_C_TYPE@>(x));
+}
+
+void lc_delete_vector1d_@LC_C_TYPE@(lc_vector1d_@LC_C_TYPE@_t *vector) {
+    delete VECTOR1D_CPP(vector);
+}
+
+void lc_vector1d_@LC_C_TYPE@_assign(lc_vector1d_@LC_C_TYPE@_t *vector, const lc_vector1d_@LC_C_TYPE@_t *other) {
+    *VECTOR1D_CPP(vector) = *CONST_VECTOR1D_CPP(other);
+}
+
+@LC_C_TYPE@ lc_vector1d_@LC_C_TYPE@_get_x(const lc_vector1d_@LC_C_TYPE@_t *vector) {
+    return CONST_VECTOR1D_CPP(vector)->get_x();
+}
+
+void lc_vector1d_@LC_C_TYPE@_set_x(lc_vector1d_@LC_C_TYPE@_t *vector, @LC_C_TYPE@ x) {
+    VECTOR1D_CPP(vector)->set_x(x);
+}
+
+@LC_C_TYPE@ lc_vector1d_@LC_C_TYPE@_get_standard(const lc_vector1d_@LC_C_TYPE@_t *vector) {
+    return CONST_VECTOR1D_CPP(vector)->get_standard();    
+}
+
+bool lc_vector1d_@LC_C_TYPE@_is_null(const lc_vector1d_@LC_C_TYPE@_t *vector) {
+    return CONST_VECTOR1D_CPP(vector)->is_null();
+}
+
+const char *lc_vector1d_@LC_C_TYPE@_to_string(const lc_vector1d_@LC_C_TYPE@_t *vector) {
+    static char to_string[256];
+    CONST_VECTOR1D_CPP(vector)->to_string().copy(to_string, 256);
+    return to_string;
+}
+
+bool lc_vector1d_@LC_C_TYPE@_equals(const lc_vector1d_@LC_C_TYPE@_t *u, const lc_vector1d_@LC_C_TYPE@_t *v) {
+    return *CONST_VECTOR1D_CPP(u) == *CONST_VECTOR1D_CPP(v);
+}
+
+lc_vector1d_@LC_C_TYPE@_t *lc_vector1d_@LC_C_TYPE@_add(lc_vector1d_@LC_C_TYPE@_t *vector, const lc_vector1d_@LC_C_TYPE@_t *other) {
+    *VECTOR1D_CPP(vector) += *CONST_VECTOR1D_CPP(other);
+    return vector;
+}
+
+lc_vector1d_@LC_C_TYPE@_t *lc_vector1d_@LC_C_TYPE@_subtract(lc_vector1d_@LC_C_TYPE@_t *vector, const lc_vector1d_@LC_C_TYPE@_t *other) {
+    *VECTOR1D_CPP(vector) += *CONST_VECTOR1D_CPP(other);
+    return vector;
+}
+
+// =================================================================================================================================================================================
+// Vector2D
+
+lc_vector2d_@LC_C_TYPE@_t *lc_new_vector2d_@LC_C_TYPE@(@LC_C_TYPE@ x, @LC_C_TYPE@ y) {
+    return reinterpret_cast<lc_vector2d_@LC_C_TYPE@_t *>(new lambdacommon::Vector2D<@LC_C_TYPE@>(x, y));
+}
+
+void lc_delete_vector2d_@LC_C_TYPE@(lc_vector2d_@LC_C_TYPE@_t *vector) {
+    delete VECTOR2D_CPP(vector);
+}
+
+void lc_vector2d_@LC_C_TYPE@_assign(lc_vector2d_@LC_C_TYPE@_t *vector, const lc_vector2d_@LC_C_TYPE@_t *other) {
+    *VECTOR2D_CPP(vector) = *CONST_VECTOR2D_CPP(other);
+}
+
+@LC_C_TYPE@ lc_vector2d_@LC_C_TYPE@_get_x(const lc_vector2d_@LC_C_TYPE@_t *vector) {
+    return CONST_VECTOR2D_CPP(vector)->get_x();
+}
+
+void lc_vector2d_@LC_C_TYPE@_set_x(lc_vector2d_@LC_C_TYPE@_t *vector, @LC_C_TYPE@ x) {
+    VECTOR2D_CPP(vector)->set_x(x);
+}
+
+@LC_C_TYPE@ lc_vector2d_@LC_C_TYPE@_get_y(const lc_vector2d_@LC_C_TYPE@_t *vector) {
+    return CONST_VECTOR2D_CPP(vector)->get_y();
+}
+
+void lc_vector2d_@LC_C_TYPE@_set_y(lc_vector2d_@LC_C_TYPE@_t *vector, @LC_C_TYPE@ y) {
+    VECTOR2D_CPP(vector)->set_y(y);
+}
+
+@LC_C_TYPE@ lc_vector2d_@LC_C_TYPE@_get_standard(const lc_vector2d_@LC_C_TYPE@_t *vector) {
+    return CONST_VECTOR2D_CPP(vector)->get_standard();
+}
+
+bool lc_vector2d_@LC_C_TYPE@_is_null(const lc_vector2d_@LC_C_TYPE@_t *vector) {
+    return CONST_VECTOR2D_CPP(vector)->is_null();
+}
+
+const char *lc_vector2d_@LC_C_TYPE@_to_string(const lc_vector2d_@LC_C_TYPE@_t *vector) {
+    static char to_string[256];
+    CONST_VECTOR2D_CPP(vector)->to_string().copy(to_string, 256);
+    return to_string;
+}
+
+bool lc_vector2d_@LC_C_TYPE@_equals(const lc_vector2d_@LC_C_TYPE@_t *u, const lc_vector2d_@LC_C_TYPE@_t *v) {
+    return *CONST_VECTOR2D_CPP(u) == *CONST_VECTOR2D_CPP(v);
+}
+
+lc_vector2d_@LC_C_TYPE@_t *lc_vector2d_@LC_C_TYPE@_add(lc_vector2d_@LC_C_TYPE@_t *vector, const lc_vector2d_@LC_C_TYPE@_t *other) {
+    *VECTOR2D_CPP(vector) += *CONST_VECTOR2D_CPP(other);
+    return vector;
+}
+
+lc_vector2d_@LC_C_TYPE@_t *lc_vector2d_@LC_C_TYPE@_subtract(lc_vector2d_@LC_C_TYPE@_t *vector, const lc_vector2d_@LC_C_TYPE@_t *other) {
+    *VECTOR2D_CPP(vector) += *CONST_VECTOR2D_CPP(other);
+    return vector;
+}
+
+// =================================================================================================================================================================================
+// Vector3D
+
+lc_vector3d_@LC_C_TYPE@_t *lc_new_vector3d_@LC_C_TYPE@(@LC_C_TYPE@ x, @LC_C_TYPE@ y, @LC_C_TYPE@ z) {
+    return reinterpret_cast<lc_vector3d_@LC_C_TYPE@_t *>(new lambdacommon::Vector3D<@LC_C_TYPE@>(x, y, z));
+}
+
+void lc_delete_vector3d_@LC_C_TYPE@(lc_vector3d_@LC_C_TYPE@_t *vector) {
+    delete VECTOR3D_CPP(vector);
+}
+
+void lc_vector3d_@LC_C_TYPE@_assign(lc_vector3d_@LC_C_TYPE@_t *vector, const lc_vector3d_@LC_C_TYPE@_t *other) {
+    *VECTOR3D_CPP(vector) = *CONST_VECTOR3D_CPP(other);
+}
+
+@LC_C_TYPE@ lc_vector3d_@LC_C_TYPE@_get_x(const lc_vector3d_@LC_C_TYPE@_t *vector) {
+    return CONST_VECTOR3D_CPP(vector)->get_x();
+}
+
+void lc_vector3d_@LC_C_TYPE@_set_x(lc_vector3d_@LC_C_TYPE@_t *vector, @LC_C_TYPE@ x) {
+    VECTOR3D_CPP(vector)->set_x(x);
+}
+
+@LC_C_TYPE@ lc_vector3d_@LC_C_TYPE@_get_y(const lc_vector3d_@LC_C_TYPE@_t *vector) {
+    return CONST_VECTOR3D_CPP(vector)->get_y();
+}
+
+void lc_vector3d_@LC_C_TYPE@_set_y(lc_vector3d_@LC_C_TYPE@_t *vector, @LC_C_TYPE@ y) {
+    VECTOR3D_CPP(vector)->set_y(y);
+}
+
+@LC_C_TYPE@ lc_vector3d_@LC_C_TYPE@_get_z(const lc_vector3d_@LC_C_TYPE@_t *vector) {
+return CONST_VECTOR3D_CPP(vector)->get_z();
+}
+
+void lc_vector3d_@LC_C_TYPE@_set_z(lc_vector3d_@LC_C_TYPE@_t *vector, @LC_C_TYPE@ z) {
+VECTOR3D_CPP(vector)->set_z(z);
+}
+
+@LC_C_TYPE@ lc_vector3d_@LC_C_TYPE@_get_standard(const lc_vector3d_@LC_C_TYPE@_t *vector) {
+    return CONST_VECTOR3D_CPP(vector)->get_standard();
+}
+
+bool lc_vector3d_@LC_C_TYPE@_is_null(const lc_vector3d_@LC_C_TYPE@_t *vector) {
+    return CONST_VECTOR3D_CPP(vector)->is_null();
+}
+
+const char *lc_vector3d_@LC_C_TYPE@_to_string(const lc_vector3d_@LC_C_TYPE@_t *vector) {
+    static char to_string[356];
+    CONST_VECTOR3D_CPP(vector)->to_string().copy(to_string, 356);
+    return to_string;
+}
+
+bool lc_vector3d_@LC_C_TYPE@_equals(const lc_vector3d_@LC_C_TYPE@_t *u, const lc_vector3d_@LC_C_TYPE@_t *v) {
+    return *CONST_VECTOR3D_CPP(u) == *CONST_VECTOR3D_CPP(v);
+}
+
+lc_vector3d_@LC_C_TYPE@_t *lc_vector3d_@LC_C_TYPE@_add(lc_vector3d_@LC_C_TYPE@_t *vector, const lc_vector3d_@LC_C_TYPE@_t *other) {
+    *VECTOR3D_CPP(vector) += *CONST_VECTOR3D_CPP(other);
+    return vector;
+}
+
+lc_vector3d_@LC_C_TYPE@_t *lc_vector3d_@LC_C_TYPE@_subtract(lc_vector3d_@LC_C_TYPE@_t *vector, const lc_vector3d_@LC_C_TYPE@_t *other) {
+    *VECTOR3D_CPP(vector) += *CONST_VECTOR3D_CPP(other);
+    return vector;
+}

@@ -7,8 +7,8 @@
  * see the LICENSE file.
  */
 
-#ifndef LAMBDACOMMON_POINT_H
-#define LAMBDACOMMON_POINT_H
+#ifndef CLAMBDACOMMON_POINT_H
+#define CLAMBDACOMMON_POINT_H
 
 #include <clambdacommon/maths/geometry/point_int8_t.h>
 #include <clambdacommon/maths/geometry/point_uint8_t.h>
@@ -21,4 +21,4 @@
 #include <clambdacommon/maths/geometry/point_double.h>
 #include <clambdacommon/maths/geometry/point_float.h>
 
-#endif //LAMBDACOMMON_POINT_H
+#endif //CLAMBDACOMMON_POINT_H

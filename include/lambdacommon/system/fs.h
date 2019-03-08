@@ -14,6 +14,11 @@
 #include <memory>
 #include <system_error>
 
+#ifdef LAMBDA_WINDOWS
+#  pragma warning(push)
+#  pragma warning(disable:4275)
+#endif
+
 namespace lambdacommon
 {
     namespace fs
@@ -717,5 +722,9 @@ namespace lambdacommon
         extern path LAMBDACOMMON_API current_path();
     }
 }
+
+#ifdef LAMBDA_WINDOWS
+#  pragma warning(pop)
+#endif
 
 #endif //LAMBDACOMMON_FS_H
