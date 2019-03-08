@@ -1097,12 +1097,12 @@ namespace lambdacommon
 #else
 
             explicit impl(path p) : _base(std::move(p)),
-                                    _dir((p.empty() ? nullptr : ::opendir(p.c_str())), [](DIR *d) { if (d) ::closedir(d); }),
+                                    _dir((_base.empty() ? nullptr : ::opendir(_base.c_str())), [](DIR *d) { if (d) ::closedir(d); }),
                                     _buffer_size(directory_entry_buffer_size(_dir.get())),
                                     _buffer(new char[_buffer_size])
             {
                 _entry = reinterpret_cast<::dirent *>(&_buffer[0]);
-                if (!p.empty()) {
+                if (!_base.empty()) {
                     if (!_dir) {
                         auto error = errno;
                         _base = path();
