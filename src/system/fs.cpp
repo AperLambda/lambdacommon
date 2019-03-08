@@ -14,7 +14,6 @@
 #include <cctype>
 #include <sstream>
 #include <stdexcept>
-#include <filesystem>
 
 #ifdef LAMBDA_WINDOWS
 #  include <Windows.h>
