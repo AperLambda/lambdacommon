@@ -32,6 +32,14 @@
 
 #include <sys/stat.h>
 
+/*
+ * Some of the code here is inspired by the C++'s standard filesystem API (https://en.cppreference.com/w/cpp/filesystem), I just created my own version to be more easier and don't
+ * have to mess with library linking.
+ *
+ * To write the implementation, I used parts of the old filesystem API of lambdacommon and the code from https://github.com/gulrak/filesystem/blob/master/filesystem.h helped me a
+ * lot. So thanks to gulrak.
+ */
+
 namespace lambdacommon
 {
     namespace fs
@@ -336,21 +344,28 @@ namespace lambdacommon
         {
             ec.clear();
 #ifdef LAMBDA_WINDOWS
+            // The Windows implementation is longer... That's sad :c
+            // If the path is empty, treat it as a "." path.
             if (this->empty())
                 return (current_path() / "").to_absolute(ec);
+            // Gets the size of the absolute path.
             uint32_t size = ::GetFullPathNameW(this->c_str(), 0, nullptr, nullptr);
             if (size) {
+                // Allocate the buffer to get the absolute path.
                 std::vector<wchar_t> buffer(size, 0);
                 uint32_t a = ::GetFullPathNameW(this->c_str(), size, buffer.data(), nullptr);
+                // We check that everything is correct and we can return the result.
                 if (a && a < size) {
                     path result(std::wstring(buffer.data(), a));
                     return result;
                 }
             }
+            // Wait wat? The size is 0, we cannot get the absolute path... So we set the error code.
             ec = std::error_code(static_cast<int>(::GetLastError()), std::system_category());
             return {};
 #else
             char temp[PATH_MAX];
+            // We just get the absolute path and check for errors.
             if (realpath(this->c_str(), temp) == nullptr) {
                 ec = std::error_code(errno, std::system_category());
                 return {};
@@ -362,20 +377,24 @@ namespace lambdacommon
         bool path::exists() const
         {
 #ifdef LAMBDA_WINDOWS
+            // In Windows, to check if a file exists, we get its attributes and check if they are not equals to INVALID_FILE_ATTRIBUTES. Simple.
             return GetFileAttributesA(to_string().c_str()) != INVALID_FILE_ATTRIBUTES;
 #else
             struct STAT_STRUCT sb{};
+            // The stat function returns a number different from 0 when the file does not exist.
             return stat(this->to_string().c_str(), &sb) == 0;
 #endif
         }
 
         path path::get_filename() const
         {
+            // We use the path iterator and get the last component which is the filename.
             return !this->has_relative_path() ? path() : *--end();
         }
 
         path path::get_extension() const
         {
+            // As the filename contains the extension, we get the filename and fetch the string after the last dot character if there is one, else we returns an empty string.
             string_type file_name = std::move(get_filename());
             auto pos = file_name.find_last_of('.');
             if (pos == std::string::npos || pos == 0)
@@ -458,6 +477,7 @@ namespace lambdacommon
             return fs;
 #else
             struct STAT_STRUCT st{};
+            // Get the status of the file with the stat function.
             auto result = ::stat(this->c_str(), &st);
             if (result == 0) {
                 ec.clear();
@@ -491,6 +511,7 @@ namespace lambdacommon
 
         void path::permissions(perms prms, perm_options opts, std::error_code &ec) const
         {
+            // We must have indication to what to do.
             if (static_cast<int>(opts & (perm_options::replace | perm_options::add | perm_options::remove)) == 0) {
                 ec = std::error_code(ERROR_INVALID_PARAMETER, std::system_category());
                 return;
@@ -532,6 +553,7 @@ namespace lambdacommon
                 return {};
             }
 #ifdef LAMBDA_WINDOWS
+            // Define some weird stuff because sometimes Windows don't declare its stuff.
 #ifndef REPARSE_DATA_BUFFER_HEADER_SIZE
             typedef struct _REPARSE_DATA_BUFFER
             {
@@ -564,6 +586,7 @@ namespace lambdacommon
                 } DUMMYUNIONNAME;
             } REPARSE_DATA_BUFFER, *PREPARSE_DATA_BUFFER;
 #endif
+            // We open the file.
             std::shared_ptr<void> file(::CreateFileW(this->c_str(), 0, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING,
                                                      FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS, nullptr), ::CloseHandle);
             if (file.get() == INVALID_HANDLE_VALUE) {
@@ -600,7 +623,7 @@ namespace lambdacommon
                     ec = std::error_code(errno, std::system_category());
                     return {};
                 } else if (rc < static_cast<int>(buffer_size))
-                    return {std::string(buffer.data(), rc)};
+                    return {std::string(buffer.data(), static_cast<unsigned long>(rc))};
                 buffer_size *= 2;
             }
 #endif
@@ -626,15 +649,18 @@ namespace lambdacommon
             if (fs.type != file_type::none && this->exists())
                 return false;
 #ifdef LAMBDA_WINDOWS
+            // We create the directory...
             if (!::CreateDirectoryW(this->c_str(), nullptr)) {
                 ec = std::error_code(static_cast<int>(::GetLastError()), std::system_category());
                 return false;
             }
+            // and we set its permissions.
             this->permissions(prms, ec);
             if (ec)
                 return false;
 #else
-            mode_t attribs = static_cast<mode_t>(prms);
+            // It's magic! We do the same thing but in less lines!
+            auto attribs = static_cast<mode_t>(prms);
             if (::mkdir(this->c_str(), attribs) != 0) {
                 ec = std::error_code(errno, std::system_category());
                 return false;
