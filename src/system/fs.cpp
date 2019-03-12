@@ -70,7 +70,15 @@ namespace lambdacommon
 
 #define FP_ST(val) L##val
 
-        inline file_status status_from_INFO(const path &path, const WIN32_FILE_ATTRIBUTE_DATA *info, std::error_code &ec)
+        inline time_t time_from_FILETIME(const FILETIME &ft)
+        {
+            ULARGE_INTEGER ull;
+            ull.LowPart = ft.dwLowDateTime;
+            ull.HighPart = ft.dwHighDateTime;
+            return ull.QuadPart / 10000000ULL - 11644473600ULL;
+        }
+
+        inline file_status status_from_INFO(const path &path, const WIN32_FILE_ATTRIBUTE_DATA *info, time_t *lwt, std::error_code &ec)
         {
             file_type ft;
             if ((info->dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT))
@@ -86,6 +94,8 @@ namespace lambdacommon
             if (lstring::equals_ignore_case(ext, ".exe") || lstring::equals_ignore_case(ext, ".cmd") || lstring::equals_ignore_case(ext, ".bat") ||
                 lstring::equals_ignore_case(ext, ".com"))
                 prms = prms | perms::owner_exec | perms::group_exec | perms::others_exec;
+            if (lwt)
+                *lwt = time_from_FILETIME(info->ftLastWriteTime);
             return {ft, prms};
         }
 
@@ -101,6 +111,48 @@ namespace lambdacommon
             return ec.value() == ERROR_FILE_NOT_FOUND || ec.value() == ERROR_PATH_NOT_FOUND;
 #else
             return ec.value() == ENOENT;
+#endif
+        }
+
+        inline file_status status_ex(const path &p, std::error_code &ec, time_t *lwt)
+        {
+            ec.clear();
+#ifdef LAMBDA_WINDOWS
+            WIN32_FILE_ATTRIBUTE_DATA attr;
+            if (!::GetFileAttributesExW(p.c_str(), GetFileExInfoStandard, &attr))
+                ec = std::error_code(static_cast<int>(::GetLastError()), std::system_category());
+            else if (attr.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
+                auto target = p.read_symlink(ec);
+                if (!ec && !target.empty())
+                    return target.status(ec);
+                return {file_type::unknown};
+            }
+            if (ec) {
+                if (is_not_found_error(ec))
+                    return {file_type::not_found, perms::unknown};
+                return {file_type::none};
+            }
+            return status_from_INFO(p, &attr, lwt, ec);
+#else
+            struct STAT_STRUCT st{};
+            auto result = ::lstat(p.c_str(), &st);
+            if (result == 0) {
+                file_status fs = file_status_from_st_mode(st.st_mode);
+                if (fs.type == file_type::symlink) {
+                    result = ::stat(p.c_str(), &st);
+                    if (result == 0)
+                        fs = file_status_from_st_mode(st.st_mode);
+                }
+                if (lwt)
+                    *lwt = st.st_mtime;
+                return fs;
+            } else {
+                auto error = errno;
+                ec = std::error_code(errno, std::system_category());
+                if (error == ENOENT)
+                    return {file_type::not_found, perms::unknown};
+                return {file_type::none};
+            }
 #endif
         }
 
@@ -335,8 +387,7 @@ namespace lambdacommon
         {
             std::error_code ec;
             auto result = std::move(this->to_absolute(ec));
-            if (ec)
-                throw filesystem_error(get_sys_error_txt(ec.value()), *this, ec);
+            if (ec) throw filesystem_error("path::to_absolute -- " + get_sys_error_txt(ec.value()), *this, ec);
             return std::move(result);
         }
 
@@ -411,42 +462,7 @@ namespace lambdacommon
 
         file_status path::status(std::error_code &ec) const noexcept
         {
-            ec.clear();
-#ifdef LAMBDA_WINDOWS
-            WIN32_FILE_ATTRIBUTE_DATA attr;
-            if (!::GetFileAttributesExW(this->c_str(), GetFileExInfoStandard, &attr))
-                ec = std::error_code(static_cast<int>(::GetLastError()), std::system_category());
-            else if (attr.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
-                auto target = this->read_symlink(ec);
-                if (!ec && !target.empty())
-                    return target.status(ec);
-                return {file_type::unknown};
-            }
-            if (ec) {
-                if (is_not_found_error(ec))
-                    return {file_type::not_found, perms::unknown};
-                return {file_type::none};
-            }
-            return status_from_INFO(*this, &attr, ec);
-#else
-            struct STAT_STRUCT st{};
-            auto result = ::lstat(this->c_str(), &st);
-            if (result == 0) {
-                file_status fs = file_status_from_st_mode(st.st_mode);
-                if (fs.type == file_type::symlink) {
-                    result = ::stat(this->c_str(), &st);
-                    if (result == 0)
-                        fs = file_status_from_st_mode(st.st_mode);
-                }
-                return fs;
-            } else {
-                auto error = errno;
-                ec = std::error_code(errno, std::system_category());
-                if (error == ENOENT)
-                    return {file_type::not_found, perms::unknown};
-                return {file_type::none};
-            }
-#endif
+            return status_ex(*this, ec, nullptr);
         }
 
         file_status path::symlink_status() const
@@ -465,7 +481,7 @@ namespace lambdacommon
                 ec = std::error_code(static_cast<int>(::GetLastError()), std::system_category());
             else {
                 ec.clear();
-                fs = status_from_INFO(*this, &attr, ec);
+                fs = status_from_INFO(*this, &attr, nullptr, ec);
                 if (attr.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
                     fs.type = file_type::symlink;
             }
@@ -501,12 +517,27 @@ namespace lambdacommon
             return this->status(ec).type;
         }
 
+        file_time_type path::last_write_time() const
+        {
+            std::error_code ec;
+            auto result = this->last_write_time(ec);
+            if (ec) throw filesystem_error("last_write_time -- " + get_sys_error_txt(ec.value()), *this, ec);
+            return result;
+        }
+
+        file_time_type path::last_write_time(std::error_code &ec) const noexcept
+        {
+            time_t result = 0;
+            ec.clear();
+            auto fs = status_ex(*this, ec, &result);
+            return ec ? (file_time_type::min)() : std::chrono::system_clock::from_time_t(result);
+        }
+
         void path::permissions(perms prms, perm_options opts) const
         {
             std::error_code ec;
             this->permissions(prms, opts, ec);
-            if (ec)
-                throw filesystem_error(get_sys_error_txt(ec.value()), *this, ec);
+            if (ec) throw filesystem_error("path::permissions -- " + get_sys_error_txt(ec.value()), *this, ec);
         }
 
         void path::permissions(perms prms, perm_options opts, std::error_code &ec) const
@@ -540,8 +571,7 @@ namespace lambdacommon
         {
             std::error_code ec;
             auto result = this->read_symlink(ec);
-            if (ec)
-                throw filesystem_error(get_sys_error_txt(ec.value()), *this, ec);
+            if (ec) throw filesystem_error("path::read_symlink -- " + get_sys_error_txt(ec.value()), *this, ec);
             return result;
         }
 
@@ -633,6 +663,7 @@ namespace lambdacommon
         {
             std::error_code ec;
             auto result = mkdir(prms, ec);
+            if (ec) throw filesystem_error("path::mkdir -- " + get_sys_error_txt(ec.value()), *this, ec);
             return result;
         }
 
@@ -672,6 +703,7 @@ namespace lambdacommon
         bool path::mkdirs() const
         {
             std::error_code ec;
+            if (ec) throw filesystem_error("path::mkdirs -- " + get_sys_error_txt(ec.value()), *this, ec);
             return mkdirs(ec);
         }
 
@@ -681,6 +713,10 @@ namespace lambdacommon
             ec.clear();
             auto root_name_v = this->root_name(), root_path_v = this->root_path();
             for (const auto &part : *this) {
+                if (part == root_name_v) {
+                    current.assign(part);
+                    continue;
+                }
                 current /= part;
                 if (current != root_name_v && current != root_path_v) {
                     std::error_code ec1;
@@ -703,7 +739,7 @@ namespace lambdacommon
         {
             std::error_code ec;
             this->move(new_path, ec);
-            if (ec) throw filesystem_error(get_sys_error_txt(ec.value()), *this, new_path, ec);
+            if (ec) throw filesystem_error("path::move -- " + get_sys_error_txt(ec.value()), *this, new_path, ec);
         }
 
         void path::move(const path &new_path, std::error_code &ec) const noexcept
@@ -724,7 +760,7 @@ namespace lambdacommon
         {
             std::error_code ec;
             auto result = this->remove(ec);
-            if (ec) throw filesystem_error(get_sys_error_txt(ec.value()), *this, ec);
+            if (ec) throw filesystem_error("path::remove -- " + get_sys_error_txt(ec.value()), *this, ec);
             return result;
         }
 
@@ -762,7 +798,7 @@ namespace lambdacommon
         {
             std::error_code ec;
             auto result = this->remove_all(ec);
-            if (ec) throw filesystem_error(get_sys_error_txt(ec.value()), *this, ec);
+            if (ec) throw filesystem_error("path::remove_all -- " + get_sys_error_txt(ec.value()), *this, ec);
             return result;
         }
 
@@ -770,14 +806,43 @@ namespace lambdacommon
         {
             ec.clear();
             uintmax_t count = 0;
-            return 0;
+            if (*this == path("/")) {
+                return static_cast<uintmax_t>(-1);
+            }
+
+            std::error_code tec;
+            auto fs = this->status(tec);
+            if (this->exists() && fs::is_directory(fs)) {
+                for (auto iter = directory_iterator(*this, ec); iter != directory_iterator(); iter.increment(ec)) {
+                    // If there is an error we stop right now.
+                    if (ec) break;
+
+                    auto iter_fs = iter->status(ec);
+                    if (iter_fs.type != file_type::symlink && fs::is_directory(iter_fs)) {
+                        count += (*iter)->remove_all(ec);
+                        if (ec)
+                            return static_cast<uintmax_t>(-1);
+                    } else {
+                        (*iter)->remove(ec);
+                        if (ec)
+                            return static_cast<uintmax_t>(-1);
+                        ++count;
+                    }
+                }
+            }
+            if (!ec) {
+                if (this->remove(ec)) ++count;
+            }
+            if (ec)
+                return static_cast<uintmax_t>(-1);
+            return count;
         }
 
         void path::resize_file(uintmax_t size) const
         {
             std::error_code ec;
             this->resize_file(size, ec);
-            if (ec) throw filesystem_error(get_sys_error_txt(ec.value()), ec);
+            if (ec) throw filesystem_error("path::resize_file -- " + get_sys_error_txt(ec.value()), ec);
         }
 
         void path::resize_file(uintmax_t size, std::error_code &ec) const noexcept
@@ -1282,6 +1347,36 @@ namespace lambdacommon
 
         // =========================================================================================================================================================================
         // Filesystem operations
+
+        path LAMBDACOMMON_API temp_directory_path()
+        {
+            std::error_code ec;
+            auto result = temp_directory_path(ec);
+            if (ec) throw filesystem_error("temp_directory_path -- " + get_sys_error_txt(ec.value()), ec);
+            return result;
+        }
+
+        path LAMBDACOMMON_API temp_directory_path(std::error_code &ec) noexcept
+        {
+            ec.clear();
+#ifdef LAMBDA_WINDOWS
+            wchar_t buffer[512];
+            int rc = ::GetTempPathW(511, buffer);
+            if(!rc || rc > 511) {
+                ec = std::error_code(static_cast<int>(::GetLastError()), std::system_category());
+                return {};
+            }
+            return {std::wstring(buffer)};
+#else
+            static const char *temp_vars[] = {"TMPDIR", "TMP", "TEMP", "TEMPDIR", nullptr};
+            const char *temp_path = nullptr;
+            for (auto temp_name = temp_vars; *temp_name != nullptr; ++temp_name) {
+                if (temp_path = std::getenv(*temp_name); temp_path)
+                    return {temp_path};
+            }
+            return {"/tmp"};
+#endif
+        }
 
         std::wstring LAMBDACOMMON_API current_path_wstr()
         {

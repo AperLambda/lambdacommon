@@ -11,6 +11,7 @@
 #define LAMBDACOMMON_FS_H
 
 #include "../path.h"
+#include "../types.h"
 #include <memory>
 #include <system_error>
 
@@ -145,6 +146,33 @@ namespace lambdacommon
             file_type type;
             perms prms;
         };
+
+        /*!
+         * Checks whether the given file status corresponds to a directory.
+         * @return True if the file status corresponds to a directory, else false.
+         */
+        inline bool is_directory(const file_status &ft) noexcept
+        {
+            return ft.type == file_type::directory;
+        }
+
+        /*!
+         * Checks whether the given file status corresponds to a regular file.
+         * @return True if file status corresponds to a regular file, else false.
+         */
+        inline bool is_file(const file_status &ft) noexcept
+        {
+            return ft.type == file_type::regular;
+        }
+
+        /*!
+         * Checks whether the given file status corresponds to a symlink.
+         * @return True if the file status corresponds to a symlink, else false.
+         */
+        inline bool is_symlink(const file_status &ft) noexcept
+        {
+            return ft.type == file_type::symlink;
+        }
 
         using namespace std::rel_ops;
 
@@ -286,7 +314,7 @@ namespace lambdacommon
 
             /*!
              * Makes a new instance of FilePath with the absolute path.
-             * @param ec Error code.
+             * @param ec Out-parameter for error reporting in the non-throwing overload.
              * @return The absolute path.
              */
             path to_absolute(std::error_code &ec) const;
@@ -343,10 +371,25 @@ namespace lambdacommon
 
             /*!
              * Gets the file type.
-             * @param ec Error code.
+             * @param ec Out-parameter for error reporting in the non-throwing overload.
              * @return The file type.
              */
             file_type get_file_type(std::error_code &ec) const noexcept;
+
+            /*! @brief Get the time of the last data modification.
+             *
+             * Returns the time of the last modification of this path (symlinks are followed).
+             * @return The time of the last modification.
+             */
+            file_time_type last_write_time() const;
+
+            /*! @brief Get the time of the last data modification.
+             *
+             * Returns the time of the last modification of this path (symlinks are followed).
+             * @param ec Out-parameter for error reporting.
+             * @return The time of the last modification or `file_time_type::min()` on errors.
+             */
+            file_time_type last_write_time(std::error_code &ec) const noexcept;
 
             /*! @brief Modifies file access permissions.
              *
@@ -360,7 +403,7 @@ namespace lambdacommon
              *
              * Changes access permissions of the file to which the path resolves. Symlinks are followed.
              * @param perms Permissions to set, add, or remove.
-             * @param ec Error code.
+             * @param ec Out-parameter for error reporting in the non-throwing overload.
              */
             inline void permissions(perms prms, std::error_code &ec) const noexcept
             {
@@ -372,7 +415,7 @@ namespace lambdacommon
              * Changes access permissions of the file to which the path resolves. Symlinks are followed unless {@code perm_options::nofollow} is set in opts.
              * @param prms Permissions to set, add, or remove.
              * @param opts Options controlling the action taken by this function.
-             * @param ec Error code.
+             * @param ec Out-parameter for error reporting in the non-throwing overload.
              */
             void permissions(perms prms, perm_options opts, std::error_code &ec) const;
 
@@ -389,7 +432,7 @@ namespace lambdacommon
              *
              * If the path refers to a symbolic link, returns a new path object which refers to the target of that symbolic link.
              * It is an error if the path does not refer to a symbolic link.
-             * @param ec Error code.
+             * @param ec Out-parameter for error reporting in the non-throwing overload.
              * @return The target of the symlink (which may not necessarily exist) if success, else an empty path on errors.
              */
             path read_symlink(std::error_code &ec) const;
@@ -702,6 +745,21 @@ namespace lambdacommon
         {
             old_path.move(new_path, ec);
         }
+
+        /*! @brief Returns a directory suitable for temporary files.
+         *
+         * Returns a directory suitable for temporary files.
+         * @return A directory suitable for temporary files. The path is guaranteed to exist and to be a directory. The overload takes `error_code&` argument returns an empty path on error.
+         */
+        extern path LAMBDACOMMON_API temp_directory_path();
+
+        /*! @brief Returns a directory suitable for temporary files.
+         *
+         * Returns a directory suitable for temporary files.
+         * @param ec Out-parameter for error reporting in the non-throwing overload.
+         * @return A directory suitable for temporary files. The path is guaranteed to exist and to be a directory. The overload takes `error_code&` argument returns an empty path on error.
+         */
+        extern path LAMBDACOMMON_API temp_directory_path(std::error_code &ec) noexcept;
 
         /*!
          * Gets the current working directory as a wide string.

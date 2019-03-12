@@ -12,6 +12,7 @@
 
 #include "sizes.h"
 #include "maths/geometry/point.h"
+#include <chrono>
 
 namespace lambdacommon
 {
@@ -45,6 +46,11 @@ namespace lambdacommon
      * Time
      */
     typedef uint64_t utime_t;
+#if __cplusplus > 201703L
+    using file_time_type = std::chrono::time_point<std::chrono::file_clock>;
+#else
+    using file_time_type = std::chrono::system_clock::time_point;
+#endif
 
     /*
      * Dumb types
