@@ -164,17 +164,13 @@ namespace lambdacommon
         {
             const char *head = data;
             const char *const tail = data + bytes;
-            ssize_t n;
 
             while (head < tail) {
-
-                n = write(fd, head, (size_t) (tail - head));
+                ssize_t n = write(fd, head, (size_t) (tail - head));
                 if (n > (ssize_t) 0)
                     head += n;
-
                 else if (n != (ssize_t) -1)
                     return EIO;
-
                 else if (errno != EINTR && errno != EAGAIN && errno != EWOULDBLOCK)
                     return errno;
             }
