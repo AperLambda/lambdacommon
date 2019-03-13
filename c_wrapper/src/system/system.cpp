@@ -120,6 +120,11 @@ void lc_sys_open_uri(const char *uri)
     lambdacommon::system::open_uri({uri});
 }
 
+void lc_sys_get_error_message(int error, char *msg, size_t msg_length)
+{
+    lambdacommon::system::get_error_message(error).copy(msg, msg_length);
+}
+
 void lc_sys_sleep(uint32_t time)
 {
     lambdacommon::system::sleep(time);

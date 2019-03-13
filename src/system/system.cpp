@@ -9,6 +9,7 @@
 
 #include "../../include/lambdacommon/system/system.h"
 #include <sstream>
+#include <stdexcept>
 
 #ifdef LAMBDA_WINDOWS
 #  define INFO_BUFFER_SIZE 32767
@@ -55,7 +56,9 @@
 #  error "Cannot find any replacement for sys/sysctl.h"
 #endif
 
+#  include <errno.h>
 #  include <unistd.h>
+#  include <cstring>
 #  include <climits>
 #  include <sys/types.h>
 #  include <sys/param.h>
@@ -124,9 +127,9 @@ namespace lambdacommon
             void init()
             {
                 if (fn_IsWow64Process == nullptr)
-                    fn_IsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
+                    fn_IsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(GetModuleHandleW(L"kernel32"), "IsWow64Process");
                 // Load ntdll and its functions to hack some limitations.
-                if (ntdll = LoadLibraryA("ntdll.dll"); ntdll) {
+                if (ntdll = LoadLibraryW(L"ntdll.dll"); ntdll) {
                     fn_RtlGetVersion = (LPFN_RtlGetVersion) GetProcAddress(ntdll, "RtlGetVersion");
                     fn_RtlVerifyVersionInfo = (LPFN_RtlVerifyVersionInfo) GetProcAddress(ntdll, "RtlVerifyVersionInfo");
                 }
@@ -770,6 +773,26 @@ namespace lambdacommon
             // Use of system is not recommended but none alternatives exist.
             if (::system(nullptr))
                 ::system((std::string("xdg-open ") + uri).c_str());
+#endif
+        }
+
+        std::string LAMBDACOMMON_API get_error_message(int error_code)
+        {
+#ifdef LAMBDA_WINDOWS
+            LPVOID msg_buf;
+            FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, static_cast<DWORD>(error_code ? error_code : ::GetLastError()),
+                           MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR) &msg_buf, 0, nullptr);
+            auto msg = lstring::from_wstring_to_utf8(std::wstring((LPWSTR) msg_buf));
+            LocalFree(msg_buf);
+            return msg;
+#elif defined(LAMBDA_MAC_OSX) || defined(LAMBDA_WASM)
+            char buffer[512];
+            auto rc = strerror_r(error_code ? error_code : errno, buffer, sizeof(buffer));
+            return rc == 0 ? buffer : "Error in strerror_r!";
+#else
+            char buffer[512];
+            char *msg = strerror_r(error_code ? error_code : errno, buffer, sizeof(buffer));
+            return msg ? msg : buffer;
 #endif
         }
 

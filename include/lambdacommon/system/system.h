@@ -134,6 +134,14 @@ namespace lambdacommon
         extern void LAMBDACOMMON_API open_uri(const std::string &uri);
 
         /*!
+         * Gets the message of the specified error code.
+         * If 0 is given as a parameter get the latest error code and returns its message.
+         * @param error The error code.
+         * @return The message of the error.
+         */
+        extern std::string LAMBDACOMMON_API get_error_message(int error = 0);
+
+        /*!
          * Sleeps the current thread for the specified time in milliseconds.
          * @param time Time to wait in milliseconds.
          */

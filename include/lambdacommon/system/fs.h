@@ -147,6 +147,21 @@ namespace lambdacommon
             perms prms;
         };
 
+        /*! @brief Information about free and available space on the filesystem.
+         *
+         * Represents the filesystem information as determined by `space`.
+         * The members have the following meaning:
+         *  - `capacity` -- Total size of the filesystem, in bytes.
+         *  - `free` -- Free space on the filesystem, in bytes.
+         *  - `available` -- Free space available to a non-privileged process (may be equal or less than `free`)
+         */
+        struct space_info
+        {
+            uintmax_t capacity;
+            uintmax_t free;
+            uintmax_t available;
+        };
+
         /*!
          * Checks whether the given file status corresponds to a directory.
          * @return True if the file status corresponds to a directory, else false.
@@ -376,6 +391,23 @@ namespace lambdacommon
              */
             file_type get_file_type(std::error_code &ec) const noexcept;
 
+            /*! @brief Returns the size of a file.
+             *
+             * For a regular file, returns the size determined as if by reading the `st_size` member of the structure obtained by POSIX stat (symlinks are followed).
+             * The result of attempting to determine the size of a directory (as well as any other file that is not a regular file or a symlink) is implementation-defined.
+             * @return The size of the file, in bytes.
+             */
+            uintmax_t file_size() const;
+
+            /*! @brief Returns the size of a file.
+             *
+             * For a regular file, returns the size determined as if by reading the `st_size` member of the structure obtained by POSIX stat (symlinks are followed).
+             * The result of attempting to determine the size of a directory (as well as any other file that is not a regular file or a symlink) is implementation-defined.
+             * @param ec Out-parameter for error reporting in the non-throwing overload.
+             * @return The size of the file, in bytes.
+             */
+            uintmax_t file_size(std::error_code &ec) const noexcept;
+
             /*! @brief Get the time of the last data modification.
              *
              * Returns the time of the last modification of this path (symlinks are followed).
@@ -508,6 +540,23 @@ namespace lambdacommon
              * @return The size of the file.
              */
             size_t get_size() const;
+
+            /*! @brief Returns the number of hard links referring to the specific file.
+             *
+             * Returns the number of hard links for the filesystem object.
+             *
+             * @return The number of hard links.
+             */
+            size_t hard_link_count() const;
+
+            /*! @brief Returns the number of hard links referring to the specific file.
+             *
+             * Returns the number of hard links for the filesystem object.
+             *
+             * @param ec Out-parameter for error reporting.
+             * @return The number of hard links, or `static_cast<size_t>(-1)` on errors.
+             */
+            size_t hard_link_count(std::error_code &ec) const noexcept;
 
             /*!
              * Deletes the file or the directory.
@@ -723,7 +772,7 @@ namespace lambdacommon
             // Assignements
             directory_iterator &operator=(const directory_iterator &other);
 
-            directory_iterator &operator=(directory_iterator &&other);
+            directory_iterator &operator=(directory_iterator &&other) noexcept;
         };
 
         inline directory_iterator begin(directory_iterator iter) noexcept
@@ -736,6 +785,73 @@ namespace lambdacommon
             return directory_iterator();
         }
 
+        /*! @brief Creates a symbolic link.
+         *
+         * Creates a symbolic link with its target set to target as if by POSIX `symlink()`: the pathname target may be invalid or non-existing.
+         * @param target Path to point the symlink to, does not have to exist.
+         * @param link Path of the new symbolic link.
+         */
+        extern void LAMBDACOMMON_API create_symlink(const path &target, const path &link);
+
+        /*! @brief Creates a symbolic link.
+         *
+         * Creates a symbolic link with its target set to target as if by POSIX `symlink()`: the pathname target may be invalid or non-existing.
+         * @param target Path to point the symlink to, does not have to exist.
+         * @param link Path of the new symbolic link.
+         * @param ec Out-parameter for error reporting in the non-throwing overload.
+         */
+        extern void LAMBDACOMMON_API create_symlink(const path &target, const path &link, std::error_code &ec) noexcept;
+
+        /*! @brief Creates a hard link.
+         *
+         * Creates a hard link with its target set to target as if by POSIX `link()`: the pathname target must exist.
+         *
+         * Once created, link and target are two logical names that refer to the same file (they are equivalent). Even if the original name target is deleted, the file continues to
+         * exist and is accessible as link.
+         *
+         * @param target Path of the file or directory to link to.
+         * @param link Path of the new hard link.
+         */
+        extern void LAMBDACOMMON_API create_hardlink(const path &target, const path &link);
+
+        /*! @brief Creates a hard link.
+         *
+         * Creates a hard link with its target set to target as if by POSIX `link()`: the pathname target must exist.
+         *
+         * Once created, link and target are two logical names that refer to the same file (they are equivalent). Even if the original name target is deleted, the file continues to
+         * exist and is accessible as link.
+         *
+         * @param target Path of the file or directory to link to.
+         * @param link Path of the new hard link.
+         * @param ec Out-parameter for error reporting in the non-throwing overload.
+         */
+        extern void LAMBDACOMMON_API create_hardlink(const path &target, const path &link, std::error_code &ec) noexcept;
+
+        /*! @brief Checks whether two paths refer to the same filesystem object.
+         *
+         * Checks whether the paths path1 and path2 resolve to the same filesystem entity.
+         *
+         * If either one of the given path does not exist, an error is reported.
+         *
+         * @param path1 Path to check for equivalence.
+         * @param path2 Path to check for equivalence.
+         * @return True if the path1 and path2 refer to the same file or directory and their file status is the same, false otherwise.
+         */
+        extern bool LAMBDACOMMON_API equivalent(const path &path1, const path &path2);
+
+        /*! @brief Checks whether two paths refer to the same filesystem object.
+         *
+         * Checks whether the paths path1 and path2 resolve to the same filesystem entity.
+         *
+         * If either one of the given path does not exist, an error is reported.
+         *
+         * @param path1 Path to check for equivalence.
+         * @param path2 Path to check for equivalence.
+         * @param ec Out-parameter for error reporting in the non-throwing overload.
+         * @return True if the path1 and path2 refer to the same file or directory and their file status is the same, false otherwise.
+         */
+        extern bool LAMBDACOMMON_API equivalent(const path &path1, const path &path2, std::error_code &ec) noexcept;
+
         inline void move(const path &old_path, const path &new_path)
         {
             old_path.move(new_path);
@@ -745,6 +861,26 @@ namespace lambdacommon
         {
             old_path.move(new_path, ec);
         }
+
+        /*! @brief Determines available free space on the filesystem.
+         *
+         * Determines the information about the filesystem on which the pathname `p` is located.
+         * Populates and returns an object of type `space_info`.
+         * @param p Path to examine.
+         * @return The filesystem information (a `space_info` object).
+         */
+        extern space_info LAMBDACOMMON_API space(const path &p);
+
+        /*! @brief Determines available free space on the filesystem.
+         *
+         * Determines the information about the filesystem on which the pathname `p` is located.
+         * Populates and returns an object of type `space_info`.
+         * All members may be set to `static_cast<uintmax_t>(-1)` on error.
+         * @param p Path to examine.
+         * @param ec Out-parameter for error reporting in the non-throwing overload.
+         * @return The filesystem information (a `space_info` object).
+         */
+        extern space_info LAMBDACOMMON_API space(const path &p, std::error_code &ec) noexcept;
 
         /*! @brief Returns a directory suitable for temporary files.
          *

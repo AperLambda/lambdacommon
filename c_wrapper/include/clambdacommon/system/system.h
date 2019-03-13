@@ -126,6 +126,15 @@ bool lc_sys_is_root();
 void lc_sys_open_uri(const char *uri);
 
 /*!
+ * Gets the message of the specified error code.
+ * If 0 is given as a parameter get the latest error code and returns its message.
+ * @param error The error code.
+ * @param msg Out-parameter to get the error message.
+ * @param msg_length The message length.
+ */
+void lc_sys_get_error_message(int error, char *msg, size_t msg_length);
+
+/*!
  * Sleeps the current thread for the specified time in milliseconds.
  * @param time Time to wait in milliseconds.
  */
