@@ -1498,6 +1498,13 @@ namespace lambdacommon
 #endif
         }
 
+        void LAMBDACOMMON_API copy_symlink(const path &from, const path &to)
+        {
+            std::error_code ec;
+            copy_symlink(from, to, ec);
+            if (ec) throw filesystem_error("copy_symlink -- " + system::get_error_message(ec.value()), from, to, ec);
+        }
+
         space_info LAMBDACOMMON_API space(const path &p)
         {
             std::error_code ec;

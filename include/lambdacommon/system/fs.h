@@ -852,6 +852,31 @@ namespace lambdacommon
          */
         extern bool LAMBDACOMMON_API equivalent(const path &path1, const path &path2, std::error_code &ec) noexcept;
 
+        /*! @brief Copies a symbolic link.
+         *
+         * Copies a symlink to another location.
+         *
+         * @param from Path to a symbolic link to copy.
+         * @param to Destination path of the new symlink.
+         */
+        extern void LAMBDACOMMON_API copy_symlink(const path &from, const path &to);
+
+        /*! @brief Copies a symbolic link.
+        *
+        * Copies a symlink to another location.
+        *
+        * @param from Path to a symbolic link to copy.
+        * @param to Destination path of the new symlink.
+        * @param ec Out-parameter for error reporting in the non-throwing overload.
+        */
+        inline void copy_symlink(const path &from, const path &to, std::error_code &ec) noexcept
+        {
+            ec.clear();
+            auto original = from.read_symlink(ec);
+            if (!ec)
+                create_symlink(original, to, ec);
+        }
+
         inline void move(const path &old_path, const path &new_path)
         {
             old_path.move(new_path);
