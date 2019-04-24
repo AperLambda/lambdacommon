@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD 17)
 # Options
 option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)
 option(LAMBDACOMMON_INSTALL "Generate installation target" ON)
+option(LAMBDACOMMON_BUILD_C_WRAPPER "Build the λcommon C wrapper" ON)
 option(LAMBDACOMMON_BUILD_TESTS "Build the λcommon test programs" ON)
 
 # Version
@@ -124,4 +125,6 @@ if (LAMBDACOMMON_BUILD_TESTS)
     add_subdirectory(tests)
 endif ()
 
-add_subdirectory(c_wrapper)
+if (LAMBDACOMMON_BUILD_C_WRAPPER)
+    add_subdirectory(c_wrapper)
+endif ()
