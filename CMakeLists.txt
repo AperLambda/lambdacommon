@@ -79,6 +79,7 @@ endif ()
 # WebAssembly specific
 if (LAMBDA_WASM)
     set_target_properties(lambdacommon PROPERTIES SUFFIX ".bc")
+    set_target_properties(lambdacommon PROPERTIES LINK_FLAGS "-s WASM=1")
 endif ()
 
 include_directories(include)

@@ -31,7 +31,7 @@ namespace lambdacommon
 {
     namespace terminal
     {
-        bool _use_ansi_escape_codes = false;
+        bool _use_ansi = false;
         bool _has_utf8 = false;
 
         /*
@@ -194,7 +194,7 @@ namespace lambdacommon
         {
             if (is_tty(stream)) {
 #ifdef WIN_FRIENDLY
-                if (!_use_ansi_escape_codes) {
+                if (!_use_ansi) {
                     for (auto format : term_formatting) {
                         switch (format) {
                             case RESET:
@@ -309,7 +309,7 @@ namespace lambdacommon
             } else
                 goto write_ansi;
             write_ansi:
-            if (!_use_ansi_escape_codes)
+            if (!_use_ansi)
                 return stream;
             std::string ansi_sequence{((char) 0x1B)};
             ansi_sequence += "[";
@@ -334,14 +334,14 @@ namespace lambdacommon
 
         void erase_current_line_ansi(std::ostream &stream)
         {
-            if (_use_ansi_escape_codes)
+            if (_use_ansi)
                 stream << "\033[2K";
         }
 
         std::ostream LAMBDACOMMON_API &erase_current_line(std::ostream &stream)
         {
 #ifdef WIN_FRIENDLY
-            if (_use_ansi_escape_codes) {
+            if (_use_ansi) {
                 erase_current_line_ansi(stream);
                 stream << '\r';
             } else {
@@ -369,7 +369,7 @@ namespace lambdacommon
                 return stream;
             }
 #endif
-            if (_use_ansi_escape_codes)
+            if (_use_ansi)
                 stream << "\033[2J";
             return stream;
         }
@@ -474,7 +474,7 @@ namespace lambdacommon
                 return;
             }
 #endif
-            if (_use_ansi_escape_codes)
+            if (_use_ansi)
                 stream << ("\033[" + std::to_string(y) + ';' + std::to_string(x) + "H");
         }
 
@@ -492,7 +492,7 @@ namespace lambdacommon
          * Terminal manipulations
          */
 
-        bool LAMBDACOMMON_API setup()
+        bool LAMBDACOMMON_API setup(bool force_ansi)
         {
             bool ok = true;
 #ifdef  WIN_FRIENDLY
@@ -500,14 +500,16 @@ namespace lambdacommon
                 if (DWORD dw_mode = 0; GetConsoleMode(h_out, &dw_mode)) {
                     dw_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
                     if (SetConsoleMode(h_out, dw_mode))
-                        _use_ansi_escape_codes = true;
+                        _use_ansi = true;
                 }
             }
-            if (!_use_ansi_escape_codes)
+            if (!_use_ansi)
                 ok = false;
 #elif !defined(LAMBDA_WASM)
-            _use_ansi_escape_codes = true;
+            _use_ansi = true;
 #endif
+            if (!_use_ansi && force_ansi)
+                _use_ansi = force_ansi;
             if (!use_utf8())
                 ok = false;
             return ok;
@@ -558,7 +560,7 @@ namespace lambdacommon
             if (is_tty(stream))
                 return (bool) SetConsoleTitle(TEXT(title.c_str()));
 #endif
-            if (_use_ansi_escape_codes)
+            if (_use_ansi)
                 stream << ("\033]0;" + title + "\007");
             return true;
         }

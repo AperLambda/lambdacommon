@@ -157,7 +157,7 @@ namespace lambdacommon
          *   - Calls useUTF8().
          * @return True if success else false.
          */
-        extern bool LAMBDACOMMON_API setup();
+        extern bool LAMBDACOMMON_API setup(bool force_ansi = false);
 
         extern bool LAMBDACOMMON_API use_utf8();
 

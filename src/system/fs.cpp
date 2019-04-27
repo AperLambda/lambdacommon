@@ -382,6 +382,9 @@ namespace lambdacommon
         path path::to_absolute(std::error_code &ec) const
         {
             ec.clear();
+            if (this->is_absolute())
+                // It's already absolute we don't need to do processing..
+                return *this;
 #ifdef LAMBDA_WINDOWS
             // The Windows implementation is longer... That's sad :c
             // If the path is empty, treat it as a "." path.
