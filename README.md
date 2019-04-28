@@ -8,7 +8,7 @@
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/AperLambda/lambdacommon.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/AperLambda/lambdacommon/context:cpp)
 [![Build Status](https://travis-ci.org/AperLambda/lambdacommon.svg?branch=master)](https://travis-ci.org/AperLambda/lambdacommon/)
 [![Build status](https://ci.appveyor.com/api/projects/status/aufclhjsvecva6mk?svg=true)](https://ci.appveyor.com/project/LambdAurora/lambdacommon)
-![Downloads](https://img.shields.io/github/downloads/AperLambda/lambdacommon/latest/total.svg?style=flat-square)
+![Downloads](https://img.shields.io/github/downloads/AperLambda/lambdacommon/total.svg?style=flat-square)
 [![GitHub issues](https://img.shields.io/github/issues/AperLambda/lambdacommon.svg?style=flat-square)](https://github.com/AperLambda/lambdacommon/issues/)
 
 A library written in C++ with common features.
