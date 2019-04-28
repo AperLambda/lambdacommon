@@ -10,7 +10,6 @@
 #include "../include/clambdacommon/system/time.h"
 #include <lambdacommon/system/time.h>
 
-time_t lc_time_get_time_millis()
-{
+time_t lc_time_get_time_millis() {
     return lambdacommon::time::get_time_millis();
 }

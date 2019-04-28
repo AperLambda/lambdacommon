@@ -21,71 +21,60 @@
 
 namespace lambdacommon
 {
-    ResourceName::ResourceName(const std::string &name)
-    {
+    ResourceName::ResourceName(const std::string& name) {
         auto separator = name.find_first_of(':');
         if (separator <= 0)
             throw std::invalid_argument("The resource name '" + name + "' is invalid.");
-        _domain = name.substr(0, separator);
+        _namespace = name.substr(0, separator);
         _name = name.substr(separator + 1);
     }
 
-    ResourceName::ResourceName(std::string domain, std::string name) noexcept : _domain(std::move(domain)), _name(std::move(name))
-    {}
+    ResourceName::ResourceName(std::string domain, std::string name) noexcept : _namespace(std::move(domain)), _name(std::move(name)) {}
 
-    ResourceName::ResourceName(const ResourceName &other) = default;
+    ResourceName::ResourceName(const ResourceName& other) = default;
 
-    ResourceName::ResourceName(ResourceName &&other) noexcept : _domain(std::move(other._domain)), _name(std::move(other._name))
-    {}
+    ResourceName::ResourceName(ResourceName&& other) noexcept : _namespace(std::move(other._namespace)), _name(std::move(other._name)) {}
 
-    const std::string &ResourceName::get_domain() const
-    {
-        return _domain;
+    const std::string& ResourceName::get_domain() const {
+        return _namespace;
     }
 
-    const std::string &ResourceName::get_name() const
-    {
+    const std::string& ResourceName::get_name() const {
         return _name;
     }
 
-    ResourceName ResourceName::sub(const std::string &name) const
-    {
-        return ResourceName(_domain, lstring::merge_path(_name, name));
+    ResourceName ResourceName::sub(const std::string& name) const {
+        return ResourceName(_namespace, lstring::merge_path(_name, name));
     }
 
-    std::string ResourceName::to_string() const
-    {
-        return _domain + ":" + _name;
+    std::string ResourceName::to_string() const {
+        return _namespace + ":" + _name;
     }
 
-    ResourceName &ResourceName::operator=(const ResourceName &other)
-    {
+    ResourceName& ResourceName::operator=(const ResourceName& other) {
         if (this != &other) {
-            if (other._domain != _domain)
-                _domain = other._domain;
+            if (other._namespace != _namespace)
+                _namespace = other._namespace;
             if (other._name != _name)
                 _name = other._name;
         }
         return *this;
     }
 
-    ResourceName &ResourceName::operator=(ResourceName &&other) noexcept
-    {
+    ResourceName& ResourceName::operator=(ResourceName&& other) noexcept {
         if (this != &other) {
-            _domain = std::move(other._domain);
+            _namespace = std::move(other._namespace);
             _name = std::move(other._name);
         }
         return *this;
     }
 
-    bool ResourceName::operator==(const ResourceName &other) const
-    {
-        return _domain == other._domain && _name == other._name;
+    bool ResourceName::operator==(const ResourceName& other) const {
+        return _namespace == other._namespace && _name == other._name;
     }
 
-    bool ResourceName::operator<(const ResourceName &other) const
-    {
-        return std::tie(_domain, _name) < std::tie(other._domain, other._name);
+    bool ResourceName::operator<(const ResourceName& other) const {
+        return std::tie(_namespace, _name) < std::tie(other._namespace, other._name);
     }
 
     /*
@@ -93,21 +82,17 @@ namespace lambdacommon
      */
     uint32_t last_id = 0;
 
-    ResourcesManager::ResourcesManager() : _id(++last_id)
-    {}
+    ResourcesManager::ResourcesManager() : _id(++last_id) {}
 
-    ResourcesManager::ResourcesManager(const ResourcesManager &other) = default;
+    ResourcesManager::ResourcesManager(const ResourcesManager& other) = default;
 
-    ResourcesManager::ResourcesManager(ResourcesManager &&other) noexcept : _id(other._id)
-    {}
+    ResourcesManager::ResourcesManager(ResourcesManager&& other) noexcept : _id(other._id) {}
 
-    uint32_t ResourcesManager::get_id() const
-    {
+    uint32_t ResourcesManager::get_id() const {
         return _id;
     }
 
-    bool ResourcesManager::operator==(const ResourcesManager &other) const
-    {
+    bool ResourcesManager::operator==(const ResourcesManager& other) const {
         return _id == other._id;
     }
 
@@ -115,46 +100,38 @@ namespace lambdacommon
      * FileResourcesManager
      */
 
-    FileResourcesManager::FileResourcesManager(fs::path working_directory) : ResourcesManager(), _working_directory(std::move(working_directory))
-    {}
+    FileResourcesManager::FileResourcesManager(fs::path working_directory) : ResourcesManager(), _working_directory(std::move(working_directory)) {}
 
-    FileResourcesManager::FileResourcesManager(const FileResourcesManager &other) = default;
+    FileResourcesManager::FileResourcesManager(const FileResourcesManager& other) = default;
 
-    FileResourcesManager::FileResourcesManager(FileResourcesManager &&other) noexcept : _working_directory(std::move(other._working_directory))
-    {
+    FileResourcesManager::FileResourcesManager(FileResourcesManager&& other) noexcept : _working_directory(std::move(other._working_directory)) {
         _id = other._id;
     }
 
-    const lambdacommon::fs::path &FileResourcesManager::get_working_directory() const
-    {
+    const lambdacommon::fs::path& FileResourcesManager::get_working_directory() const {
         return _working_directory;
     }
 
-    bool FileResourcesManager::has_resource(const ResourceName &resource) const
-    {
+    bool FileResourcesManager::has_resource(const ResourceName& resource) const {
         return this->has_resource(resource, "");
     }
 
-    bool FileResourcesManager::has_resource(const ResourceName &resource, const std::string &extension) const
-    {
+    bool FileResourcesManager::has_resource(const ResourceName& resource, const std::string& extension) const {
         return get_resource_path(resource, extension).exists();
     }
 
-    lambdacommon::fs::path FileResourcesManager::get_resource_path(const ResourceName &resource, const std::string &extension) const
-    {
+    lambdacommon::fs::path FileResourcesManager::get_resource_path(const ResourceName& resource, const std::string& extension) const {
         auto file = resource.get_name();
         if (!extension.empty())
             file += "." + extension;
         return (_working_directory / resource.get_domain()) / file;
     }
 
-    std::string FileResourcesManager::load_resource(const ResourceName &resource) const
-    {
+    std::string FileResourcesManager::load_resource(const ResourceName& resource) const {
         return this->load_resource(resource, "");
     }
 
-    std::string FileResourcesManager::load_resource(const ResourceName &resource, const std::string &extension) const
-    {
+    std::string FileResourcesManager::load_resource(const ResourceName& resource, const std::string& extension) const {
         auto resource_path = get_resource_path(resource, extension);
         if (!resource_path.exists())
             return "";
@@ -165,13 +142,12 @@ namespace lambdacommon
             file_stream.close();
             return output_stream.str();
         }
-        catch (std::exception &e) {
+        catch (std::exception& e) {
             return "";
         }
     }
 
-    FileResourcesManager &FileResourcesManager::operator=(const FileResourcesManager &other)
-    {
+    FileResourcesManager& FileResourcesManager::operator=(const FileResourcesManager& other) {
         if (this != &other) {
             if (_id != other._id)
                 _id = other._id;
@@ -181,8 +157,7 @@ namespace lambdacommon
         return *this;
     }
 
-    FileResourcesManager &FileResourcesManager::operator=(FileResourcesManager &&other) noexcept
-    {
+    FileResourcesManager& FileResourcesManager::operator=(FileResourcesManager&& other) noexcept {
         if (this != &other) {
             _id = other._id;
             _working_directory = std::move(other._working_directory);
@@ -190,8 +165,7 @@ namespace lambdacommon
         return *this;
     }
 
-    bool FileResourcesManager::operator==(const FileResourcesManager &other) const
-    {
+    bool FileResourcesManager::operator==(const FileResourcesManager& other) const {
         return _id == other._id && _working_directory == other._working_directory;
     }
 }

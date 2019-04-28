@@ -128,14 +128,14 @@ void lc_term_use_ut8();
  * Warning: Only works on Windows, on Unix system this returns an empty string.
  * @return The title of the terminal.
  */
-const char *lc_term_get_terminal_title();
+const char* lc_term_get_terminal_title();
 
 /*!
  * Sets the title of the terminal.
  * @param title The new title of the terminal.
  * @return True if success else false.
  */
-bool lc_term_set_terminal_title(const char *title);
+bool lc_term_set_terminal_title(const char* title);
 
 /*!
  * Gets the terminal's size.

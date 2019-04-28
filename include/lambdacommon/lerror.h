@@ -21,14 +21,11 @@ namespace lambdacommon
         std::string _msg;
 
     public:
-        unsupported_operation_error(std::string message) : _msg(std::move(message))
-        {}
+        unsupported_operation_error(std::string message) : _msg(std::move(message)) {}
 
-        unsupported_operation_error(const char *message) : _msg(message)
-        {}
+        unsupported_operation_error(const char* message) : _msg(message) {}
 
-        const char *what() const noexcept override
-        {
+        const char* what() const noexcept override {
             return _msg.c_str();
         }
     };

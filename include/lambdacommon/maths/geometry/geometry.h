@@ -13,6 +13,7 @@
 #include "vector.h"
 
 namespace lambdacommon
-{}
+{
+}
 
 #endif //LAMBDACOMMON_GEOMETRY_H

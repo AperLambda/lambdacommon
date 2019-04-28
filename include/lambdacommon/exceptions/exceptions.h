@@ -22,11 +22,9 @@ namespace lambdacommon
         std::string _msg;
 
     public:
-        explicit ParseException(std::string msg) : _msg(std::move(msg))
-        {}
+        explicit ParseException(std::string msg) : _msg(std::move(msg)) {}
 
-        const char *what() const noexcept override
-        {
+        const char* what() const noexcept override {
             return _msg.c_str();
         }
     };

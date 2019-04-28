@@ -43,7 +43,7 @@ typedef enum lc_sys_OS lc_sys_OS;
  */
 lc_sys_OS lc_os_get_os();
 
-const char *lc_os_get_os_name(lc_sys_OS os);
+const char* lc_os_get_os_name(lc_sys_OS os);
 
 #ifdef __cplusplus
 }

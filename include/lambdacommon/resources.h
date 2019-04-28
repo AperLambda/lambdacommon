@@ -31,36 +31,36 @@ namespace lambdacommon
     class LAMBDACOMMON_API ResourceName : public Object
     {
     private:
-        std::string _domain;
+        std::string _namespace;
         std::string _name;
 
     public:
-        ResourceName(const std::string &name);
+        ResourceName(const std::string& name);
 
         ResourceName(std::string domain, std::string name) noexcept;
 
-        ResourceName(const ResourceName &other);
+        ResourceName(const ResourceName& other);
 
-        ResourceName(ResourceName &&other) noexcept;
+        ResourceName(ResourceName&& other) noexcept;
 
         /*!
-         * Gets the domain of the resource.
-         * @return The domain of the resource.
+         * Gets the namespace of the resource.
+         * @return The namespace of the resource.
          */
-        const std::string &get_domain() const;
+        const std::string& get_domain() const;
 
         /*!
          * Gets the name of the resource.
          * @return The name of the resource.
          */
-        const std::string &get_name() const;
+        const std::string& get_name() const;
 
         /*!
          * Creates a new {@code ResourceName} from this resource name.
          * @param name The path to append.
          * @return The new {@code ResourceName} with the appended path.
          */
-        ResourceName sub(const std::string &name) const;
+        ResourceName sub(const std::string& name) const;
 
         /*!
          * Gets the resource name as a string.
@@ -73,23 +73,21 @@ namespace lambdacommon
          * @param path The path to append.
          * @return The new {@code ResourceName} with the appended path.
          */
-        inline ResourceName operator/(const std::string &path) const
-        {
+        inline ResourceName operator/(const std::string& path) const {
             return sub(path);
         }
 
-        ResourceName &operator=(const ResourceName &other);
+        ResourceName& operator=(const ResourceName& other);
 
-        ResourceName &operator=(ResourceName &&other) noexcept;
+        ResourceName& operator=(ResourceName&& other) noexcept;
 
-        bool operator==(const ResourceName &other) const;
+        bool operator==(const ResourceName& other) const;
 
-        bool operator<(const ResourceName &other) const;
+        bool operator<(const ResourceName& other) const;
 
         template<std::size_t N>
-        decltype(auto) get() const
-        {
-            if constexpr (N == 0) return this->_domain;
+        decltype(auto) get() const {
+            if constexpr (N == 0) return this->_namespace;
             else if constexpr (N == 1) return this->_name;
         }
     };
@@ -107,9 +105,9 @@ namespace lambdacommon
     public:
         ResourcesManager();
 
-        ResourcesManager(const ResourcesManager &other);
+        ResourcesManager(const ResourcesManager& other);
 
-        ResourcesManager(ResourcesManager &&other) noexcept;
+        ResourcesManager(ResourcesManager&& other) noexcept;
 
         /*!
          * Gets the identifier of the resources manager.
@@ -122,7 +120,7 @@ namespace lambdacommon
          * @param resource The resource to check.
          * @return True of the resource exists, else false.
          */
-        virtual bool has_resource(const ResourceName &resource) const = 0;
+        virtual bool has_resource(const ResourceName& resource) const = 0;
 
         /*! @brief Checks whether the resource exists or not.
          *
@@ -130,14 +128,14 @@ namespace lambdacommon
          * @param extension The extension of the resource file.
          * @return True if the resource exists, else false.
          */
-        virtual bool has_resource(const ResourceName &resource, const std::string &extension) const = 0;
+        virtual bool has_resource(const ResourceName& resource, const std::string& extension) const = 0;
 
         /*!
          * Loads the resource content into a string value.
          * @param resource The resource to load.
          * @return The resource content if successfully loaded, else an empty string.
          */
-        virtual std::string load_resource(const ResourceName &resource) const = 0;
+        virtual std::string load_resource(const ResourceName& resource) const = 0;
 
         /*! @brief Loads the resource content into a string value.
          *
@@ -145,9 +143,9 @@ namespace lambdacommon
          * @param extension The extension of the resource file.
          * @return The resource content if successfully loaded,X else an empty string.
          */
-        virtual std::string load_resource(const ResourceName &resource, const std::string &extension) const = 0;
+        virtual std::string load_resource(const ResourceName& resource, const std::string& extension) const = 0;
 
-        bool operator==(const ResourcesManager &other) const;
+        bool operator==(const ResourcesManager& other) const;
     };
 
     class LAMBDACOMMON_API FileResourcesManager : public ResourcesManager
@@ -158,32 +156,32 @@ namespace lambdacommon
     public:
         explicit FileResourcesManager(lambdacommon::fs::path working_directory = std::move(fs::current_path()));
 
-        FileResourcesManager(const FileResourcesManager &other);
+        FileResourcesManager(const FileResourcesManager& other);
 
-        FileResourcesManager(FileResourcesManager &&other) noexcept;
+        FileResourcesManager(FileResourcesManager&& other) noexcept;
 
         /*! @brief Gets the working directory of the resource manager.
          *
          * @return The working directory.
          */
-        const lambdacommon::fs::path &get_working_directory() const;
+        const lambdacommon::fs::path& get_working_directory() const;
 
-        bool has_resource(const ResourceName &resource) const override;
+        bool has_resource(const ResourceName& resource) const override;
 
-        bool has_resource(const ResourceName &resource, const std::string &extension) const override;
+        bool has_resource(const ResourceName& resource, const std::string& extension) const override;
 
         lambdacommon::fs::path
-        get_resource_path(const ResourceName &resource, const std::string &extension) const;
+        get_resource_path(const ResourceName& resource, const std::string& extension) const;
 
-        std::string load_resource(const ResourceName &resource) const override;
+        std::string load_resource(const ResourceName& resource) const override;
 
-        std::string load_resource(const ResourceName &resource, const std::string &extension) const override;
+        std::string load_resource(const ResourceName& resource, const std::string& extension) const override;
 
-        FileResourcesManager &operator=(const FileResourcesManager &other);
+        FileResourcesManager& operator=(const FileResourcesManager& other);
 
-        FileResourcesManager &operator=(FileResourcesManager &&other) noexcept;
+        FileResourcesManager& operator=(FileResourcesManager&& other) noexcept;
 
-        bool operator==(const FileResourcesManager &other) const;
+        bool operator==(const FileResourcesManager& other) const;
     };
 }
 

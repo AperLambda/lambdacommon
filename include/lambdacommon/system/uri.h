@@ -35,7 +35,7 @@ namespace lambdacommon
             OTHER
         };
 
-        extern SchemeType LAMBDACOMMON_API get_scheme_type_by_string(const std::string &scheme);
+        extern SchemeType LAMBDACOMMON_API get_scheme_type_by_string(const std::string& scheme);
 
         extern port_t LAMBDACOMMON_API get_scheme_default_port(SchemeType scheme);
 
@@ -55,39 +55,38 @@ namespace lambdacommon
             std::string _fragment;
 
         public:
-            URI(std::string scheme, std::string username, std::string password, Address address, std::string path = "", const std::map<std::string, std::string> &queries = {},
+            URI(std::string scheme, std::string username, std::string password, Address address, std::string path = "", const std::map<std::string, std::string>& queries = {},
                 std::string fragment = "");
 
-            URI(const URI &uri);
+            URI(const URI& uri);
 
-            URI(URI &&uri) noexcept;
+            URI(URI&& uri) noexcept;
 
-            const std::string &get_scheme() const;
+            const std::string& get_scheme() const;
 
-            inline SchemeType get_scheme_type() const
-            {
+            inline SchemeType get_scheme_type() const {
                 return get_scheme_type_by_string(get_scheme());
             }
 
-            const std::string &get_username() const;
+            const std::string& get_username() const;
 
-            const std::string &get_password() const;
+            const std::string& get_password() const;
 
             void set_username_and_password(std::string username, std::string password);
 
-            const Address &get_address() const;
+            const Address& get_address() const;
 
             void set_address(Address address);
 
             std::map<std::string, std::string> get_queries() const;
 
-            void set_queries(const std::map<std::string, std::string> &queries);
+            void set_queries(const std::map<std::string, std::string>& queries);
 
-            bool has_query(const std::string &query) const;
+            bool has_query(const std::string& query) const;
 
-            std::string get_query(const std::string &query) const;
+            std::string get_query(const std::string& query) const;
 
-            const std::string &get_fragment() const;
+            const std::string& get_fragment() const;
 
             void set_fragment(std::string fragment);
 
@@ -98,17 +97,17 @@ namespace lambdacommon
              */
             void open_in_system() const;
 
-            URI &operator=(const URI &uri);
+            URI& operator=(const URI& uri);
 
-            URI &operator=(URI &&uri) noexcept;
+            URI& operator=(URI&& uri) noexcept;
 
-            bool operator==(const URI &uri);
+            bool operator==(const URI& uri);
 
-            bool operator!=(const URI &uri);
+            bool operator!=(const URI& uri);
 
-            URI operator/(const URI &uri);
+            URI operator/(const URI& uri);
 
-            URI operator/(const AbstractPath &path);
+            URI operator/(const AbstractPath& path);
         };
 
         /**
@@ -118,7 +117,7 @@ namespace lambdacommon
          */
         extern URI LAMBDACOMMON_API from_file_path(fs::path path = fs::current_path());
 
-        extern URI LAMBDACOMMON_API from_string(const std::string &uri);
+        extern URI LAMBDACOMMON_API from_string(const std::string& uri);
     }
 }
 

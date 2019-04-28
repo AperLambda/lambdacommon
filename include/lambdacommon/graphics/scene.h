@@ -38,9 +38,9 @@ namespace lambdacommon
              */
             virtual void update() = 0;
 
-            bool operator==(const Scene &other) const;
+            bool operator==(const Scene& other) const;
 
-            bool operator<(const Scene &other) const;
+            bool operator<(const Scene& other) const;
         };
 
         class Scene2D : public Scene
@@ -49,11 +49,11 @@ namespace lambdacommon
             Size2D_u32 size;
 
         public:
-            Scene2D(const Size2D_u32 &size);
+            Scene2D(const Size2D_u32& size);
 
-            const Size2D_u32 &get_size() const;
+            const Size2D_u32& get_size() const;
 
-            void set_size(const Size2D_u32 &size);
+            void set_size(const Size2D_u32& size);
         };
     }
 }

@@ -42,21 +42,19 @@ namespace lambdatest
     class Test
     {
     private:
-        std::function<void(Test &)> _test_func;
+        std::function<void(Test&)> _test_func;
         std::string _name;
         size_t _requirements = 0;
         size_t _requirements_passed = 0;
 
     public:
-        Test(std::string name, std::function<void(Test &)> test_func) : _name(std::move(name)), _test_func(std::move(test_func))
-        {}
+        Test(std::string name, std::function<void(Test&)> test_func) : _name(std::move(name)), _test_func(std::move(test_func)) {}
 
         /*!
          * Gets the name of the test.
          * @return The test's name.
          */
-        const std::string &get_name() const
-        {
+        const std::string& get_name() const {
             return _name;
         }
 
@@ -64,8 +62,7 @@ namespace lambdatest
          * Gets the number of requirements to met to pass the test.
          * @return The number of requirements to met.
          */
-        size_t get_requirements() const
-        {
+        size_t get_requirements() const {
             return _requirements;
         }
 
@@ -73,16 +70,14 @@ namespace lambdatest
          * Gets the number of requirements passed.
          * @return The number of requirements passed.
          */
-        size_t get_requirements_passed() const
-        {
+        size_t get_requirements_passed() const {
             return _requirements_passed;
         }
 
         /*!
          * Tests.
          */
-        void test()
-        {
+        void test() {
             _test_func(*this);
         }
 
@@ -93,8 +88,7 @@ namespace lambdatest
          * @param line The line where the requirement is specified.
          * @param file The file where the requirement is specified.
          */
-        void require(bool condition, const std::string &expression, size_t line, const std::string &file)
-        {
+        void require(bool condition, const std::string& expression, size_t line, const std::string& file) {
             _requirements++;
             if (condition)
                 _requirements_passed++;
@@ -108,18 +102,15 @@ namespace lambdatest
          * Checks whether the test pass or not.
          * @return True if the test pass, else false.
          */
-        bool pass() const
-        {
+        bool pass() const {
             return _requirements_passed == _requirements;
         }
 
-        bool operator==(const Test &other) const
-        {
+        bool operator==(const Test& other) const {
             return _name == other._name;
         }
 
-        bool operator<(const Test &other) const
-        {
+        bool operator<(const Test& other) const {
             return _name < other._name;
         }
     };
@@ -133,8 +124,7 @@ namespace lambdatest
         std::string _name;
         std::vector<Test> _tests;
 
-        void print_section_result(size_t passed)
-        {
+        void print_section_result(size_t passed) {
             std::cout << "=> ";
             if (_tests.size() == passed) std::cout << term::formats({term::BOLD, term::LIGHT_GREEN}) << "PASSED ";
             else std::cout << term::formats({term::BOLD, term::LIGHT_RED}) << "FAILED ";
@@ -142,15 +132,13 @@ namespace lambdatest
         }
 
     public:
-        TestSection(std::string name) : _name(std::move(name))
-        {}
+        TestSection(std::string name) : _name(std::move(name)) {}
 
         /*!
          * Gets the name of the test section.
          * @return The name of the section.
          */
-        const std::string &get_name() const
-        {
+        const std::string& get_name() const {
             return _name;
         }
 
@@ -158,10 +146,9 @@ namespace lambdatest
          * Tests the section.
          * @return The test result.
          */
-        bool test()
-        {
+        bool test() {
             size_t passed_count = 0;
-            for (auto &test : _tests) {
+            for (auto& test : _tests) {
                 std::cout << "Testing " << term::formats({term::BOLD, term::LIGHT_BLUE}) << test.get_name() << term::RESET << "..." << std::endl;
                 test.test();
                 std::cout << " -> Result: ";
@@ -183,18 +170,15 @@ namespace lambdatest
          * Register a test in the section.
          * @param test The test to register.
          */
-        void register_test(Test test)
-        {
+        void register_test(Test test) {
             _tests.push_back(std::move(test));
         }
 
-        bool operator==(const TestSection &other) const
-        {
+        bool operator==(const TestSection& other) const {
             return _name == other._name;
         }
 
-        bool operator<(const TestSection &other) const
-        {
+        bool operator<(const TestSection& other) const {
             return _name < other._name;
         }
     };
@@ -204,16 +188,14 @@ namespace lambdatest
     private:
         std::vector<std::shared_ptr<TestSection>> _sections;
 
-        LambdaTest()
-        {}
+        LambdaTest() {}
 
     public:
         /*!
          * Registers a section in the LambdaTest instance.
          * @param section The section to register.
          */
-        void register_section(const std::shared_ptr<TestSection> &section)
-        {
+        void register_section(const std::shared_ptr<TestSection>& section) {
             _sections.push_back(section);
         }
 
@@ -221,12 +203,11 @@ namespace lambdatest
          * Launches the tests.
          * @return EXIT_SUCCESS if all tests succeed, else EXIT_FAILURE.
          */
-        int launch()
-        {
+        int launch() {
             std::cout << "Testing " << _sections.size() << " sections..." << std::endl;
             time_t start = lambdacommon::time::get_time_millis();
             size_t sections_passed = 0;
-            for (auto &section : _sections) {
+            for (auto& section : _sections) {
                 std::cout << term::LIGHT_YELLOW << "========== " << section->get_name() << " section ==========" << term::RESET << std::endl;
                 if (section->test()) {
                     sections_passed++;
@@ -255,8 +236,7 @@ namespace lambdatest
 
     LambdaTest LambdaTest::INSTANCE = LambdaTest();
 
-    std::shared_ptr<TestSection> __auto_register_section(std::string name)
-    {
+    std::shared_ptr<TestSection> __auto_register_section(std::string name) {
         std::shared_ptr<TestSection> section = std::make_shared<TestSection>(std::move(name));
         LambdaTest::INSTANCE.register_section(section);
         return section;
@@ -264,8 +244,7 @@ namespace lambdatest
 
     struct TestAutoRegister
     {
-        TestAutoRegister(std::shared_ptr<TestSection> &section, std::string name, const std::function<void(Test &)> &test_func)
-        {
+        TestAutoRegister(std::shared_ptr<TestSection>& section, std::string name, const std::function<void(Test&)>& test_func) {
             section->register_test(std::move(Test(std::move(name), test_func)));
         }
     };

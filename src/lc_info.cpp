@@ -12,8 +12,7 @@
 namespace sys = lambdacommon::system;
 namespace term = lambdacommon::terminal;
 
-int main(int argc, char **argv)
-{
+int main(int argc, char** argv) {
     term::setup();
     if (argc > 1) {
         term::set_title("λcommon_info - Help");

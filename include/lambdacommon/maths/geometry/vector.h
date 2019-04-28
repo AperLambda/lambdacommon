@@ -29,15 +29,13 @@ namespace lambdacommon
         T x;
 
     public:
-        explicit Vector1D(T x) : x(x)
-        {}
+        explicit Vector1D(T x) : x(x) {}
 
         /*!
          * Gets the X coordinate.
          * @return The X coordinate.
          */
-        T get_x() const
-        {
+        T get_x() const {
             return x;
         }
 
@@ -45,8 +43,7 @@ namespace lambdacommon
          * Sets the X coordinate.
          * @param x The X coordinate.
          */
-        void set_x(T x)
-        {
+        void set_x(T x) {
             this->x = x;
         }
 
@@ -54,58 +51,48 @@ namespace lambdacommon
          * Gets the standard of the vector.
          * @return The standard of the vector.
          */
-        virtual T get_standard() const
-        {
+        virtual T get_standard() const {
             return maths::abs(this->x);
         }
 
-        bool is_null() const override
-        {
+        bool is_null() const override {
             return this->x == 0;
         }
 
-        std::string to_string() const override
-        {
+        std::string to_string() const override {
             return std::move('(' + std::to_string(this->x) + ')');
         }
 
-        bool operator==(const Vector1D<T> &other) const
-        {
+        bool operator==(const Vector1D<T>& other) const {
             return this->x == other.x;
         }
 
-        bool operator<(const Vector1D<T> &other) const
-        {
+        bool operator<(const Vector1D<T>& other) const {
             return this->x < other.x;
         }
 
-        Vector1D<T> &operator+=(Vector1D<T> vec)
-        {
+        Vector1D<T>& operator+=(Vector1D<T> vec) {
             this->x += vec.x;
             return *this;
         }
 
-        Vector1D<T> &operator-=(Vector1D<T> vec)
-        {
+        Vector1D<T>& operator-=(Vector1D<T> vec) {
             this->x -= vec.x;
             return *this;
         }
 
-        friend const Vector1D<T> operator+(Vector1D<T> self, Vector1D<T> vec)
-        {
+        friend const Vector1D<T> operator+(Vector1D<T> self, Vector1D<T> vec) {
             self += vec;
             return self;
         }
 
-        friend const Vector1D<T> operator-(Vector1D<T> self, Vector1D<T> vec)
-        {
+        friend const Vector1D<T> operator-(Vector1D<T> self, Vector1D<T> vec) {
             self -= vec;
             return self;
         }
 
         template<std::size_t N>
-        decltype(auto) get() const
-        {
+        decltype(auto) get() const {
             if constexpr (N == 0) return this->x;
         }
     };
@@ -121,15 +108,13 @@ namespace lambdacommon
         T y;
 
     public:
-        Vector2D(T x, T y) : Vector1D<T>(x), y(y)
-        {}
+        Vector2D(T x, T y) : Vector1D<T>(x), y(y) {}
 
         /*!
          * Gets the Y coordinate.
          * @return The Y coordinate.
          */
-        T get_y() const
-        {
+        T get_y() const {
             return y;
         }
 
@@ -137,65 +122,54 @@ namespace lambdacommon
          * Sets the Y coordinate.
          * @param y The Y coordinate.
          */
-        void set_y(T y)
-        {
+        void set_y(T y) {
             this->y = y;
         }
 
-        T get_standard() const override
-        {
+        T get_standard() const override {
             return static_cast<T>(sqrt(pow(this->x, 2) + pow(this->y, 2)));
         }
 
-        bool is_null() const override
-        {
+        bool is_null() const override {
             return Vector1D<T>::is_null() && y == 0;
         }
 
-        std::string to_string() const override
-        {
+        std::string to_string() const override {
             return '(' + std::to_string(this->x) + ';' + std::to_string(this->y) + ')';
         }
 
-        bool operator==(const Vector2D<T> &other) const
-        {
+        bool operator==(const Vector2D<T>& other) const {
             return this->x == other.x && this->y == other.y;
         }
 
-        bool operator<(const Vector2D<T> &other) const
-        {
+        bool operator<(const Vector2D<T>& other) const {
             return std::tie(this->x, this->y) < std::tie(other.x, other.y);
         }
 
-        Vector2D<T> &operator+=(Vector2D<T> vec)
-        {
+        Vector2D<T>& operator+=(Vector2D<T> vec) {
             this->x += vec.x;
             this->y += vec.y;
             return *this;
         }
 
-        Vector2D<T> &operator-=(Vector2D<T> vec)
-        {
+        Vector2D<T>& operator-=(Vector2D<T> vec) {
             this->x -= vec.x;
             this->y -= vec.y;
             return *this;
         }
 
-        friend const Vector2D<T> operator+(Vector2D<T> self, Vector2D<T> vec)
-        {
+        friend const Vector2D<T> operator+(Vector2D<T> self, Vector2D<T> vec) {
             self += vec;
             return self;
         }
 
-        friend const Vector2D<T> operator-(Vector2D<T> self, Vector2D<T> vec)
-        {
+        friend const Vector2D<T> operator-(Vector2D<T> self, Vector2D<T> vec) {
             self -= vec;
             return self;
         }
 
         template<std::size_t N>
-        decltype(auto) get() const
-        {
+        decltype(auto) get() const {
             if constexpr (N == 0) return this->x;
             else if constexpr (N == 1) return this->y;
         }
@@ -212,15 +186,13 @@ namespace lambdacommon
         T z;
 
     public:
-        Vector3D(T x, T y, T z) : Vector2D<T>(x, y), z(z)
-        {}
+        Vector3D(T x, T y, T z) : Vector2D<T>(x, y), z(z) {}
 
         /*!
          * Gets the Z coordinate.
          * @return The Z coordinate.
          */
-        T get_z() const
-        {
+        T get_z() const {
             return z;
         }
 
@@ -228,8 +200,7 @@ namespace lambdacommon
          * Sets the Z coordinate.
          * @param y The Z coordinate.
          */
-        void set_z(T z)
-        {
+        void set_z(T z) {
             this->z = z;
         }
 
@@ -238,81 +209,68 @@ namespace lambdacommon
          * @param v The other vector.
          * @return The cross product.
          */
-        Vector3D<T> cross_product(const Vector3D<T> v)
-        {
+        Vector3D<T> cross_product(const Vector3D<T> v) {
             return (*this) * v;
         }
 
-        T get_standard() const override
-        {
+        T get_standard() const override {
             return static_cast<T>(sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2)));
         }
 
-        bool is_null() const override
-        {
+        bool is_null() const override {
             return Vector2D<T>::is_null() && this->z == 0;
         }
 
-        std::string to_string() const override
-        {
+        std::string to_string() const override {
             return '(' + std::to_string(this->x) + ';' + std::to_string(this->y) + ';' + std::to_string(this->z) + ')';
         }
 
-        bool operator==(const Vector3D<T> &other) const
-        {
+        bool operator==(const Vector3D<T>& other) const {
             return this->x == other.x && this->y == other.y && this->z == other.z;
         }
 
-        bool operator<(const Vector3D<T> &other) const
-        {
+        bool operator<(const Vector3D<T>& other) const {
             return std::tie(this->x, this->y, this->z) < std::tie(other.x, other.y, other.z);
         }
 
-        Vector3D<T> &operator+=(Vector3D<T> vec)
-        {
+        Vector3D<T>& operator+=(Vector3D<T> vec) {
             this->x += vec.x;
             this->y += vec.y;
             this->z += vec.z;
             return *this;
         }
 
-        Vector3D<T> &operator-=(Vector3D<T> vec)
-        {
+        Vector3D<T>& operator-=(Vector3D<T> vec) {
             this->x -= vec.x;
             this->y -= vec.y;
             this->z -= vec.z;
             return *this;
         }
 
-        Vector3D<T> &operator*=(Vector3D<T> vec)
-        {
+        Vector3D<T>& operator*=(Vector3D<T> vec) {
             this->x = this->y * vec.z - this->z * vec.y;
             this->y = this->z * vec.x - this->x * vec.z;
             this->z = this->x * vec.y - this->y * vec.x;
             return *this;
         }
 
-        friend const Vector3D<T> operator+(Vector3D<T> self, Vector3D<T> vec)
-        {
+        friend const Vector3D<T> operator+(Vector3D<T> self, Vector3D<T> vec) {
             self += vec;
             return self;
         }
 
-        friend const Vector3D<T> operator-(Vector3D<T> self, Vector3D<T> vec)
-        {
+        friend const Vector3D<T> operator-(Vector3D<T> self, Vector3D<T> vec) {
             self -= vec;
             return self;
         }
 
-        friend const Vector3D<T> operator*(Vector3D<T> self, Vector3D<T> vec)
-        {
+        friend const Vector3D<T> operator*(Vector3D<T> self, Vector3D<T> vec) {
             self *= vec;
             return self;
         }
 
         template<std::size_t N>
-        decltype(auto) get() const
-        {
+        decltype(auto) get() const {
             if constexpr (N == 0) return this->x;
             else if constexpr (N == 1) return this->y;
             else if constexpr (N == 2) return this->z;
@@ -327,8 +285,7 @@ namespace lambdacommon
      * @return A new casted vector.
      */
     template<typename T, typename I>
-    constexpr Vector1D<T> vector1d_cast(const Vector1D<I> &vector_1d)
-    {
+    constexpr Vector1D<T> vector1d_cast(const Vector1D<I>& vector_1d) {
         return Vector1D<T>(static_cast<T>(vector_1d.get_x()));
     }
 
@@ -340,8 +297,7 @@ namespace lambdacommon
      * @return A new casted vector.
      */
     template<typename T, typename I>
-    constexpr Vector2D<T> vector2d_cast(const Vector2D<I> &vector_2d)
-    {
+    constexpr Vector2D<T> vector2d_cast(const Vector2D<I>& vector_2d) {
         return Vector2D<T>(static_cast<T>(vector_2d.get_x()), static_cast<T>(vector_2d.get_y()));
     }
 
@@ -353,8 +309,7 @@ namespace lambdacommon
      * @return A new casted vector.
      */
     template<typename T, typename I>
-    constexpr Vector3D<T> vector3d_cast(const Vector3D<I> &vector_3d)
-    {
+    constexpr Vector3D<T> vector3d_cast(const Vector3D<I>& vector_3d) {
         return Vector3D<T>(static_cast<T>(vector_3d.get_x()), static_cast<T>(vector_3d.get_y()), static_cast<T>(vector_3d.get_z()));
     }
 
@@ -368,8 +323,7 @@ namespace lambdacommon
          * @return A new vector defined by the two given points.
          */
         template<typename T>
-        Vector1D<T> from_points(const Point1D <T> &a, const Point1D <T> &b)
-        {
+        Vector1D<T> from_points(const Point1D <T>& a, const Point1D <T>& b) {
             return Vector1D<T>(b.get_x() - a.get_x());
         }
 
@@ -381,8 +335,7 @@ namespace lambdacommon
          * @return A new vector defined by the two given points.
          */
         template<typename T>
-        Vector2D<T> from_points(const Point2D <T> &a, const Point2D <T> &b)
-        {
+        Vector2D<T> from_points(const Point2D <T>& a, const Point2D <T>& b) {
             return {b.get_x() - a.get_x(), b.get_y() - a.get_y()};
         }
 
@@ -394,8 +347,7 @@ namespace lambdacommon
          * @return A new vector in space defined by the two given points.
          */
         template<typename T>
-        Vector3D<T> from_points(const Point3D <T> &a, const Point3D <T> &b)
-        {
+        Vector3D<T> from_points(const Point3D <T>& a, const Point3D <T>& b) {
             return {b.get_x() - a.get_x(), b.get_y() - a.get_y(), b.get_z() - a.get_z()};
         }
 
@@ -407,8 +359,7 @@ namespace lambdacommon
          * @return The scalar product.
          */
         template<typename T>
-        T scalar_product(const Vector1D<T> &u, const Vector1D<T> &v)
-        {
+        T scalar_product(const Vector1D<T>& u, const Vector1D<T>& v) {
             return u.get_x() * v.get_x();
         }
 
@@ -420,8 +371,7 @@ namespace lambdacommon
          * @return The scalar product.
          */
         template<typename T>
-        T scalar_product(const Vector2D<T> &u, const Vector2D<T> &v)
-        {
+        T scalar_product(const Vector2D<T>& u, const Vector2D<T>& v) {
             return u.get_x() * v.get_x() + u.get_y() * v.get_y();
         }
 
@@ -433,8 +383,7 @@ namespace lambdacommon
          * @return The scalar product.
          */
         template<typename T>
-        T scalar_product(const Vector3D<T> &u, const Vector3D<T> &v)
-        {
+        T scalar_product(const Vector3D<T>& u, const Vector3D<T>& v) {
             return u.get_x() * v.get_x() + u.get_y() * v.get_y() + u.get_z() * v.get_z();
         }
     }

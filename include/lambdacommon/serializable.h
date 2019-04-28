@@ -13,12 +13,9 @@
 #include "lambdacommon.h"
 #include <vector>
 
-namespace lambdacommon
+namespace lambdacommon::serializable
 {
-    namespace serializable
-    {
-        extern std::vector<std::string> LAMBDACOMMON_API tokenize(const std::string &_string, const std::string &delim);
-    }
+    extern std::vector<std::string> LAMBDACOMMON_API tokenize(const std::string& _string, const std::string& delim);
 }
 
 #endif //LAMBDACOMMON_SERIALIZABLE_H

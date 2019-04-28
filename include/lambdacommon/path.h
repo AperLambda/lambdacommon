@@ -56,13 +56,13 @@ namespace lambdacommon
 
         AbstractPath(std::string path);
 
-        AbstractPath(const AbstractPath &other);
+        AbstractPath(const AbstractPath& other);
 
-        AbstractPath(AbstractPath &&other) noexcept;
+        AbstractPath(AbstractPath&& other) noexcept;
 
-        void append(const std::string &path);
+        void append(const std::string& path);
 
-        void append(const AbstractPath &path);
+        void append(const AbstractPath& path);
 
         void clear() noexcept override;
 
@@ -70,7 +70,7 @@ namespace lambdacommon
          * Gets the path value.
          * @return The path value.
          */
-        virtual const std::string &get_path() const;
+        virtual const std::string& get_path() const;
 
         bool empty() const override;
 
@@ -80,9 +80,9 @@ namespace lambdacommon
 
         virtual std::string to_string(char delimiter = '/') const;
 
-        bool operator==(const AbstractPath &other) const;
+        bool operator==(const AbstractPath& other) const;
 
-        bool operator<(const AbstractPath &other) const;
+        bool operator<(const AbstractPath& other) const;
     };
 }
 

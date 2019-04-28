@@ -97,7 +97,7 @@ namespace lambdacommon
          * @param bg_color The background color.
          * @return The blended color.
          */
-        const Color blend(const Color &bg_color) const;
+        const Color blend(const Color& bg_color) const;
 
         /*!
          * Mixes this color with another color.
@@ -105,7 +105,7 @@ namespace lambdacommon
          * @param ratio The mix ratio.
          * @return The mixed color.
          */
-        const Color mix(const Color &b, float ratio) const;
+        const Color mix(const Color& b, float ratio) const;
 
         /*!
          * Gets the color as an hexadecimal color.
@@ -122,25 +122,24 @@ namespace lambdacommon
         std::string to_string() const override;
 
         template<std::size_t N>
-        decltype(auto) get() const
-        {
+        decltype(auto) get() const {
             if constexpr (N == 0) return this->_red;
             else if constexpr (N == 1) return this->_green;
             else if constexpr (N == 2) return this->_blue;
             else if constexpr (N == 3) return this->_alpha;
         }
 
-        bool operator==(const Color &other) const;
+        bool operator==(const Color& other) const;
 
-        bool operator<(const Color &other) const;
+        bool operator<(const Color& other) const;
 
-        Color &operator+=(const Color &other);
+        Color& operator+=(const Color& other);
 
-        Color &operator-=(const Color &other);
+        Color& operator-=(const Color& other);
 
-        Color &operator*=(const Color &other);
+        Color& operator*=(const Color& other);
 
-        Color &operator*=(float coefficient);
+        Color& operator*=(float coefficient);
 
         /*!
          * Adds the specified color to the current color.
@@ -148,21 +147,21 @@ namespace lambdacommon
          * @param other The color to add.
          * @return The added color.
          */
-        friend const Color operator+(Color self, const Color &other);
+        friend const Color operator+(Color self, const Color& other);
 
         /*!
          * Subtracts the specified color to the current color. Alpha is not subtracted.
          * @param other The color to subtract.
          * @return The subtracted color.
          */
-        friend const Color operator-(Color self, const Color &other);
+        friend const Color operator-(Color self, const Color& other);
 
         /*!
          * Multiplies the specified color to the current color.
          * @param other The color to multiply.
          * @return The multiplied color.
          */
-        friend const Color operator*(Color self, const Color &other);
+        friend const Color operator*(Color self, const Color& other);
 
         /*!
          * Multiplies the current color with a specified coefficient.
@@ -205,7 +204,7 @@ namespace lambdacommon
          * @param fg The foreground color.
          * @return The blended color.
          */
-        extern Color LAMBDACOMMON_API blend(const Color &bg, const Color &fg);
+        extern Color LAMBDACOMMON_API blend(const Color& bg, const Color& fg);
 
         /*!
          * Mixes two different colors with a ratio.
@@ -214,7 +213,7 @@ namespace lambdacommon
          * @param ratio The mix ratio.
          * @return The mixed color.
          */
-        extern Color LAMBDACOMMON_API mix(const Color &a, const Color &b, float ratio);
+        extern Color LAMBDACOMMON_API mix(const Color& a, const Color& b, float ratio);
 
         /*!
          * Makes a new Color instance from the given hexadecimal color value.
@@ -229,7 +228,7 @@ namespace lambdacommon
          * @param hex_color The hexadecimal color value as a string.
          * @return A new Color instance.
          */
-        extern Color LAMBDACOMMON_API from_hex(const std::string &hex_color);
+        extern Color LAMBDACOMMON_API from_hex(const std::string& hex_color);
 
         /*!
          * Makes a new Color instance from a RGB value.

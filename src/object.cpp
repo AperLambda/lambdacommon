@@ -12,8 +12,7 @@
 
 namespace lambdacommon
 {
-    std::wstring Object::to_wstring() const
-    {
+    std::wstring Object::to_wstring() const {
         return std::move(lstring::from_utf8_to_wstring(this->to_string()));
     }
 }

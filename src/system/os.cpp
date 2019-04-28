@@ -13,8 +13,7 @@ namespace lambdacommon
 {
     namespace system
     {
-        OS LAMBDACOMMON_API os::get_os()
-        {
+        OS LAMBDACOMMON_API os::get_os() {
 #ifdef LAMBDA_WINDOWS
 #ifdef LAMBDA_WIN64
             return OS::WINDOWS_64;
@@ -36,8 +35,7 @@ namespace lambdacommon
 #endif
         }
 
-        std::string LAMBDACOMMON_API os::get_os_name(OS os)
-        {
+        std::string LAMBDACOMMON_API os::get_os_name(OS os) {
             std::string os_name = std::string();
             switch (os) {
                 case WINDOWS_32:

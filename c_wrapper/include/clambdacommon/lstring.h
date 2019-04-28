@@ -40,7 +40,7 @@ bool lc_char_equals_ignore_case(char a, char b);
  * @param b One of two strings.
  * @return True if they are equal else false.
  */
-bool lc_str_equals(const char *a, const char *b);
+bool lc_str_equals(const char* a, const char* b);
 
 /*!
  * Checks if two strings are equal with case insensitive.
@@ -48,7 +48,7 @@ bool lc_str_equals(const char *a, const char *b);
  * @param b One of two strings.
  * @return True if they are equal with case insensitive else false.
  */
-bool lc_str_equals_ignore_case(const char *a, const char *b);
+bool lc_str_equals_ignore_case(const char* a, const char* b);
 
 /*!
  * Transforms a string to a full lower case string.
@@ -78,26 +78,26 @@ const char *to
  * @param value A boolean value.
  * @return The boolean value as a string.
  */
-const char *lc_bool_to_string(bool value);
+const char* lc_bool_to_string(bool value);
 
 /*!
  * Transforms a pointer address into a string value.
  * @param pointer The pointer address.
  * @return The pointer address as a string.
  */
-const char *lc_pointer_to_string(const void *pointer);
+const char* lc_pointer_to_string(const void* pointer);
 
-bool lc_str_ends_with(const char *str, const char *suffix);
+bool lc_str_ends_with(const char* str, const char* suffix);
 
-bool lc_str_starts_with(const char *str, const char *prefix);
+bool lc_str_starts_with(const char* str, const char* prefix);
 
-int lc_str_parse_int(const char *integer);
+int lc_str_parse_int(const char* integer);
 
-int lc_str_parse_int_base(const char *integer, int base);
+int lc_str_parse_int_base(const char* integer, int base);
 
-long lc_str_parse_long(const char *longNumber);
+long lc_str_parse_long(const char* longNumber);
 
-long lc_str_parse_long_base(const char *longNumber, int base);
+long lc_str_parse_long_base(const char* longNumber, int base);
 
 #ifdef __cplusplus
 }

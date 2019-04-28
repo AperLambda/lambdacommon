@@ -37,8 +37,7 @@ namespace lambdacommon
         /*
          * INTERNAL
          */
-        inline FILE *get_standard_stream(const std::ostream &stream)
-        {
+        inline FILE* get_standard_stream(const std::ostream& stream) {
             if (&stream == &std::cout)
                 return stdout;
             else if ((&stream == &std::cerr) || (&stream == &std::clog))
@@ -140,8 +139,7 @@ namespace lambdacommon
 #define RD_EOF -1
 #define RD_EIO -2
 
-        static inline int rd(const int fd)
-        {
+        static inline int rd(const int fd) {
             unsigned char buffer[4];
 
             while (1) {
@@ -160,10 +158,9 @@ namespace lambdacommon
             }
         }
 
-        static inline int wr(const int fd, const char *const data, const size_t bytes)
-        {
-            const char *head = data;
-            const char *const tail = data + bytes;
+        static inline int wr(const int fd, const char* const data, const size_t bytes) {
+            const char* head = data;
+            const char* const tail = data + bytes;
 
             while (head < tail) {
                 ssize_t n = write(fd, head, (size_t) (tail - head));
@@ -184,14 +181,12 @@ namespace lambdacommon
          * IMPLEMENTATION
          */
 
-        std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, TermFormatting term_formatting)
-        {
+        std::ostream LAMBDACOMMON_API& operator<<(std::ostream& stream, TermFormatting term_formatting) {
             std::vector<TermFormatting> formats{term_formatting};
             return stream << formats;
         }
 
-        std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const std::vector<TermFormatting> &term_formatting)
-        {
+        std::ostream LAMBDACOMMON_API& operator<<(std::ostream& stream, const std::vector<TermFormatting>& term_formatting) {
             if (is_tty(stream)) {
 #ifdef WIN_FRIENDLY
                 if (!_use_ansi) {
@@ -326,20 +321,17 @@ namespace lambdacommon
             return stream;
         }
 
-        std::ostream LAMBDACOMMON_API &operator<<(std::ostream &stream, const std::vector<std::string> &string_vector)
-        {
+        std::ostream LAMBDACOMMON_API& operator<<(std::ostream& stream, const std::vector<std::string>& string_vector) {
             stream << lstring::to_string(string_vector);
             return stream;
         }
 
-        void erase_current_line_ansi(std::ostream &stream)
-        {
+        void erase_current_line_ansi(std::ostream& stream) {
             if (_use_ansi)
                 stream << "\033[2K";
         }
 
-        std::ostream LAMBDACOMMON_API &erase_current_line(std::ostream &stream)
-        {
+        std::ostream LAMBDACOMMON_API& erase_current_line(std::ostream& stream) {
 #ifdef WIN_FRIENDLY
             if (_use_ansi) {
                 erase_current_line_ansi(stream);
@@ -361,8 +353,7 @@ namespace lambdacommon
             return stream;
         }
 
-        std::ostream LAMBDACOMMON_API &clear(std::ostream &stream)
-        {
+        std::ostream LAMBDACOMMON_API& clear(std::ostream& stream) {
 #ifdef WIN_FRIENDLY
             if (is_tty(stream)) {
                 cls(get_term_handle(stream));
@@ -374,8 +365,7 @@ namespace lambdacommon
             return stream;
         }
 
-        Point2D_u16 LAMBDACOMMON_API get_cursor_position(std::ostream &stream)
-        {
+        Point2D_u16 LAMBDACOMMON_API get_cursor_position(std::ostream& stream) {
             if (is_tty(stream)) {
 #ifdef WIN_FRIENDLY
                 CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -463,8 +453,7 @@ namespace lambdacommon
             return {0, 0};
         }
 
-        void LAMBDACOMMON_API set_cursor_position(unsigned short x, unsigned short y, std::ostream &stream)
-        {
+        void LAMBDACOMMON_API set_cursor_position(unsigned short x, unsigned short y, std::ostream& stream) {
 #ifdef WIN_FRIENDLY
             if (is_tty(stream)) {
                 COORD coord;
@@ -482,8 +471,7 @@ namespace lambdacommon
          * Sound manipulations
          */
 
-        std::ostream LAMBDACOMMON_API &bell(std::ostream &stream)
-        {
+        std::ostream LAMBDACOMMON_API& bell(std::ostream& stream) {
             stream << ((char) 0x7);
             return stream;
         }
@@ -492,8 +480,7 @@ namespace lambdacommon
          * Terminal manipulations
          */
 
-        bool LAMBDACOMMON_API setup(bool force_ansi)
-        {
+        bool LAMBDACOMMON_API setup(bool force_ansi) {
             bool ok = true;
 #ifdef  WIN_FRIENDLY
             if (HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE); h_out != INVALID_HANDLE_VALUE) {
@@ -515,8 +502,7 @@ namespace lambdacommon
             return ok;
         }
 
-        bool LAMBDACOMMON_API use_utf8()
-        {
+        bool LAMBDACOMMON_API use_utf8() {
 #ifdef WIN_FRIENDLY
             if (SetConsoleCP(CP_UTF8) && SetConsoleOutputCP(CP_UTF8))
                 _has_utf8 = true;
@@ -527,14 +513,12 @@ namespace lambdacommon
             return _has_utf8;
         }
 
-        bool LAMBDACOMMON_API has_utf8()
-        {
+        bool LAMBDACOMMON_API has_utf8() {
             return _has_utf8;
         }
 
-        bool LAMBDACOMMON_API is_tty(const std::ostream &stream)
-        {
-            FILE *std_stream = get_standard_stream(stream);
+        bool LAMBDACOMMON_API is_tty(const std::ostream& stream) {
+            FILE* std_stream = get_standard_stream(stream);
 
 #ifdef LAMBDA_WINDOWS
             return ::_isatty(_fileno(std_stream)) != 0;
@@ -543,8 +527,7 @@ namespace lambdacommon
 #endif
         }
 
-        std::string LAMBDACOMMON_API get_title()
-        {
+        std::string LAMBDACOMMON_API get_title() {
 #ifdef WIN_FRIENDLY
             if (TCHAR current_title[MAX_PATH]; GetConsoleTitle(current_title, MAX_PATH))
                 return {current_title};
@@ -554,8 +537,7 @@ namespace lambdacommon
 #endif
         }
 
-        bool LAMBDACOMMON_API set_title(const std::string &title, std::ostream &stream)
-        {
+        bool LAMBDACOMMON_API set_title(const std::string& title, std::ostream& stream) {
 #ifdef WIN_FRIENDLY
             if (is_tty(stream))
                 return (bool) SetConsoleTitle(TEXT(title.c_str()));
@@ -565,8 +547,7 @@ namespace lambdacommon
             return true;
         }
 
-        const Size2D_u16 get_size(const std::ostream &stream)
-        {
+        const Size2D_u16 get_size(const std::ostream& stream) {
             Size2D_u16 size{};
 #ifdef WIN_FRIENDLY
             CONSOLE_SCREEN_BUFFER_INFO csbi;

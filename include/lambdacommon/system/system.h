@@ -131,7 +131,7 @@ namespace lambdacommon
          * Opens the specified URI with the default application assigned to.
          * @param uri The URI to open.
          */
-        extern void LAMBDACOMMON_API open_uri(const std::string &uri);
+        extern void LAMBDACOMMON_API open_uri(const std::string& uri);
 
         /*!
          * Gets the message of the specified error code.

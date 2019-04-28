@@ -52,8 +52,7 @@ namespace lambdacommon
     namespace fs
     {
         template<typename T>
-        inline file_status file_status_from_st_mode(T mode)
-        {
+        inline file_status file_status_from_st_mode(T mode) {
 #ifdef LAMBDA_WINDOWS
             file_type ft = file_type::unknown;
             if ((mode & _S_IFDIR) == _S_IFDIR) ft = file_type::directory;
@@ -112,8 +111,7 @@ namespace lambdacommon
 
 #endif
 
-        inline bool is_not_found_error(const std::error_code &ec)
-        {
+        inline bool is_not_found_error(const std::error_code& ec) {
 #ifdef LAMBDA_WINDOWS
             return ec.value() == ERROR_FILE_NOT_FOUND || ec.value() == ERROR_PATH_NOT_FOUND;
 #else
@@ -121,8 +119,7 @@ namespace lambdacommon
 #endif
         }
 
-        inline file_status internal_status(const path &p, std::error_code &ec, size_t *hard_link_count, time_t *lwt)
-        {
+        inline file_status internal_status(const path& p, std::error_code& ec, size_t* hard_link_count, time_t* lwt) {
             ec.clear();
 #ifdef LAMBDA_WINDOWS
             WIN32_FILE_ATTRIBUTE_DATA attr;
@@ -175,43 +172,36 @@ namespace lambdacommon
 
 #else
 
-        path::path(std::string path) : _path(std::move(path))
-        {}
+        path::path(std::string path) : _path(std::move(path)) {}
 
-        path::path(std::wstring path) : _path(std::move(lstring::from_wstring_to_utf8(path)))
-        {}
+        path::path(std::wstring path) : _path(std::move(lstring::from_wstring_to_utf8(path))) {}
 
 #endif
 
-        path::path(const path &other) = default;
+        path::path(const path& other) = default;
 
-        path::path(path &&other) noexcept : _path(std::move(other._path))
-        {}
+        path::path(path&& other) noexcept : _path(std::move(other._path)) {}
 
         // =========================================================================================================================================================================
         // Modifiers/Assignments
 
-        path &path::assign(path::string_type source)
-        {
+        path& path::assign(path::string_type source) {
             _path = std::move(source);
             return *this;
         }
 
-        path &path::assign(const path &source)
-        {
+        path& path::assign(const path& source) {
             return assign(source._path);
         }
 
-        void path::clear() noexcept
-        {
+        void path::clear() noexcept {
             this->_path.clear();
         }
 
         // =========================================================================================================================================================================
         // Appends
 
-        path &path::append(const path &path)
-        {
+        path& path::append(const path& path) {
             if (path.empty()) {
                 if (!_path.empty() && _path[_path.length() - 1] != preferred_separator && _path[_path.length() - 1] != FP_ST(':'))
                     _path += preferred_separator;
@@ -243,8 +233,7 @@ namespace lambdacommon
         // =========================================================================================================================================================================
         // Decomposition
 
-        path path::root_name() const
-        {
+        path path::root_name() const {
 #ifdef LAMBDA_WINDOWS
             if (_path.length() >= 2 && std::toupper(static_cast<uint8_t>(_path[0])) >= 'A' && std::toupper(static_cast<uint8_t>(_path[0])) <= 'Z' && _path[1] == L':')
                 return _path.substr(0, 2);
@@ -257,21 +246,18 @@ namespace lambdacommon
             return {};
         }
 
-        path path::root_directory() const
-        {
+        path path::root_directory() const {
             auto root = root_name();
             if (_path.length() > root._path.length() && _path[root._path.length()] == preferred_separator)
                 return string_type() + preferred_separator;
             return {};
         }
 
-        path path::root_path() const
-        {
+        path path::root_path() const {
             return root_name() / root_directory();
         }
 
-        path path::relative_path() const
-        {
+        path path::relative_path() const {
             string_type root = this->root_path()._path;
             return _path.substr((maths::min)(root.length(), _path.length()));
         }
@@ -279,38 +265,31 @@ namespace lambdacommon
         // =========================================================================================================================================================================
         // Query
 
-        bool path::empty() const
-        {
+        bool path::empty() const {
             return this->_path.empty();
         }
 
-        bool path::has_root_name() const
-        {
+        bool path::has_root_name() const {
             return !this->root_name().empty();
         }
 
-        bool path::has_root_directory() const
-        {
+        bool path::has_root_directory() const {
             return !this->root_directory().empty();
         }
 
-        bool path::has_root_path() const
-        {
+        bool path::has_root_path() const {
             return !this->root_path().empty();
         }
 
-        bool path::has_relative_path() const
-        {
+        bool path::has_relative_path() const {
             return !this->relative_path().empty();
         }
 
-        bool path::has_filename() const
-        {
+        bool path::has_filename() const {
             return !this->get_filename().empty();
         }
 
-        bool path::is_absolute() const
-        {
+        bool path::is_absolute() const {
 #ifdef LAMBDA_WINDOWS
             return this->has_root_name() && this->has_root_directory();
 #else
@@ -321,21 +300,18 @@ namespace lambdacommon
         // =========================================================================================================================================================================
         // Iterators
 
-        path::iterator path::begin() const
-        {
+        path::iterator path::begin() const {
             return iterator(_path.begin(), _path.end(), _path.begin());
         }
 
-        path::iterator path::end() const
-        {
+        path::iterator path::end() const {
             return iterator(_path.begin(), _path.end(), _path.end());
         }
 
         // =========================================================================================================================================================================
         // String manipulation
 
-        std::string path::to_string() const
-        {
+        std::string path::to_string() const {
 #ifdef LAMBDA_WINDOWS
             return std::move(lstring::from_wstring_to_utf8(_path));
 #else
@@ -343,8 +319,7 @@ namespace lambdacommon
 #endif
         }
 
-        std::wstring path::to_wstring() const
-        {
+        std::wstring path::to_wstring() const {
 #ifdef LAMBDA_WINDOWS
             return this->_path;
 #else
@@ -352,35 +327,30 @@ namespace lambdacommon
 #endif
         }
 
-        std::string path::to_generic_string() const
-        {
+        std::string path::to_generic_string() const {
             auto p = std::move(this->to_string());
             return std::move((this->is_absolute() && !(lstring::starts_with(p, "/") || lstring::starts_with(p, "\\")) ? "/" : "") + lstring::replace_all(std::move(p), "\\", "/"));
         }
 
-        const path::string_type &path::native() const noexcept
-        {
+        const path::string_type& path::native() const noexcept {
             return _path;
         }
 
-        const path::value_type *path::c_str() const noexcept
-        {
+        const path::value_type* path::c_str() const noexcept {
             return _path.c_str();
         }
 
         // =========================================================================================================================================================================
         // Filesystem operations
 
-        path path::to_absolute() const
-        {
+        path path::to_absolute() const {
             std::error_code ec;
             auto result = std::move(this->to_absolute(ec));
             if (ec) throw filesystem_error("path::to_absolute -- " + system::get_error_message(ec.value()), *this, ec);
             return std::move(result);
         }
 
-        path path::to_absolute(std::error_code &ec) const
-        {
+        path path::to_absolute(std::error_code& ec) const {
             ec.clear();
             if (this->is_absolute())
                 // It's already absolute we don't need to do processing..
@@ -416,8 +386,7 @@ namespace lambdacommon
 #endif
         }
 
-        bool path::exists() const
-        {
+        bool path::exists() const {
 #ifdef LAMBDA_WINDOWS
             // In Windows, to check if a file exists, we get its attributes and check if they are not equals to INVALID_FILE_ATTRIBUTES. Simple.
             return GetFileAttributesA(to_string().c_str()) != INVALID_FILE_ATTRIBUTES;
@@ -428,14 +397,12 @@ namespace lambdacommon
 #endif
         }
 
-        path path::get_filename() const
-        {
+        path path::get_filename() const {
             // We use the path iterator and get the last component which is the filename.
             return !this->has_relative_path() ? path() : *--end();
         }
 
-        path path::get_extension() const
-        {
+        path path::get_extension() const {
             // As the filename contains the extension, we get the filename and fetch the string after the last dot character if there is one, else we returns an empty string.
             string_type file_name = std::move(get_filename());
             auto pos = file_name.find_last_of('.');
@@ -444,27 +411,23 @@ namespace lambdacommon
             return file_name.substr(pos);
         }
 
-        file_status path::status() const
-        {
+        file_status path::status() const {
             std::error_code ec;
             auto result = this->status(ec);
             return result;
         }
 
-        file_status path::status(std::error_code &ec) const noexcept
-        {
+        file_status path::status(std::error_code& ec) const noexcept {
             return internal_status(*this, ec, nullptr, nullptr);
         }
 
-        file_status path::symlink_status() const
-        {
+        file_status path::symlink_status() const {
             std::error_code ec;
             auto result = this->symlink_status(ec);
             return result;
         }
 
-        file_status path::symlink_status(std::error_code &ec) const noexcept
-        {
+        file_status path::symlink_status(std::error_code& ec) const noexcept {
 #ifdef LAMBDA_WINDOWS
             file_status fs{};
             WIN32_FILE_ATTRIBUTE_DATA attr;
@@ -498,26 +461,22 @@ namespace lambdacommon
 #endif
         }
 
-        file_type path::get_file_type() const
-        {
+        file_type path::get_file_type() const {
             return this->status().type;
         }
 
-        file_type path::get_file_type(std::error_code &ec) const noexcept
-        {
+        file_type path::get_file_type(std::error_code& ec) const noexcept {
             return this->status(ec).type;
         }
 
-        uintmax_t path::file_size() const
-        {
+        uintmax_t path::file_size() const {
             std::error_code ec;
             auto result = this->file_size(ec);
             if (ec) throw filesystem_error("file_size -- " + system::get_error_message(ec.value()), *this, ec);
             return result;
         }
 
-        uintmax_t path::file_size(std::error_code &ec) const noexcept
-        {
+        uintmax_t path::file_size(std::error_code& ec) const noexcept {
             ec.clear();
 #ifdef LAMBDA_WINDOWS
             WIN32_FILE_ATTRIBUTE_DATA attr;
@@ -536,31 +495,27 @@ namespace lambdacommon
 #endif
         }
 
-        file_time_type path::last_write_time() const
-        {
+        file_time_type path::last_write_time() const {
             std::error_code ec;
             auto result = this->last_write_time(ec);
             if (ec) throw filesystem_error("last_write_time -- " + system::get_error_message(ec.value()), *this, ec);
             return result;
         }
 
-        file_time_type path::last_write_time(std::error_code &ec) const noexcept
-        {
+        file_time_type path::last_write_time(std::error_code& ec) const noexcept {
             time_t result = 0;
             ec.clear();
             internal_status(*this, ec, nullptr, &result);
             return ec ? (file_time_type::min)() : std::chrono::system_clock::from_time_t(result);
         }
 
-        void path::permissions(perms prms, perm_options opts) const
-        {
+        void path::permissions(perms prms, perm_options opts) const {
             std::error_code ec;
             this->permissions(prms, opts, ec);
             if (ec) throw filesystem_error("path::permissions -- " + system::get_error_message(ec.value()), *this, ec);
         }
 
-        void path::permissions(perms prms, perm_options opts, std::error_code &ec) const
-        {
+        void path::permissions(perms prms, perm_options opts, std::error_code& ec) const {
             // We must have indication to what to do.
             if (static_cast<int>(opts & (perm_options::replace | perm_options::add | perm_options::remove)) == 0) {
                 ec = std::error_code(ERROR_INVALID_PARAMETER, std::system_category());
@@ -586,16 +541,14 @@ namespace lambdacommon
 #endif
         }
 
-        path path::read_symlink() const
-        {
+        path path::read_symlink() const {
             std::error_code ec;
             auto result = this->read_symlink(ec);
             if (ec) throw filesystem_error("path::read_symlink -- " + system::get_error_message(ec.value()), *this, ec);
             return result;
         }
 
-        path path::read_symlink(std::error_code &ec) const
-        {
+        path path::read_symlink(std::error_code& ec) const {
             file_type type = this->get_file_type(ec);
             if (type != file_type::symlink) {
                 ec = std::error_code(ERROR_INVALID_PARAMETER, std::system_category());
@@ -678,21 +631,18 @@ namespace lambdacommon
 #endif
         }
 
-        bool path::mkdir(perms prms) const
-        {
+        bool path::mkdir(perms prms) const {
             std::error_code ec;
             auto result = mkdir(prms, ec);
             if (ec) throw filesystem_error("path::mkdir -- " + system::get_error_message(ec.value()), *this, ec);
             return result;
         }
 
-        bool path::mkdir(std::error_code &ec) const noexcept
-        {
+        bool path::mkdir(std::error_code& ec) const noexcept {
             return mkdir(perms::all, ec);
         }
 
-        bool path::mkdir(perms prms, std::error_code &ec) const noexcept
-        {
+        bool path::mkdir(perms prms, std::error_code& ec) const noexcept {
             std::error_code ec1;
             ec.clear();
             auto fs = this->status(ec1);
@@ -719,19 +669,17 @@ namespace lambdacommon
             return true;
         }
 
-        bool path::mkdirs() const
-        {
+        bool path::mkdirs() const {
             std::error_code ec;
             if (ec) throw filesystem_error("path::mkdirs -- " + system::get_error_message(ec.value()), *this, ec);
             return mkdirs(ec);
         }
 
-        bool path::mkdirs(std::error_code &ec) const noexcept
-        {
+        bool path::mkdirs(std::error_code& ec) const noexcept {
             path current;
             ec.clear();
             auto root_name_v = this->root_name(), root_path_v = this->root_path();
-            for (const auto &part : *this) {
+            for (const auto& part : *this) {
                 if (part == root_name_v) {
                     current.assign(part);
                     continue;
@@ -754,15 +702,13 @@ namespace lambdacommon
             return true;
         }
 
-        void path::move(const path &new_path) const
-        {
+        void path::move(const path& new_path) const {
             std::error_code ec;
             this->move(new_path, ec);
             if (ec) throw filesystem_error("path::move -- " + system::get_error_message(ec.value()), *this, new_path, ec);
         }
 
-        void path::move(const path &new_path, std::error_code &ec) const noexcept
-        {
+        void path::move(const path& new_path, std::error_code& ec) const noexcept {
             ec.clear();
             if (*this != new_path) {
 #ifdef LAMBDA_WINDOWS
@@ -775,16 +721,14 @@ namespace lambdacommon
             }
         }
 
-        bool path::remove() const
-        {
+        bool path::remove() const {
             std::error_code ec;
             auto result = this->remove(ec);
             if (ec) throw filesystem_error("path::remove -- " + system::get_error_message(ec.value()), *this, ec);
             return result;
         }
 
-        bool path::remove(std::error_code &ec) const noexcept
-        {
+        bool path::remove(std::error_code& ec) const noexcept {
             ec.clear();
 #ifdef LAMBDA_WINDOWS
             DWORD attr = ::GetFileAttributesW(this->c_str());
@@ -813,16 +757,14 @@ namespace lambdacommon
             return ec ? false : true;
         }
 
-        uintmax_t path::remove_all() const
-        {
+        uintmax_t path::remove_all() const {
             std::error_code ec;
             auto result = this->remove_all(ec);
             if (ec) throw filesystem_error("path::remove_all -- " + system::get_error_message(ec.value()), *this, ec);
             return result;
         }
 
-        uintmax_t path::remove_all(std::error_code &ec) const noexcept
-        {
+        uintmax_t path::remove_all(std::error_code& ec) const noexcept {
             ec.clear();
             uintmax_t count = 0;
             if (*this == path("/")) {
@@ -857,15 +799,13 @@ namespace lambdacommon
             return count;
         }
 
-        void path::resize_file(uintmax_t size) const
-        {
+        void path::resize_file(uintmax_t size) const {
             std::error_code ec;
             this->resize_file(size, ec);
             if (ec) throw filesystem_error("path::resize_file -- " + system::get_error_message(ec.value()), ec);
         }
 
-        void path::resize_file(uintmax_t size, std::error_code &ec) const noexcept
-        {
+        void path::resize_file(uintmax_t size, std::error_code& ec) const noexcept {
             ec.clear();
 #ifdef LAMBDA_WINDOWS
             LARGE_INTEGER li_size;
@@ -881,23 +821,19 @@ namespace lambdacommon
 #endif
         }
 
-        bool path::is_directory() const
-        {
+        bool path::is_directory() const {
             return this->get_file_type() == file_type::directory;
         }
 
-        bool path::is_file() const
-        {
+        bool path::is_file() const {
             return this->get_file_type() == file_type::regular;
         }
 
-        bool path::is_symlink() const
-        {
+        bool path::is_symlink() const {
             return this->get_file_type() == file_type::symlink;
         }
 
-        size_t path::get_size() const
-        {
+        size_t path::get_size() const {
             if (!this->exists())
                 return 0;
             struct __STAT_STRUCT sb{};
@@ -906,16 +842,14 @@ namespace lambdacommon
             return (size_t) sb.st_size;
         }
 
-        size_t path::hard_link_count() const
-        {
+        size_t path::hard_link_count() const {
             std::error_code ec;
             auto result = this->hard_link_count(ec);
             if (ec) throw filesystem_error("hard_link_count -- " + system::get_error_message(ec.value()), *this, ec);
             return result;
         }
 
-        size_t path::hard_link_count(std::error_code &ec) const noexcept
-        {
+        size_t path::hard_link_count(std::error_code& ec) const noexcept {
             ec.clear();
 #ifdef LAMBDA_WINDOWS
             auto result = static_cast<size_t>(-1);
@@ -941,18 +875,15 @@ namespace lambdacommon
 #endif
         }
 
-        bool path::operator==(const path &other) const
-        {
+        bool path::operator==(const path& other) const {
             return _path == other._path;
         }
 
-        bool path::operator<(const path &other) const
-        {
+        bool path::operator<(const path& other) const {
             return _path < other._path;
         }
 
-        path &path::operator=(const path &other)
-        {
+        path& path::operator=(const path& other) {
             if (this != &other) {
                 if (this->_path != other._path)
                     this->_path = other._path;
@@ -960,41 +891,35 @@ namespace lambdacommon
             return *this;
         }
 
-        path &path::operator=(path &&other) noexcept
-        {
+        path& path::operator=(path&& other) noexcept {
             this->_path = std::move(other._path);
             return *this;
         }
 
-        path &path::operator=(path::string_type source)
-        {
+        path& path::operator=(path::string_type source) {
             this->assign(std::move(source));
             return *this;
         }
 
-        path::operator string_type() const
-        {
+        path::operator string_type() const {
             return this->native();
         }
 
-        path &path::operator/=(const path &other)
-        {
+        path& path::operator/=(const path& other) {
             this->append(other);
             return *this;
         }
 
-        path &path::operator/=(const std::string &other)
-        {
+        path& path::operator/=(const std::string& other) {
             this->append(other);
             return *this;
         }
 
         path::iterator::iterator() = default;
 
-        path::iterator::iterator(const string_type::const_iterator &first, const string_type::const_iterator &last, const string_type::const_iterator &pos) : _first(first),
+        path::iterator::iterator(const string_type::const_iterator& first, const string_type::const_iterator& last, const string_type::const_iterator& pos) : _first(first),
                                                                                                                                                               _last(last),
-                                                                                                                                                              _pos(pos)
-        {
+                                                                                                                                                              _pos(pos) {
             update_current();
             // Find the position of a potential root directory.
 #ifdef LAMBDA_WINDOWS
@@ -1012,8 +937,7 @@ namespace lambdacommon
                 _root = _last;
         }
 
-        path::iterator &path::iterator::operator++()
-        {
+        path::iterator& path::iterator::operator++() {
             _pos = increment(_pos);
             while (_pos != _last && _pos != _root && *_pos == path::preferred_separator && (_pos + 1) != _last)
                 ++_pos;
@@ -1021,44 +945,37 @@ namespace lambdacommon
             return *this;
         }
 
-        path::iterator path::iterator::operator++(int)
-        {
+        path::iterator path::iterator::operator++(int) {
             path::iterator i{*this};
             ++(*this);
             return i;
         }
 
-        path::iterator &path::iterator::operator--()
-        {
+        path::iterator& path::iterator::operator--() {
             _pos = decrement(_pos);
             update_current();
             return *this;
         }
 
-        path::iterator path::iterator::operator--(int)
-        {
+        path::iterator path::iterator::operator--(int) {
             path::iterator i{*this};
             --(*this);
             return i;
         }
 
-        bool path::iterator::operator==(const path::iterator &other) const
-        {
+        bool path::iterator::operator==(const path::iterator& other) const {
             return _pos == other._pos;
         }
 
-        const path &path::iterator::operator*() const
-        {
+        const path& path::iterator::operator*() const {
             return _current;
         }
 
-        path::iterator::pointer path::iterator::operator->() const
-        {
+        path::iterator::pointer path::iterator::operator->() const {
             return &_current;
         }
 
-        void path::iterator::update_current()
-        {
+        void path::iterator::update_current() {
             if (_pos != _first && _pos != _last && (*_pos == preferred_separator && _pos != _root) && (_pos + 1 == _last))
                 _current = FP_ST("");
             else {
@@ -1068,8 +985,7 @@ namespace lambdacommon
             }
         }
 
-        path::string_type::const_iterator path::iterator::increment(const path::string_type::const_iterator &pos) const
-        {
+        path::string_type::const_iterator path::iterator::increment(const path::string_type::const_iterator& pos) const {
             path::string_type::const_iterator i = _pos;
             bool from_start = i == _first;
             if (i != _last) {
@@ -1089,8 +1005,7 @@ namespace lambdacommon
             return i;
         }
 
-        path::string_type::const_iterator path::iterator::decrement(const path::string_type::const_iterator &pos) const
-        {
+        path::string_type::const_iterator path::iterator::decrement(const path::string_type::const_iterator& pos) const {
             path::string_type::const_iterator i = pos;
             if (i != _first) {
                 --i;
@@ -1113,78 +1028,62 @@ namespace lambdacommon
             return i;
         }
 
-        filesystem_error::filesystem_error(const std::string &msg, std::error_code ec) : system_error(ec, msg)
-        {}
+        filesystem_error::filesystem_error(const std::string& msg, std::error_code ec) : system_error(ec, msg) {}
 
-        filesystem_error::filesystem_error(const std::string &msg, const path &p1, std::error_code ec) : system_error(ec, msg), _p1(p1)
-        {}
+        filesystem_error::filesystem_error(const std::string& msg, const path& p1, std::error_code ec) : system_error(ec, msg), _p1(p1) {}
 
-        filesystem_error::filesystem_error(const std::string &msg, const path &p1, const path &p2, std::error_code ec) : system_error(ec, msg), _p1(p1), _p2(p2)
-        {}
+        filesystem_error::filesystem_error(const std::string& msg, const path& p1, const path& p2, std::error_code ec) : system_error(ec, msg), _p1(p1), _p2(p2) {}
 
-        const path &filesystem_error::path1() const noexcept
-        {
+        const path& filesystem_error::path1() const noexcept {
             return _p1;
         }
 
-        const path &filesystem_error::path2() const noexcept
-        {
+        const path& filesystem_error::path2() const noexcept {
             return _p2;
         }
 
         // =========================================================================================================================================================================
         // Directory entry
 
-        directory_entry::directory_entry(path p) : _path(std::move(p))
-        {}
+        directory_entry::directory_entry(path p) : _path(std::move(p)) {}
 
-        void directory_entry::assign(path p)
-        {
+        void directory_entry::assign(path p) {
             _path = std::move(p);
         }
 
-        const path &directory_entry::get_path() const noexcept
-        {
+        const path& directory_entry::get_path() const noexcept {
             return _path;
         }
 
-        directory_entry::operator const path &() const noexcept
-        {
+        directory_entry::operator const path&() const noexcept {
             return this->get_path();
         }
 
-        file_status directory_entry::status() const
-        {
+        file_status directory_entry::status() const {
             return this->get_path().status();
         }
 
-        file_status directory_entry::status(std::error_code &ec) const noexcept
-        {
+        file_status directory_entry::status(std::error_code& ec) const noexcept {
             return this->get_path().status(ec);
         }
 
-        file_status directory_entry::symlink_status() const
-        {
+        file_status directory_entry::symlink_status() const {
             return this->get_path().symlink_status();
         }
 
-        file_status directory_entry::symlink_status(std::error_code &ec) const noexcept
-        {
+        file_status directory_entry::symlink_status(std::error_code& ec) const noexcept {
             return this->get_path().symlink_status(ec);
         }
 
-        bool directory_entry::operator==(const directory_entry &other) const
-        {
+        bool directory_entry::operator==(const directory_entry& other) const {
             return _path == other._path;
         }
 
-        bool directory_entry::operator<(const directory_entry &other) const
-        {
+        bool directory_entry::operator<(const directory_entry& other) const {
             return _path < other._path;
         }
 
-        const path *directory_entry::operator->() const
-        {
+        const path* directory_entry::operator->() const {
             return &_path;
         }
 
@@ -1200,12 +1099,11 @@ namespace lambdacommon
             HANDLE _dir_handle;
 #else
             std::shared_ptr<DIR> _dir;
-            struct ::dirent *_entry;
+            struct ::dirent* _entry;
             size_t _buffer_size;
             std::unique_ptr<char[]> _buffer;
 
-            inline size_t directory_entry_buffer_size(DIR *d)
-            {
+            inline size_t directory_entry_buffer_size(DIR* d) {
                 size_t result = maths::max(sizeof(::dirent), sizeof(::dirent) - sizeof(::dirent::d_name) + NAME_MAX) + 1;
                 if (d) {
                     long rc = ::fpathconf(dirfd(d), _PC_NAME_MAX);
@@ -1242,11 +1140,10 @@ namespace lambdacommon
 #else
 
             explicit impl(path p) : _base(std::move(p)),
-                                    _dir((_base.empty() ? nullptr : ::opendir(_base.c_str())), [](DIR *d) { if (d) ::closedir(d); }),
+                                    _dir((_base.empty() ? nullptr : ::opendir(_base.c_str())), [](DIR* d) { if (d) ::closedir(d); }),
                                     _buffer_size(directory_entry_buffer_size(_dir.get())),
-                                    _buffer(new char[_buffer_size])
-            {
-                _entry = reinterpret_cast<::dirent *>(&_buffer[0]);
+                                    _buffer(new char[_buffer_size]) {
+                _entry = reinterpret_cast<::dirent*>(&_buffer[0]);
                 if (!_base.empty()) {
                     if (!_dir) {
                         auto error = errno;
@@ -1260,10 +1157,9 @@ namespace lambdacommon
 
 #endif
 
-            impl(const impl &other) = delete;
+            impl(const impl& other) = delete;
 
-            ~impl()
-            {
+            ~impl() {
 #ifdef LAMBDA_WINDOWS
                 if (_dir_handle != INVALID_HANDLE_VALUE) {
                     FindClose(_dir_handle);
@@ -1274,8 +1170,7 @@ namespace lambdacommon
 
 #ifndef LAMBDA_WINDOWS
 
-            int i_readdir_r(DIR *dir, struct dirent *entry, struct dirent **result)
-            {
+            int i_readdir_r(DIR* dir, struct dirent* entry, struct dirent** result) {
 #if defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 24))
                 errno = 0;
                 auto de = ::readdir(dir);
@@ -1292,8 +1187,7 @@ namespace lambdacommon
 
 #endif
 
-            void increment(std::error_code &ec)
-            {
+            void increment(std::error_code& ec) {
 #ifdef LAMBDA_WINDOWS
                 if (_dir_handle != INVALID_HANDLE_VALUE) {
                     do {
@@ -1312,7 +1206,7 @@ namespace lambdacommon
 #else
                 if (_dir) {
                     do {
-                        dirent *result = nullptr;
+                        dirent* result = nullptr;
                         if (this->i_readdir_r(_dir.get(), _entry, &result) == 0) {
                             if (result) {
                                 _current = _base / path(_entry->d_name);
@@ -1333,64 +1227,53 @@ namespace lambdacommon
             }
         };
 
-        directory_iterator::directory_iterator() noexcept : _impl(new impl(std::move(path())))
-        {}
+        directory_iterator::directory_iterator() noexcept : _impl(new impl(std::move(path()))) {}
 
-        directory_iterator::directory_iterator(path p) : _impl(new impl(std::move(p)))
-        {
+        directory_iterator::directory_iterator(path p) : _impl(new impl(std::move(p))) {
             if (this->_impl->ec) throw filesystem_error(system::get_error_message(this->_impl->ec.value()), p, this->_impl->ec);
             this->_impl->ec.clear();
         }
 
-        directory_iterator::directory_iterator(path p, std::error_code &ec) noexcept : _impl(new impl(p))
-        {
+        directory_iterator::directory_iterator(path p, std::error_code& ec) noexcept : _impl(new impl(p)) {
             if (this->_impl->ec)
                 ec = this->_impl->ec;
         }
 
-        directory_iterator &directory_iterator::operator++()
-        {
+        directory_iterator& directory_iterator::operator++() {
             std::error_code ec;
             this->increment(ec);
             if (ec) throw filesystem_error(system::get_error_message(ec.value()), this->_impl->_current, ec);
             return *this;
         }
 
-        directory_iterator &directory_iterator::increment(std::error_code &ec) noexcept
-        {
+        directory_iterator& directory_iterator::increment(std::error_code& ec) noexcept {
             this->_impl->increment(ec);
             return *this;
         }
 
-        bool directory_iterator::operator==(const directory_iterator &other) const
-        {
+        bool directory_iterator::operator==(const directory_iterator& other) const {
             return this->_impl->_current == other._impl->_current;
         }
 
-        bool directory_iterator::operator!=(const directory_iterator &other) const
-        {
+        bool directory_iterator::operator!=(const directory_iterator& other) const {
             return !(*this == other);
         }
 
-        const directory_entry &directory_iterator::operator*() const
-        {
+        const directory_entry& directory_iterator::operator*() const {
             return this->_impl->_dir_entry;
         }
 
-        directory_iterator::pointer directory_iterator::operator->() const
-        {
+        directory_iterator::pointer directory_iterator::operator->() const {
             return (&**this);
         }
 
-        void directory_iterator::swap(directory_iterator &other)
-        {
+        void directory_iterator::swap(directory_iterator& other) {
             std::swap(this->_impl, other._impl);
         }
 
-        directory_iterator &directory_iterator::operator=(const directory_iterator &other) = default;
+        directory_iterator& directory_iterator::operator=(const directory_iterator& other) = default;
 
-        directory_iterator &directory_iterator::operator=(directory_iterator &&other) noexcept
-        {
+        directory_iterator& directory_iterator::operator=(directory_iterator&& other) noexcept {
             _impl = std::move(other._impl);
             return *this;
         }
@@ -1398,15 +1281,13 @@ namespace lambdacommon
         // =========================================================================================================================================================================
         // Filesystem operations
 
-        void LAMBDACOMMON_API create_symlink(const path &target, const path &link)
-        {
+        void LAMBDACOMMON_API create_symlink(const path& target, const path& link) {
             std::error_code ec;
             create_symlink(target, link, ec);
             if (ec) throw filesystem_error("create_symlink -- " + system::get_error_message(ec.value()), target, link, ec);
         }
 
-        void LAMBDACOMMON_API create_symlink(const path &target, const path &link, std::error_code &ec) noexcept
-        {
+        void LAMBDACOMMON_API create_symlink(const path& target, const path& link, std::error_code& ec) noexcept {
 #ifdef LAMBDA_WINDOWS
             std::error_code ec1;
             auto fs = target.status(ec1);
@@ -1427,15 +1308,13 @@ namespace lambdacommon
 #endif
         }
 
-        void LAMBDACOMMON_API create_hardlink(const path &target, const path &link)
-        {
+        void LAMBDACOMMON_API create_hardlink(const path& target, const path& link) {
             std::error_code ec;
             create_hardlink(target, link, ec);
             if (ec) throw filesystem_error("create_hardlink -- " + system::get_error_message(ec.value()), target, link, ec);
         }
 
-        void LAMBDACOMMON_API create_hardlink(const path &target, const path &link, std::error_code &ec) noexcept
-        {
+        void LAMBDACOMMON_API create_hardlink(const path& target, const path& link, std::error_code& ec) noexcept {
 #ifdef LAMBDA_WINDOWS
             static auto CreateHardLinkW_fn = reinterpret_cast<LPFN_CreateHardLinkW>(GetProcAddress(GetModuleHandleW(L"kernel32"), "CreateHardLinkW"));
             if (CreateHardLinkW_fn) {
@@ -1449,16 +1328,14 @@ namespace lambdacommon
 #endif
         }
 
-        bool LAMBDACOMMON_API equivalent(const path &path1, const path &path2)
-        {
+        bool LAMBDACOMMON_API equivalent(const path& path1, const path& path2) {
             std::error_code ec;
             auto result = equivalent(path1, path2, ec);
             if (ec) throw filesystem_error("equivalent -- " + system::get_error_message(ec.value()), path1, path2, ec);
             return result;
         }
 
-        bool LAMBDACOMMON_API equivalent(const path &path1, const path &path2, std::error_code &ec) noexcept
-        {
+        bool LAMBDACOMMON_API equivalent(const path& path1, const path& path2, std::error_code& ec) noexcept {
             ec.clear();
 #ifdef LAMBDA_WINDOWS
             std::shared_ptr<void> file1(::CreateFileW(path1.c_str(), 0, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS,
@@ -1501,23 +1378,20 @@ namespace lambdacommon
 #endif
         }
 
-        void LAMBDACOMMON_API copy_symlink(const path &from, const path &to)
-        {
+        void LAMBDACOMMON_API copy_symlink(const path& from, const path& to) {
             std::error_code ec;
             copy_symlink(from, to, ec);
             if (ec) throw filesystem_error("copy_symlink -- " + system::get_error_message(ec.value()), from, to, ec);
         }
 
-        space_info LAMBDACOMMON_API space(const path &p)
-        {
+        space_info LAMBDACOMMON_API space(const path& p) {
             std::error_code ec;
             auto result = space(p, ec);
             if (ec) throw filesystem_error("space_info -- " + system::get_error_message(ec.value()), p, ec);
             return result;
         }
 
-        space_info LAMBDACOMMON_API space(const path &p, std::error_code &ec) noexcept
-        {
+        space_info LAMBDACOMMON_API space(const path& p, std::error_code& ec) noexcept {
             ec.clear();
 #ifdef LAMBDA_WINDOWS
             ULARGE_INTEGER free_bytes_available{0};
@@ -1539,16 +1413,14 @@ namespace lambdacommon
 #endif
         }
 
-        path LAMBDACOMMON_API temp_directory_path()
-        {
+        path LAMBDACOMMON_API temp_directory_path() {
             std::error_code ec;
             auto result = temp_directory_path(ec);
             if (ec) throw filesystem_error("temp_directory_path -- " + system::get_error_message(ec.value()), ec);
             return result;
         }
 
-        path LAMBDACOMMON_API temp_directory_path(std::error_code &ec) noexcept
-        {
+        path LAMBDACOMMON_API temp_directory_path(std::error_code& ec) noexcept {
             ec.clear();
 #ifdef LAMBDA_WINDOWS
             wchar_t buffer[512];
@@ -1559,8 +1431,8 @@ namespace lambdacommon
             }
             return {std::wstring(buffer)};
 #else
-            static const char *temp_vars[] = {"TMPDIR", "TMP", "TEMP", "TEMPDIR", nullptr};
-            const char *temp_path = nullptr;
+            static const char* temp_vars[] = {"TMPDIR", "TMP", "TEMP", "TEMPDIR", nullptr};
+            const char* temp_path = nullptr;
             for (auto temp_name = temp_vars; *temp_name != nullptr; ++temp_name) {
                 if (temp_path = std::getenv(*temp_name); temp_path)
                     return {temp_path};
@@ -1569,8 +1441,7 @@ namespace lambdacommon
 #endif
         }
 
-        std::wstring LAMBDACOMMON_API current_path_wstr()
-        {
+        std::wstring LAMBDACOMMON_API current_path_wstr() {
 #ifdef LAMBDA_WINDOWS
             wchar_t temp[MAX_PATH];
             if (!_wgetcwd(temp, MAX_PATH))
@@ -1582,8 +1453,7 @@ namespace lambdacommon
 #endif
         }
 
-        std::string LAMBDACOMMON_API current_path_str()
-        {
+        std::string LAMBDACOMMON_API current_path_str() {
 #ifdef LAMBDA_WINDOWS
             return lstring::from_wstring_to_utf8(current_path_wstr());
 #else
@@ -1594,8 +1464,7 @@ namespace lambdacommon
 #endif
         }
 
-        path LAMBDACOMMON_API current_path()
-        {
+        path LAMBDACOMMON_API current_path() {
             return path(std::move(current_path_str()));
         }
     }

@@ -44,9 +44,9 @@ namespace lambdacommon
     public:
         Address(host host, port_t port = 0);
 
-        Address(const Address &address);
+        Address(const Address& address);
 
-        Address(Address &&address) noexcept;
+        Address(Address&& address) noexcept;
 
         ~Address();
 
@@ -54,7 +54,7 @@ namespace lambdacommon
          * Gets the host of the address.
          * @return The host of the address.
          */
-        const host &get_host() const;
+        const host& get_host() const;
 
         /*!
          * Gets the port of the address.
@@ -92,17 +92,16 @@ namespace lambdacommon
 
         std::string to_string() const override;
 
-        Address &operator=(const Address &other);
+        Address& operator=(const Address& other);
 
-        Address &operator=(Address &&other) noexcept;
+        Address& operator=(Address&& other) noexcept;
 
-        bool operator==(const Address &other) const;
+        bool operator==(const Address& other) const;
 
-        bool operator<(const Address &other) const;
+        bool operator<(const Address& other) const;
 
         template<std::size_t N>
-        decltype(auto) get() const
-        {
+        decltype(auto) get() const {
             if constexpr (N == 0) return this->_host;
             else if constexpr (N == 1) return this->_port;
         }

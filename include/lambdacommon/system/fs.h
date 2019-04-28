@@ -69,37 +69,30 @@ namespace lambdacommon
             unknown = 0xFFFF
         };
 
-        constexpr perms operator&(perms x, perms y) noexcept
-        {
+        constexpr perms operator&(perms x, perms y) noexcept {
             using underlying_type = typename std::underlying_type<perms>::type;
             return static_cast<perms>(static_cast<underlying_type>(x) & static_cast<underlying_type>(y));
         }
 
-        constexpr perms operator|(perms x, perms y) noexcept
-        {
+        constexpr perms operator|(perms x, perms y) noexcept {
             using underlying_type = typename std::underlying_type<perms>::type;
             return static_cast<perms>(static_cast<underlying_type>(x) | static_cast<underlying_type>(y));
         }
 
-        constexpr perms operator^(perms x, perms y) noexcept
-        {
+        constexpr perms operator^(perms x, perms y) noexcept {
             using underlying_type = typename std::underlying_type<perms>::type;
             return static_cast<perms>(static_cast<underlying_type>(x) ^ static_cast<underlying_type>(y));
         }
 
-        constexpr perms operator~(perms self) noexcept
-        {
+        constexpr perms operator~(perms self) noexcept {
             return static_cast<perms>(~static_cast<typename std::underlying_type<perms>::type>(self));
         }
 
-        inline perms &operator&=(perms &self, perms other) noexcept
-        { return self = self & other; }
+        inline perms& operator&=(perms& self, perms other) noexcept { return self = self & other; }
 
-        inline perms &operator|=(perms &self, perms other) noexcept
-        { return self = self | other; }
+        inline perms& operator|=(perms& self, perms other) noexcept { return self = self | other; }
 
-        inline perms &operator^=(perms &self, perms other) noexcept
-        { return self = self ^ other; }
+        inline perms& operator^=(perms& self, perms other) noexcept { return self = self ^ other; }
 
         enum class perm_options : uint16_t
         {
@@ -109,37 +102,30 @@ namespace lambdacommon
             nofollow = 3
         };
 
-        constexpr perm_options operator&(perm_options x, perm_options y) noexcept
-        {
+        constexpr perm_options operator&(perm_options x, perm_options y) noexcept {
             using underlying_type = typename std::underlying_type<perm_options>::type;
             return static_cast<perm_options>(static_cast<underlying_type>(x) & static_cast<underlying_type>(y));
         }
 
-        constexpr perm_options operator|(perm_options x, perm_options y) noexcept
-        {
+        constexpr perm_options operator|(perm_options x, perm_options y) noexcept {
             using underlying_type = typename std::underlying_type<perm_options>::type;
             return static_cast<perm_options>(static_cast<underlying_type>(x) | static_cast<underlying_type>(y));
         }
 
-        constexpr perm_options operator^(perm_options x, perm_options y) noexcept
-        {
+        constexpr perm_options operator^(perm_options x, perm_options y) noexcept {
             using underlying_type = typename std::underlying_type<perm_options>::type;
             return static_cast<perm_options>(static_cast<underlying_type>(x) ^ static_cast<underlying_type>(y));
         }
 
-        constexpr perm_options operator~(perm_options self) noexcept
-        {
+        constexpr perm_options operator~(perm_options self) noexcept {
             return static_cast<perm_options>(~static_cast<typename std::underlying_type<perm_options>::type>(self));
         }
 
-        inline perm_options &operator&=(perm_options &self, perm_options other) noexcept
-        { return self = self & other; }
+        inline perm_options& operator&=(perm_options& self, perm_options other) noexcept { return self = self & other; }
 
-        inline perm_options &operator|=(perm_options &self, perm_options other) noexcept
-        { return self = self | other; }
+        inline perm_options& operator|=(perm_options& self, perm_options other) noexcept { return self = self | other; }
 
-        inline perm_options &operator^=(perm_options &self, perm_options other) noexcept
-        { return self = self ^ other; }
+        inline perm_options& operator^=(perm_options& self, perm_options other) noexcept { return self = self ^ other; }
 
         struct file_status
         {
@@ -166,8 +152,7 @@ namespace lambdacommon
          * Checks whether the given file status corresponds to a directory.
          * @return True if the file status corresponds to a directory, else false.
          */
-        inline bool is_directory(const file_status &ft) noexcept
-        {
+        inline bool is_directory(const file_status& ft) noexcept {
             return ft.type == file_type::directory;
         }
 
@@ -175,8 +160,7 @@ namespace lambdacommon
          * Checks whether the given file status corresponds to a regular file.
          * @return True if file status corresponds to a regular file, else false.
          */
-        inline bool is_file(const file_status &ft) noexcept
-        {
+        inline bool is_file(const file_status& ft) noexcept {
             return ft.type == file_type::regular;
         }
 
@@ -184,8 +168,7 @@ namespace lambdacommon
          * Checks whether the given file status corresponds to a symlink.
          * @return True if the file status corresponds to a symlink, else false.
          */
-        inline bool is_symlink(const file_status &ft) noexcept
-        {
+        inline bool is_symlink(const file_status& ft) noexcept {
             return ft.type == file_type::symlink;
         }
 
@@ -217,24 +200,23 @@ namespace lambdacommon
 
             path(std::wstring path);
 
-            path(const path &other);
+            path(const path& other);
 
-            path(path &&other) noexcept;
+            path(path&& other) noexcept;
 
-            path &assign(string_type source);
+            path& assign(string_type source);
 
-            path &assign(const path &source);
+            path& assign(const path& source);
 
             template<class InputIterator>
-            path &assign(InputIterator first, InputIterator last)
-            {
+            path& assign(InputIterator first, InputIterator last) {
                 _path.assign(first, last);
                 return *this;
             }
 
             void clear() noexcept override;
 
-            path &append(const path &path);
+            path& append(const path& path);
 
             /*!
              * Returns the root name of the generic-format path. If the path (in generic format) does not include root name, returns `FilePath()`.
@@ -313,13 +295,13 @@ namespace lambdacommon
              * Gets the path as the native string type.
              * @return The path as the native string type.
              */
-            const string_type &native() const noexcept;
+            const string_type& native() const noexcept;
 
             /*!
              * Gets the path as a C value.
              * @return The path as a C value.
              */
-            const value_type *c_str() const noexcept;
+            const value_type* c_str() const noexcept;
 
             /*!
              * Makes a new instance of FilePath with the absolute path.
@@ -332,7 +314,7 @@ namespace lambdacommon
              * @param ec Out-parameter for error reporting in the non-throwing overload.
              * @return The absolute path.
              */
-            path to_absolute(std::error_code &ec) const;
+            path to_absolute(std::error_code& ec) const;
 
             /*!
              * Checks whether the path exists or not.
@@ -363,7 +345,7 @@ namespace lambdacommon
              * @param ec Out-parameter for error reporting in the non-throwing overload.
              * @return The file status.
              */
-            file_status status(std::error_code &ec) const noexcept;
+            file_status status(std::error_code& ec) const noexcept;
 
             /*!
              * Determines the type and attributes of the filesystem object.
@@ -376,7 +358,7 @@ namespace lambdacommon
              * @param ec Out-parameter for error reporting in the non-throwing overload.
              * @return The file status.
              */
-            file_status symlink_status(std::error_code &ec) const noexcept;
+            file_status symlink_status(std::error_code& ec) const noexcept;
 
             /*!
              * Gets the file type.
@@ -389,7 +371,7 @@ namespace lambdacommon
              * @param ec Out-parameter for error reporting in the non-throwing overload.
              * @return The file type.
              */
-            file_type get_file_type(std::error_code &ec) const noexcept;
+            file_type get_file_type(std::error_code& ec) const noexcept;
 
             /*! @brief Returns the size of a file.
              *
@@ -406,7 +388,7 @@ namespace lambdacommon
              * @param ec Out-parameter for error reporting in the non-throwing overload.
              * @return The size of the file, in bytes.
              */
-            uintmax_t file_size(std::error_code &ec) const noexcept;
+            uintmax_t file_size(std::error_code& ec) const noexcept;
 
             /*! @brief Get the time of the last data modification.
              *
@@ -421,7 +403,7 @@ namespace lambdacommon
              * @param ec Out-parameter for error reporting.
              * @return The time of the last modification or `file_time_type::min()` on errors.
              */
-            file_time_type last_write_time(std::error_code &ec) const noexcept;
+            file_time_type last_write_time(std::error_code& ec) const noexcept;
 
             /*! @brief Modifies file access permissions.
              *
@@ -437,8 +419,7 @@ namespace lambdacommon
              * @param perms Permissions to set, add, or remove.
              * @param ec Out-parameter for error reporting in the non-throwing overload.
              */
-            inline void permissions(perms prms, std::error_code &ec) const noexcept
-            {
+            inline void permissions(perms prms, std::error_code& ec) const noexcept {
                 this->permissions(prms, perm_options::replace, ec);
             }
 
@@ -449,7 +430,7 @@ namespace lambdacommon
              * @param opts Options controlling the action taken by this function.
              * @param ec Out-parameter for error reporting in the non-throwing overload.
              */
-            void permissions(perms prms, perm_options opts, std::error_code &ec) const;
+            void permissions(perms prms, perm_options opts, std::error_code& ec) const;
 
             /*! @brief Obtains the target of a symbolic link.
              *
@@ -467,17 +448,17 @@ namespace lambdacommon
              * @param ec Out-parameter for error reporting in the non-throwing overload.
              * @return The target of the symlink (which may not necessarily exist) if success, else an empty path on errors.
              */
-            path read_symlink(std::error_code &ec) const;
+            path read_symlink(std::error_code& ec) const;
 
             bool mkdir(perms prms = perms::all) const;
 
-            bool mkdir(std::error_code &ec) const noexcept;
+            bool mkdir(std::error_code& ec) const noexcept;
 
-            bool mkdir(perms prms, std::error_code &ec) const noexcept;
+            bool mkdir(perms prms, std::error_code& ec) const noexcept;
 
             bool mkdirs() const;
 
-            bool mkdirs(std::error_code &ec) const noexcept;
+            bool mkdirs(std::error_code& ec) const noexcept;
 
             /*! @brief Moves or renames a file or directory.
              *
@@ -488,7 +469,7 @@ namespace lambdacommon
              *   - this path is a directory which is an ancestor of `new_path`.
              * @param new_path Target path for the move/rename operation.
              */
-            void move(const path &new_path) const;
+            void move(const path& new_path) const;
 
             /*! @brief Moves or renames a file or directory.
              *
@@ -500,7 +481,7 @@ namespace lambdacommon
              * @param new_path Target path for the move/rename operation.
              * @param ec Out-parameter for error reporting.
              */
-            void move(const path &new_path, std::error_code &ec) const noexcept;
+            void move(const path& new_path, std::error_code& ec) const noexcept;
 
             /*! @brief Changes the size of a regular file by truncation or zero-fill.
              *
@@ -515,7 +496,7 @@ namespace lambdacommon
              * @param size Size that the file will now have.
              * @param ec Out-parameter for error reporting.
              */
-            void resize_file(uintmax_t size, std::error_code &ec) const noexcept;
+            void resize_file(uintmax_t size, std::error_code& ec) const noexcept;
 
             /*!
              * Checks whether the path points to a directory.
@@ -556,43 +537,41 @@ namespace lambdacommon
              * @param ec Out-parameter for error reporting.
              * @return The number of hard links, or `static_cast<size_t>(-1)` on errors.
              */
-            size_t hard_link_count(std::error_code &ec) const noexcept;
+            size_t hard_link_count(std::error_code& ec) const noexcept;
 
             /*!
              * Deletes the file or the directory.
              */
             bool remove() const;
 
-            bool remove(std::error_code &ec) const noexcept;
+            bool remove(std::error_code& ec) const noexcept;
 
             uintmax_t remove_all() const;
 
-            uintmax_t remove_all(std::error_code &ec) const noexcept;
+            uintmax_t remove_all(std::error_code& ec) const noexcept;
 
-            bool operator==(const path &other) const;
+            bool operator==(const path& other) const;
 
-            bool operator<(const path &other) const;
+            bool operator<(const path& other) const;
 
-            path &operator=(const path &other);
+            path& operator=(const path& other);
 
-            path &operator=(path &&other) noexcept;
+            path& operator=(path&& other) noexcept;
 
-            path &operator=(string_type source);
+            path& operator=(string_type source);
 
             operator string_type() const;
 
-            path &operator/=(const path &other);
+            path& operator/=(const path& other);
 
-            path &operator/=(const std::string &other);
+            path& operator/=(const std::string& other);
 
-            friend const path operator/(path self, const path &to_append)
-            {
+            friend const path operator/(path self, const path& to_append) {
                 self /= to_append;
                 return self;
             }
 
-            friend const path operator/(path self, const std::string &to_append)
-            {
+            friend const path operator/(path self, const std::string& to_append) {
                 self /= to_append;
                 return self;
             }
@@ -604,22 +583,22 @@ namespace lambdacommon
             using iterator_category = std::bidirectional_iterator_tag;
             using value_type = const path;
             using difference_type = std::ptrdiff_t;
-            using pointer = const path *;
-            using reference = const path &;
+            using pointer = const path*;
+            using reference = const path&;
 
             iterator();
 
-            iterator(const string_type::const_iterator &first, const string_type::const_iterator &last, const string_type::const_iterator &pos);
+            iterator(const string_type::const_iterator& first, const string_type::const_iterator& last, const string_type::const_iterator& pos);
 
-            iterator &operator++();
+            iterator& operator++();
 
             iterator operator++(int);
 
-            iterator &operator--();
+            iterator& operator--();
 
             iterator operator--(int);
 
-            bool operator==(const iterator &other) const;
+            bool operator==(const iterator& other) const;
 
             reference operator*() const;
 
@@ -628,9 +607,9 @@ namespace lambdacommon
         private:
             void update_current();
 
-            string_type::const_iterator increment(const string_type::const_iterator &pos) const;
+            string_type::const_iterator increment(const string_type::const_iterator& pos) const;
 
-            string_type::const_iterator decrement(const string_type::const_iterator &pos) const;
+            string_type::const_iterator decrement(const string_type::const_iterator& pos) const;
 
             string_type::const_iterator _first;
             string_type::const_iterator _last;
@@ -649,15 +628,15 @@ namespace lambdacommon
             path _p1, _p2;
 
         public:
-            filesystem_error(const std::string &msg, std::error_code ec);
+            filesystem_error(const std::string& msg, std::error_code ec);
 
-            filesystem_error(const std::string &msg, const path &p1, std::error_code ec);
+            filesystem_error(const std::string& msg, const path& p1, std::error_code ec);
 
-            filesystem_error(const std::string &msg, const path &p1, const path &p2, std::error_code ec);
+            filesystem_error(const std::string& msg, const path& p1, const path& p2, std::error_code ec);
 
-            const path &path1() const noexcept;
+            const path& path1() const noexcept;
 
-            const path &path2() const noexcept;
+            const path& path2() const noexcept;
         };
 
         class LAMBDACOMMON_API directory_entry
@@ -672,37 +651,37 @@ namespace lambdacommon
 
             explicit directory_entry(path p);
 
-            directory_entry(const directory_entry &) = default;
+            directory_entry(const directory_entry&) = default;
 
-            directory_entry(directory_entry &&) noexcept = default;
+            directory_entry(directory_entry&&) noexcept = default;
 
             // Modifiers
             void assign(path p);
 
             // Observers
-            const path &get_path() const noexcept;
+            const path& get_path() const noexcept;
 
-            operator const path &() const noexcept;
+            operator const path&() const noexcept;
 
             file_status status() const;
 
-            file_status status(std::error_code &ec) const noexcept;
+            file_status status(std::error_code& ec) const noexcept;
 
             file_status symlink_status() const;
 
-            file_status symlink_status(std::error_code &ec) const noexcept;
+            file_status symlink_status(std::error_code& ec) const noexcept;
 
             // Operators
-            bool operator==(const directory_entry &other) const;
+            bool operator==(const directory_entry& other) const;
 
-            bool operator<(const directory_entry &other) const;
+            bool operator<(const directory_entry& other) const;
 
-            const path *operator->() const;
+            const path* operator->() const;
 
             // Assignments
-            directory_entry &operator=(const directory_entry &) = default;
+            directory_entry& operator=(const directory_entry&) = default;
 
-            directory_entry &operator=(directory_entry &&) = default;
+            directory_entry& operator=(directory_entry&&) = default;
         };
 
         class LAMBDACOMMON_API directory_iterator
@@ -720,68 +699,62 @@ namespace lambdacommon
 
                 friend class directory_iterator;
 
-                explicit proxy(const directory_entry &dir_entry) : _dir_entry(dir_entry)
-                {}
+                explicit proxy(const directory_entry& dir_entry) : _dir_entry(dir_entry) {}
 
             public:
-                const directory_entry &operator*() const & noexcept
-                { return _dir_entry; }
+                const directory_entry& operator*() const& noexcept { return _dir_entry; }
 
-                directory_entry operator*() && noexcept
-                { return std::move(_dir_entry); }
+                directory_entry operator*()&& noexcept { return std::move(_dir_entry); }
             };
 
             using iterator_category = std::input_iterator_tag;
             using value_type = directory_entry;
             using difference_type = std::ptrdiff_t;
-            using pointer = const directory_entry *;
-            using reference = const directory_entry &;
+            using pointer = const directory_entry*;
+            using reference = const directory_entry&;
 
             directory_iterator() noexcept;
 
             explicit directory_iterator(path p);
 
-            directory_iterator(path p, std::error_code &ec) noexcept;
+            directory_iterator(path p, std::error_code& ec) noexcept;
 
-            directory_iterator(const directory_iterator &) = default;
+            directory_iterator(const directory_iterator&) = default;
 
-            directory_iterator(directory_iterator &&) noexcept = default;
+            directory_iterator(directory_iterator&&) noexcept = default;
 
-            directory_iterator &operator++();
+            directory_iterator& operator++();
 
-            directory_iterator &increment(std::error_code &ec) noexcept;
+            directory_iterator& increment(std::error_code& ec) noexcept;
 
-            proxy operator++(int)
-            {
+            proxy operator++(int) {
                 proxy proxy{**this};
                 ++*this;
                 return proxy;
             }
 
             // Operators
-            bool operator==(const directory_iterator &other) const;
+            bool operator==(const directory_iterator& other) const;
 
-            bool operator!=(const directory_iterator &other) const;
+            bool operator!=(const directory_iterator& other) const;
 
             reference operator*() const;
 
             pointer operator->() const;
 
-            void swap(directory_iterator &other);
+            void swap(directory_iterator& other);
 
             // Assignements
-            directory_iterator &operator=(const directory_iterator &other);
+            directory_iterator& operator=(const directory_iterator& other);
 
-            directory_iterator &operator=(directory_iterator &&other) noexcept;
+            directory_iterator& operator=(directory_iterator&& other) noexcept;
         };
 
-        inline directory_iterator begin(directory_iterator iter) noexcept
-        {
+        inline directory_iterator begin(directory_iterator iter) noexcept {
             return std::move(iter);
         }
 
-        inline directory_iterator end(const directory_iterator &) noexcept
-        {
+        inline directory_iterator end(const directory_iterator&) noexcept {
             return directory_iterator();
         }
 
@@ -791,7 +764,7 @@ namespace lambdacommon
          * @param target Path to point the symlink to, does not have to exist.
          * @param link Path of the new symbolic link.
          */
-        extern void LAMBDACOMMON_API create_symlink(const path &target, const path &link);
+        extern void LAMBDACOMMON_API create_symlink(const path& target, const path& link);
 
         /*! @brief Creates a symbolic link.
          *
@@ -800,7 +773,7 @@ namespace lambdacommon
          * @param link Path of the new symbolic link.
          * @param ec Out-parameter for error reporting in the non-throwing overload.
          */
-        extern void LAMBDACOMMON_API create_symlink(const path &target, const path &link, std::error_code &ec) noexcept;
+        extern void LAMBDACOMMON_API create_symlink(const path& target, const path& link, std::error_code& ec) noexcept;
 
         /*! @brief Creates a hard link.
          *
@@ -812,7 +785,7 @@ namespace lambdacommon
          * @param target Path of the file or directory to link to.
          * @param link Path of the new hard link.
          */
-        extern void LAMBDACOMMON_API create_hardlink(const path &target, const path &link);
+        extern void LAMBDACOMMON_API create_hardlink(const path& target, const path& link);
 
         /*! @brief Creates a hard link.
          *
@@ -825,7 +798,7 @@ namespace lambdacommon
          * @param link Path of the new hard link.
          * @param ec Out-parameter for error reporting in the non-throwing overload.
          */
-        extern void LAMBDACOMMON_API create_hardlink(const path &target, const path &link, std::error_code &ec) noexcept;
+        extern void LAMBDACOMMON_API create_hardlink(const path& target, const path& link, std::error_code& ec) noexcept;
 
         /*! @brief Checks whether two paths refer to the same filesystem object.
          *
@@ -837,7 +810,7 @@ namespace lambdacommon
          * @param path2 Path to check for equivalence.
          * @return True if the path1 and path2 refer to the same file or directory and their file status is the same, false otherwise.
          */
-        extern bool LAMBDACOMMON_API equivalent(const path &path1, const path &path2);
+        extern bool LAMBDACOMMON_API equivalent(const path& path1, const path& path2);
 
         /*! @brief Checks whether two paths refer to the same filesystem object.
          *
@@ -850,7 +823,7 @@ namespace lambdacommon
          * @param ec Out-parameter for error reporting in the non-throwing overload.
          * @return True if the path1 and path2 refer to the same file or directory and their file status is the same, false otherwise.
          */
-        extern bool LAMBDACOMMON_API equivalent(const path &path1, const path &path2, std::error_code &ec) noexcept;
+        extern bool LAMBDACOMMON_API equivalent(const path& path1, const path& path2, std::error_code& ec) noexcept;
 
         /*! @brief Copies a symbolic link.
          *
@@ -859,7 +832,7 @@ namespace lambdacommon
          * @param from Path to a symbolic link to copy.
          * @param to Destination path of the new symlink.
          */
-        extern void LAMBDACOMMON_API copy_symlink(const path &from, const path &to);
+        extern void LAMBDACOMMON_API copy_symlink(const path& from, const path& to);
 
         /*! @brief Copies a symbolic link.
         *
@@ -869,21 +842,18 @@ namespace lambdacommon
         * @param to Destination path of the new symlink.
         * @param ec Out-parameter for error reporting in the non-throwing overload.
         */
-        inline void copy_symlink(const path &from, const path &to, std::error_code &ec) noexcept
-        {
+        inline void copy_symlink(const path& from, const path& to, std::error_code& ec) noexcept {
             ec.clear();
             auto original = from.read_symlink(ec);
             if (!ec)
                 create_symlink(original, to, ec);
         }
 
-        inline void move(const path &old_path, const path &new_path)
-        {
+        inline void move(const path& old_path, const path& new_path) {
             old_path.move(new_path);
         }
 
-        inline void move(const path &old_path, const path &new_path, std::error_code &ec) noexcept
-        {
+        inline void move(const path& old_path, const path& new_path, std::error_code& ec) noexcept {
             old_path.move(new_path, ec);
         }
 
@@ -894,7 +864,7 @@ namespace lambdacommon
          * @param p Path to examine.
          * @return The filesystem information (a `space_info` object).
          */
-        extern space_info LAMBDACOMMON_API space(const path &p);
+        extern space_info LAMBDACOMMON_API space(const path& p);
 
         /*! @brief Determines available free space on the filesystem.
          *
@@ -905,7 +875,7 @@ namespace lambdacommon
          * @param ec Out-parameter for error reporting in the non-throwing overload.
          * @return The filesystem information (a `space_info` object).
          */
-        extern space_info LAMBDACOMMON_API space(const path &p, std::error_code &ec) noexcept;
+        extern space_info LAMBDACOMMON_API space(const path& p, std::error_code& ec) noexcept;
 
         /*! @brief Returns a directory suitable for temporary files.
          *
@@ -920,7 +890,7 @@ namespace lambdacommon
          * @param ec Out-parameter for error reporting in the non-throwing overload.
          * @return A directory suitable for temporary files. The path is guaranteed to exist and to be a directory. The overload takes `error_code&` argument returns an empty path on error.
          */
-        extern path LAMBDACOMMON_API temp_directory_path(std::error_code &ec) noexcept;
+        extern path LAMBDACOMMON_API temp_directory_path(std::error_code& ec) noexcept;
 
         /*!
          * Gets the current working directory as a wide string.
