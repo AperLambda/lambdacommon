@@ -765,7 +765,7 @@ namespace lambdacommon::system
         auto msg = lstring::from_wstring_to_utf8(std::wstring((LPWSTR) msg_buf));
         LocalFree(msg_buf);
         return msg;
-#elif defined(LAMBDA_MAC_OSX) || defined(LAMBDA_WASM)
+#elif defined(LAMBDA_MAC_OSX) || defined(LAMBDA_WASM) || defined(LAMBDA_ANDROID)
         char buffer[512];
         auto rc = strerror_r(error_code ? error_code : errno, buffer, sizeof(buffer));
         return rc == 0 ? buffer : "Error in strerror_r!";
