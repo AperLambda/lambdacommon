@@ -13,16 +13,13 @@
 #include "../lambdacommon.h"
 #include <chrono>
 
-namespace lambdacommon
+namespace lambdacommon::time
 {
-    namespace time
-    {
-        /*!
-         * Gets the current time in milliseconds.
-         * @return The difference, measured in milliseconds, between the current time and midnight, January 1, 1970 UTC.
-         */
-        extern time_t LAMBDACOMMON_API get_time_millis();
-    }
+    /*!
+     * Gets the current time in milliseconds.
+     * @return The difference, measured in milliseconds, between the current time and midnight, January 1, 1970 UTC.
+     */
+    extern time_t LAMBDACOMMON_API get_time_millis();
 }
 
 #endif //LAMBDACOMMON_TIME_H

@@ -14,6 +14,7 @@
 #include "../types.h"
 #include <memory>
 #include <system_error>
+#include <utility>
 
 #ifdef LAMBDA_WINDOWS
 #  pragma warning(push)
@@ -28,7 +29,7 @@ namespace lambdacommon
          *
          * file_type defines constants that indicate a type of a file or directory a path refers to. The value of the enumerators are distinct.
          */
-        enum class file_type : int8_t
+        enum class file_type : i8
         {
             none = 0,
             not_found = -1,
@@ -46,7 +47,7 @@ namespace lambdacommon
          *
          * This type represents file access permissions. perms satisfies the requirements of `BitmaskType`.
          */
-        enum class perms : uint16_t
+        enum class perms : u16
         {
             none = 0,
             owner_read = 0400,
@@ -94,7 +95,7 @@ namespace lambdacommon
 
         inline perms& operator^=(perms& self, perms other) noexcept { return self = self ^ other; }
 
-        enum class perm_options : uint16_t
+        enum class perm_options : u16
         {
             replace = 3,
             add = 1,
@@ -198,7 +199,7 @@ namespace lambdacommon
 
             path(std::string path);
 
-            path(std::wstring path);
+            explicit path(std::wstring path);
 
             path(const path& other);
 
@@ -222,52 +223,52 @@ namespace lambdacommon
              * Returns the root name of the generic-format path. If the path (in generic format) does not include root name, returns `FilePath()`.
              * @return The root name of the path.
              */
-            path root_name() const;
+            [[nodiscard]] path root_name() const;
 
             /*!
              * Returns the root directory of the generic-format path. If the path (in generic format) does not include root directory, returns `path()`.
              * @return The root directory of the path.
              */
-            path root_directory() const;
+            [[nodiscard]] path root_directory() const;
 
             /*!
              * Returns the root path of the path. If the path foes not include root path, returns `path()`.
              * Effectively, returns the following `root_name() / root_directory()`.
              * @return The root path of the path.
              */
-            path root_path() const;
+            [[nodiscard]] path root_path() const;
 
-            path relative_path() const;
+            [[nodiscard]] path relative_path() const;
 
-            bool empty() const override;
+            [[nodiscard]] bool empty() const override;
 
             /*!
              * Checks whether `root_name()` is empty.
              * @return True if the root name is not empty, false otherwise.
              */
-            bool has_root_name() const;
+            [[nodiscard]] bool has_root_name() const;
 
             /*!
              * Checks whether `root_directory()` is empty.
              * @return True if the root directory is not empty, false otherwise.
              */
-            bool has_root_directory() const;
+            [[nodiscard]] bool has_root_directory() const;
 
             /*!
              * Checks whether `root_path()` is empty.
              * @return True if the root path is not empty, false otherwise.
              */
-            bool has_root_path() const;
+            [[nodiscard]] bool has_root_path() const;
 
             /*!
              * Checks whether `relative_path()` is empty.
              * @return True if the relative path is not empty, false otherwise.
              */
-            bool has_relative_path() const;
+            [[nodiscard]] bool has_relative_path() const;
 
-            bool has_filename() const;
+            [[nodiscard]] bool has_filename() const;
 
-            bool is_absolute() const override;
+            [[nodiscard]] bool is_absolute() const override;
 
             class LAMBDACOMMON_API iterator;
 
@@ -277,37 +278,37 @@ namespace lambdacommon
              * Returns an iterator to the first element of the path. If the path is empty, the returned iterator is equal to `end()`.
              * @return Iterator to the first element of the path.
              */
-            iterator begin() const;
+            [[nodiscard]] iterator begin() const;
 
             /*!
              * Returns an iterator one past the last element of the path.
              * @return Iterator one past the end of the path.
              */
-            iterator end() const;
+            [[nodiscard]] iterator end() const;
 
-            std::string to_string() const override;
+            [[nodiscard]] std::string to_string() const override;
 
-            std::wstring to_wstring() const override;
+            [[nodiscard]] std::wstring to_wstring() const override;
 
-            std::string to_generic_string() const;
+            [[nodiscard]] std::string to_generic_string() const;
 
             /*!
              * Gets the path as the native string type.
              * @return The path as the native string type.
              */
-            const string_type& native() const noexcept;
+            [[nodiscard]] const string_type& native() const noexcept;
 
             /*!
              * Gets the path as a C value.
              * @return The path as a C value.
              */
-            const value_type* c_str() const noexcept;
+            [[nodiscard]] const value_type* c_str() const noexcept;
 
             /*!
              * Makes a new instance of FilePath with the absolute path.
              * @return The absolute path.
              */
-            path to_absolute() const;
+            [[nodiscard]] path to_absolute() const;
 
             /*!
              * Makes a new instance of FilePath with the absolute path.
@@ -320,25 +321,25 @@ namespace lambdacommon
              * Checks whether the path exists or not.
              * @return True if the path exists else false.
              */
-            bool exists() const;
+            [[nodiscard]] bool exists() const;
 
             /*!
              * Gets the generic-format filename component of the path.
              * @return The filename identified by the path.
              */
-            path get_filename() const;
+            [[nodiscard]] path get_filename() const;
 
             /*!
              * Gets the file extension.
              * @return The file extension.
              */
-            path get_extension() const;
+            [[nodiscard]] path get_extension() const;
 
             /*!
              * Determines the type and attributes of the filesystem object.
              * @return The file status.
              */
-            file_status status() const;
+            [[nodiscard]] file_status status() const;
 
             /*!
              * Determines the type and attributes of the filesystem object.
@@ -351,7 +352,7 @@ namespace lambdacommon
              * Determines the type and attributes of the filesystem object.
              * @return The file status.
              */
-            file_status symlink_status() const;
+            [[nodiscard]] file_status symlink_status() const;
 
             /*!
              * Determines the type and attributes of the filesystem object.
@@ -364,7 +365,7 @@ namespace lambdacommon
              * Gets the file type.
              * @return The file type.
              */
-            file_type get_file_type() const;
+            [[nodiscard]] file_type get_file_type() const;
 
             /*!
              * Gets the file type.
@@ -379,7 +380,7 @@ namespace lambdacommon
              * The result of attempting to determine the size of a directory (as well as any other file that is not a regular file or a symlink) is implementation-defined.
              * @return The size of the file, in bytes.
              */
-            uintmax_t file_size() const;
+            [[nodiscard]] uintmax_t file_size() const;
 
             /*! @brief Returns the size of a file.
              *
@@ -395,7 +396,7 @@ namespace lambdacommon
              * Returns the time of the last modification of this path (symlinks are followed).
              * @return The time of the last modification.
              */
-            file_time_type last_write_time() const;
+            [[nodiscard]] file_time_type last_write_time() const;
 
             /*! @brief Get the time of the last data modification.
              *
@@ -439,7 +440,7 @@ namespace lambdacommon
              * The non-throwing overload returns an empty path on errors.
              * @return The target of the symlink (which may not necessarily exist).
              */
-            path read_symlink() const;
+            [[nodiscard]] path read_symlink() const;
 
             /*! @brief Obtains the target of a symbolic link.
              *
@@ -502,25 +503,25 @@ namespace lambdacommon
              * Checks whether the path points to a directory.
              * @return True if the path points to a directory, else false.
              */
-            bool is_directory() const;
+            [[nodiscard]] bool is_directory() const;
 
             /*!
              * Checks whether the path points to a regular file.
              * @return True if the path points to a regular file, else false.
              */
-            bool is_file() const;
+            [[nodiscard]] bool is_file() const;
 
             /*!
              * Checks whether the path points to a symlink.
              * @return True if the path points to a symlink, else false.
              */
-            bool is_symlink() const;
+            [[nodiscard]] bool is_symlink() const;
 
             /*!
              * Gets the size of the file in bytes.
              * @return The size of the file.
              */
-            size_t get_size() const;
+            [[nodiscard]] size_t get_size() const;
 
             /*! @brief Returns the number of hard links referring to the specific file.
              *
@@ -528,7 +529,7 @@ namespace lambdacommon
              *
              * @return The number of hard links.
              */
-            size_t hard_link_count() const;
+            [[nodiscard]] size_t hard_link_count() const;
 
             /*! @brief Returns the number of hard links referring to the specific file.
              *
@@ -560,7 +561,7 @@ namespace lambdacommon
 
             path& operator=(string_type source);
 
-            operator string_type() const;
+            explicit operator string_type() const;
 
             path& operator/=(const path& other);
 
@@ -634,9 +635,9 @@ namespace lambdacommon
 
             filesystem_error(const std::string& msg, const path& p1, const path& p2, std::error_code ec);
 
-            const path& path1() const noexcept;
+            [[nodiscard]] const path& path1() const noexcept;
 
-            const path& path2() const noexcept;
+            [[nodiscard]] const path& path2() const noexcept;
         };
 
         class LAMBDACOMMON_API directory_entry
@@ -659,15 +660,15 @@ namespace lambdacommon
             void assign(path p);
 
             // Observers
-            const path& get_path() const noexcept;
+            [[nodiscard]] const path& get_path() const noexcept;
 
             operator const path&() const noexcept;
 
-            file_status status() const;
+            [[nodiscard]] file_status status() const;
 
             file_status status(std::error_code& ec) const noexcept;
 
-            file_status symlink_status() const;
+            [[nodiscard]] file_status symlink_status() const;
 
             file_status symlink_status(std::error_code& ec) const noexcept;
 
@@ -699,7 +700,7 @@ namespace lambdacommon
 
                 friend class directory_iterator;
 
-                explicit proxy(const directory_entry& dir_entry) : _dir_entry(dir_entry) {}
+                explicit proxy(directory_entry dir_entry) : _dir_entry(std::move(dir_entry)) {}
 
             public:
                 const directory_entry& operator*() const& noexcept { return _dir_entry; }

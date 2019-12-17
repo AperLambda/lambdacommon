@@ -10,7 +10,7 @@
 #ifndef LAMBDACOMMON_COLOR_H
 #define LAMBDACOMMON_COLOR_H
 
-#include "../object.h"
+#include "../types.h"
 #include <utility>
 
 namespace lambdacommon
@@ -20,13 +20,13 @@ namespace lambdacommon
     class LAMBDACOMMON_API Color : public Object
     {
     private:
-        float _red;
-        float _green;
-        float _blue;
-        float _alpha;
+        f32 _red;
+        f32 _green;
+        f32 _blue;
+        f32 _alpha;
 
     public:
-        Color(float red, float green, float blue, float alpha = 1.f);
+        Color(f32 red, f32 green, f32 blue, f32 alpha = 1.f);
 
         /*! @brief Gets the red value of the color.
          *
@@ -34,7 +34,7 @@ namespace lambdacommon
          *
          * @return The red value (between 0 and 1).
          */
-        float red() const;
+        f32 red() const;
 
         /*! @brief Gets the green value of the color.
          *
@@ -42,7 +42,7 @@ namespace lambdacommon
          *
          * @return The green value (between 0 and 1).
          */
-        float green() const;
+        f32 green() const;
 
         /*! @brief Gets the blue value of the color.
          *
@@ -50,7 +50,7 @@ namespace lambdacommon
          *
          * @return The blue value (between 0 and 1).
          */
-        float blue() const;
+        f32 blue() const;
 
         /*! @brief Gets the alpha value of the color.
          *
@@ -58,7 +58,7 @@ namespace lambdacommon
          *
          * @return The alpha value (between 0 and 1).
          */
-        float alpha() const;
+        f32 alpha() const;
 
         /*! @brief Gets the red value of the color.
          *
@@ -66,7 +66,7 @@ namespace lambdacommon
          *
          * @return The red value (between 0 and 255).
          */
-        uint8_t red_as_int() const;
+        u8 red_as_int() const;
 
         /*! @brief Gets the green value of the color.
          *
@@ -74,7 +74,7 @@ namespace lambdacommon
          *
          * @return The green value (between 0 and 255).
          */
-        uint8_t green_as_int() const;
+        u8 green_as_int() const;
 
         /*! @brief Gets the blue value of the color.
          *
@@ -82,7 +82,7 @@ namespace lambdacommon
          *
          * @return The blue value (between 0 and 255).
          */
-        uint8_t blue_as_int() const;
+        u8 blue_as_int() const;
 
         /*! @brief Gets the alpha value of the color.
          *
@@ -90,7 +90,7 @@ namespace lambdacommon
          *
          * @return The alpha value (between 0 and 255).
          */
-        uint8_t alpha_as_int() const;
+        u8 alpha_as_int() const;
 
         /*!
          * Blends this color with a background color.
@@ -105,13 +105,13 @@ namespace lambdacommon
          * @param ratio The mix ratio.
          * @return The mixed color.
          */
-        const Color mix(const Color& b, float ratio) const;
+        const Color mix(const Color& b, f32 ratio) const;
 
         /*!
          * Gets the color as an hexadecimal color.
          * @return The hexadecimal color.
          */
-        //uint64_t to_hex() const;
+        //u64 to_hex() const;
 
         /*!
          * Gets the color as a string.
@@ -139,7 +139,7 @@ namespace lambdacommon
 
         Color& operator*=(const Color& other);
 
-        Color& operator*=(float coefficient);
+        Color& operator*=(f32 coefficient);
 
         /*!
          * Adds the specified color to the current color.
@@ -168,7 +168,7 @@ namespace lambdacommon
          * @param coefficient The multiplication coefficient.
          * @return The multiplied color.
          */
-        friend const Color operator*(Color self, float coefficient);
+        friend const Color operator*(Color self, f32 coefficient);
 
         /**
          * Represents the black color.
@@ -213,7 +213,7 @@ namespace lambdacommon
          * @param ratio The mix ratio.
          * @return The mixed color.
          */
-        extern Color LAMBDACOMMON_API mix(const Color& a, const Color& b, float ratio);
+        extern Color LAMBDACOMMON_API mix(const Color& a, const Color& b, f32 ratio);
 
         /*!
          * Makes a new Color instance from the given hexadecimal color value.
@@ -221,7 +221,7 @@ namespace lambdacommon
          * @param has_alpha True if the hexadecimal color value includes the alpha channel, else false.
          * @return A new Color instance.
          */
-        extern Color LAMBDACOMMON_API from_hex(uint64_t hex_color, bool has_alpha = true);
+        extern Color LAMBDACOMMON_API from_hex(u64 hex_color, bool has_alpha = true);
 
         /*!
          * Makes a new Color instance from the given hexadecimal color value string.
@@ -238,7 +238,7 @@ namespace lambdacommon
          * @param alpha Alpha channel.
          * @return A new Color instance.
          */
-        extern Color LAMBDACOMMON_API from_int_rgba(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+        extern Color LAMBDACOMMON_API from_int_rgba(u8 red, u8 green, u8 blue, u8 alpha = 255);
     }
 }
 

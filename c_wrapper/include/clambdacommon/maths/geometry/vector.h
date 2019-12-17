@@ -10,15 +10,15 @@
 #ifndef CLAMBDACOMMON_VECTOR_H
 #define CLAMBDACOMMON_VECTOR_H
 
-#include <clambdacommon/maths/geometry/vector_int8_t.h>
-#include <clambdacommon/maths/geometry/vector_uint8_t.h>
-#include <clambdacommon/maths/geometry/vector_int16_t.h>
-#include <clambdacommon/maths/geometry/vector_uint16_t.h>
-#include <clambdacommon/maths/geometry/vector_int32_t.h>
-#include <clambdacommon/maths/geometry/vector_uint32_t.h>
-#include <clambdacommon/maths/geometry/vector_int64_t.h>
-#include <clambdacommon/maths/geometry/vector_uint64_t.h>
-#include <clambdacommon/maths/geometry/vector_double.h>
-#include <clambdacommon/maths/geometry/vector_float.h>
+#include <clambdacommon/maths/geometry/vector_i8.h>
+#include <clambdacommon/maths/geometry/vector_u8.h>
+#include <clambdacommon/maths/geometry/vector_i16.h>
+#include <clambdacommon/maths/geometry/vector_u16.h>
+#include <clambdacommon/maths/geometry/vector_i32.h>
+#include <clambdacommon/maths/geometry/vector_u32.h>
+#include <clambdacommon/maths/geometry/vector_i64.h>
+#include <clambdacommon/maths/geometry/vector_u64.h>
+#include <clambdacommon/maths/geometry/vector_f32.h>
+#include <clambdacommon/maths/geometry/vector_f64.h>
 
 #endif //CLAMBDACOMMON_VECTOR_H

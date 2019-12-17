@@ -10,7 +10,7 @@
 #ifndef CLAMBDACOMMON_VECTOR_@LC_C_TYPE@_H
 #define CLAMBDACOMMON_VECTOR_@LC_C_TYPE@_H
 
-#include <inttypes.h>
+#include <clambdacommon/types.h>
 
 #ifdef __cplusplus
 extern "C" {

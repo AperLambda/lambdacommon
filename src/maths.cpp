@@ -18,19 +18,19 @@ namespace lambdacommon::maths
 #define RADIANS(TYPE, VALUE) VALUE * (static_cast<TYPE>(LCOMMON_PI) / static_cast<TYPE>(180.0))
 #define DEGREES(TYPE, VALUE) VALUE * (static_cast<TYPE>(180.0) / static_cast<TYPE>(LCOMMON_PI))
 
-    double LAMBDACOMMON_API radians(double degrees) {
-        return RADIANS(double, degrees);
+    f64 LAMBDACOMMON_API radians(f64 degrees) {
+        return RADIANS(f64, degrees);
     }
 
-    float LAMBDACOMMON_API radians(float degrees) {
-        return RADIANS(float, degrees);
+    f32 LAMBDACOMMON_API radians(f32 degrees) {
+        return RADIANS(f32, degrees);
     }
 
-    double LAMBDACOMMON_API degrees(double radians) {
-        return DEGREES(double, radians);
+    f64 LAMBDACOMMON_API degrees(f64 radians) {
+        return DEGREES(f64, radians);
     }
 
-    float LAMBDACOMMON_API degrees(float radians) {
-        return DEGREES(float, radians);
+    f32 LAMBDACOMMON_API degrees(f32 radians) {
+        return DEGREES(f32, radians);
     }
 }

@@ -24,24 +24,24 @@ namespace lambdacommon
     using namespace std::rel_ops;
 
     /*!
-     * ResourceName
+     * Identifier
      *
      * Represents a resource identifier.
      */
-    class LAMBDACOMMON_API ResourceName : public Object
+    class LAMBDACOMMON_API Identifier : public Object
     {
     private:
         std::string _namespace;
         std::string _name;
 
     public:
-        ResourceName(const std::string& name);
+        Identifier(const std::string& name);
 
-        ResourceName(std::string domain, std::string name) noexcept;
+        Identifier(std::string domain, std::string name) noexcept;
 
-        ResourceName(const ResourceName& other);
+        Identifier(const Identifier& other);
 
-        ResourceName(ResourceName&& other) noexcept;
+        Identifier(Identifier&& other) noexcept;
 
         /*!
          * Gets the namespace of the resource.
@@ -56,11 +56,11 @@ namespace lambdacommon
         const std::string& get_name() const;
 
         /*!
-         * Creates a new {@code ResourceName} from this resource name.
+         * Creates a new {@code Identifier} from this resource name.
          * @param name The path to append.
-         * @return The new {@code ResourceName} with the appended path.
+         * @return The new {@code Identifier} with the appended path.
          */
-        ResourceName sub(const std::string& name) const;
+        Identifier sub(const std::string& name) const;
 
         /*!
          * Gets the resource name as a string.
@@ -69,21 +69,21 @@ namespace lambdacommon
         std::string to_string() const override;
 
         /*!
-         * Creates a new {@code ResourceName} from this resource name.
+         * Creates a new {@code Identifier} from this resource name.
          * @param path The path to append.
-         * @return The new {@code ResourceName} with the appended path.
+         * @return The new {@code Identifier} with the appended path.
          */
-        inline ResourceName operator/(const std::string& path) const {
+        inline Identifier operator/(const std::string& path) const {
             return sub(path);
         }
 
-        ResourceName& operator=(const ResourceName& other);
+        Identifier& operator=(const Identifier& other);
 
-        ResourceName& operator=(ResourceName&& other) noexcept;
+        Identifier& operator=(Identifier&& other) noexcept;
 
-        bool operator==(const ResourceName& other) const;
+        bool operator==(const Identifier& other) const;
 
-        bool operator<(const ResourceName& other) const;
+        bool operator<(const Identifier& other) const;
 
         template<std::size_t N>
         decltype(auto) get() const {
@@ -100,7 +100,7 @@ namespace lambdacommon
     class LAMBDACOMMON_API ResourcesManager
     {
     protected:
-        uint32_t _id;
+        u32 _id;
 
     public:
         ResourcesManager();
@@ -113,14 +113,14 @@ namespace lambdacommon
          * Gets the identifier of the resources manager.
          * @return The identifier.
          */
-        uint32_t get_id() const;
+        u32 get_id() const;
 
         /*! @brief Checks whether the resources exists or not.
          *
          * @param resource The resource to check.
          * @return True of the resource exists, else false.
          */
-        virtual bool has_resource(const ResourceName& resource) const = 0;
+        [[nodiscard]] virtual bool has_resource(const Identifier& resource) const = 0;
 
         /*! @brief Checks whether the resource exists or not.
          *
@@ -128,14 +128,7 @@ namespace lambdacommon
          * @param extension The extension of the resource file.
          * @return True if the resource exists, else false.
          */
-        virtual bool has_resource(const ResourceName& resource, const std::string& extension) const = 0;
-
-        /*!
-         * Loads the resource content into a string value.
-         * @param resource The resource to load.
-         * @return The resource content if successfully loaded, else an empty string.
-         */
-        virtual std::string load_resource(const ResourceName& resource) const = 0;
+        [[nodiscard]] virtual bool has_resource(const Identifier& resource, const std::string& extension) const = 0;
 
         /*! @brief Loads the resource content into a string value.
          *
@@ -143,9 +136,16 @@ namespace lambdacommon
          * @param extension The extension of the resource file.
          * @return The resource content if successfully loaded,X else an empty string.
          */
-        virtual std::string load_resource(const ResourceName& resource, const std::string& extension) const = 0;
+        [[nodiscard]] virtual std::string load_resource(const Identifier& resource, const std::string& extension) const = 0;
 
         bool operator==(const ResourcesManager& other) const;
+
+        /*!
+         * Loads the resource content into a string value.
+         * @param resource The resource to load.
+         * @return The resource content if successfully loaded, else an empty string.
+         */
+        [[nodiscard]] virtual std::string load_resource(const Identifier& resource) const = 0;
     };
 
     class LAMBDACOMMON_API FileResourcesManager : public ResourcesManager
@@ -166,16 +166,16 @@ namespace lambdacommon
          */
         const lambdacommon::fs::path& get_working_directory() const;
 
-        bool has_resource(const ResourceName& resource) const override;
+        bool has_resource(const Identifier& resource) const override;
 
-        bool has_resource(const ResourceName& resource, const std::string& extension) const override;
+        bool has_resource(const Identifier& resource, const std::string& extension) const override;
 
         lambdacommon::fs::path
-        get_resource_path(const ResourceName& resource, const std::string& extension) const;
+        get_resource_path(const Identifier& resource, const std::string& extension) const;
 
-        std::string load_resource(const ResourceName& resource) const override;
+        std::string load_resource(const Identifier& resource) const override;
 
-        std::string load_resource(const ResourceName& resource, const std::string& extension) const override;
+        std::string load_resource(const Identifier& resource, const std::string& extension) const override;
 
         FileResourcesManager& operator=(const FileResourcesManager& other);
 
@@ -185,18 +185,18 @@ namespace lambdacommon
     };
 }
 
-// Structured bindings for lambdacommon::ResourceName.
+// Structured bindings for lambdacommon::Identifier.
 namespace std
 {
     template<>
-    struct tuple_size<lambdacommon::ResourceName> : std::integral_constant<std::size_t, 2>
+    struct tuple_size<lambdacommon::Identifier> : std::integral_constant<std::size_t, 2>
     {
     };
 
     template<std::size_t N>
-    struct tuple_element<N, lambdacommon::ResourceName>
+    struct tuple_element<N, lambdacommon::Identifier>
     {
-        using type = decltype(std::declval<lambdacommon::ResourceName>().get<N>());
+        using type = decltype(std::declval<lambdacommon::Identifier>().get<N>());
     };
 }
 

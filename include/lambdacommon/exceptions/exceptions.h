@@ -24,7 +24,7 @@ namespace lambdacommon
     public:
         explicit ParseException(std::string msg) : _msg(std::move(msg)) {}
 
-        const char* what() const noexcept override {
+        [[nodiscard]] const char* what() const noexcept override {
             return _msg.c_str();
         }
     };

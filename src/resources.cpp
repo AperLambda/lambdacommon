@@ -21,7 +21,7 @@
 
 namespace lambdacommon
 {
-    ResourceName::ResourceName(const std::string& name) {
+    Identifier::Identifier(const std::string& name) {
         auto separator = name.find_first_of(':');
         if (separator <= 0)
             throw std::invalid_argument("The resource name '" + name + "' is invalid.");
@@ -29,29 +29,29 @@ namespace lambdacommon
         _name = name.substr(separator + 1);
     }
 
-    ResourceName::ResourceName(std::string domain, std::string name) noexcept : _namespace(std::move(domain)), _name(std::move(name)) {}
+    Identifier::Identifier(std::string domain, std::string name) noexcept : _namespace(std::move(domain)), _name(std::move(name)) {}
 
-    ResourceName::ResourceName(const ResourceName& other) = default;
+    Identifier::Identifier(const Identifier& other) = default;
 
-    ResourceName::ResourceName(ResourceName&& other) noexcept : _namespace(std::move(other._namespace)), _name(std::move(other._name)) {}
+    Identifier::Identifier(Identifier&& other) noexcept : _namespace(std::move(other._namespace)), _name(std::move(other._name)) {}
 
-    const std::string& ResourceName::get_domain() const {
+    const std::string& Identifier::get_domain() const {
         return _namespace;
     }
 
-    const std::string& ResourceName::get_name() const {
+    const std::string& Identifier::get_name() const {
         return _name;
     }
 
-    ResourceName ResourceName::sub(const std::string& name) const {
-        return ResourceName(_namespace, lstring::merge_path(_name, name));
+    Identifier Identifier::sub(const std::string& name) const {
+        return Identifier(_namespace, lstring::merge_path(_name, name));
     }
 
-    std::string ResourceName::to_string() const {
+    std::string Identifier::to_string() const {
         return _namespace + ":" + _name;
     }
 
-    ResourceName& ResourceName::operator=(const ResourceName& other) {
+    Identifier& Identifier::operator=(const Identifier& other) {
         if (this != &other) {
             if (other._namespace != _namespace)
                 _namespace = other._namespace;
@@ -61,7 +61,7 @@ namespace lambdacommon
         return *this;
     }
 
-    ResourceName& ResourceName::operator=(ResourceName&& other) noexcept {
+    Identifier& Identifier::operator=(Identifier&& other) noexcept {
         if (this != &other) {
             _namespace = std::move(other._namespace);
             _name = std::move(other._name);
@@ -69,18 +69,18 @@ namespace lambdacommon
         return *this;
     }
 
-    bool ResourceName::operator==(const ResourceName& other) const {
+    bool Identifier::operator==(const Identifier& other) const {
         return _namespace == other._namespace && _name == other._name;
     }
 
-    bool ResourceName::operator<(const ResourceName& other) const {
+    bool Identifier::operator<(const Identifier& other) const {
         return std::tie(_namespace, _name) < std::tie(other._namespace, other._name);
     }
 
     /*
      * ResourcesManager
      */
-    uint32_t last_id = 0;
+    u32 last_id = 0;
 
     ResourcesManager::ResourcesManager() : _id(++last_id) {}
 
@@ -88,7 +88,7 @@ namespace lambdacommon
 
     ResourcesManager::ResourcesManager(ResourcesManager&& other) noexcept : _id(other._id) {}
 
-    uint32_t ResourcesManager::get_id() const {
+    u32 ResourcesManager::get_id() const {
         return _id;
     }
 
@@ -112,26 +112,26 @@ namespace lambdacommon
         return _working_directory;
     }
 
-    bool FileResourcesManager::has_resource(const ResourceName& resource) const {
+    bool FileResourcesManager::has_resource(const Identifier& resource) const {
         return this->has_resource(resource, "");
     }
 
-    bool FileResourcesManager::has_resource(const ResourceName& resource, const std::string& extension) const {
+    bool FileResourcesManager::has_resource(const Identifier& resource, const std::string& extension) const {
         return get_resource_path(resource, extension).exists();
     }
 
-    lambdacommon::fs::path FileResourcesManager::get_resource_path(const ResourceName& resource, const std::string& extension) const {
+    lambdacommon::fs::path FileResourcesManager::get_resource_path(const Identifier& resource, const std::string& extension) const {
         auto file = resource.get_name();
         if (!extension.empty())
             file += "." + extension;
         return (_working_directory / resource.get_domain()) / file;
     }
 
-    std::string FileResourcesManager::load_resource(const ResourceName& resource) const {
+    std::string FileResourcesManager::load_resource(const Identifier& resource) const {
         return this->load_resource(resource, "");
     }
 
-    std::string FileResourcesManager::load_resource(const ResourceName& resource, const std::string& extension) const {
+    std::string FileResourcesManager::load_resource(const Identifier& resource, const std::string& extension) const {
         auto resource_path = get_resource_path(resource, extension);
         if (!resource_path.exists())
             return "";

@@ -12,18 +12,18 @@ set(CMAKE_CXX_STANDARD 17)
 # Options
 option(LAMBDACOMMON_BUILD_STATIC "Build static libraries" OFF)
 option(LAMBDACOMMON_INSTALL "Generate installation target" ON)
-option(LAMBDACOMMON_BUILD_C_WRAPPER "Build the λcommon C wrapper" ON)
+option(LAMBDACOMMON_BUILD_C_WRAPPER "Build the λcommon C wrapper" OFF)
 option(LAMBDACOMMON_BUILD_TESTS "Build the λcommon test programs" ON)
 
 # Version
 set(LAMBDACOMMON_VERSION_MAJOR 1)
 set(LAMBDACOMMON_VERSION_MINOR 10)
 set(LAMBDACOMMON_VERSION_PATCH 0)
-set(LAMBDACOMMON_VERSION_TYPE "indev")
+set(LAMBDACOMMON_VERSION_TYPE "Release")
 
 # Generate compile flags.
 generate_flags(LAMBDACOMMON_COMPILE_FLAGS "native" 2 true)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}${LAMBDACOMMON_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}${LAMBDACOMMON_COMPILE_FLAGS} -Wno-attributes")
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework CoreFoundation -framework ApplicationServices -Wno-unused-command-line-argument")

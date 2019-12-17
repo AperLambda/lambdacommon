@@ -11,7 +11,7 @@ echo "cd to build directory"
 mkdir -p build/
 cd build/
 echo "Building project..."
-cmake ..
+cmake -DLAMBDACOMMON_BUILD_C_WRAPPER=ON ..
 if [ $? -ne 0 ]; then
 echo "${RED}Error: CMake doesn't exit with success! Cleaning...${NC}"
 cd ..

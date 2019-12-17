@@ -74,11 +74,11 @@ namespace lambdacommon
             B_WHITE = 107
         };
 
-        extern std::ostream LAMBDACOMMON_API& operator<<(std::ostream& stream, TermFormatting term_formatting);
+        extern std::ostream& LAMBDACOMMON_API operator<<(std::ostream& stream, TermFormatting term_formatting);
 
-        extern std::ostream LAMBDACOMMON_API& operator<<(std::ostream& stream, const std::vector<TermFormatting>& term_formatting);
+        extern std::ostream& LAMBDACOMMON_API operator<<(std::ostream& stream, const std::vector<TermFormatting>& term_formatting);
 
-        extern std::ostream LAMBDACOMMON_API& operator<<(std::ostream& stream, const std::vector<std::string>& string_vector);
+        extern std::ostream& LAMBDACOMMON_API operator<<(std::ostream& stream, const std::vector<std::string>& string_vector);
 
         inline std::vector<TermFormatting> formats(std::initializer_list<TermFormatting> format_list) {
             return format_list;
@@ -90,14 +90,14 @@ namespace lambdacommon
          * @param stream Stream will be affect.
          * @return The current stream.
          */
-        extern std::ostream LAMBDACOMMON_API& erase_current_line(std::ostream& stream = std::cout);
+        extern std::ostream& LAMBDACOMMON_API erase_current_line(std::ostream& stream = std::cout);
 
         /*!
          * Clears the specified stream.
          * @param stream The stream to affect.
          * @return The affected stream.
          */
-        extern std::ostream LAMBDACOMMON_API& clear(std::ostream& stream = std::cout);
+        extern std::ostream& LAMBDACOMMON_API clear(std::ostream& stream = std::cout);
 
         /*!
          * Gets the cursor position in the tty.
@@ -141,7 +141,7 @@ namespace lambdacommon
          * @param stream The stream to affect.
          * @return The affected stream.
          */
-        extern std::ostream LAMBDACOMMON_API& bell(std::ostream& stream = std::cout);
+        extern std::ostream& LAMBDACOMMON_API bell(std::ostream& stream = std::cout);
 
         /*
          * Terminal manipulations

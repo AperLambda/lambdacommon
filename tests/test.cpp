@@ -15,9 +15,9 @@ using namespace lstring::stream;
 using namespace terminal;
 using namespace std;
 
-const ResourceName BASE_RESOURCENAME{"tests", "value/path"};
+const Identifier BASE_RESOURCENAME{"tests", "value/path"};
 
-bool test(const string& test_name, const std::function<bool()>& func) {
+auto test(const string& test_name, const std::function<bool()>& func) -> bool {
     if (test_name.find('"') != string::npos) {
         cout << "TESTING ";
         bool state = false;
@@ -165,13 +165,13 @@ LC_TEST_SECTION(Size)
 
 LC_TEST_SECTION(ResourceNames)
 {
-    LC_TEST(rsc_name, "ResourceName(const std::string &resource_name)") {
-        REQUIRE(ResourceName("tests:value/path").to_string() == "tests:value/path");
+    LC_TEST(rsc_name, "Identifier(const std::string &resource_name)") {
+        REQUIRE(Identifier("tests:value/path").to_string() == "tests:value/path");
     }
 
-    LC_TEST(rsc_operators, "ResourceName operators") {
-        REQUIRE(ResourceName("tests:value/path") != ResourceName("tests", "value/OwO"));
-        REQUIRE(ResourceName("tests:value/path") / "owo" == ResourceName("tests", "value/path/owo"));
+    LC_TEST(rsc_operators, "Identifier operators") {
+        REQUIRE(Identifier("tests:value/path") != Identifier("tests", "value/OwO"));
+        REQUIRE(Identifier("tests:value/path") / "owo" == Identifier("tests", "value/path/owo"));
     }
 }
 
@@ -182,7 +182,7 @@ LC_TEST_SECTION(Color)
     }
 }
 
-int main() {
+auto main() -> int {
     setup();
     set_title("λcommon - tests");
     cout << "Starting lambdacommon-tests with" << CYAN << " lambdacommon" << RESET << " v"

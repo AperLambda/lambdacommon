@@ -23,7 +23,7 @@
 using LPFN_CreateSymbolicLinkW = BOOLEAN(WINAPI *)(LPCWSTR, LPCWSTR, DWORD);
 using LPFN_CreateHardLinkW = BOOLEAN(WINAPI *)(LPCWSTR, LPCWSTR, LPSECURITY_ATTRIBUTES);
 #else
-#  include <errno.h>
+#  include <cerrno>
 #  define ERROR_INVALID_PARAMETER EINVAL
 #  define ERROR_PATH_NOT_FOUND ENOENT
 #  include <unistd.h>
@@ -235,7 +235,7 @@ namespace lambdacommon
 
         path path::root_name() const {
 #ifdef LAMBDA_WINDOWS
-            if (_path.length() >= 2 && std::toupper(static_cast<uint8_t>(_path[0])) >= 'A' && std::toupper(static_cast<uint8_t>(_path[0])) <= 'Z' && _path[1] == L':')
+            if (_path.length() >= 2 && std::toupper(static_cast<u8>(_path[0])) >= 'A' && std::toupper(static_cast<u8>(_path[0])) <= 'Z' && _path[1] == L':')
                 return _path.substr(0, 2);
 #endif
             if (_path.length() > 2 && _path[0] == '/' && _path[1] == '/' && _path[2] != '/' && std::isprint(_path[2])) {
@@ -361,11 +361,11 @@ namespace lambdacommon
             if (this->empty())
                 return (current_path() / "").to_absolute(ec);
             // Gets the size of the absolute path.
-            uint32_t size = ::GetFullPathNameW(this->c_str(), 0, nullptr, nullptr);
+            u32 size = ::GetFullPathNameW(this->c_str(), 0, nullptr, nullptr);
             if (size) {
                 // Allocate the buffer to get the absolute path.
                 std::vector<wchar_t> buffer(size, 0);
-                uint32_t a = ::GetFullPathNameW(this->c_str(), size, buffer.data(), nullptr);
+                u32 a = ::GetFullPathNameW(this->c_str(), size, buffer.data(), nullptr);
                 // We check that everything is correct and we can return the result.
                 if (a && a < size) {
                     path result(std::wstring(buffer.data(), a));
@@ -404,7 +404,7 @@ namespace lambdacommon
 
         path path::get_extension() const {
             // As the filename contains the extension, we get the filename and fetch the string after the last dot character if there is one, else we returns an empty string.
-            string_type file_name = std::move(get_filename());
+            string_type file_name = this->get_filename().native();
             auto pos = file_name.find_last_of('.');
             if (pos == std::string::npos || pos == 0)
                 return {""};
@@ -923,7 +923,7 @@ namespace lambdacommon
             update_current();
             // Find the position of a potential root directory.
 #ifdef LAMBDA_WINDOWS
-            if (_last - _first >= 3 && std::toupper(static_cast<uint8_t>(*first)) >= 'A' && std::toupper(static_cast<uint8_t>(*first)) <= 'Z' && *(first + 1) == L':' &&
+            if (_last - _first >= 3 && std::toupper(static_cast<u8>(*first)) >= 'A' && std::toupper(static_cast<u8>(*first)) <= 'Z' && *(first + 1) == L':' &&
                 *(first + 2) == preferred_separator)
                 _root = _first + 2;
             else

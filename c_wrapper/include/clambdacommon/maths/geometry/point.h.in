@@ -10,7 +10,7 @@
 #ifndef CLAMBDACOMMON_POINT_@LC_C_TYPE@_H
 #define CLAMBDACOMMON_POINT_@LC_C_TYPE@_H
 
-#include <inttypes.h>
+#include <clambdacommon/types.h>
 
 #ifdef __cplusplus
 extern "C" {

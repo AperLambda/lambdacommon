@@ -10,6 +10,8 @@
 #ifndef CLAMBDACOMMON_MATHS_H
 #define CLAMBDACOMMON_MATHS_H
 
+#include "types.h"
+
 #define LCOMMON_PI 3.14159265359
 #define LCOMMON_TAU 6.28318530718
 
@@ -24,13 +26,13 @@ extern "C"
 {
 #endif
 
-double lc_maths_radians(double degrees);
+f64 lc_maths_radians(f64 degrees);
 
-float lc_maths_fradians(float degrees);
+f32 lc_maths_fradians(f32 degrees);
 
-double lc_maths_degrees(double radians);
+f64 lc_maths_degrees(f64 radians);
 
-float lc_maths_fdegrees(float radians);
+f32 lc_maths_fdegrees(f32 radians);
 
 #ifdef __cplusplus
 }

@@ -10,15 +10,15 @@
 #ifndef CLAMBDACOMMON_POINT_H
 #define CLAMBDACOMMON_POINT_H
 
-#include <clambdacommon/maths/geometry/point_int8_t.h>
-#include <clambdacommon/maths/geometry/point_uint8_t.h>
-#include <clambdacommon/maths/geometry/point_int16_t.h>
-#include <clambdacommon/maths/geometry/point_uint16_t.h>
-#include <clambdacommon/maths/geometry/point_int32_t.h>
-#include <clambdacommon/maths/geometry/point_uint32_t.h>
-#include <clambdacommon/maths/geometry/point_int64_t.h>
-#include <clambdacommon/maths/geometry/point_uint64_t.h>
-#include <clambdacommon/maths/geometry/point_double.h>
-#include <clambdacommon/maths/geometry/point_float.h>
+#include <clambdacommon/maths/geometry/point_i8.h>
+#include <clambdacommon/maths/geometry/point_u8.h>
+#include <clambdacommon/maths/geometry/point_i16.h>
+#include <clambdacommon/maths/geometry/point_u16.h>
+#include <clambdacommon/maths/geometry/point_i32.h>
+#include <clambdacommon/maths/geometry/point_u32.h>
+#include <clambdacommon/maths/geometry/point_i64.h>
+#include <clambdacommon/maths/geometry/point_u64.h>
+#include <clambdacommon/maths/geometry/point_f32.h>
+#include <clambdacommon/maths/geometry/point_f64.h>
 
 #endif //CLAMBDACOMMON_POINT_H

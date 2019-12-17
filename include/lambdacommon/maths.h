@@ -16,7 +16,7 @@
  * Note: Never use `using namespace maths;` with this header, else the std and this will be conflicting.
  */
 
-#include "lambdacommon.h"
+#include "types.h"
 
 #define LCOMMON_PI 3.14159265359
 #define LCOMMON_TAU 6.28318530718
@@ -30,7 +30,7 @@ namespace lambdacommon::maths
      * @return The absolute value.
      */
     template<typename N>
-    N abs(N number) {
+    inline N abs(N number) {
         return number < 0 ? -number : number;
     }
 
@@ -42,7 +42,7 @@ namespace lambdacommon::maths
      * @return The smallest number.
      */
     template<typename N>
-    N min(N a, N b) {
+    inline N min(N a, N b) {
         return a < b ? a : b;
     }
 
@@ -76,7 +76,7 @@ namespace lambdacommon::maths
      * @return The largest number.
      */
     template<typename N>
-    N max(N a, N b) {
+    inline N max(N a, N b) {
         return a > b ? a : b;
     }
 
@@ -111,7 +111,7 @@ namespace lambdacommon::maths
      * @return The clamped value.
      */
     template<typename N>
-    N clamp(N number, N min, N max) {
+    inline N clamp(N number, N min, N max) {
         return maths::min(maths::max(number, min), max);
     }
 
@@ -143,14 +143,14 @@ namespace lambdacommon::maths
      * @param degrees Value representing an angle, expressed in degrees.
      * @return The radian value.
      */
-    extern double LAMBDACOMMON_API radians(double degrees);
+    extern f64 LAMBDACOMMON_API radians(f64 degrees);
 
     /*!
      * Converts a degree value to a radian value.
      * @param degrees Value representing an angle, expressed in degrees.
      * @return The radian value.
      */
-    extern float LAMBDACOMMON_API radians(float degrees);
+    extern f32 LAMBDACOMMON_API radians(f32 degrees);
 
     /*!
      * Converts a degree value to a radian value.
@@ -159,8 +159,8 @@ namespace lambdacommon::maths
      * @return The radian value.
      */
     template<typename N>
-    double radians(N degrees) {
-        return radians(static_cast<double>(degrees));
+    f64 radians(N degrees) {
+        return radians(static_cast<f64>(degrees));
     }
 
     /*!
@@ -168,14 +168,14 @@ namespace lambdacommon::maths
      * @param degrees Value representing an angle, expressed in radians.
      * @return The degree value.
      */
-    extern double LAMBDACOMMON_API degrees(double radians);
+    extern f64 LAMBDACOMMON_API degrees(f64 radians);
 
     /*!
      * Converts a radian value to a radian value.
      * @param degrees Value representing an angle, expressed in radians.
      * @return The degree value.
      */
-    extern float LAMBDACOMMON_API degrees(float radians);
+    extern f32 LAMBDACOMMON_API degrees(f32 radians);
 
     /*!
      * Converts a radian value to a radian value.
@@ -184,8 +184,8 @@ namespace lambdacommon::maths
      * @return The degree value.
      */
     template<typename N>
-    double degrees(N radians) {
-        return degrees(static_cast<double>(radians));
+    f64 degrees(N radians) {
+        return degrees(static_cast<f64>(radians));
     }
 }
 

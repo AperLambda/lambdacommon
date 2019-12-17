@@ -88,7 +88,7 @@ namespace lambdacommon::system
         return arch == ARM || arch == ARM64 || arch == ARMv7 || arch == ARMv8_64;
     }
 
-    uint32_t LAMBDACOMMON_API get_cpu_cores() {
+    u32 LAMBDACOMMON_API get_cpu_cores() {
         return std::thread::hardware_concurrency();
     }
 
@@ -323,7 +323,7 @@ namespace lambdacommon::system
         return get_processor_arch_enum_str();
     }
 
-    uint64_t LAMBDACOMMON_API get_memory_total()
+    u64 LAMBDACOMMON_API get_memory_total()
     {
         MEMORYSTATUSEX statex;
         statex.dwLength = sizeof(statex);
@@ -331,7 +331,7 @@ namespace lambdacommon::system
         return statex.ullTotalPhys;
     }
 
-    uint64_t LAMBDACOMMON_API get_memory_available()
+    u64 LAMBDACOMMON_API get_memory_available()
     {
         MEMORYSTATUSEX statex;
         statex.dwLength = sizeof(statex);
@@ -339,7 +339,7 @@ namespace lambdacommon::system
         return statex.ullAvailPhys;
     }
 
-    uint64_t LAMBDACOMMON_API get_memory_used()
+    u64 LAMBDACOMMON_API get_memory_used()
     {
         return get_memory_total() - get_memory_available();
     }
@@ -495,28 +495,28 @@ namespace lambdacommon::system
         return u_name.machine;
     }
 
-    uint64_t LAMBDACOMMON_API get_memory_total() {
+    u64 LAMBDACOMMON_API get_memory_total() {
 #ifdef _SC_PHYS_PAGES
         long pages = sysconf(_SC_PHYS_PAGES);
         long page_size = sysconf(_SC_PAGESIZE);
-        return static_cast<uint64_t>(pages * page_size);
+        return static_cast<u64>(pages * page_size);
 #elif defined(LAMBDA_MEM_TOTAL_KEY)
-        uint64_t mem;
+        u64 mem;
         size_t len = sizeof(mem);
         int mib[2];
         mib[0] = CTL_HW;
         mib[1] = LAMBDA_MEM_TOTAL_KEY;
         sysctl(mib, 2, &size, &len, nullptr, 0);
 #else
-        uint64_t mem;
+        u64 mem;
         size_t len = sizeof(mem);
         sysctlbyname("hw.memsize", &mem, &len, nullptr, 0);
         return mem / sysconf(_SC_PAGE_SIZE);
 #endif
     }
 
-    uint64_t LAMBDACOMMON_API get_memory_available() {
-        uint64_t mem_free = 0;
+    u64 LAMBDACOMMON_API get_memory_available() {
+        u64 mem_free = 0;
 #ifdef LAMBDA_MAC_OSX
         vm_size_t page_size;
         mach_port_t mach_port;
@@ -526,15 +526,15 @@ namespace lambdacommon::system
         mach_port = mach_host_self();
         count = sizeof(vm_stats) / sizeof(natural_t);
         if (KERN_SUCCESS == host_page_size(mach_port, &page_size) && KERN_SUCCESS == host_statistics64(mach_port, HOST_VM_INFO, (host_info64_t) &vm_stats, &count))
-            mem_free = static_cast<uint64_t>(vm_stats.free_count * page_size);
+            mem_free = static_cast<u64>(vm_stats.free_count * page_size);
 #elif defined(LAMBDA_FREEBSD) || defined(LAMBDA_DRAGONFLY)
         long page_size = sysconf(_SC_PAGESIZE);
-        uint32_t mem_inactive, mem_unused, mem_cache;
+        u32 mem_inactive, mem_unused, mem_cache;
         size_t mem_inactive_len = sizeof(mem_inactive), mem_unused_len = sizeof(mem_unused), mem_cache_len = sizeof(mem_cache);
         sysctlbyname("vm.stats.vm.v_inactive_count", &mem_inactive, &mem_inactive_len, nullptr, 0);
         sysctlbyname("vm.stats.vm.v_free_count", &mem_unused, &mem_unused_len, nullptr, 0);
         sysctlbyname("vm.stats.vm.v_cache_count", &mem_cache, &mem_cache_len, nullptr, 0);
-        mem_free = static_cast<uint64_t>(page_size * (mem_inactive + mem_unused + mem_cache));
+        mem_free = static_cast<u64>(page_size * (mem_inactive + mem_unused + mem_cache));
 #elif !defined(LAMBDA_WASM)
         std::ifstream meminfo;
         meminfo.open("/proc/meminfo", std::ios::in);
@@ -559,11 +559,11 @@ namespace lambdacommon::system
         return mem_free;
     }
 
-    uint64_t LAMBDACOMMON_API get_memory_used() {
+    u64 LAMBDACOMMON_API get_memory_used() {
         std::ifstream meminfo;
         meminfo.open("/proc/meminfo", std::ios::in);
 
-        uint64_t mem_used = 0;
+        u64 mem_used = 0;
 
         if (meminfo.is_open()) {
             std::string last;

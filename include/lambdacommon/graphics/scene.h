@@ -22,16 +22,16 @@ namespace lambdacommon
         class Scene
         {
         protected:
-            const uint32_t id;
+            const u32 id;
 
         public:
-            Scene(uint32_t id);
+            Scene(u32 id);
 
             /*!
              * Gets the ID which identify the Scene.
              * @return The ID.
              */
-            uint32_t get_id() const;
+            u32 get_id() const;
 
             /*!
              * Updates every component of the Scene.

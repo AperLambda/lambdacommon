@@ -61,25 +61,25 @@ namespace lambdacommon
          * Returns the count of the processor (CPU) cores as an int.
          * @return The CPU cores' count
          */
-        extern uint32_t LAMBDACOMMON_API get_cpu_cores();
+        extern u32 LAMBDACOMMON_API get_cpu_cores();
 
         /*!
          * Returns the size of the physical memory (RAM) in bytes.
          * @return The physical memory in bytes.
          */
-        extern uint64_t LAMBDACOMMON_API get_memory_total();
+        extern u64 LAMBDACOMMON_API get_memory_total();
 
         /*!
          * Returns the size of the available physical memory (RAM) in bytes.
          * @return The available physical memory in bytes.
          */
-        extern uint64_t LAMBDACOMMON_API get_memory_available();
+        extern u64 LAMBDACOMMON_API get_memory_available();
 
         /*!
          * Returns the size of the used physical memory (RAM) in bytes.
          * @return The used physical memory in bytes.
          */
-        extern uint64_t LAMBDACOMMON_API get_memory_used();
+        extern u64 LAMBDACOMMON_API get_memory_used();
 
         /*
          * Computer
