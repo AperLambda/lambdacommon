@@ -23,7 +23,11 @@ set(LAMBDACOMMON_VERSION_TYPE "Release")
 
 # Generate compile flags.
 generate_flags(LAMBDACOMMON_COMPILE_FLAGS "native" 2 true)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}${LAMBDACOMMON_COMPILE_FLAGS} -Wno-attributes")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}${LAMBDACOMMON_COMPILE_FLAGS}")
+
+if (NOT LAMBDA_WINDOWS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-attributes")
+endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework CoreFoundation -framework ApplicationServices -Wno-unused-command-line-argument")
